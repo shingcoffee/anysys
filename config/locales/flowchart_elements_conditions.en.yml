@@ -1,0 +1,33 @@
+en:
+  flowchart_elements:
+    conditions:
+      errors:
+        invalid_condition: Conditions must be a flat group of rows
+        empty_condition: Add at least one condition
+        invalid_row: Condition row %{index} must be a field or record-count row
+        nested_group: Condition row %{index} cannot be a nested group
+        missing_entity: Condition row %{index} needs an entity
+        unknown_count_operator: Condition row %{index} needs a count comparison
+        missing_left: Condition row %{index} needs a value to compare
+        missing_operator: Condition row %{index} needs an operator
+        unknown_operator: Condition row %{index} has an unknown operator
+        missing_right: Condition row %{index} needs a value for %{operator}
+        invalid_regex: Condition row %{index} has an invalid pattern
+    operators:
+      "==": equals
+      "!=": does not equal
+      ">": is greater than
+      ">=": is at least
+      "<": is less than
+      "<=": is at most
+      contains: contains
+      starts_with: starts with
+      ends_with: ends with
+      matches_regex: matches pattern
+      in_range: is in range
+      is_type: is of type
+      is_true: is true
+      is_false: is false
+      is_empty: is empty
+      is_not_empty: is not empty
+      is_nil: is not set

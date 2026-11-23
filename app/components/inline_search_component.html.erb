@@ -1,0 +1,72 @@
+<div class="relative<%= ' w-full' unless mobile? %>"
+     data-controller="inline-search"
+     data-inline-search-customer-id-value="<%= customer_id %>"
+     data-inline-search-no-results-format-value="<%= t("chrome.inline_search.no_results_format") %>"
+     data-inline-search-type-to-search-value="<%= t("chrome.inline_search.empty") %>">
+
+  <%# Collapsed state: pill button %>
+  <button type="button"
+          aria-label="<%= t("chrome.inline_search.open_search") %>"
+          data-inline-search-target="trigger"
+          data-action="click->inline-search#expand"
+          class="<%= mobile? ? 'icon-button bg-surface-active' : 'inline-flex items-center gap-2.5 h-10 w-full px-3.5 rounded-xl bg-surface-active text-text-muted hover:bg-surface-hover hover:text-text-secondary transition-base' %>">
+    <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="7"/>
+      <path d="m21 21-4.35-4.35"/>
+    </svg>
+    <% unless mobile? %>
+      <span class="text-sm"><%= t("chrome.inline_search.search") %></span>
+      <span class="ml-auto flex items-center gap-0.5 text-[11px] text-text-muted bg-surface/60 px-1.5 py-0.5 rounded font-mono">
+        <kbd>⌘</kbd><kbd>K</kbd>
+      </span>
+    <% end %>
+  </button>
+
+  <%# Expanded state: input with results dropdown %>
+  <div data-inline-search-target="expanded"
+       class="hidden absolute <%= mobile? ? 'right-0 w-80' : 'inset-x-0' %> top-0 z-50">
+    <div class="dropdown-panel overflow-hidden">
+      <%# Search input row %>
+      <div class="flex items-center gap-3 px-4 h-12 border-b border-border-subtle">
+        <svg class="w-4 h-4 text-text-muted flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text"
+               placeholder="<%= t("chrome.inline_search.placeholder") %>"
+               data-inline-search-target="input"
+               data-action="input->inline-search#query keydown->inline-search#navigate"
+               class="flex-1 bg-transparent border-0 outline-none text-sm text-text-primary placeholder-text-muted focus:ring-0 p-0"
+               autocomplete="off"
+               aria-label="<%= t("chrome.inline_search.aria_search") %>" />
+        <button type="button"
+                data-action="click->inline-search#collapse"
+                class="p-1.5 -mr-1.5 text-text-muted hover:text-text-secondary hover:bg-surface-active rounded-lg transition-base"
+                aria-label="<%= t("chrome.inline_search.close_search") %>">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <%# Empty state %>
+      <div data-inline-search-target="empty"
+           class="py-10 px-4 text-center">
+        <svg class="w-10 h-10 mx-auto mb-3 text-border-strong" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <p class="text-sm text-text-muted"><%= t("chrome.inline_search.empty") %></p>
+      </div>
+
+      <%# Results container %>
+      <div data-inline-search-target="results"
+           class="hidden max-h-80 overflow-y-auto"></div>
+    </div>
+  </div>
+
+  <%# Click-outside overlay when expanded %>
+  <div data-inline-search-target="backdrop"
+       data-action="click->inline-search#collapse"
+       class="hidden fixed inset-0 z-40"></div>
+</div>

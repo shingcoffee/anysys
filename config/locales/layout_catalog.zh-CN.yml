@@ -1,0 +1,734 @@
+zh-CN:
+  layout_catalog:
+    categories:
+      all: "全部模板"
+      general: "通用"
+      registration: "注册"
+      contact: "联系"
+      business: "商务"
+      survey: "调查"
+      scheduling: "日程"
+      application: "申请"
+      healthcare: "医疗"
+      education: "教育"
+      payment: "支付与收款"
+      marketing: "营销"
+      realestate: "房地产"
+      legal: "法律"
+      travel: "旅行"
+      nonprofit: "非营利"
+      hr: "人力资源"
+      ecommerce: "电子商务"
+      feedback: "反馈"
+      social: "社交与活动"
+      hospitality: "酒店与餐饮"
+      fitness: "健身与健康"
+      creative: "创意与媒体"
+      it: "信息技术"
+      insurance: "保险"
+      government: "政府"
+      automotive: "汽车"
+      pets: "宠物与兽医"
+      construction: "建筑工程"
+      beauty: "美容与水疗"
+      childcare: "托育"
+      sports: "体育与联赛"
+      consulting: "咨询"
+      logistics: "物流与运输"
+      research: "研究"
+      banking: "银行与金融"
+      religious: "宗教与信仰"
+      entertainment: "娱乐"
+      dental: "牙科"
+      homeservices: "家政服务"
+      mentalhealth: "心理健康"
+      agriculture: "农业"
+      manufacturing: "制造"
+      retail: "零售"
+      accounting: "会计与税务"
+      recruitment: "招聘"
+      facilities: "设施"
+      procurement: "采购"
+      tutoring: "辅导与教练"
+      moving: "搬家与搬迁"
+      cleaning: "清洁服务"
+      security: "安全"
+      food: "餐饮"
+      coworking: "联合办公"
+      saas: "SaaS 与产品"
+      hoa: "业主委员会与社区"
+      optometry: "验光与视力"
+      music: "音乐与表演"
+      roofing: "屋顶与外墙"
+      pestcontrol: "虫害防治"
+      interiordesign: "室内设计"
+      telehealth: "远程医疗"
+      creator: "网红与创作者"
+      energy: "能源与公用事业"
+      warranty: "保修与理赔"
+      compliance: "合规与审计"
+      seniorcare: "养老护理"
+      hvac: "暖通与技工"
+      landscaping: "园林与草坪"
+      wedding: "婚礼"
+      pharmacy: "药房"
+      waste: "回收与废弃物"
+      funeral: "殡葬与纪念"
+      tattoo: "纹身与身体艺术"
+      laundry: "洗衣与干洗"
+      notary: "公证与法律服务"
+      physicaltherapy: "物理治疗"
+      printing: "印刷与标识"
+      marine: "船舶"
+      aviation: "航空"
+      staffing: "劳务派遣"
+      catering: "餐饮承办"
+      library: "图书馆与档案"
+      bidding: "招标"
+      inventory: "库存管理"
+    groups:
+      popular: "常用"
+      business_finance: "商业与金融"
+      healthcare_wellness: "医疗与健康"
+      professional: "专业服务"
+      home_property: "家居与房产"
+      tech_saas: "技术与 SaaS"
+      marketing_media: "营销与媒体"
+      education_community: "教育与社区"
+      hospitality_events: "酒店与活动"
+      government_public: "政府与公共"
+      specialty: "特色行业"
+    templates:
+      accounting_client_onboarding:
+        name: "客户入职"
+        description: "新会计客户登记，包含企业资料、税务信息与文件"
+      tax_document_upload:
+        name: "税务文件上传"
+        description: "安全的税务文件提交入口，可分类文件类型并填写说明"
+      crop_report:
+        name: "作物报告"
+        description: "田间作物状况报告，包含产量估计、生长条件与照片"
+      livestock_record:
+        name: "牲畜档案"
+        description: "动物健康与存栏跟踪，包含品种、体重与兽医记录"
+      employee_onboarding:
+        name: "员工入职"
+        description: "新员工表单，包含紧急联系人与制度确认"
+      job_application:
+        name: "求职申请"
+        description: "招聘表单，包含个人资料、简历上传与求职信"
+      test_drive_request:
+        name: "试驾预约"
+        description: "预约试驾，选择车型并核验驾照"
+      vehicle_service:
+        name: "车辆保养预约"
+        description: "汽车保养预约，填写车辆信息、服务类型与时间"
+      aircraft_charter_request:
+        name: "包机询价"
+        description: "私人包机咨询，包含行程、乘客人数、行李与特殊要求"
+      flight_training_enrollment:
+        name: "飞行训练报名"
+        description: "飞行员培训报名，包含经验水平、执照目标、体检状态与日程"
+      credit_card_application:
+        name: "信用卡申请"
+        description: "信用卡申请，包含个人、就业与财务信息"
+      loan_application:
+        name: "贷款申请"
+        description: "个人或企业贷款申请，包含财务状况与就业信息"
+      salon_appointment:
+        name: "美发预约"
+        description: "美发或美容预约，选择服务与造型师"
+      spa_treatment:
+        name: "水疗预约"
+        description: "水疗或康养预约，填写偏好与健康说明"
+      rfp_submission:
+        name: "招标响应"
+        description: "提案或投标提交，包含公司资质、报价、工期与支持文件"
+      vendor_bid_response:
+        name: "供应商报价"
+        description: "采购用供应商报价，包含分项价格、交付条款与质保"
+      expense_report:
+        name: "费用报告"
+        description: "员工费用报销，可上传收据并进入审批"
+      invoice_form:
+        name: "发票 / 付款"
+        description: "账单表单，包含明细金额与付款信息"
+      order_form:
+        name: "订单"
+        description: "采购订单，包含数量、配送与付款信息"
+      product_listing:
+        name: "商品上架"
+        description: "电商商品表单，包含价格、规格与图片"
+      vendor_registration:
+        name: "供应商注册"
+        description: "供应商入驻，包含企业资料、税务信息与银行账户"
+      catering_quote_request:
+        name: "餐饮报价"
+        description: "活动餐饮报价，包含人数、菜单偏好、饮食需求与场地"
+      catering_menu_selection:
+        name: "菜单选择"
+        description: "已确认餐饮订单的菜单选择，包含菜品与饮食说明"
+      afterschool_program:
+        name: "课后项目报名"
+        description: "课后活动报名，包含儿童信息、接送授权与医疗说明"
+      daycare_enrollment:
+        name: "托育报名"
+        description: "儿童入托表单，包含家长信息、医疗说明与紧急联系人"
+      cleaning_quote:
+        name: "清洁报价"
+        description: "住宅或商用清洁估价，包含房间、频次与附加项"
+      janitorial_inspection:
+        name: "保洁巡检"
+        description: "清洁质量检查清单，包含区域评分与整改措施"
+      audit_checklist:
+        name: "审计清单"
+        description: "内部或外部审计清单，包含控制点、证据与发现"
+      policy_acknowledgment:
+        name: "制度确认"
+        description: "员工制度阅读与确认，包含电子签名与理解确认"
+      building_inspection:
+        name: "房屋检查"
+        description: "物业检查清单，包含照片、缺陷与合规说明"
+      project_estimate:
+        name: "工程估价"
+        description: "建筑或装修报价申请，包含范围与工期"
+      consultation_request:
+        name: "咨询预约"
+        description: "专业咨询预约，包含主题、可约时间与目标"
+      project_brief:
+        name: "项目简报"
+        description: "客户项目简报，包含目标、范围、工期与预算"
+      contact_detailed:
+        name: "详细联系"
+        description: "完整联系表单，包含电话、公司与部门"
+      contact_simple:
+        name: "简单联系"
+        description: "快速联系表单：姓名、邮箱与留言"
+      support_ticket:
+        name: "支持工单"
+        description: "帮助台表单，包含优先级、类别与附件"
+      community_membership:
+        name: "社区会员"
+        description: "联合办公会员申请，包含方案选择与门禁偏好"
+      desk_booking:
+        name: "工位预订"
+        description: "热桌或固定工位预订，包含日期、时间与设施"
+      design_brief:
+        name: "设计简报"
+        description: "创意项目简报，包含品牌规范、交付物与工期"
+      photography_booking:
+        name: "摄影预约"
+        description: "摄影拍摄申请，包含活动类型、日期与风格偏好"
+      portfolio_submission:
+        name: "作品集提交"
+        description: "创意作品上传，包含项目说明与链接"
+      brand_collaboration:
+        name: "品牌合作"
+        description: "达人品牌合作咨询，包含受众数据、内容风格与活动偏好"
+      sponsorship_application:
+        name: "赞助申请"
+        description: "活动或内容赞助申请，包含品牌资料、赞助档位与交付物"
+      cosmetic_consultation:
+        name: "美容牙科咨询"
+        description: "美容牙科咨询，包含笑容目标、治疗意向与牙科病史"
+      dental_patient_intake:
+        name: "牙科初诊"
+        description: "新牙科患者表单，包含病史、保险与口腔健康"
+      customer_review:
+        name: "客户评价"
+        description: "商品评价，包含星级、照片与优缺点"
+      gift_card_purchase:
+        name: "礼品卡购买"
+        description: "电子或实体礼品卡订单，可附个性化留言"
+      product_return:
+        name: "退货申请"
+        description: "退货或换货申请，包含订单信息与原因"
+      wholesale_order:
+        name: "批发订单"
+        description: "批量采购订单，包含商品数量与配送信息"
+      assignment_submission:
+        name: "作业提交"
+        description: "学生作业提交，可上传文件并填写说明"
+      course_enrollment:
+        name: "课程报名"
+        description: "学生选课报名，包含课程选择与学业信息"
+      parent_permission:
+        name: "家长同意书"
+        description: "学校同意书，包含紧急联系人与医疗信息"
+      scholarship_application:
+        name: "奖学金申请"
+        description: "学业奖学金申请，包含绩点、文书与推荐信"
+      outage_report:
+        name: "停电报修"
+        description: "公用事业中断报告，包含地点、中断类型与安全隐患"
+      solar_quote:
+        name: "光伏安装报价"
+        description: "住宅或商用光伏报价，包含屋顶、用电量与融资偏好"
+      ticket_booking:
+        name: "票务预订"
+        description: "演出或活动购票，包含座位与参与者信息"
+      venue_rental:
+        name: "场地租赁"
+        description: "活动场地咨询，包含日期、人数、餐饮与音视频需求"
+      maintenance_request:
+        name: "维修申请"
+        description: "设施维修申请，包含地点、优先级与照片"
+      parking_permit:
+        name: "停车许可"
+        description: "员工或访客停车许可，包含车辆信息与车位偏好"
+      room_booking:
+        name: "房间预订"
+        description: "会议室或场地预订，包含设备与餐饮需求"
+      bug_report:
+        name: "缺陷报告"
+        description: "软件问题报告，包含严重程度、复现步骤与截图"
+      feature_request:
+        name: "功能建议"
+        description: "产品功能建议，包含优先级、使用场景与投票"
+      testimonial_collection:
+        name: "证言收集"
+        description: "收集客户证言，包含照片与分享授权"
+      website_feedback:
+        name: "网站反馈"
+        description: "访客体验调查，包含评分与易用性问题"
+      class_booking:
+        name: "课程预约"
+        description: "健身课程预约，包含时间、教练与难度"
+      gym_membership:
+        name: "健身会员"
+        description: "健身俱乐部入会申请，包含健康筛查与方案选择"
+      personal_training_intake:
+        name: "私教建档"
+        description: "新客户评估，包含健身目标、健康史与可约时间"
+      food_truck_booking:
+        name: "餐车预订"
+        description: "活动餐车预订，包含菜单偏好、人数与地点"
+      recipe_submission:
+        name: "食谱投稿"
+        description: "社区食谱分享，包含食材、步骤与照片"
+      restaurant_order:
+        name: "餐厅点餐"
+        description: "在线点餐，包含菜单分类、定制与配送信息"
+      memorial_tribute:
+        name: "纪念留言"
+        description: "在线纪念页，用于分享回忆、照片与哀悼"
+      funeral_service_arrangement:
+        name: "殡葬安排"
+        description: "葬礼与追悼会安排，包含逝者信息、仪式偏好与家属联系方式"
+      blank:
+        name: "空白画布"
+        description: "从零开始，不套用任何布局"
+      compact_two_column:
+        name: "紧凑双列"
+        description: "字段并排，节省空间"
+      data_entry_admin:
+        name: "数据录入 / 管理"
+        description: "紧凑的管理面板，字段排列更密"
+      default:
+        name: "默认"
+        description: "自动排版：按已整理的属性分组（未定义时回退到来源分区），并为每种字段选择合适宽度。"
+      member_default:
+        name: "默认（会员）"
+        description: "面向会员的布局：移动端优先的宽度，按实体的属性分组，并隐藏未对会员可见的内容。"
+      public_default:
+        name: "默认（公开）"
+        description: "面向公众的布局：展示型主题、宽松间距、全宽字段，并在手机上自动收起。适合匿名访客的第一印象。"
+      sectioned_professional:
+        name: "专业分区"
+        description: "按类型整理字段，带清晰的分区标题与分隔线"
+      settings_preferences:
+        name: "设置面板"
+        description: "以开关为主的偏好页，适合配置表单"
+      three_column_grid:
+        name: "三列网格"
+        description: "紧凑网格，适合字段很多的表单"
+      wizard_multi_step:
+        name: "多步向导"
+        description: "把字段拆到多页，按步骤引导填写"
+      permit_application:
+        name: "许可申请"
+        description: "政府许可或执照申请，可上传证明文件"
+      public_complaint:
+        name: "公众投诉"
+        description: "市民投诉或服务请求，包含地点与跟踪信息"
+      health_assessment:
+        name: "健康评估"
+        description: "健康问卷，包含症状清单与量表"
+      patient_intake:
+        name: "患者初诊"
+        description: "医疗初诊，包含人口统计、保险与同意书"
+      prescription_refill:
+        name: "处方续配"
+        description: "药房续配申请，包含药品信息与药房选择"
+      architectural_review:
+        name: "建筑审查申请"
+        description: "业主委员会外观改造审查，包含图纸、材料与工期"
+      hoa_violation_report:
+        name: "业主违规报告"
+        description: "社区规约违规报告，包含地点、违规类型与照片"
+      home_repair:
+        name: "家修申请"
+        description: "住宅维修申请，包含照片与紧急程度"
+      plumbing_service:
+        name: "管道维修申请"
+        description: "管道服务申请，包含问题描述、位置与预约偏好"
+      catering_order:
+        name: "餐饮订单"
+        description: "活动餐饮申请，包含菜单、人数与配送"
+      guest_checkin:
+        name: "宾客入住"
+        description: "酒店或民宿入住登记，包含证件与偏好"
+      restaurant_feedback:
+        name: "用餐反馈"
+        description: "用餐体验调查，包含菜品、服务与环境评分"
+      room_service_order:
+        name: "客房送餐"
+        description: "酒店客房送餐，包含送达时间与特殊要求"
+      expense_reimbursement:
+        name: "费用报销"
+        description: "员工费用报销，包含收据与审批流程"
+      performance_review:
+        name: "绩效评估"
+        description: "季度或年度员工评估，包含目标与评分"
+      time_off_request:
+        name: "请假申请"
+        description: "员工请假，包含日期范围、类型与主管审批"
+      training_registration:
+        name: "培训报名"
+        description: "员工培训报名，包含课程选择与时间"
+      ac_repair_request:
+        name: "空调 / 供暖维修"
+        description: "暖通维修申请，包含设备信息、症状与预约时间"
+      electrical_estimate:
+        name: "电气工程估价"
+        description: "住宅或商用电气工程估价，包含布线、配电箱与安装"
+      insurance_claim:
+        name: "保险理赔"
+        description: "提交保险理赔，包含事故说明、照片与证明文件"
+      insurance_quote:
+        name: "保险报价"
+        description: "保险报价，包含险种、个人资料与财产信息"
+      room_design_assessment:
+        name: "房间设计评估"
+        description: "设计咨询用的房间评估，包含尺寸、现有家具与目标"
+      interior_style_quiz:
+        name: "室内风格问卷"
+        description: "设计风格偏好问卷，包含房间照片、配色与生活方式"
+      inventory_audit:
+        name: "库存盘点"
+        description: "仓库或门店盘点，包含数量、差异与盘点人签字"
+      stock_reorder_request:
+        name: "补货申请"
+        description: "内部补货申请，包含货品、数量、供应商偏好与紧急程度"
+      access_permission_request:
+        name: "权限申请"
+        description: "系统访问或权限变更申请，带审批流程"
+      equipment_request:
+        name: "设备申请"
+        description: "信息技术设备或软件申请，包含理由与审批"
+      it_support_request:
+        name: "信息技术支持"
+        description: "帮助台工单，包含问题类型、优先级与设备信息"
+      lawn_care_quote:
+        name: "草坪养护报价"
+        description: "住宅或商用草坪服务估价，包含面积、服务项与排期"
+      tree_service_request:
+        name: "树木服务申请"
+        description: "砍伐、修剪或除根申请，包含位置、树种与危险评估"
+      dry_cleaning_dropoff:
+        name: "干洗送洗单"
+        description: "店内干洗交接，包含衣物清单、面料与污渍处理说明"
+      laundry_pickup_request:
+        name: "洗衣取送"
+        description: "洗衣与干洗取送预约，包含衣物类型与特殊护理"
+      consent_waiver:
+        name: "同意 / 免责"
+        description: "法律同意书，包含条款确认与签名"
+      incident_report:
+        name: "事件报告"
+        description: "工作场所事件表单，包含时间、证人与照片"
+      nda_agreement:
+        name: "保密协议"
+        description: "保密协议，包含各方、生效日期与签名"
+      archive_research_request:
+        name: "档案查阅申请"
+        description: "特藏与档案查阅申请，包含主题、时期与资料类型"
+      library_card_application:
+        name: "借书证申请"
+        description: "借书证登记，包含读者信息、地址核验与账户偏好"
+      freight_quote:
+        name: "货运报价"
+        description: "货运报价，包含起讫地、货物与特殊装卸"
+      shipping_request:
+        name: "托运申请"
+        description: "货运或包裹托运，包含起讫地与尺寸"
+      quality_inspection:
+        name: "质量检验"
+        description: "产品质量检查，包含合格标准、测量与缺陷跟踪"
+      work_order:
+        name: "工单"
+        description: "生产或维修工单，包含任务、材料与工期"
+      boat_service_request:
+        name: "船舶维修申请"
+        description: "船舶保养与维修申请，包含船只、发动机与服务类型"
+      marina_slip_rental:
+        name: "泊位租赁申请"
+        description: "码头泊位租赁申请，包含船舶尺寸、保险与租期"
+      contest_entry:
+        name: "抽奖 / 赠品"
+        description: "抽奖报名，包含社交分享与资格确认"
+      lead_capture:
+        name: "线索收集"
+        description: "高转化线索表单，字段尽量少以提高完成率"
+      newsletter_signup:
+        name: "通讯订阅"
+        description: "邮箱收集，包含兴趣偏好与发送频率"
+      webinar_registration:
+        name: "网络研讨会报名"
+        description: "在线活动报名，包含场次与时区"
+      counseling_feedback:
+        name: "咨询反馈"
+        description: "会后反馈，包含情绪记录、进展评分与咨询师评价"
+      therapy_intake:
+        name: "心理咨询初诊"
+        description: "新来访者建档，包含病史、目标与同意书"
+      moving_quote:
+        name: "搬家报价"
+        description: "住宅或商用搬家估价，包含物品清单与特殊物品"
+      storage_rental:
+        name: "仓储租赁"
+        description: "自助仓储租赁申请，包含尺寸、租期与进出要求"
+      music_lesson_signup:
+        name: "音乐课报名"
+        description: "音乐课报名，包含乐器、水平与时间偏好"
+      music_recital_registration:
+        name: "音乐会报名"
+        description: "学生演出报名，包含曲目、乐器与伴奏需求"
+      membership_application:
+        name: "会员申请"
+        description: "组织入会申请，包含等级选择与推荐信息"
+      petition_form:
+        name: "请愿 / 承诺"
+        description: "为一项事业或活动承诺收集支持者签名"
+      volunteer_registration:
+        name: "志愿者登记"
+        description: "志愿者报名，包含可服务时间、技能与背景调查同意"
+      notary_appointment_request:
+        name: "公证预约"
+        description: "上门或到店公证预约，包含文件类型、签署人数与证件要求"
+      notary_document_certification:
+        name: "文件认证"
+        description: "认证副本与文件鉴定申请，包含文件说明、用途与提交方式"
+      contact_lens_reorder:
+        name: "隐形眼镜复购"
+        description: "按处方复购隐形眼镜，包含镜片信息、处方核验与配送偏好"
+      eye_exam_booking:
+        name: "验光预约"
+        description: "验光预约，包含视力问题、保险与处方史"
+      donation_form:
+        name: "捐款"
+        description: "非营利捐款，包含建议金额、定期捐款与捐赠人信息"
+      payment_request:
+        name: "收款"
+        description: "收款，包含账单地址与付款方式"
+      subscription_form:
+        name: "订阅 / 会员"
+        description: "定期订阅，包含方案与计费周期"
+      pest_inspection_request:
+        name: "虫害检查申请"
+        description: "虫害防治检查申请，包含害虫类型、房屋情况与严重程度"
+      pest_treatment_followup:
+        name: "虫害治理回访"
+        description: "处理后回访，包含效果评估、是否需再次处理与客户满意度"
+      pet_adoption:
+        name: "宠物领养申请"
+        description: "领养申请，包含家庭环境、养宠经验与推荐人"
+      vet_appointment:
+        name: "兽医预约"
+        description: "宠物就诊预约，包含症状、病史与疫苗"
+      medication_review:
+        name: "用药复查"
+        description: "年度用药治疗复查，包含当前用药、过敏与健康目标"
+      prescription_transfer:
+        name: "处方转移"
+        description: "从其他药房转移处方，包含药品与保险信息"
+      pt_progress_evaluation:
+        name: "康复进展评估"
+        description: "物理治疗进展评估，包含功能改善、疼痛记录与更新后的治疗目标"
+      pt_intake:
+        name: "物理治疗初诊"
+        description: "物理治疗新患者建档，包含伤情、疼痛评估、活动目标与病史"
+      print_order:
+        name: "印刷订单"
+        description: "定制印刷订单，包含产品类型、数量、纸张、工艺与文件"
+      sign_quote:
+        name: "标识报价"
+        description: "定制标识报价，包含尺寸、材料、安装要求与设计文件"
+      purchase_order:
+        name: "采购订单"
+        description: "采购订单，包含供应商、货品、数量与审批"
+      vendor_evaluation:
+        name: "供应商评估"
+        description: "供应商绩效评估，包含质量、交付、价格与服务评分"
+      property_inquiry:
+        name: "房源咨询"
+        description: "房产咨询，包含看房预约与预算区间"
+      rental_application:
+        name: "租房申请"
+        description: "租客申请，包含就业、推荐人与收入证明"
+      candidate_screening:
+        name: "候选人筛选"
+        description: "面试前筛选问卷，包含经验、技能与可到岗时间"
+      exit_interview:
+        name: "离职面谈"
+        description: "员工离职面谈，包含离职原因、满意度与改进建议"
+      reference_check:
+        name: "背景调查"
+        description: "职业推荐问卷，包含绩效与品格评估"
+      detailed_registration:
+        name: "详细注册"
+        description: "完整注册，包含个人信息、地址与偏好"
+      simple_signup:
+        name: "简单注册"
+        description: "最简注册：姓名、邮箱与密码"
+      user_profile:
+        name: "用户资料"
+        description: "资料编辑，包含头像、简介与社交链接"
+      church_event:
+        name: "教会活动报名"
+        description: "信仰社区活动报名，包含人数与饮食需求"
+      prayer_request:
+        name: "代祷请求"
+        description: "保密的代祷提交，包含类别与后续联系偏好"
+      lab_sample_submission:
+        name: "实验室样本提交"
+        description: "实验室样本提交，包含标本信息、检测要求与保管链"
+      research_consent:
+        name: "研究知情同意"
+        description: "研究参与知情同意，包含研究说明与签名"
+      customer_loyalty:
+        name: "会员忠诚计划"
+        description: "奖励计划注册，包含偏好与沟通授权"
+      inventory_count:
+        name: "库存清点"
+        description: "实地库存盘点，包含数量、差异与库位"
+      roof_repair_quote:
+        name: "屋顶维修报价"
+        description: "屋顶维修或更换报价，包含损坏情况、屋顶类型与紧急程度"
+      roof_inspection:
+        name: "屋顶检查申请"
+        description: "屋顶检查或维修估价，包含屋顶类型、年限、损坏描述与保险信息"
+      beta_signup:
+        name: "内测报名"
+        description: "抢先体验候补，包含使用场景、公司规模与感兴趣的功能"
+      cancellation_survey:
+        name: "取消调查"
+        description: "客户流失反馈，包含原因、满意度与挽回方案"
+      onboarding_checklist:
+        name: "入门清单"
+        description: "新用户引导，包含资料设置、偏好与第一步"
+      appointment_booking:
+        name: "预约"
+        description: "服务预约，包含日期时段与联系方式"
+      conference_registration:
+        name: "会议报名"
+        description: "多场次会议报名，包含工作坊与餐食选择"
+      event_registration:
+        name: "活动报名"
+        description: "回复表单，包含日期、餐食与来宾人数"
+      access_card_request:
+        name: "门禁卡申请"
+        description: "员工或承包商证件与门禁申请，包含权限级别与区域"
+      visitor_signin:
+        name: "访客登记"
+        description: "楼宇访客登记，包含接待人、来访目的与证件发放"
+      senior_activity_signup:
+        name: "长者活动报名"
+        description: "社区中心或养老机构活动报名，包含无障碍与饮食需求"
+      senior_care_assessment:
+        name: "养老需求评估"
+        description: "综合老年照护评估，包含病史、行动能力、日常生活与家属联系方式"
+      party_rsvp:
+        name: "聚会回复"
+        description: "活动回复，包含来宾人数、饮食偏好与点歌"
+      potluck_signup:
+        name: "聚餐报名"
+        description: "协调聚餐菜品、份量与到达时间"
+      reunion_registration:
+        name: "聚会报名"
+        description: "家庭或同学聚会报名，包含活动与住宿"
+      wedding_rsvp:
+        name: "婚礼回复"
+        description: "婚礼回复卡，包含餐食与携伴信息"
+      player_registration:
+        name: "运动员注册"
+        description: "个人运动员注册，包含个人资料、体检合格与免责声明"
+      team_registration:
+        name: "队伍报名"
+        description: "联赛或队伍报名，包含队员信息、位置与免责声明"
+      temp_staffing_request:
+        name: "临时用工申请"
+        description: "临时用工申请，包含岗位、技能要求、期限与班次"
+      staffing_worker_application:
+        name: "劳务人员申请"
+        description: "劳务派遣人员登记，包含可工作时间、技能、工作经历与证书"
+      customer_feedback:
+        name: "客户反馈"
+        description: "星级、满意度量表与开放意见"
+      employee_satisfaction:
+        name: "员工满意度"
+        description: "内部人力资源调查，包含敬业度与部门反馈"
+      market_research:
+        name: "市场调研"
+        description: "消费者研究，包含人口统计、偏好与产品反馈"
+      nps_survey:
+        name: "净推荐值调查"
+        description: "净推荐值调查：评分量表与追问"
+      quiz_assessment:
+        name: "测验 / 评估"
+        description: "选择题，答案按组整理"
+      tattoo_aftercare_checkin:
+        name: "纹身护理回访"
+        description: "纹身后恢复回访，包含愈合进展、顾虑与复查照片"
+      tattoo_consultation:
+        name: "纹身咨询"
+        description: "纹身设计咨询，包含风格、位置、尺寸与参考图"
+      symptom_checker:
+        name: "症状自查"
+        description: "就诊前症状评估，便于远程问诊分诊"
+      virtual_visit_intake:
+        name: "远程问诊初诊"
+        description: "远程问诊前问卷，包含症状、病史与设备准备情况"
+      hotel_reservation:
+        name: "酒店预订"
+        description: "客人预订，包含房型、入离日期与特殊要求"
+      restaurant_reservation:
+        name: "餐厅预订"
+        description: "订座，包含人数、时间与饮食偏好"
+      travel_request:
+        name: "出差申请"
+        description: "公司出差申请，包含行程、预算与审批"
+      progress_report:
+        name: "学员进度报告"
+        description: "导师提交的进度报告，包含技能评估、目标与家长沟通"
+      tutoring_session:
+        name: "辅导预约"
+        description: "预约辅导或教练课程，包含科目、水平与时间"
+      warranty_claim:
+        name: "保修索赔"
+        description: "产品保修索赔，包含缺陷描述、照片与期望处理方式"
+      warranty_registration:
+        name: "保修登记"
+        description: "产品保修登记，包含购买信息、序列号与购买凭证"
+      bulk_pickup_request:
+        name: "大件清运"
+        description: "大件或大量废弃物清运预约，包含物品清单、地点与进出条件"
+      recycling_schedule:
+        name: "回收预约"
+        description: "住宅回收桶申请与收运安排，包含材料类型与地址核验"
+      wedding_vendor_inquiry:
+        name: "婚礼供应商咨询"
+        description: "新人向供应商咨询，包含婚期、风格、预算与场地"
+      wedding_guest_rsvp:
+        name: "婚礼宾客回复"
+        description: "宾客回复，包含餐食、携伴、点歌与饮食需求"

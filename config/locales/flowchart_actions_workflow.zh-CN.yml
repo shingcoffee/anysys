@@ -1,0 +1,180 @@
+zh-CN:
+  flowchart_actions:
+    transition_state:
+      label: 流转状态
+      description: 按声明的状态机迁移记录字段或上下文变量。
+      fields:
+        stateSource:
+          label: 状态来源
+          help: 从已加载的记录或上下文变量读取当前状态。
+          options:
+            record: 记录字段
+            variable: 上下文变量
+        modelVariable:
+          label: 记录
+          help: 已加载记录在上下文中的路径。本步骤只改内存中的字段，需由后续保存步骤落库。
+        stateField:
+          label: 状态字段
+          help: 保存当前状态的属性。本步骤不会保存该记录。
+        stateVariable:
+          label: 状态变量
+          help: 保存当前状态的变量在上下文中的路径。
+          placeholder: 例如 status
+        targetSource:
+          label: 目标来源
+          help: 从字面量或上下文变量读取要迁入的状态。
+          options:
+            literal: 字面量
+            variable: 上下文变量
+        targetState:
+          label: 目标状态
+          help: 在映射允许时迁入的状态。
+          placeholder: 例如 approved
+        targetVariable:
+          label: 目标变量
+          help: 要迁入的状态在上下文中的路径。
+        transitions:
+          label: 迁移映射
+          help: 起始状态对应逗号分隔的允许目标。起始状态填 * 表示任意当前状态。
+        initialState:
+          label: 初始状态
+          help: 当前值为空时假定的状态。
+        allowSameState:
+          label: 允许同状态
+          help: 目标与当前状态相同时视为成功的空操作。
+        guardExpression:
+          label: 守卫条件
+          help: 迁移继续前必须成立的额外布尔条件。
+        onInvalid:
+          label: 非法时
+          help: 映射或守卫拒绝该迁移时的处理方式。
+          options:
+            fail: 使步骤失败
+            skip: 保持状态不变并继续
+        timestampField:
+          label: 时间戳字段
+          help: 可选。迁移发生时写入当前时间的属性。本步骤不会保存该记录。
+        resultVar:
+          label: 将状态保存为
+          help: 后续步骤读取结果状态的变量名。
+        previousStateVar:
+          label: 将原状态保存为
+          help: 后续步骤读取本步骤之前状态的变量名。
+        transitionedVar:
+          label: 将是否已迁移保存为
+          help: 后续步骤读取状态是否已变更的变量名。
+      errors:
+        plain_variable: "%{field} 须为普通变量名，不能是嵌套路径"
+    evaluate_rules:
+      label: 评估规则
+      description: 按 DMN 风格的命中策略执行决策表，用于定价档位、资格、路由或计分。
+      fields:
+        rules:
+          label: 规则
+          help: 基于 ctx 的条件表达式对应结果表达式。按行顺序检测。
+        hitPolicy:
+          label: 命中策略
+          help: 如何将匹配行合并为一项结果。
+          options:
+            first: 首个匹配
+            collect: 收集全部匹配
+            sum: 求和
+            count: 计数
+            min: 最小
+            max: 最大
+            any: 任一（全部匹配须相等）
+        uniqueResults:
+          label: 结果去重
+          help: 从收集到的列表中去掉重复值。
+        defaultValue:
+          label: 默认值
+          help: 无匹配且“无匹配时”为默认时使用的表达式。
+        onNoMatch:
+          label: 无匹配时
+          help: 没有任何规则匹配时的处理方式。
+          options:
+            default: 使用默认值
+            fail: 使步骤失败
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取决策结果的变量名。
+        matchedVar:
+          label: 将匹配行保存为
+          help: 后续步骤读取从 1 起算的匹配行号的变量名。
+    select_assignee:
+      label: 选择处理人
+      description: 按策略从候选池中选取一名处理人，用于工单路由或线索分配。
+      fields:
+        candidateSource:
+          label: 候选来源
+          help: 从上下文数组中选取，或从本客户持有指定保留角色的启用用户中选取。
+          options:
+            variable: 上下文数组
+            role: 角色用户
+        sourceVariable:
+          label: 候选人
+          help: 候选哈希或标量数组在上下文中的路径。
+          placeholder: 例如 agents
+        role:
+          label: 角色
+          help: 作为候选池的保留角色；仅包含本客户下该角色的启用用户。
+          options:
+            admin: 管理员
+            member: 成员
+        strategy:
+          label: 策略
+          help: 从合格候选中选取一人的方式。
+          options:
+            round_robin: 轮询
+            random: 随机
+            weighted: 加权
+            least_loaded: 负载最低
+            first: 首位合格
+        poolKey:
+          label: 池键
+          help: 轮询使用的租户级轮转计数器名称。
+        weightField:
+          label: 权重字段
+          help: 保存各候选人权重的哈希字段。
+        loadField:
+          label: 负载字段
+          help: 保存各候选人当前负载的哈希字段。
+        availabilityField:
+          label: 可用字段
+          help: 填写后仅保留该字段为真的候选人。
+        excludeVariable:
+          label: 排除
+          help: 要跳过的 id 或 id 列表在上下文中的路径，例如上一任处理人。
+        idField:
+          label: 标识字段
+          help: 作为候选人 id 的哈希字段。标量以自身为 id。
+        returns:
+          label: 返回
+          help: 保存完整候选人还是仅保存其 id。
+          options:
+            candidate: 候选人
+            id: 标识
+        onEmpty:
+          label: 无人选时
+          help: 没有合格候选人时的处理方式。
+          options:
+            fail: 使步骤失败
+            nil: 保存空值并继续
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取所选处理人的变量名。
+  flowchart_runtime:
+    errors:
+      transition_state:
+        invalid_transition: 无法从 %{from} 迁移到 %{to}。
+        guard_failed: 从 %{from} 到 %{to} 的迁移守卫未通过。
+        missing_record: 没有可迁移的已加载记录。
+        failed: 无法变更状态（%{reason}）。
+      evaluate_rules:
+        no_match: 没有规则匹配。
+        non_numeric: 匹配规则返回了非数值结果。
+        any_conflict: 匹配规则返回了不同的结果。
+        failed: 无法评估规则（%{reason}）。
+      select_assignee:
+        no_candidates: 没有合格的处理人。
+        failed: 无法选择处理人（%{reason}）。

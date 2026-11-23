@@ -1,0 +1,16 @@
+<div class="hidden fixed inset-0 z-50 flex items-start justify-center pt-[20vh]"
+     data-page-builder-target="commandPalette"
+     data-action="click->page-builder#closeCommandPalette">
+  <div class="bg-white rounded-xl shadow-2xl border border-gray-200 w-[480px] max-h-[400px] flex flex-col overflow-hidden"
+       data-action="click->page-builder#stopPropagation">
+    <div class="p-3 border-b border-gray-100">
+      <input type="text"
+             class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+             placeholder="<%= t("comp_page_builder.command_palette.placeholder") %>"
+             data-page-builder-target="commandPaletteInput"
+             data-action="input->page-builder#filterCommandPalette keydown->page-builder#commandPaletteKeydown"
+             autocomplete="off">
+    </div>
+    <div class="flex-1 overflow-y-auto p-2" data-page-builder-target="commandPaletteResults"></div>
+  </div>
+</div>

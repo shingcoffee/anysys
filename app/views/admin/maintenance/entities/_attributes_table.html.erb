@@ -1,0 +1,222 @@
+<%# Attributes Table Partial %>
+<%# locals: (entity:, attributes:, editable: true, show_view_action: false, show_visibility: true, truncate_validators: false) %>
+<% editable = local_assigns.fetch(:editable, true) %>
+<% show_view_action = local_assigns.fetch(:show_view_action, false) %>
+<% show_visibility = local_assigns.fetch(:show_visibility, true) %>
+<% truncate_validators = local_assigns.fetch(:truncate_validators, false) %>
+
+<%# Grouping controls (toolbar + groups state input) are rendered by the form so they
+    are always present — see entities/_attribute_grouping_controls. %>
+
+<% table_min_w = show_visibility ? "min-w-[860px]" : "min-w-[720px]" %>
+<div class="overflow-x-auto">
+<table class="w-full <%= table_min_w %> divide-y divide-border-subtle table-fixed"<%= ' data-entity-form-target="attributesTable"' if editable %>>
+  <thead class="table-header">
+    <tr>
+      <% if editable %>
+        <th scope="col" class="w-8"></th>
+        <th scope="col" class="w-6"></th>
+        <th scope="col" class="w-6"></th>
+      <% end %>
+      <th scope="col" class="px-3 py-2.5 text-left w-40"><%= t("common.labels.name") %></th>
+      <th scope="col" class="px-3 py-2.5 text-left w-40"><%= t("maint_core.entities.attrs.display_label") %></th>
+      <th scope="col" class="px-3 py-2.5 text-left w-32"><%= t("maint_core.entities.attrs.html_type") %></th>
+      <th scope="col" class="px-3 py-2.5 text-left w-36"><%= t("maint_core.entities.attrs.validators") %></th>
+      <% if show_visibility %>
+        <th scope="col" class="px-3 py-2.5 text-left w-44"><%= t("maint_core.entities.attrs.visibility") %></th>
+      <% end %>
+      <% if editable || show_view_action %>
+        <th scope="col" class="px-3 py-2.5 text-right w-28"><%= t("common.labels.actions") %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody class="bg-surface divide-y divide-border-subtle">
+    <%
+      data_cols = 4 + (show_visibility ? 1 : 0)
+      total_cols = (editable ? 3 : 0) + data_cols + ((editable || show_view_action) ? 1 : 0)
+      index_counter = 0
+      iterate_grouped_attributes(entity) do |group, group_attrs|
+        next if group.nil? && group_attrs.empty?
+    %>
+      <% if group %>
+        <tr data-attribute-group-header
+            data-group-id="<%= group["id"] %>"
+            <% if editable %>draggable="true"
+            data-action="dragstart->entity-form#dragStartGroup dragover->entity-form#dragOverGroupHeader drop->entity-form#dropGroup"<% end %>
+            class="bg-accent-subtle/50 select-none">
+          <td colspan="<%= total_cols %>" class="px-0 py-2">
+            <div class="flex items-center gap-2">
+              <span class="inline-block w-1 h-6 rounded <%= attribute_group_color_classes(group["color"], variant: :bar) %>"></span>
+              <% if editable %>
+                <span class="cursor-grab text-text-muted px-1" title="<%= t("maint_core.entities.attrs.drag_to_reorder") %>">⋮⋮</span>
+              <% end %>
+              <span class="<%= attribute_group_color_classes(group["color"], variant: :icon) %>">
+                <%= attribute_group_icon(group["icon"], css_class: "w-4 h-4 inline") %>
+              </span>
+              <span class="font-semibold text-sm <%= attribute_group_color_classes(group["color"], variant: :text) %>">
+                <%= group["name"] %>
+              </span>
+              <% if group["description"].present? %>
+                <span class="text-xs text-text-muted truncate max-w-xs"><%= group["description"] %></span>
+              <% end %>
+              <span class="text-xs text-text-muted normal-case">
+                <%= t("maint_core.entities.attrs.attribute_count", count: group_attrs.size) %>
+              </span>
+              <% if group_attrs.empty? %>
+                <span class="ml-1 px-1.5 py-0.5 text-xs rounded bg-text-muted/10"><%= t("maint_core.entities.attrs.empty") %></span>
+              <% end %>
+              <% if editable %>
+                <button type="button" class="ml-auto p-1 text-text-muted hover:text-text-primary"
+                        data-action="click->entity-form#openGroupMenu"
+                        data-group-id="<%= group["id"] %>"
+                        title="<%= t("maint_core.entities.attrs.group_actions") %>">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
+                  </svg>
+                </button>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% elsif group_attrs.any? %>
+        <tr data-attribute-group-header data-group-id="" class="bg-accent-subtle/30 select-none">
+          <td colspan="<%= total_cols %>" class="px-0 py-2">
+            <div class="flex items-center gap-2">
+              <span class="inline-block w-1 h-6 rounded bg-text-muted/30"></span>
+              <span class="font-semibold text-sm text-text-muted"><%= t("maint_core.entities.attrs.ungrouped") %></span>
+              <span class="text-xs text-text-muted normal-case">
+                <%= t("maint_core.entities.attrs.attribute_count", count: group_attrs.size) %>
+              </span>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+
+      <% group_attrs.each do |attr| %>
+        <% index = index_counter %>
+        <% index_counter += 1 %>
+        <% validators = attr["validators"] || [] %>
+        <% visibility = normalize_attribute_visibility(attr["visibility"]) %>
+        <% validator_apply = normalize_attribute_visibility(attr["validator_apply"]) %>
+        <% attr_editable = normalize_attribute_visibility(attr["editable"]) %>
+        <% attr_editable = {
+             admin: visibility[:admin] && attr_editable[:admin],
+             member: visibility[:member] && attr_editable[:member],
+             public: visibility[:public] && attr_editable[:public]
+           } %>
+        <% display_label = attr["display_label"].presence || attr["name"] %>
+        <% bar_classes = group ? "#{attribute_group_color_classes(group["color"], variant: :bar)} opacity-30" : "bg-transparent" %>
+        <tr <%= 'data-attribute-item=""' if editable || show_view_action %>
+            class="attribute-item"
+            <% if editable %>draggable="true"
+            data-action="dragstart->entity-form#dragStartRow dragover->entity-form#dragOverRow drop->entity-form#dropRow dragend->entity-form#dragEndRow"<% end %>
+            data-attr-name="<%= attr["name"] %>"
+            data-attr-name-slug="<%= attr["name_slug"] %>"
+            data-attr-display-label="<%= display_label %>"
+            data-attr-html-type="<%= attr["html_type"] || "text" %>"
+            data-attr-type="<%= attr["type"] %>"
+            data-attr-description="<%= attr["description"] %>"
+            data-attr-validators="<%= Array(validators).to_json %>"
+            data-attr-visibility="<%= visibility.to_json %>"
+            data-attr-validator-apply="<%= validator_apply.to_json %>"
+            data-attr-editable="<%= attr_editable.to_json %>"
+            data-attr-group-id="<%= attr["group_id"] %>"
+            data-attr-config="<%= attr["config"]&.to_json.presence || "null" %>"
+            data-attr-owner="<%= attr["owner"] == true ? "true" : "" %>">
+          <% if editable %>
+            <td class="pl-3 pr-1 py-2 w-8">
+              <span class="inline-block w-1 h-6 rounded <%= bar_classes %>"></span>
+            </td>
+            <td class="px-1 py-2 w-6">
+              <input type="checkbox" data-action="change->entity-form#toggleAttributeSelection" class="rounded">
+            </td>
+            <td class="px-1 py-2 w-6 cursor-grab text-text-muted" title="<%= t("maint_core.entities.attrs.drag") %>">⋮⋮</td>
+          <% end %>
+          <td class="px-3 py-2 text-sm font-medium text-text-primary">
+            <span class="block truncate cursor-help" data-field="name" title="<%= attr["name"] %>"><%= attr["name"] %></span>
+          </td>
+          <td class="px-3 py-2 text-body-sm text-text-primary">
+            <span class="block truncate cursor-help" data-field="display_label" title="<%= display_label %>"><%= display_label %></span>
+          </td>
+          <td class="px-3 py-2">
+            <span class="badge badge-success" data-field="html_type">
+              <%= HtmlTypeOptions.label_for(attr["html_type"]) %>
+            </span>
+            <% if attr["type"] == "Computed" %>
+              <span class="ml-1 badge badge-accent" data-field="attr_type"><%= t("comp_admin.attribute_modal.computed_type_badge") %></span>
+            <% end %>
+            <%= render Admin::Maintenance::Entities::LifecycleSummaryComponent.new(attribute: attr) %>
+          </td>
+          <td class="px-3 py-2 <%= "w-36 max-w-[9rem]" if truncate_validators %>" data-field="validators">
+            <%= render_validator_badges(validators, truncate: truncate_validators) %>
+          </td>
+          <% if show_visibility %>
+            <td class="px-3 py-2" data-field="visibility">
+              <%= render_attribute_visibility_badges(visibility) %>
+            </td>
+          <% end %>
+          <% if editable || show_view_action %>
+            <td class="px-3 py-2 text-right">
+              <div class="inline-flex items-center justify-end gap-0.5">
+                <% if show_view_action %>
+                  <button type="button"
+                          data-action="click->entity-form#viewAttribute"
+                          class="action-icon"
+                          title="<%= t("maint_core.entities.attrs.view_title") %>">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </button>
+                <% end %>
+                <% if editable %>
+                  <button type="button"
+                          data-action="click->entity-form#copyAttribute"
+                          class="action-icon"
+                          title="<%= t("maint_core.entities.attrs.copy_title") %>">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  </button>
+                  <button type="button"
+                          data-action="click->entity-form#editAttribute"
+                          class="action-icon"
+                          title="<%= t("maint_core.entities.attrs.edit_title") %>">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </button>
+                  <button type="button"
+                          data-action="click->entity-form#removeAttribute"
+                          class="action-icon action-icon-danger"
+                          title="<%= t("maint_core.entities.attrs.remove_title") %>">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                <% end %>
+              </div>
+              <% if editable %>
+                <input type="hidden" name="attributes[<%= index %>][name]" value="<%= attr["name"] %>" data-input="name">
+                <input type="hidden" name="attributes[<%= index %>][name_slug]" value="<%= attr["name_slug"] %>" data-input="name_slug">
+                <input type="hidden" name="attributes[<%= index %>][display_label]" value="<%= display_label %>" data-input="display_label">
+                <input type="hidden" name="attributes[<%= index %>][html_type]" value="<%= attr["html_type"] || "text" %>" data-input="html_type">
+                <input type="hidden" name="attributes[<%= index %>][type]" value="<%= attr["type"] %>" data-input="type">
+                <input type="hidden" name="attributes[<%= index %>][description]" value="<%= attr["description"] %>" data-input="description">
+                <input type="hidden" name="attributes[<%= index %>][validators]" value="<%= Array(validators).to_json %>" data-input="validators">
+                <input type="hidden" name="attributes[<%= index %>][visibility]" value="<%= visibility.to_json %>" data-input="visibility">
+                <input type="hidden" name="attributes[<%= index %>][validator_apply]" value="<%= validator_apply.to_json %>" data-input="validator_apply">
+                <input type="hidden" name="attributes[<%= index %>][editable]" value="<%= attr_editable.to_json %>" data-input="editable">
+                <input type="hidden" name="attributes[<%= index %>][group_id]" value="<%= attr["group_id"] %>" data-input="group_id">
+                <input type="hidden" name="attributes[<%= index %>][config]" value="<%= attr["config"]&.to_json.presence || "null" %>" data-input="config">
+                <input type="hidden" name="attributes[<%= index %>][owner]" value="<%= attr["owner"] == true ? "true" : "" %>" data-input="owner">
+                <input type="hidden" name="attributes[<%= index %>][lifecycle]" value="<%= attr["lifecycle"].is_a?(Hash) ? attr["lifecycle"].to_json : "" %>" data-input="lifecycle">
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+</div>

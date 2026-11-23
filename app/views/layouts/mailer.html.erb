@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
+    <title><%= message.subject %></title>
+    <%# Mail clients strip <style> blocks that reference the app bundle and never
+        load Tailwind, so responsive mail chrome has to ship as a <style> block of
+        client resets plus one small-screen media query. Same documented exception
+        as the inline styles in Mailers::ShellComponent — it is not app UI CSS. %>
+    <style type="text/css">
+      body, table, td, p, h1, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse; }
+      @media only screen and (max-width: 600px) {
+        .mail-outer { padding: 24px 12px 40px !important; }
+        .mail-pad { padding-left: 26px !important; padding-right: 26px !important; }
+        .mail-body-pad { padding-top: 32px !important; padding-bottom: 34px !important; }
+        .mail-head-pad { padding-top: 22px !important; padding-bottom: 22px !important; }
+        .mail-title { font-size: 24px !important; line-height: 1.32 !important; }
+        .mail-amount { font-size: 30px !important; }
+        .mail-lede { font-size: 15px !important; }
+        .mail-stack { display: block !important; width: 100% !important; text-align: left !important; }
+        .mail-kicker { padding-top: 10px !important; text-align: left !important; }
+        .mail-fact-label { font-size: 12px !important; }
+      }
+    </style>
+  </head>
+  <body style="margin:0;padding:0;background-color:#f7f2ea;" bgcolor="#f7f2ea">
+    <%= yield %>
+  </body>
+</html>

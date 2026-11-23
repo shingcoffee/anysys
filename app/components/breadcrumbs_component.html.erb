@@ -1,0 +1,14 @@
+<nav class="text-sm text-text-muted mb-6 flex items-center gap-1.5 overflow-x-auto scrollbar-none" aria-label="<%= t("common.aria.breadcrumb") %>">
+  <% crumbs.each_with_index do |crumb, i| %>
+    <% if i == crumbs.size - 1 %>
+      <span class="shrink-0 text-text-primary font-medium"><%= crumb[:label] %></span>
+    <% elsif crumb[:path] %>
+      <%= link_to crumb[:label], crumb[:path], class: "shrink-0 hover:text-text-secondary transition-base rounded" %>
+    <% else %>
+      <span class="shrink-0"><%= crumb[:label] %></span>
+    <% end %>
+    <% unless i == crumbs.size - 1 %>
+      <span class="text-border-strong shrink-0">/</span>
+    <% end %>
+  <% end %>
+</nav>

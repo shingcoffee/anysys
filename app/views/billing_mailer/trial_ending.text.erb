@@ -1,0 +1,12 @@
+<% price = t("billing_mailer.trial_ending.price", amount: Billing::CurrencyResolver.format(@subscription.amount_cents, @subscription.currency), currency: @subscription.currency, interval: t("comp_billing.plan_form.intervals.#{@subscription.interval}")) %>
+<%= t("billing_mailer.trial_ending.title") %>
+
+<%= t("billing_mailer.trial_ending.intro") %>
+
+<%= t("billing_mailer.trial_ending.label_price_after_trial") %>: <%= price %>
+<%= t("billing_mailer.trial_ending.label_plan") %>: <%= @plan.name %>
+<%= t("billing_mailer.trial_ending.label_trial_ends") %>: <%= format_mail_date(@subscription.trial_end) %>
+
+<%= t("billing_mailer.trial_ending.outro") %>
+
+<%= t("billing_mailer.shell.footer") %>

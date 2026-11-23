@@ -1,0 +1,10 @@
+<% if hidden_input? || input_only %>
+  <%= render_input %>
+<% else %>
+  <div class="<%= wrapper_classes %>">
+    <label for="<%= field_id %>" class="<%= label_classes %>">
+      <%= label %><%= required_indicator %>
+    </label>
+    <%= render_input %>
+  </div>
+<% end %>

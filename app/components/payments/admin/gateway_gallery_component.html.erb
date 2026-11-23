@@ -1,0 +1,16 @@
+<%= render ::Admin::Settings::PageComponent.new(
+  customer_id: helpers.params[:customer_id], title: t("settings_navigation.items.payment_providers"),
+  breadcrumbs: [{ label: t("settings_navigation.items.payment_providers") }],
+  description: t("settings_modules.payments.description")
+) do %>
+  <% if empty? %>
+    <%= render ::Admin::Settings::SectionComponent.new(title: t("settings_modules.payments.empty_title"), description: t("settings_modules.payments.empty_hint")) %>
+  <% else %>
+    <p class="mb-5 max-w-3xl text-sm text-text-secondary"><%= t("settings_modules.payments.gallery_hint") %></p>
+    <div class="grid grid-cols-1 gap-4 xl:grid-cols-2">
+      <% gateways.each do |gateway| %>
+        <%= render Payments::Admin::GatewayCardComponent.new(gateway: gateway, account: account_for(gateway), default_provider: default_provider) %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <title><%= content_for(:title) || t("public_views.layouts.handoff_title") %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <%# A Turbo visit to the handoff hop reloads it top-level, so the module is entered outside Turbo Drive. %>
+    <%= turbo_page_requires_reload_tag %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="bg-gray-50 min-h-screen flex flex-col">
+    <main class="flex-1 flex items-start justify-center py-8 px-4 sm:py-12">
+      <div class="w-full max-w-2xl">
+        <% flash.each do |type, message| %>
+          <% next unless message.is_a?(String) %>
+          <div class="mb-4 border-l-4 <%= type == 'alert' ? 'bg-red-50 border-red-400 text-red-800' : 'bg-green-50 border-green-400 text-green-800' %> px-3 py-2 text-sm"
+               role="alert"><%= message %></div>
+        <% end %>
+        <%= yield %>
+      </div>
+    </main>
+  </body>
+</html>

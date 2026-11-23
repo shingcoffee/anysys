@@ -1,0 +1,11 @@
+<div class="space-y-6 min-w-0">
+  <%= link_to ui("segments.edit"), sms_path(:edit_segment, @segment), class: "btn btn-secondary" %>
+  <%= section(ui("segments.rules")) do %>
+    <p class="text-text-secondary break-words"><%= @segment.description %></p>
+    <p class="text-sm text-text-secondary"><%= ui("segments.rules_help") %></p>
+    <pre class="whitespace-pre-wrap break-words [overflow-wrap:anywhere] text-sm"><%= JSON.pretty_generate(@segment.segment_rules) %></pre>
+  <% end %>
+  <%= render Sms::Admin::AudienceSummaryComponent.new(preview: @preview) %>
+  <% if @preview %><%= render Sms::Admin::AudienceSamplesComponent.new(preview: @preview) %><% end %>
+  <%= section(ui("segments.delete")) do %><p class="text-sm text-text-secondary"><%= ui("segments.delete_help") %></p><%= link_to t("sms_campaign_http.navigation.campaigns"), sms_path(:campaigns), class: "link" %><%= button_to ui("segments.delete"), sms_path(:segment, @segment), method: :delete, class: "btn btn-secondary" %><% end %>
+</div>

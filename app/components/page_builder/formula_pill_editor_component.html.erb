@@ -1,0 +1,35 @@
+<%# app/components/page_builder/formula_pill_editor_component.html.erb %>
+<%# When embedded, the parent owns the formula-editor controller (so a sibling function %>
+<%# inserter shares the same Stimulus scope); standalone, this div owns it. %>
+<div class="space-y-2"
+     <%- unless embedded -%>
+     data-controller="formula-editor"
+     data-formula-editor-fields-value="<%= fields_json %>"
+     data-formula-editor-formula-value="<%= formula %>"
+     data-formula-editor-valid-label-value="<%= t("comp_page_builder.calc_editor.validation.valid_label") %>"
+     data-formula-editor-errors-singular-format-value="<%= t("comp_page_builder.calc_editor.validation.errors_singular_format") %>"
+     data-formula-editor-errors-plural-format-value="<%= t("comp_page_builder.calc_editor.validation.errors_plural_format") %>"
+     data-formula-editor-preview-format-value="<%= t("comp_page_builder.calc_editor.validation.preview_format") %>"
+     <%- end -%>>
+
+  <%# Contenteditable formula surface %>
+  <div contenteditable="true"
+       data-formula-editor-target="surface"
+       data-action="input->formula-editor#onInput keydown->formula-editor#onKeydown blur->formula-editor#onBlur"
+       class="min-h-[72px] w-full rounded-lg border border-gray-300 bg-white px-3 py-2 font-mono text-sm leading-7 focus:outline-none focus:ring-2 focus:ring-purple-500/30 focus:border-purple-400"
+       role="textbox" aria-multiline="true"></div>
+
+  <%# Autocomplete dropdown (positioned by controller) %>
+  <div data-formula-editor-target="autocomplete"
+       class="hidden absolute z-50 max-h-56 w-64 overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg"></div>
+
+  <%# Validation + live result %>
+  <div class="flex items-center justify-between text-xs">
+    <span data-formula-editor-target="status" class="font-medium"></span>
+    <span data-formula-editor-target="preview" class="text-gray-500"></span>
+  </div>
+
+  <%# Error block %>
+  <div data-formula-editor-target="errors"
+       class="hidden rounded-md bg-red-50 px-3 py-2 text-xs text-red-700"></div>
+</div>

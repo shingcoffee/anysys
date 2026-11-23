@@ -1,0 +1,11 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "payment",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.payment.entries.reconciliations") }
+      ],
+      title: t("feature_modules.payment.entries.reconciliations"),
+      description: t("admin_modules.payments.reconciliations.description")
+    ) do %>
+  <%= render ::Payments::Admin::ReconciliationTableComponent.new(bills: @bills) %>
+<% end %>

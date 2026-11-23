@@ -1,0 +1,114 @@
+zh-CN:
+  activerecord:
+    attributes:
+      sms/credential:
+        sender_rate_per_second: 账户发送速率（条／秒）
+  sms_campaign_http:
+    registration:
+      description: 通过可扩展服务商发送定向短信活动与事务短信
+    navigation:
+      campaigns: 活动
+      contacts: 联系人
+      segments: 受众
+    access_points:
+      contacts: 短信联系人
+      consent_events: 短信同意记录
+      entity_syncs: 短信实体同步
+      segments: 短信分群
+      campaigns: 短信活动
+      campaign_launches: 启动短信活动
+      campaign_cancellations: 取消短信活动
+      campaign_reports: 短信活动报告
+    flash:
+      saved: 已保存更改。
+      created: 已创建联系人。
+      archived: 已归档联系人。
+      deleted: 已删除记录。
+      consent_recorded: 已记录同意事件。
+      launched: 活动已入队。
+      cancelled: 已取消活动剩余发送。
+    errors:
+      payload_too_large: 请求内容不得超过 64 KiB。
+      unknown_parameters: 请求包含不支持或受保护的参数。
+      object_required: 必须为 JSON 对象。
+      string_required: 必须为有效文本。
+      integer_required: 必须为支持范围内的整数。
+      invalid_json: JSON 格式无效或存在重复键。请修正原始内容后重试。
+      json_too_large: JSON 超出允许大小。
+      invalid_schedule: 请填写所选 IANA 时区内的有效本地日期与时间。不接受夏令时切换造成的重复或不存在的时间。
+      offset_required: 请填写带明确时区偏移的 ISO 8601 日期与时间。
+      invalid_filter: 不支持所选筛选或排序条件。
+      invalid_source: 实体没有有效的已解析来源结构。
+      not_found: 未找到短信资源。
+      not_draft: 仅草稿活动可以编辑或删除。
+      segment_in_use: 草稿活动正在引用此分群，无法删除。
+      invalid_review: 请重新确认已保存的活动，再启动发送。
+      invalid_unsubscribe: 退订链接无效或已过期。
+      invalid_sender_rate: 账户发送速率必须为大于 0 且不超过 1 的有限数值。
+    labels:
+      name: 名称
+      phone_e164: 电话
+      country_code: 国家
+      timezone: 时区
+      source_kind: 来源
+      consent_status: 同意状态
+      status: 状态
+      description: 说明
+      updated_at: 更新时间
+      send_timing: 发送方式
+      scheduled_at: 计划时间
+      matched_count: 收件人数
+      not_started: 尚未开始
+      message_status: 消息状态
+      skip_reason: 原因
+      admitted_at: 接收时间
+    contact_status:
+      active: 启用
+      archived: 已归档
+    source_kind:
+      manual: 手动
+      entity: 实体
+    consent_status:
+      unknown: 未知
+      granted: 已同意
+      revoked: 已撤回
+    campaign_status:
+      draft: 草稿
+      scheduled: 待发送
+      running: 发送中
+      completed: 已完成
+      cancelled: 已取消
+      failed: 失败
+    recipient_status:
+      pending: 待处理
+      admitted: 已入队
+      skipped: 已跳过
+      cancelled: 已取消
+    message_status:
+      queued: 排队中
+      pending: 待处理
+      sent: 已受理
+      delivered: 已送达
+      failed: 失败
+      unknown: 未知
+      suppressed: 已阻止
+      expired: 已到期
+    send_timing:
+      immediate: 立即发送
+      scheduled: 定时发送
+    csv:
+      campaign_id: 活动 ID
+      recipient_id: 收件人记录 ID
+      contact_id: 联系人 ID
+      name: 名称
+      phone_e164: 电话
+      recipient_status: 收件人状态
+      skip_reason: 跳过原因
+      message_id: 消息 ID
+      message_status: 消息状态
+      dispatch_started_at: 尝试开始时间
+      sent_at: API 接受时间
+      delivered_at: 送达时间
+      expires_at: 到期时间
+      failure_code: 失败代码
+      provider_segments: 服务商报告的短信段数

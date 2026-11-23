@@ -1,0 +1,18 @@
+<section class="<%= padding_class %>">
+  <div class="<%= inner_measure_class %> flex flex-col <%= gap_class %>">
+    <%= header(kicker: prop("kicker"), heading: prop("heading"), subhead: prop("subhead")) %>
+    <div class="grid gap-x-10 gap-y-12 md:gap-y-16 <%= grid_class %>">
+      <% items.each_with_index do |item, index| %>
+        <article <%= item_attrs("items", class: "flex flex-col gap-3 border-t pt-6 #{hairline_class}") %>>
+          <p class="text-site-sm tabular-nums <%= theme.kicker_class %>"><%= format("%02d", index + 1) %></p>
+          <% if present_text?(item["title"]) %>
+            <h3 <%= el_attrs("items.title", class: card_title_class) %>><%= item["title"] %></h3>
+          <% end %>
+          <% if present_text?(item["body"]) %>
+            <p <%= el_attrs("items.body", class: "text-pretty text-site-md leading-relaxed md:text-site-lg #{muted_class}") %>><%= item["body"] %></p>
+          <% end %>
+        </article>
+      <% end %>
+    </div>
+  </div>
+</section>

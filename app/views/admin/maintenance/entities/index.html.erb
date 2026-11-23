@@ -1,0 +1,86 @@
+<%
+  header_actions = [
+    { label: t("maint_core.nav.trash"), path: trash_admin_maintenance_entities_path(current_customer_id), variant: :ghost, icon: :trash }
+  ]
+  if @grouped_view
+    header_actions << { label: t("maint_core.entity_domains.index.new_domain"), path: new_admin_maintenance_entity_domain_path(current_customer_id), variant: :primary, icon: :plus }
+  elsif current_user.platform_owner?
+    header_actions << { label: t("maint_core.entities.index.new_entity"), path: new_admin_maintenance_entity_path(current_customer_id), variant: :primary, icon: :plus }
+  end
+%>
+<%= render AdminPageComponent.new(
+  breadcrumbs: definition_resource_breadcrumbs(:entities),
+  title: t("maint_core.nav.entities"),
+  description: t("maint_core.entities.index.description"),
+  actions: header_actions
+) do %>
+  <% if entity_grouping? %>
+    <div class="mb-4">
+      <%= render Admin::Maintenance::Entities::ViewSwitchComponent.new(current: @grouped_view ? :domains : :table, customer_id: current_customer_id) %>
+    </div>
+  <% end %>
+
+  <%= tag.div(data: {
+        controller: "versions",
+        "versions-customer-id-value": current_customer_id,
+        "versions-resource-value": "entities"
+      }.merge(versions_i18n_data)) do %>
+    <% if @grouped_view %>
+      <%= render Admin::Maintenance::Entities::DomainWorkspaceComponent.new(
+            sections: @sections, journeys: @journeys, customer_id: current_customer_id,
+            selected: params[:domain_id], query: params[:q], kind: params[:kind]
+          ) %>
+    <% else %>
+      <%= render AdminTableComponent.new(
+        rows:        @rows,
+        columns:     @columns,
+        pagination:  @pagination,
+        params:      params.permit(:q, :sort, :dir, :page, :show_bridge, :view).to_h.symbolize_keys,
+        search:      { param: :q, placeholder: t("maint_core.entities.index.search_placeholder") },
+        filters:     [
+          {
+            key: :show_bridge,
+            label: t("maint_core.entities.index.filter_kind"),
+            options: [
+              [t("maint_core.entities.index.show_bridge"), "true"]
+            ]
+          }
+        ],
+        base_path:   admin_maintenance_entities_path(current_customer_id),
+        row_path:    ->(e) { admin_maintenance_entity_path(current_customer_id, e) },
+        row_actions: ->(e) {
+          [{ label: t("common.actions.edit"), path: edit_admin_maintenance_entity_path(current_customer_id, e) }]
+        },
+        row_menu_actions: ->(e) {
+          actions = [
+            { label: t("maint_core.nav.versions"), path: "#",
+              data: { turbo: "false", action: "versions#open",
+                      "versions-id-param": e.id,
+                      "versions-name-param": e.display_label } }
+          ]
+          if entity_grouping?
+            actions << { label: t("maint_core.entity_domains.index.move"), path: edit_admin_maintenance_entity_domain_membership_path(current_customer_id, e) }
+          end
+          if current_user.platform_owner? && can_copy_definition?(e)
+            actions << { label: t("common.actions.copy"), path: admin_maintenance_entity_copy_path(current_customer_id, e) }
+          end
+          if can_destroy_definition?(e)
+            actions << { label: t("common.actions.delete"), path: admin_maintenance_entity_path(current_customer_id, e),
+                         method: :delete,
+                         tone: :danger,
+                         data: { turbo_confirm: t("maint_core.entities.index.delete_confirm", name: e.display_label) } }
+          end
+          actions
+        },
+        empty_state: {
+          title: t("maint_core.entities.index.empty_title"),
+          description: t("maint_core.entities.index.empty_description"),
+          action_path: (new_admin_maintenance_entity_path(current_customer_id) if current_user.platform_owner?),
+          action_text: t("maint_core.entities.index.empty_action")
+        }
+      ) %>
+    <% end %>
+
+    <%= render VersionsModalComponent.new %>
+  <% end %>
+<% end %>

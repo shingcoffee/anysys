@@ -1,0 +1,86 @@
+---
+zh-CN:
+  flowchart_elements:
+    chrome:
+      label:
+        label: 名称
+    shared:
+      none: 无
+      errors:
+        required: "必须填写 %{field}"
+        unknown_field: "%{field} 不是已声明的设置"
+        unknown_reference: "%{field} 无法匹配已知的 %{source}"
+        not_in_list: "%{field} 必须是以下之一：%{allowed}"
+        invalid_expression: "%{field} 必须是单个安全的 Ruby 表达式"
+        not_one_statement: "%{field} 必须恰好是一条语句"
+        invalid_conditions: "%{field} 必须是条件组"
+    start:
+      label: 开始
+      defaultLabel: 开始
+    end:
+      label: 结束
+      defaultLabel: 结束
+      fields:
+        responseType:
+          label: 响应类型
+          help: 流程图结束时是否返回一个值。
+          options:
+            none: 不返回
+            value: 返回一个值
+        returnValue:
+          label: 返回值
+          help: 流程图结束时返回的值。可使用 ctx.result 等上下文路径。
+          placeholder: ctx.result
+    process:
+      label: 流程
+      defaultLabel: 流程
+    decision:
+      label: 决策
+      defaultLabel: 决策
+    loop:
+      label: 循环
+      defaultLabel: 循环
+    subflow:
+      label: 子流程
+      defaultLabel: 子流程
+      fields:
+        flowchartId:
+          label: 流程图
+          help: 选择已上线的流程图。当前正在编辑的流程图不会出现在列表中。
+        inputVariables:
+          label: 输入
+          help: 填写子流程读取的变量名及其在本流程中的取值来源；名称已一致时留空。
+      errors:
+        self_reference: 不能指向流程图自身
+        duplicate_input: "%{field} 重复使用了 %{value}"
+        invalid_identifier: "%{field} 必须是合法标识符"
+        reserved_name: "%{field} 不能使用 %{value}"
+        invalid_mapping: "%{field} 必须是键值对列表"
+    connection:
+      fields:
+        label:
+          label: 名称
+          help: 显示在连线上的名称。
+        description:
+          help: 此连线的选填备注。
+    template_labels:
+      start: 开始
+      end: 结束
+      new_model: 新建记录
+      build_contract: 构建契约
+      validate: 校验
+      validate_contract: 校验
+      save_model: 保存记录
+      find_model: 查找记录
+      destroy_model: 删除记录
+    trace:
+      start: 开始
+      success: 成功
+      failure: 失败
+      collect_errors: 收集错误
+      errors:
+        no_activity_code: "尚未生成活动代码"
+        failed_to_build: "无法构建活动类"
+        execution_failed: "执行失败"
+        timed_out: "执行在 %{seconds} 秒后超时"
+        must_regenerate: "必须重新生成活动"

@@ -1,0 +1,183 @@
+zh-CN:
+  flowchart_actions:
+    new_model:
+      label: 新建记录
+      description: 为绑定实体创建一个尚未保存的新记录。
+      fields:
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        assignments:
+          label: 赋值
+          help: 绑定实体属性到 Ruby 表达式的映射，写入新建的记录。
+    find_model:
+      label: 查找记录
+      description: 按 ID 或属性加载绑定实体的一条记录。
+      fields:
+        findBy:
+          label: 查找方式
+          help: 按 ID 或按某一属性查找记录。
+          options:
+            id: ID
+            attribute: 属性
+            current_person: 当前会员本人的记录
+        idSource:
+          label: ID
+          help: 要查找的 ID 所在的上下文路径。
+        findField:
+          label: 属性
+          help: 用于匹配的绑定实体属性。
+        findValue:
+          label: 值
+          help: 要匹配的值所在的上下文路径。
+        onNotFound:
+          label: 未找到时
+          help: 没有匹配记录时的处理方式。
+          options:
+            fail: 失败
+            "nil": 返回空
+            new: 新建记录
+        notFoundMessage:
+          label: 未找到提示
+          help: 可选的本地化文案，失败时替代默认提示。
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        foundVar:
+          label: 将是否找到保存为
+          help: 可选变量，找到匹配记录时设为 true。
+        lock:
+          label: 锁定该行
+          help: 使用 FOR UPDATE 锁定，以便本次提交中的后续写入读到一致的行。
+    save_model:
+      label: 保存记录
+      description: 通过绑定实体将 Reform 契约中的模型持久化。
+      fields:
+        onInvalid:
+          label: 校验失败时
+          help: 使步骤失败，或继续执行以便后续判断根据保存结果分支。
+          options:
+            fail: 失败
+            continue: 继续
+        savedVar:
+          label: 将是否保存成功保存为
+          help: 可选变量，保存成功时设为 true。
+    update_model:
+      label: 更新记录
+      description: 将契约或参数应用到已加载的记录并保存。
+      fields:
+        modelVariable:
+          label: 记录
+          help: 要更新的记录所在的上下文路径。
+        assignments:
+          label: 赋值
+          help: 绑定实体属性到 Ruby 表达式的映射，在保存前写入。
+        skipIfUnchanged:
+          label: 无变更时跳过保存
+          help: 记录没有待保存变更时跳过写入。
+        changesVar:
+          label: 将变更保存为
+          help: 可选变量，用于接收已保存的属性变更。
+        valuesFrom:
+          label: 取值来源
+          help: 仅写入赋值，或同时同步契约、复制已提交参数。
+          options:
+            assignments: 仅赋值
+            contract: Reform 契约
+            params: 已提交参数
+      errors:
+        page_record_only: "%{field} 仅可把契约或已提交参数复制到页面记录（model）。"
+    destroy_model:
+      label: 删除记录
+      description: 删除已加载的记录，或通过写入日期时间属性将其归档。
+      fields:
+        modelVariable:
+          label: 记录
+          help: 要删除或归档的记录所在的上下文路径。
+        mode:
+          label: 方式
+          help: 永久删除该行，或改为写入归档时间戳。
+          options:
+            delete: 删除
+            archive: 归档
+        archiveField:
+          label: 归档字段
+          help: 归档时写入当前时间的日期时间属性。
+        archivedByField:
+          label: 归档人字段
+          help: 可选属性，归档时写入当前用户 ID。
+        onMissing:
+          label: 记录为空时
+          help: 记录变量为空时的处理方式。
+          options:
+            fail: 失败
+            ignore: 忽略
+    clone_model:
+      label: 复制记录
+      description: 复制绑定实体中已加载的一条记录。
+      fields:
+        modelVariable:
+          label: 记录
+          help: 要复制的记录所在的上下文路径。
+        excludeFields:
+          label: 排除字段
+          help: 复制后清空的绑定实体属性。
+        overrides:
+          label: 覆盖赋值
+          help: 绑定实体属性到 Ruby 表达式的映射，写入副本。
+        persist:
+          label: 立即保存副本
+          help: 通过绑定实体立即持久化副本。
+        onMissing:
+          label: 记录为空时
+          help: 记录变量为空时的处理方式。
+          options:
+            fail: 失败
+            ignore: 忽略
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+    upsert_model:
+      label: 更新或插入记录
+      description: 按匹配条件查找绑定实体的记录并更新；若不存在则新建。
+      fields:
+        matchFields:
+          label: 匹配字段
+          help: 用于查找已有记录的属性；找不到时再新建。
+        assignments:
+          label: 赋值
+          help: 绑定实体属性到 Ruby 表达式的映射，写入前合并到参数。
+        onMatch:
+          label: 匹配到已有记录时
+          help: 更新匹配记录、跳过写入，或使步骤失败。
+          options:
+            update: 更新
+            skip: 跳过
+            fail: 失败
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        createdVar:
+          label: 将新建标记保存为
+          help: 新建记录时设为 true 的变量。
+        valuesFrom:
+          label: 取值来源
+          help: 仅写入赋值，或同时把已提交参数复制到该行。
+          options:
+            assignments: 仅赋值
+            params: 已提交参数
+  flowchart_runtime:
+    errors:
+      clone_model:
+        failed: "记录未能复制（%{reason}）。"
+      save_model:
+        failed: "记录未能保存（%{reason}）。"
+      update_model:
+        failed: "记录未能更新（%{reason}）。"
+      destroy_model:
+        failed: "记录未能删除（%{reason}）。"
+      upsert_model:
+        failed: "记录未能保存（%{reason}）。"
+      record_missing: 尚未加载记录。
+      record_already_exists: 已存在匹配的记录。
+      contract_missing: 尚未构建校验契约。

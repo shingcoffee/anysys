@@ -1,0 +1,12 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: definition_resource_breadcrumbs(
+    :constants,
+    { label: @constant.name, path: admin_maintenance_constant_path(current_customer_id, @constant) },
+    t("common.actions.edit")
+  ),
+  title: t("maint_core.constants.edit.title"),
+  description: t("maint_core.constants.edit.subtitle"),
+  width: :narrow
+) do %>
+  <%= render "form", constant: @constant %>
+<% end %>

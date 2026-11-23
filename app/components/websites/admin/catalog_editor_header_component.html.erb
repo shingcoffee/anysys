@@ -1,0 +1,17 @@
+<div class="flex flex-col gap-3" data-catalog-editor-header="true">
+  <%= link_to back_path, class: "inline-flex items-center gap-1 text-sm font-medium text-text-secondary hover:text-text-primary" do %>
+    <span aria-hidden="true">←</span>
+    <%= t("website.platform.catalog.back") %>
+  <% end %>
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+    <div class="min-w-0">
+      <h2 class="text-heading"><%= title %></h2>
+      <% if description.present? %>
+        <p class="mt-2 text-base font-normal leading-normal text-text-secondary"><%= description %></p>
+      <% end %>
+    </div>
+    <% if actions? %>
+      <div class="shrink-0 sm:pt-0.5"><%= actions %></div>
+    <% end %>
+  </div>
+</div>

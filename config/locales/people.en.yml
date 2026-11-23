@@ -1,0 +1,8 @@
+en:
+  people:
+    errors:
+      not_a_person: "This record is not a person entity."
+      user_unavailable: "This user cannot be linked."
+      already_linked: "This record is already linked to a user."
+      user_already_linked: "This user is already linked to another record of this type."
+      not_linked: "This record is not linked to a user."

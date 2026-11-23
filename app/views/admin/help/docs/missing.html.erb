@@ -1,0 +1,10 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("chrome.help_menu.help") },
+    { label: t("customer_docs.breadcrumb.reference"), path: admin_help_docs_path(current_customer_id, locale: current_locale) },
+    { label: t("customer_docs.missing_title") }
+  ],
+  title: t("customer_docs.missing_title"),
+  description: t("customer_docs.missing_body"),
+  width: "full"
+) %>

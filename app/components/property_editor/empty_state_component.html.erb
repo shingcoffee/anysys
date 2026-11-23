@@ -1,0 +1,8 @@
+<div class="border border-dashed border-slate-200 rounded-md py-3 text-center">
+  <% if icon_svg %>
+    <div class="flex justify-center mb-1 text-slate-300">
+      <%= icon_svg.html_safe %>
+    </div>
+  <% end %>
+  <p class="text-[11px] text-slate-400"><%= @message %></p>
+</div>

@@ -1,0 +1,69 @@
+<nav class="hidden border-b border-border-subtle bg-surface md:block"
+     aria-label="<%= t("chrome.menu_bar.dashboard_menu") %>"
+     data-menu-bar>
+  <div class="mx-auto flex max-w-[1920px] items-center gap-2 px-2.5 sm:px-4 lg:px-6">
+    <div class="relative min-w-0 flex-1">
+      <div class="overflow-x-auto scrollbar-none">
+        <ul class="flex min-w-max items-center pr-8 xl:pr-0">
+          <% primary_items.each do |item| %>
+            <li>
+              <% if item.dropdown? %>
+                <% active_child = item.active_child_for(customer, current_path) %>
+                <details class="group relative" data-controller="menu-placement" data-action="toggle->menu-placement#reposition" data-menu-item-key="<%= item.key %>">
+                  <summary class="<%= tab_classes(item) %>" <% if active_item?(item) %>aria-current="page"<% end %>>
+                    <span class="<%= label_classes(item) %>">
+                      <%= render MenuIconComponent.new(key: item.key) %>
+                      <%= item.label %>
+                      <svg class="size-3.5 text-text-muted transition-transform duration-200 group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" /></svg>
+                    </span>
+                  </summary>
+                  <div class="absolute right-0 z-20 mt-1 w-72 rounded-xl border border-border-subtle bg-surface p-1.5 shadow-float" data-menu-placement-target="panel">
+                    <% item.children.each do |child| %>
+                      <% active = child == active_child %>
+                      <%= link_to path_for(child), class: child_classes(active), "aria-current": (active ? "page" : nil) do %>
+                        <span class="<%= child_icon_classes(active) %>"><%= render MenuIconComponent.new(key: child.key) %></span>
+                        <span class="min-w-0 flex-1 pt-px">
+                          <span class="<%= child_label_classes(active) %>"><%= child.label %></span>
+                          <% if child.description %>
+                            <span class="mt-0.5 block text-xs leading-snug text-text-muted"><%= child.description %></span>
+                          <% end %>
+                        </span>
+                      <% end %>
+                    <% end %>
+                  </div>
+                </details>
+              <% else %>
+                <%= link_to path_for(item), class: tab_classes(item),
+                            "aria-current": (active_item?(item) ? "page" : nil),
+                            data: { menu_item_key: item.key } do %>
+                  <span class="<%= label_classes(item) %>">
+                    <%= render MenuIconComponent.new(key: item.key) %>
+                    <%= item.label %>
+                  </span>
+                <% end %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="pointer-events-none absolute inset-y-0 right-0 w-10 bg-linear-to-l from-surface xl:hidden" aria-hidden="true"></div>
+    </div>
+
+    <% if utility_items.any? %>
+      <ul class="flex shrink-0 items-center gap-0.5 before:mr-1 before:h-5 before:w-px before:bg-border" data-menu-bar-utility>
+        <% utility_items.each do |item| %>
+          <li>
+            <%= link_to path_for(item), class: tab_classes(item), title: item.label,
+                        "aria-current": (active_item?(item) ? "page" : nil),
+                        data: { menu_item_key: item.key } do %>
+              <span class="<%= label_classes(item) %>">
+                <%= render MenuIconComponent.new(key: item.key) %>
+                <span class="sr-only xl:not-sr-only"><%= item.label %></span>
+              </span>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</nav>

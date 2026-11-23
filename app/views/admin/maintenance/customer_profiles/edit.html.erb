@@ -1,0 +1,93 @@
+<%# app/views/maintenance/customer_profile/edit.html.erb %>
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("maint_core.nav.maintenance"), path: admin_maintenance_path(current_customer.id) },
+    { label: t("maint_core.nav.customer_profile"), path: admin_maintenance_customer_profile_path(current_customer_id) },
+    { label: t("common.actions.edit"), path: nil }
+  ],
+  title: t("maint_core.customer_profile.edit.title"),
+  description: t("maint_core.customer_profile.edit.subtitle_html")
+) do %>
+
+<%= form_with model: @customer, url: admin_maintenance_customer_profile_path(current_customer_id),
+              method: :patch, class: "space-y-6" do |f| %>
+
+  <% if @customer.errors.any? %>
+    <%= render AlertComponent.new(message: @customer.errors.full_messages.to_sentence, type: :error) %>
+  <% end %>
+
+  <%# Identity Section %>
+  <div class="card overflow-hidden">
+    <div class="card-header">
+      <h2 class="section-header"><%= t("maint_core.customer_profile.sections.identity") %></h2>
+    </div>
+    <div class="p-6 space-y-5">
+      <div>
+        <label for="customer_name" class="form-label form-label-required"><%= t("common.labels.name") %></label>
+        <%= f.text_field :name, class: "input-field mt-1", placeholder: t("maint_core.customer_profile.edit.name_placeholder") %>
+      </div>
+
+      <div>
+        <label for="customer_alias" class="form-label"><%= t("maint_core.customer_profile.fields.alias") %></label>
+        <%= f.text_field :alias, class: "input-field mt-1", placeholder: t("maint_core.customer_profile.edit.alias_placeholder") %>
+        <p class="mt-1 text-caption"><%= t("maint_core.customer_profile.edit.alias_hint") %></p>
+      </div>
+
+      <div>
+        <label for="customer_industry" class="form-label form-label-required"><%= t("maint_core.customer_profile.fields.industry") %></label>
+        <%= f.select :industry,
+              grouped_options_for_select(Customer.grouped_industry_options, @customer.industry),
+              { include_blank: t("maint_core.customer_profile.edit.industry_prompt") },
+              class: "input-field mt-1" %>
+      </div>
+    </div>
+  </div>
+
+  <%# Contact Section %>
+  <div class="card overflow-hidden">
+    <div class="card-header">
+      <h2 class="section-header"><%= t("maint_core.customer_profile.sections.contact") %></h2>
+    </div>
+    <div class="p-6 space-y-5">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div>
+          <label for="customer_contact" class="form-label"><%= t("maint_core.customer_profile.fields.contact_person") %></label>
+          <%= f.text_field :contact, class: "input-field mt-1", placeholder: t("maint_core.customer_profile.edit.contact_placeholder") %>
+        </div>
+        <div>
+          <label for="customer_phone" class="form-label"><%= t("maint_core.customer_profile.fields.phone") %></label>
+          <%= f.text_field :phone, class: "input-field mt-1", placeholder: t("maint_core.customer_profile.edit.phone_placeholder") %>
+        </div>
+      </div>
+      <div>
+        <label for="customer_address" class="form-label"><%= t("maint_core.customer_profile.fields.address") %></label>
+        <%= f.text_area :address, rows: 3, class: "input-field mt-1 resize-none",
+              placeholder: t("maint_core.customer_profile.edit.address_placeholder") %>
+      </div>
+    </div>
+  </div>
+
+  <%# Account Tier Section %>
+  <div class="card overflow-hidden">
+    <div class="card-header">
+      <h2 class="section-header"><%= t("maint_core.customer_profile.sections.account_tier") %></h2>
+    </div>
+    <div class="p-6">
+      <div>
+        <label for="customer_tier" class="form-label"><%= t("maint_core.customer_profile.fields.tier") %></label>
+        <%= f.select :tier,
+              Customer.tiers.keys.map { |tier| [t("chrome.customer_form.tiers.#{tier}"), tier] },
+              {},
+              class: "input-field mt-1" %>
+        <p class="mt-1 text-caption"><%= t("maint_core.customer_profile.edit.tier_hint") %></p>
+      </div>
+    </div>
+  </div>
+
+  <%# Actions %>
+  <div class="flex items-center justify-end gap-3 pt-4">
+    <%= link_to t("common.actions.cancel"), admin_maintenance_customer_profile_path(current_customer_id), class: "btn btn-secondary" %>
+    <%= f.submit t("maint_core.customer_profile.edit.save_changes"), class: "btn btn-primary cursor-pointer" %>
+  </div>
+<% end %>
+<% end %>

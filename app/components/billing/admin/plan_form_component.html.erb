@@ -1,0 +1,142 @@
+<%= form_with model: plan, url: form_url, method: form_method,
+              scope: :billing_plan, class: "space-y-6 max-w-4xl" do |f| %>
+  <%= render Billing::Admin::FormErrorsComponent.new(errors: form_errors, scope: form_scope, label_prefix: "comp_billing.plan_form.fields") %>
+
+  <%= render ::Admin::Settings::SectionComponent.new(title: t("comp_billing.plan_form.plan_details"), description: t("comp_billing.plan_form.plan_details_hint_html")) do %>
+    <div class="grid gap-4 md:grid-cols-2">
+      <div>
+        <%= f.label :code, t("comp_billing.plan_form.fields.code"), class: "form-label" %>
+        <%= f.text_field :code,
+              value: form_value(:code), **field_options(:code),
+              placeholder: t("comp_billing.plan_form.code_placeholder"),
+              class: "input-field font-mono",
+              disabled: plan.persisted? %>
+        <%= field_error(:code) %>
+        <% if plan.persisted? %>
+          <p class="mt-1.5 text-caption"><%= t("comp_billing.plan_form.code_immutable") %></p>
+        <% else %>
+          <p class="mt-1.5 text-caption"><%= t("comp_billing.plan_form.code_hint") %></p>
+        <% end %>
+      </div>
+
+      <div>
+        <%= f.label :name, t("comp_billing.plan_form.fields.name"), class: "form-label" %>
+        <%= f.text_field :name, value: form_value(:name), placeholder: t("comp_billing.plan_form.name_placeholder"), class: "input-field", **field_options(:name) %>
+        <%= field_error(:name) %>
+        <p class="mt-1.5 text-caption"><%= t("comp_billing.plan_form.name_hint") %></p>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <%= f.label :description, t("common.labels.description"), class: "form-label" %>
+      <%= f.text_area :description, rows: 2, value: form_value(:description), **field_options(:description),
+            placeholder: t("comp_billing.plan_form.description_placeholder"), class: "input-field" %>
+      <%= field_error(:description) %>
+    </div>
+  <% end %>
+
+  <%= render ::Admin::Settings::SectionComponent.new(title: t("comp_billing.plan_form.pricing_billing"), description: t("comp_billing.plan_form.pricing_hint")) do %>
+    <% if plan.persisted? %>
+      <p class="mb-4 text-caption"><%= t("comp_billing.plan_form.snapshot_hint") %></p>
+    <% end %>
+    <div class="grid gap-4 md:grid-cols-2">
+      <div>
+        <%= f.label :amount_usd, t("comp_billing.plan_form.amount_usd_label"), class: "form-label" %>
+        <div class="relative">
+          <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-text-muted">$</span>
+          <%= f.number_field :amount_usd, value: amount_usd_value, min: 0, step: "0.01", class: "input-field pl-7 pr-4 tabular-nums", **field_options(:amount_usd) %>
+        </div>
+        <%= field_error(:amount_usd) %>
+      </div>
+
+      <div>
+        <%= f.label :amount_cny, t("comp_billing.plan_form.amount_cny_label"), class: "form-label" %>
+        <div class="relative">
+          <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-text-muted">¥</span>
+          <%= f.number_field :amount_cny, value: amount_cny_value, min: 0, step: "0.01", class: "input-field pl-7 pr-4 tabular-nums", **field_options(:amount_cny) %>
+        </div>
+        <%= field_error(:amount_cny) %>
+      </div>
+    </div>
+
+    <div class="mt-4 grid gap-4 md:grid-cols-3">
+      <div>
+        <%= f.label :interval, t("comp_billing.plan_form.interval_label"), class: "form-label" %>
+        <%= f.select :interval, interval_options, { selected: form_value(:interval) }, class: "input-field", **field_options(:interval) %>
+        <%= field_error(:interval) %>
+      </div>
+
+      <div>
+        <%= f.label :trial_days, t("comp_billing.plan_form.trial_days_label"), class: "form-label" %>
+        <%= f.number_field :trial_days, value: form_value(:trial_days), min: 0, step: 1, class: "input-field tabular-nums", **field_options(:trial_days) %>
+        <%= field_error(:trial_days) %>
+      </div>
+
+      <div>
+        <%= f.label :position, t("comp_billing.plan_form.position_label"), class: "form-label" %>
+        <%= f.number_field :position, value: form_value(:position), min: 0, step: 1, class: "input-field tabular-nums", **field_options(:position) %>
+        <%= field_error(:position) %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= render ::Admin::Settings::SectionComponent.new(title: t("comp_billing.plan_form.availability"), description: t("comp_billing.plan_form.availability_hint")) do |section| %>
+    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-border-subtle p-4 transition-colors hover:bg-surface-hover has-[:checked]:border-accent-muted has-[:checked]:bg-accent-subtle">
+        <%= f.check_box :active, checked: ActiveModel::Type::Boolean.new.cast(form_value(:active)), class: "mt-0.5 h-4 w-4 rounded border-border-strong text-accent focus:ring-accent", **field_options(:active) %>
+        <span class="min-w-0">
+          <span class="block text-body font-medium text-text-primary"><%= t("comp_billing.plan_form.active_label") %></span>
+          <span class="mt-0.5 block text-caption"><%= t("comp_billing.plan_form.active_hint") %></span>
+        </span>
+      </label>
+      <%= field_error(:active) %>
+
+      <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-border-subtle p-4 transition-colors hover:bg-surface-hover has-[:checked]:border-accent-muted has-[:checked]:bg-accent-subtle">
+        <%= f.check_box :is_default, checked: ActiveModel::Type::Boolean.new.cast(form_value(:is_default)), class: "mt-0.5 h-4 w-4 rounded border-border-strong text-accent focus:ring-accent", **field_options(:is_default) %>
+        <span class="min-w-0">
+          <span class="block text-body font-medium text-text-primary"><%= t("comp_billing.plan_form.default_label") %></span>
+          <span class="mt-0.5 block text-caption"><%= t("comp_billing.plan_form.default_hint") %></span>
+        </span>
+      </label>
+      <%= field_error(:is_default) %>
+    </div>
+    <% unless items.any? %>
+      <% section.with_footer do %>
+        <%= link_to t("common.actions.cancel"), index_path, class: "btn btn-secondary w-full sm:w-auto" %>
+        <%= f.submit(plan.persisted? ? t("comp_billing.plan_form.update_plan") : t("comp_billing.plan_form.create_plan"), class: "btn btn-primary w-full sm:w-auto") %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if items.any? %>
+    <%= render ::Admin::Settings::SectionComponent.new(title: t("comp_billing.plan_form.plan_limits"), description: t("comp_billing.plan_form.plan_limits_hint"), id: "billing_plan_limits") do |section| %>
+      <%= field_error(:limits) %>
+      <div class="grid gap-4 md:grid-cols-2">
+        <% items.each do |item| %>
+          <% unit = item_unit(item) %>
+          <div>
+            <label class="form-label" for="billing_plan_limits_<%= item.key %>"><%= item.label %></label>
+            <div class="relative">
+              <input type="number" min="-1" step="1"
+                     id="billing_plan_limits_<%= item.key %>"
+                     name="billing_plan[limits][<%= item.key %>]"
+                     value="<%= limit_input_value(item) %>"
+                     aria-invalid="<%= field_errors("limits.#{item.key}").any? %>"
+                     aria-describedby="<%= error_id("limits.#{item.key}") if field_errors("limits.#{item.key}").any? %>"
+                     placeholder="<%= t("comp_billing.plan_form.limit_placeholder") %>"
+                     class="input-field tabular-nums<%= ' pr-16' if unit %>">
+              <% if unit %>
+                <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-body-sm text-text-muted"><%= unit %></span>
+              <% end %>
+            </div>
+            <%= field_error("limits.#{item.key}") %>
+          </div>
+        <% end %>
+      </div>
+      <% section.with_footer do %>
+        <%= link_to t("common.actions.cancel"), index_path, class: "btn btn-secondary w-full sm:w-auto" %>
+        <%= f.submit(plan.persisted? ? t("comp_billing.plan_form.update_plan") : t("comp_billing.plan_form.create_plan"), class: "btn btn-primary w-full sm:w-auto") %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,1188 @@
+{
+  "title": "Update entity",
+  "description": "Typed change set for existing customer-owned active non-bridge entities. Always parks for admin approval. Read with get_entity first and pass expected_version. Identify items by slug, group key, or related entity name — never by array index.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "updates"
+  ],
+  "properties": {
+    "updates": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "description": "Entities to change in this plan. One to ten items. Applied in order in one transaction.",
+      "items": {
+        "$ref": "#/$defs/updateItem",
+        "description": "All changes for one existing entity."
+      }
+    }
+  },
+  "$defs": {
+    "updateItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entity",
+        "changes"
+      ],
+      "description": "All changes for one existing entity.",
+      "properties": {
+        "entity": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Exact name of the entity to update. Must be customer-owned, active, and not a bridge."
+        },
+        "expected_version": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Version from get_entity. When set, the call is rejected with conflict.version_changed if the live version differs. Default none (no check beyond the confirmation snapshot)."
+        },
+        "changes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "description": "Editor actions to apply in order. One to 100. Each item is exactly one op.",
+          "items": {
+            "$ref": "#/$defs/change",
+            "description": "One editor action. Send only the fields that op uses. slug/key identify items; attribute/group/association are full objects; set is a merge patch."
+          }
+        }
+      }
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op"
+      ],
+      "description": "One editor action. Send only the fields that op uses. slug/key identify items; attribute/group/association are full objects; set is a merge patch.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "description": "Which editor action to perform.",
+          "enum": [
+            "set_details",
+            "set_settings",
+            "add_attribute",
+            "update_attribute",
+            "remove_attribute",
+            "move_attribute",
+            "add_group",
+            "update_group",
+            "remove_group",
+            "reorder_groups",
+            "add_association",
+            "update_association",
+            "remove_association",
+            "add_bridge_attribute",
+            "update_bridge_attribute",
+            "remove_bridge_attribute"
+          ],
+          "x-enum-descriptions": {
+            "set_details": "Set display_label, description, and/or extends on the entity.",
+            "set_settings": "Set icon, colour, and/or default_values.",
+            "add_attribute": "Add a new attribute, optionally positioned.",
+            "update_attribute": "Merge-patch an existing attribute by slug.",
+            "remove_attribute": "Remove an attribute by slug.",
+            "move_attribute": "Move an attribute to a group and/or position.",
+            "add_group": "Add a group, optionally with new attributes.",
+            "update_group": "Merge-patch an existing group by key.",
+            "remove_group": "Remove a group, optionally moving its attributes.",
+            "reorder_groups": "Replace group page order.",
+            "add_association": "Add an association to another entity.",
+            "update_association": "Merge-patch an association by related_entity.",
+            "remove_association": "Remove an association by related_entity.",
+            "add_bridge_attribute": "Add a field on an association's bridge.",
+            "update_bridge_attribute": "Merge-patch a bridge field.",
+            "remove_bridge_attribute": "Remove a bridge field."
+          }
+        },
+        "display_label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100,
+          "description": "Used by set_details. Replacement form label. Null resets it to the name."
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2000,
+          "description": "Used by set_details. Replacement help text. Null clears it."
+        },
+        "extends": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-vocabulary": "extendable_models",
+          "description": "Base model this entity extends, or null for none. Default none. Must be one of the tenant's extendable models."
+        },
+        "icon": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Used by set_settings. Replacement palette icon key."
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "description": "Used by set_settings. Replacement hex colour including #."
+        },
+        "default_values": {
+          "$ref": "#/$defs/defaultValues",
+          "description": "Used by set_settings. Replacement default-value map. Keys must be attribute slugs. Arrays/objects replace wholesale."
+        },
+        "attribute": {
+          "$ref": "#/$defs/attribute",
+          "description": "Used by add_attribute and add_bridge_attribute. Full create-shaped attribute. Bridge fields are always kind input — do not send calculated or computed."
+        },
+        "slug": {
+          "$ref": "#/$defs/slug",
+          "description": "Used by update_attribute, remove_attribute, move_attribute, update_bridge_attribute, and remove_bridge_attribute. Identifies an existing attribute."
+        },
+        "set": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Used by update_attribute, update_group, update_association, and update_bridge_attribute. JSON Merge Patch: objects merge, arrays replace, null clears. Shape depends on the op.",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "description": "Replacement name for an attribute, group, or bridge attribute."
+            },
+            "display_label": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 100,
+              "description": "Replacement shown label. Null resets it to the name."
+            },
+            "description": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 2000,
+              "description": "Replacement help text. Null clears it."
+            },
+            "kind": {
+              "type": "string",
+              "description": "Replacement attribute kind: input, calculated, or computed. Breaking when it changes."
+            },
+            "html_type": {
+              "type": "string",
+              "description": "Replacement form control. Same allowed values as attribute html_type. Breaking when it changes."
+            },
+            "group": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Replacement group key for an attribute. Null ungroups."
+            },
+            "rules": {
+              "type": "array",
+              "maxItems": 20,
+              "description": "Replacement rule list. Arrays replace wholesale. Same rule objects as attribute.rules.",
+              "items": {
+                "description": "One attribute rule {type, value?, min?, max?, pattern?, values?}."
+              }
+            },
+            "access": {
+              "description": "Replacement access object {visible_to, rules_apply_to, editable_by} with admin/member/public booleans. Objects merge; omitted keys stay."
+            },
+            "options": {
+              "description": "Replacement choice list {source, values?, constant?, entity?, label_field?}. Null clears. Arrays/objects replace wholesale."
+            },
+            "file": {
+              "description": "Replacement upload settings {accept, multiple}. Null clears. Ignored on non-file html_types."
+            },
+            "formula": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 1000,
+              "description": "Replacement calculated formula. Null clears it."
+            },
+            "owner": {
+              "type": "boolean",
+              "description": "Replacement owner flag for a reference attribute. Same rules as attribute owner. False clears the flag. Used by update_attribute."
+            },
+            "lifecycle": {
+              "description": "Replacement status lifecycle {transitions: [{from, to, by}]} for update_attribute. Null clears."
+            },
+            "aggregate": {
+              "description": "Replacement computed aggregate {related_entity, function, source_attribute?, precision?, filter?, direction?}. Null clears."
+            },
+            "icon": {
+              "type": "string",
+              "description": "Replacement group icon. Same allowed values as attribute_groups icon. Used by update_group."
+            },
+            "color": {
+              "type": "string",
+              "description": "Replacement group colour token. Same allowed values as attribute_groups color. Used by update_group."
+            },
+            "display_field": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Replacement association display-field slug. Used by update_association."
+            },
+            "display_field_label": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Replacement association display-field label. Used by update_association."
+            },
+            "bridge_attributes": {
+              "type": "array",
+              "maxItems": 50,
+              "description": "Replacement bridge-attribute list. Prefer add/update/remove_bridge_attribute. Same shape as add_bridge_attribute.attribute.",
+              "items": {
+                "description": "A bridge attribute. Same fields as add_bridge_attribute.attribute (always kind input)."
+              }
+            }
+          }
+        },
+        "position": {
+          "$ref": "#/$defs/position",
+          "description": "Used by add_attribute, move_attribute, add_group, and add_bridge_attribute. Relative insert; omit to append."
+        },
+        "to_group": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Used by move_attribute. Destination group key. Null ungroups."
+        },
+        "group": {
+          "$ref": "#/$defs/attributeGroup",
+          "description": "Used by add_group. Full group object to add."
+        },
+        "attributes": {
+          "type": "array",
+          "maxItems": 150,
+          "description": "Used by add_group. Full attributes to create inside the new group.",
+          "items": {
+            "description": "Full create-shaped attribute to add inside the new group. Same fields, defaults, and constraints as add_attribute.attribute."
+          }
+        },
+        "key": {
+          "$ref": "#/$defs/groupKey",
+          "description": "Used by update_group and remove_group. Identifies an existing group."
+        },
+        "move_attributes_to": {
+          "type": "string",
+          "description": "Used by remove_group. Group key that receives the removed group's attributes. Omit to ungroup them."
+        },
+        "order": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 30,
+          "description": "Used by reorder_groups. Complete permutation of existing group keys.",
+          "items": {
+            "$ref": "#/$defs/groupKey",
+            "description": "Stable group identifier stored as the group's id. Unique within the entity. Attributes reference it via group."
+          }
+        },
+        "association": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "related_entity",
+            "display_field"
+          ],
+          "description": "Used by add_association. Full association: related_entity, display_field, optional display_field_label and bridge_attributes.",
+          "properties": {
+            "related_entity": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Target entity name. May already exist or be created in the same plan."
+            },
+            "display_field": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Slug of a human-readable attribute of the related entity (text, search, email, tel, url, number or date) used as the label of each linked record."
+            },
+            "display_field_label": {
+              "type": "string",
+              "description": "Label for the display field. Default the titleized display_field."
+            },
+            "bridge_attributes": {
+              "type": "array",
+              "maxItems": 50,
+              "description": "Extra input fields stored on the bridge. Default none. Same shape as add_bridge_attribute.attribute.",
+              "items": {
+                "description": "A bridge attribute. Same fields as add_bridge_attribute.attribute (always kind input)."
+              }
+            }
+          }
+        },
+        "related_entity": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Used by update_association, remove_association, add_bridge_attribute, update_bridge_attribute, and remove_bridge_attribute. Identifies an existing association by target name."
+        }
+      },
+      "allOf": [
+        {
+          "description": "set_details uses display_label, description, and/or extends.",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "set_details",
+                "description": "When op is set_details."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/setDetailsChange",
+            "description": "set_details payload."
+          }
+        },
+        {
+          "description": "set_settings uses icon, color, and/or default_values.",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "set_settings",
+                "description": "When op is set_settings."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/setSettingsChange",
+            "description": "set_settings payload."
+          }
+        },
+        {
+          "description": "add_attribute requires attribute and may take position.",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "add_attribute",
+                "description": "When op is add_attribute."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/addAttributeChange",
+            "description": "add_attribute payload."
+          }
+        },
+        {
+          "description": "update_attribute requires slug and set (an attributePatch).",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "update_attribute",
+                "description": "When op is update_attribute."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/updateAttributeChange",
+            "description": "update_attribute payload."
+          }
+        },
+        {
+          "description": "remove_attribute requires slug.",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "remove_attribute",
+                "description": "When op is remove_attribute."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/removeAttributeChange",
+            "description": "remove_attribute payload."
+          }
+        },
+        {
+          "description": "move_attribute requires slug and may take to_group and position.",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "move_attribute",
+                "description": "When op is move_attribute."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/moveAttributeChange",
+            "description": "move_attribute payload."
+          }
+        },
+        {
+          "description": "add_group requires group and may take position and attributes.",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "add_group",
+                "description": "When op is add_group."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/addGroupChange",
+            "description": "add_group payload."
+          }
+        },
+        {
+          "description": "update_group requires key and set (a groupPatch).",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "update_group",
+                "description": "When op is update_group."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/updateGroupChange",
+            "description": "update_group payload."
+          }
+        },
+        {
+          "description": "remove_group requires key and may take move_attributes_to.",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "remove_group",
+                "description": "When op is remove_group."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/removeGroupChange",
+            "description": "remove_group payload."
+          }
+        },
+        {
+          "description": "reorder_groups requires order, a permutation of existing group keys.",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "reorder_groups",
+                "description": "When op is reorder_groups."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/reorderGroupsChange",
+            "description": "reorder_groups payload."
+          }
+        },
+        {
+          "description": "add_association requires association.",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "add_association",
+                "description": "When op is add_association."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/addAssociationChange",
+            "description": "add_association payload."
+          }
+        },
+        {
+          "description": "update_association requires related_entity and set (an associationPatch).",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "update_association",
+                "description": "When op is update_association."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/updateAssociationChange",
+            "description": "update_association payload."
+          }
+        },
+        {
+          "description": "remove_association requires related_entity.",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "remove_association",
+                "description": "When op is remove_association."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/removeAssociationChange",
+            "description": "remove_association payload."
+          }
+        },
+        {
+          "description": "add_bridge_attribute requires related_entity and attribute and may take position.",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "add_bridge_attribute",
+                "description": "When op is add_bridge_attribute."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/addBridgeAttributeChange",
+            "description": "add_bridge_attribute payload."
+          }
+        },
+        {
+          "description": "update_bridge_attribute requires related_entity, slug, and set (a bridgeAttributePatch).",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "update_bridge_attribute",
+                "description": "When op is update_bridge_attribute."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/updateBridgeAttributeChange",
+            "description": "update_bridge_attribute payload."
+          }
+        },
+        {
+          "description": "remove_bridge_attribute requires related_entity and slug.",
+          "if": {
+            "properties": {
+              "op": {
+                "const": "remove_bridge_attribute",
+                "description": "When op is remove_bridge_attribute."
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/removeBridgeAttributeChange",
+            "description": "remove_bridge_attribute payload."
+          }
+        }
+      ]
+    },
+    "setDetailsChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op"
+      ],
+      "description": "set_details payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "set_details",
+          "description": "Must be set_details."
+        },
+        "display_label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100,
+          "description": "Replacement form label."
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2000,
+          "description": "Replacement help text."
+        },
+        "extends": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-vocabulary": "extendable_models",
+          "description": "Base model this entity extends, or null for none. Default none. Must be one of the tenant's extendable models."
+        }
+      }
+    },
+    "setSettingsChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op"
+      ],
+      "description": "set_settings payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "set_settings",
+          "description": "Must be set_settings."
+        },
+        "icon": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Replacement palette icon key."
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "description": "Replacement hex colour."
+        },
+        "default_values": {
+          "$ref": "#/$defs/defaultValues",
+          "description": "Replacement default-value map."
+        }
+      }
+    },
+    "addAttributeChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "attribute"
+      ],
+      "description": "add_attribute payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "add_attribute",
+          "description": "Must be add_attribute."
+        },
+        "attribute": {
+          "$ref": "#/$defs/attribute",
+          "description": "Full attribute to add."
+        },
+        "position": {
+          "$ref": "#/$defs/position",
+          "description": "Insert relative to an existing slug."
+        }
+      }
+    },
+    "updateAttributeChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "slug",
+        "set"
+      ],
+      "description": "update_attribute payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "update_attribute",
+          "description": "Must be update_attribute."
+        },
+        "slug": {
+          "$ref": "#/$defs/slug",
+          "description": "Existing attribute slug."
+        },
+        "set": {
+          "$ref": "#/$defs/attributePatch",
+          "description": "Merge patch for that attribute."
+        }
+      }
+    },
+    "removeAttributeChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "slug"
+      ],
+      "description": "remove_attribute payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "remove_attribute",
+          "description": "Must be remove_attribute."
+        },
+        "slug": {
+          "$ref": "#/$defs/slug",
+          "description": "Existing attribute slug to remove."
+        }
+      }
+    },
+    "moveAttributeChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "slug"
+      ],
+      "description": "move_attribute payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "move_attribute",
+          "description": "Must be move_attribute."
+        },
+        "slug": {
+          "$ref": "#/$defs/slug",
+          "description": "Existing attribute slug to move."
+        },
+        "to_group": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Destination group key. Null ungroups."
+        },
+        "position": {
+          "$ref": "#/$defs/position",
+          "description": "Insert relative to an existing slug."
+        }
+      }
+    },
+    "addGroupChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "group"
+      ],
+      "description": "add_group payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "add_group",
+          "description": "Must be add_group."
+        },
+        "group": {
+          "$ref": "#/$defs/attributeGroup",
+          "description": "Full group to add."
+        },
+        "position": {
+          "$ref": "#/$defs/position",
+          "description": "Insert relative to an existing group key."
+        },
+        "attributes": {
+          "type": "array",
+          "maxItems": 150,
+          "description": "Attributes to create in this group.",
+          "items": {
+            "$ref": "#/$defs/attribute",
+            "description": "A field on an entity. Create-shaped: omitted kind is input and omitted html_type is text."
+          }
+        }
+      }
+    },
+    "updateGroupChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "key",
+        "set"
+      ],
+      "description": "update_group payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "update_group",
+          "description": "Must be update_group."
+        },
+        "key": {
+          "$ref": "#/$defs/groupKey",
+          "description": "Existing group key."
+        },
+        "set": {
+          "$ref": "#/$defs/groupPatch",
+          "description": "Merge patch for that group."
+        }
+      }
+    },
+    "removeGroupChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "key"
+      ],
+      "description": "remove_group payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "remove_group",
+          "description": "Must be remove_group."
+        },
+        "key": {
+          "$ref": "#/$defs/groupKey",
+          "description": "Existing group key to remove."
+        },
+        "move_attributes_to": {
+          "type": "string",
+          "description": "Group key that receives the attributes."
+        }
+      }
+    },
+    "reorderGroupsChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "order"
+      ],
+      "description": "reorder_groups payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "reorder_groups",
+          "description": "Must be reorder_groups."
+        },
+        "order": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 30,
+          "description": "Complete permutation of existing group keys.",
+          "items": {
+            "$ref": "#/$defs/groupKey",
+            "description": "Stable group identifier stored as the group's id. Unique within the entity. Attributes reference it via group."
+          }
+        }
+      }
+    },
+    "addAssociationChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "association"
+      ],
+      "description": "add_association payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "add_association",
+          "description": "Must be add_association."
+        },
+        "association": {
+          "$ref": "#/$defs/association",
+          "description": "Full association to add."
+        }
+      }
+    },
+    "updateAssociationChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "related_entity",
+        "set"
+      ],
+      "description": "update_association payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "update_association",
+          "description": "Must be update_association."
+        },
+        "related_entity": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Existing association target name."
+        },
+        "set": {
+          "$ref": "#/$defs/associationPatch",
+          "description": "Merge patch for that association."
+        }
+      }
+    },
+    "removeAssociationChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "related_entity"
+      ],
+      "description": "remove_association payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "remove_association",
+          "description": "Must be remove_association."
+        },
+        "related_entity": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Existing association target name to remove."
+        }
+      }
+    },
+    "addBridgeAttributeChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "related_entity",
+        "attribute"
+      ],
+      "description": "add_bridge_attribute payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "add_bridge_attribute",
+          "description": "Must be add_bridge_attribute."
+        },
+        "related_entity": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Association that owns the bridge."
+        },
+        "attribute": {
+          "$ref": "#/$defs/bridgeAttribute",
+          "description": "Full bridge attribute to add."
+        },
+        "position": {
+          "$ref": "#/$defs/position",
+          "description": "Insert relative to an existing bridge slug."
+        }
+      }
+    },
+    "updateBridgeAttributeChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "related_entity",
+        "slug",
+        "set"
+      ],
+      "description": "update_bridge_attribute payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "update_bridge_attribute",
+          "description": "Must be update_bridge_attribute."
+        },
+        "related_entity": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Association that owns the bridge."
+        },
+        "slug": {
+          "$ref": "#/$defs/slug",
+          "description": "Existing bridge-attribute slug."
+        },
+        "set": {
+          "$ref": "#/$defs/bridgeAttributePatch",
+          "description": "Merge patch for that bridge attribute."
+        }
+      }
+    },
+    "removeBridgeAttributeChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "related_entity",
+        "slug"
+      ],
+      "description": "remove_bridge_attribute payload.",
+      "properties": {
+        "op": {
+          "type": "string",
+          "const": "remove_bridge_attribute",
+          "description": "Must be remove_bridge_attribute."
+        },
+        "related_entity": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Association that owns the bridge."
+        },
+        "slug": {
+          "$ref": "#/$defs/slug",
+          "description": "Existing bridge-attribute slug to remove."
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "updates": [
+        {
+          "entity": "Student",
+          "expected_version": 7,
+          "changes": [
+            {
+              "op": "add_attribute",
+              "attribute": {
+                "name": "Phone",
+                "html_type": "tel"
+              },
+              "position": {
+                "after": "email"
+              }
+            },
+            {
+              "op": "update_attribute",
+              "slug": "email",
+              "set": {
+                "access": {
+                  "visible_to": {
+                    "public": false
+                  }
+                }
+              }
+            },
+            {
+              "op": "remove_attribute",
+              "slug": "fax"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "updates": [
+        {
+          "entity": "Course",
+          "changes": [
+            {
+              "op": "set_details",
+              "display_label": "Training course",
+              "description": "A scheduled class."
+            },
+            {
+              "op": "set_settings",
+              "icon": "custom",
+              "color": "#4f46e5"
+            },
+            {
+              "op": "add_group",
+              "group": {
+                "key": "schedule",
+                "name": "Schedule",
+                "icon": "calendar",
+                "color": "amber"
+              }
+            },
+            {
+              "op": "update_group",
+              "key": "basics",
+              "set": {
+                "name": "Overview"
+              }
+            },
+            {
+              "op": "reorder_groups",
+              "order": [
+                "schedule",
+                "basics"
+              ]
+            },
+            {
+              "op": "move_attribute",
+              "slug": "title",
+              "to_group": "schedule",
+              "position": {
+                "before": "level"
+              }
+            },
+            {
+              "op": "add_association",
+              "association": {
+                "related_entity": "Student",
+                "display_field": "email"
+              }
+            },
+            {
+              "op": "update_association",
+              "related_entity": "Student",
+              "set": {
+                "display_field_label": "Student email"
+              }
+            },
+            {
+              "op": "add_bridge_attribute",
+              "related_entity": "Student",
+              "attribute": {
+                "name": "Seat",
+                "html_type": "number"
+              }
+            },
+            {
+              "op": "update_bridge_attribute",
+              "related_entity": "Student",
+              "slug": "seat",
+              "set": {}
+            },
+            {
+              "op": "remove_bridge_attribute",
+              "related_entity": "Student",
+              "slug": "seat"
+            },
+            {
+              "op": "remove_association",
+              "related_entity": "Student"
+            },
+            {
+              "op": "remove_group",
+              "key": "schedule",
+              "move_attributes_to": "basics"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

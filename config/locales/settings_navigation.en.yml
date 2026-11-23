@@ -1,0 +1,63 @@
+en:
+  settings_navigation:
+    menu: Settings menu
+    categories:
+      organization: Organization
+    groups:
+      members: Members
+      access_security: Access & security
+      website: Website
+      messages: Messages
+      payments: Payments
+      billing: Billing
+    items:
+      member_portal: Member portal
+      member_registration: Member registration
+      password_reset: Password reset
+      account_security: Account security
+      roles_permissions: Roles & permissions
+      user_access: User access
+      public_page_protection: Public page protection
+      website: Website
+      ai_assistant: AI assistant
+      email_sending_limit: Email limit
+      email_personalization: Email personalization
+      sms_sending_limit: Text message limit
+      payment_providers: Payment providers
+      plan_subscription: Plan
+      billing_payment_methods: Payment methods
+      invoices: Invoices
+    descriptions:
+      member_portal: Choose what members see in their portal.
+      member_registration: Control whether new members can register.
+      password_reset: Manage password recovery for members.
+      account_security: Configure account security preferences.
+      roles_permissions: Review roles and manage their permissions.
+      user_access: Manage the roles assigned to your users.
+      public_page_protection: Set request limits for public pages.
+      website: Manage your site's appearance, content, and publishing.
+      ai_assistant: Choose the assistant language and view the recording limit set by the platform owner.
+      email_sending_limit: View the daily email limit set by the platform owner.
+      email_personalization: Manage fields used to personalize emails.
+      sms_sending_limit: View the daily text message limit set by the platform owner.
+      payment_providers: Connect providers to receive customer payments.
+      plan_subscription: Review your plan and manage your subscription.
+      billing_payment_methods: Manage how your subscription is paid.
+      invoices: View and download your organization's invoices.
+    synonyms:
+      member_portal: member pages visibility profile display
+      member_registration: sign up signup registration
+      password_reset: forgot forget password recovery
+      account_security: authentication MFA two-factor
+      roles_permissions: roles grants permissions
+      user_access: user role assignments access
+      public_page_protection: captcha throttle rate limits
+      website: site theme footer publishing
+      ai_assistant: AI language recording
+      email_sending_limit: email daily cap quota
+      email_personalization: template tokens merge fields
+      sms_sending_limit: SMS text messages daily cap quota
+      payment_providers: merchant accounts gateways receive payments
+      plan_subscription: subscription plan billing service
+      billing_payment_methods: billing subscription payment methods cards
+      invoices: invoices receipts download print

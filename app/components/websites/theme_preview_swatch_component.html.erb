@@ -1,0 +1,38 @@
+<div class="<%= page_class %>"
+     style="<%= page_style %>"
+     data-theme-preview-swatch="true"
+     data-appearance="<%= theme.appearance %>"
+     data-accent="<%= theme.accent %>"
+     data-type="<%= theme.type %>"
+     data-density="<%= theme.density %>"
+     data-corners="<%= theme.corners %>"
+     data-neutral="<%= theme.neutral %>"
+     data-website-theme-picker-target="preview"
+     data-base-class="<%= Websites::ThemePreviewSwatchComponent::PREVIEW_BASE %>"
+     aria-hidden="true">
+  <div class="flex items-center justify-between gap-3 border-b border-current/10 px-3.5 py-2.5">
+    <span class="truncate text-xs font-semibold tracking-tight"><%= brand_label %></span>
+    <span class="flex shrink-0 items-center gap-2.5 text-xs font-medium text-current/50">
+      <span><%= preview_copy(:nav_home) %></span>
+      <span><%= preview_copy(:nav_work) %></span>
+    </span>
+  </div>
+  <div class="<%= stage_class %>"
+       data-website-theme-picker-target="stage"
+       data-base-class="<%= Websites::ThemePreviewSwatchComponent::STAGE_BASE %>">
+    <div class="flex flex-col <%= theme.density == "compact" ? "gap-2" : "gap-2.5" %>">
+      <p class="<%= kicker_chip_class %>"
+         data-website-theme-picker-target="kicker"
+         data-base-class="<%= Websites::ThemePreviewSwatchComponent::KICKER_BASE %>"><%= preview_copy(:kicker) %></p>
+      <h3 class="<%= headline_class %>"
+          data-website-theme-picker-target="headline"
+          data-base-class="<%= Websites::ThemePreviewSwatchComponent::HEADLINE_BASE %>"><%= preview_copy(:headline) %></h3>
+      <p class="<%= body_class %>"
+         data-website-theme-picker-target="body"
+         data-base-class="<%= Websites::ThemePreviewSwatchComponent::BODY_BASE %>"><%= preview_copy(:body) %></p>
+    </div>
+    <span class="<%= button_chip_class %>"
+          data-website-theme-picker-target="button"
+          data-base-class="<%= Websites::ThemePreviewSwatchComponent::BUTTON_BASE %>"><%= preview_copy(:action) %></span>
+  </div>
+</div>

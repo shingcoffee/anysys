@@ -1,0 +1,271 @@
+zh-CN:
+  flowchart_actions:
+    query_models:
+      label: 查询记录
+      description: 按条件查询当前实体的记录
+      fields:
+        entity:
+          label: 实体
+          help: 要查询的实体。留空则使用页面绑定的实体。
+        conditions:
+          label: 条件
+          help: 筛选当前实体的记录；查询始终限定在本客户范围内。
+        select:
+          label: 选取字段
+          help: 返回取值时要取出的实体属性；返回记录时可投影这些属性。
+        returns:
+          label: 返回内容
+          help: 返回匹配的记录，或仅返回所选属性的值。
+          options:
+            records: 记录
+            values: 取值
+        recordScope:
+          label: 记录范围
+          help: 本客户下的全部记录，或仅当前登录会员本人的记录。
+          options:
+            all: 全部记录
+            own: 本人记录
+        pageVariable:
+          label: 页码变量
+          help: 存放当前页码的上下文路径。
+        pageSize:
+          label: 每页条数
+          help: 每页行数（1–200）。留空则不分页。
+        limit:
+          label: 上限
+          help: 未分页时最多返回的行数。
+        orderBy:
+          label: 排序字段
+          help: 用于排序的属性或列。
+        orderDirection:
+          label: 排序方向
+          help: 升序或降序。
+          options:
+            asc: 升序
+            desc: 降序
+        distinct:
+          label: 去重
+          help: 从结果中去掉重复行。
+        onEmpty:
+          label: 无结果时
+          help: 无匹配行时返回空列表，或使步骤失败。
+          options:
+            empty: 空列表
+            fail: 失败
+        offset:
+          label: 偏移
+          help: 未分页时跳过的行数。
+        thenOrderBy:
+          label: 次要排序
+          help: 主排序相同时使用的第二排序字段。
+        thenOrderDirection:
+          label: 次要排序方向
+          help: 次要排序的升序或降序。
+          options:
+            asc: 升序
+            desc: 降序
+        paginationVar:
+          label: 分页信息保存为
+          help: 设置每页条数时，用于存放分页元数据的变量。
+      errors:
+        unsafe_column: "%{column} 不是安全的列名"
+    count_records:
+      label: 统计记录
+      description: 统计匹配的记录数
+      fields:
+        entity:
+          label: 实体
+          help: 要统计的实体。留空则使用页面绑定的实体。
+        conditions:
+          label: 条件
+          help: 统计前先筛选当前实体的记录。
+        resultAs:
+          label: 结果形式
+          help: 返回计数、是否存在，或是否不存在。
+          options:
+            count: 计数
+            exists: 存在
+            absent: 不存在
+        recordScope:
+          label: 记录范围
+          help: 本客户下的全部记录，或仅当前登录会员本人的记录。
+          options:
+            all: 全部记录
+            own: 本人记录
+        distinct:
+          label: 去重
+          help: 仅统计不重复的值。
+        distinctField:
+          label: 去重字段
+          help: 按该属性的不重复值计数。
+        groupBy:
+          label: 分组
+          help: 按该属性分组统计。
+        onZero:
+          label: 计数为零时
+          help: 无匹配行时返回 0，或使步骤失败。
+          options:
+            zero: 返回零
+            fail: 失败
+      errors:
+        unsafe_column: "%{column} 不是安全的列名"
+    aggregate_query:
+      label: 聚合查询
+      description: 对记录做求和、平均等聚合
+      fields:
+        entity:
+          label: 实体
+          help: 要聚合的实体。留空则使用页面绑定的实体。
+        aggregations:
+          label: 聚合项
+          help: 属性与运算的配对（sum、avg、min、max、count）。
+        aggregateFunction:
+          label: 聚合函数
+          help: 未填写聚合项时使用的函数。
+          options:
+            sum: 求和
+            average: 平均值
+            minimum: 最小值
+            maximum: 最大值
+            count: 计数
+        aggregateField:
+          label: 聚合字段
+          help: 未填写聚合项时要聚合的属性。
+        groupBy:
+          label: 分组
+          help: 单个分组属性。
+        groupByFields:
+          label: 分组字段
+          help: 用于分组的属性列表。
+        having:
+          label: Having
+          help: 白名单内的聚合比较（例如 SUM(amount) > 100）。
+        resultFormat:
+          label: 结果格式
+          help: 返回单个值或带键的哈希。
+          options:
+            scalar: 标量
+            hash: 哈希
+        conditions:
+          label: 条件
+          help: 聚合前先筛选当前实体的记录。
+        recordScope:
+          label: 记录范围
+          help: 本客户下的全部记录，或仅当前登录会员本人的记录。
+          options:
+            all: 全部记录
+            own: 本人记录
+        roundTo:
+          label: 小数位数
+          help: 将聚合结果四舍五入到该位数。留空则保留全部精度。
+      errors:
+        invalid_operation: "无效的聚合运算：%{operation}"
+        scalar_needs_single_aggregation: 标量结果只能包含一项聚合
+        invalid_having: having 必须符合白名单聚合比较（例如 SUM(amount) > 100）
+        having_needs_group: having 需要至少一个分组字段
+        unsafe_column: "%{column} 不是安全的列名"
+    batch_operation:
+      label: 批量操作
+      description: 对多条记录执行批量操作
+      fields:
+        entity:
+          label: 实体
+          help: 要批量处理的实体。留空则使用页面绑定的实体。
+        operationType:
+          label: 操作类型
+          help: 每批记录的处理方式。
+          options:
+            find_each: 逐条遍历
+            in_batches: 按批遍历
+            each_batch: 逐批处理
+            update_all: 批量更新
+            destroy_all: 批量删除
+        batchSize:
+          label: 批次大小
+          help: 每批处理的记录数。
+        stepBody:
+          label: 步骤正文
+          help: 对每条记录或每批执行的 Ruby。
+        fieldAssignments:
+          label: 字段赋值
+          help: 批量更新匹配记录时要写入的属性。
+        conditions:
+          label: 条件
+          help: 在租户范围内的来源上再叠加的筛选条件。
+        recordScope:
+          label: 记录范围
+          help: 本客户下的全部记录，或仅当前登录会员本人的记录。
+          options:
+            all: 全部记录
+            own: 本人记录
+        errorCollection:
+          label: 收集错误
+          help: 单行失败后继续，并保存错误。
+        maxRecords:
+          label: 最大记录数
+          help: 处理达到该数量后停止。0 表示不限制。
+        stopOnError:
+          label: 遇错即停
+          help: 收集到错误后不再处理后续记录。
+        progressVar:
+          label: 进度保存为
+          help: 存放已处理记录数的变量。
+      errors:
+        assignments_required: 批量更新时必须填写字段赋值
+        internal_column: "不能写入内部列：%{columns}"
+    bulk_import:
+      label: 批量导入
+      description: 批量导入记录
+      fields:
+        entity:
+          label: 实体
+          help: 要导入的实体。留空则使用页面绑定的实体。
+        onDuplicateKey:
+          label: 遇到重复键
+          help: 唯一属性已匹配时跳过或更新。
+          options:
+            update: 更新
+            skip: 跳过
+        uniqueBy:
+          label: 唯一字段
+          help: 用于查找已有行的属性。
+        fieldMappings:
+          label: 字段映射
+          help: 源列名到实体属性的对应。留空则按列名原样写入。
+        recordScope:
+          label: 记录范围
+          help: 在本客户范围内匹配已有行，或仅匹配当前登录会员本人的记录。
+          options:
+            all: 全部记录
+            own: 本人记录
+        batchSize:
+          label: 批次大小
+          help: 每批提交的行数（1–1000）。
+        onRowError:
+          label: 行失败时
+          help: 使导入失败，或跳过该行并继续。
+          options:
+            fail: 失败
+            skip: 跳过
+        errorsVar:
+          label: 错误列表保存为
+          help: 存放已跳过行错误的变量。
+      errors:
+        internal_column: "不能按内部列匹配：%{columns}"
+  flowchart_runtime:
+    errors:
+      batch_operation:
+        incompatible_scope: 批量来源关系不能使用 limit、distinct、lock、readonly 或 offset
+        entity_not_accessible: 该批量实体对本客户不可访问。
+      bulk_import:
+        too_many_rows: 无法导入 %{count} 行（上限为 %{max}）
+        row_failed: 第 %{index} 行失败（%{reason}）
+        entity_not_accessible: 该导入实体对本客户不可访问。
+      query_models:
+        empty: 查询没有返回任何行。
+        failed: 查询无法执行（%{reason}）。
+      count_records:
+        zero: 没有匹配的记录。
+        failed: 统计无法执行（%{reason}）。
+      aggregate_query:
+        failed: 聚合无法执行（%{reason}）。

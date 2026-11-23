@@ -1,0 +1,105 @@
+en:
+  feature_modules:
+    errors:
+      module_not_enabled: "The %{module_name} module is not enabled for your account."
+      handoff_disabled: "The %{module_name} module cannot be handed off to."
+      input_contract_violation: "Cannot start %{module_name}: %{details}"
+      output_contract_violation: "The %{module_name} module returned an invalid result. Please contact support."
+      cross_tenant_violation: "This action is not permitted."
+      unresolvable_exit_target: "The configured exit landing page could not be resolved."
+      no_entry_path: "%{module_key} has no entry_path declared"
+      unknown_mapping_source: "unknown source: %{source}"
+    handoff:
+      no_active_request: "There is no request in progress."
+    handoff_entry:
+      title: "A few more details"
+      subtitle: "Fill in the details below to continue."
+      continue: "Continue"
+    payment:
+      name: "Payments"
+      entries:
+        transactions: "Transactions"
+        reconciliations: "Reconciliations"
+        disputes: "Disputes"
+      settings:
+        merchant_accounts: "Merchant Accounts"
+      titles:
+        transactions: "Transactions"
+      member:
+        label: "Payments"
+        title: "Payments"
+        subtitle: "A history of payments tied to your account."
+        detail_title: "Payment %{out_trade_no}"
+        created: "Created %{date}"
+        refunds: "Refunds"
+        columns:
+          date: "Date"
+          vendor: "Vendor"
+          amount: "Amount"
+          status: "Status"
+          flow: "Flow"
+          paid_at: "Paid at"
+          psp_txn_id: "PSP transaction id"
+        empty:
+          headline: "No payments yet"
+          body: "Your payment history will appear here."
+    authentication:
+      name: "User Authentication"
+      entries:
+        users: "Users"
+        events: "Security Log"
+      settings:
+        sign_up: "Sign up"
+        forget_password: "Forget password"
+        roles: "Roles"
+        user_role_assignments: "User Role Assignments"
+    captcha:
+      name: "Captcha"
+      settings:
+        status: "Captcha"
+    ai_assistant:
+      name: "AI Assistant"
+      settings:
+        status: "AI Assistant"
+    email:
+      name: "Email"
+      entries:
+        overview: "Overview"
+        audience: "Audience"
+        send_activities: "Send Activity"
+        content: "Content"
+        analytics: "Analytics"
+        settings: "Settings"
+      tabs:
+        dashboard: "Dashboard"
+        lists: "Lists"
+        templates: "Templates"
+        send_activities: "Send Activity"
+        reports: "Reports"
+        deliverability: "Deliverability"
+        engagement: "Engagement"
+        overview: "Overview"
+        health: "Health"
+        suppressions: "Suppressions"
+      settings:
+        daily_cap: "Daily send cap"
+        template_tokens: "Template tokens"
+      titles:
+        templates: "Email Templates"
+        send_activities: "Send Activity"
+        lists: "Lists"
+    sms:
+      name: "SMS"
+      entries:
+        messages: "Messages"
+        opt_outs: "Opt-outs"
+      settings:
+        daily_cap: "Daily cap"
+      titles:
+        messages: "SMS Messages"
+    website:
+      name: "Website"
+      entries:
+        pages: "Pages"
+      settings:
+        site: "Website"

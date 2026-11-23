@@ -1,0 +1,17 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("maint_platform.support_tickets.breadcrumb.maintenance"), path: admin_maintenance_path(current_customer_id) },
+    { label: t("maint_platform.support_tickets.breadcrumb.support_tickets"), path: admin_maintenance_platform_support_tickets_path(current_customer_id) },
+    { label: @support_ticket.subject }
+  ],
+  title: @support_ticket.subject
+) do %>
+  <%= render HelpThreadComponent.new(
+        support_ticket: @support_ticket,
+        messages: @messages,
+        viewer: current_user,
+        reply_path: admin_maintenance_platform_support_ticket_messages_path(current_customer_id, @support_ticket),
+        resolve_path: admin_maintenance_platform_support_ticket_resolution_path(current_customer_id, @support_ticket),
+        owner_view: true
+      ) %>
+<% end %>

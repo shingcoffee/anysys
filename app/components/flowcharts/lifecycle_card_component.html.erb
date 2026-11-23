@@ -1,0 +1,55 @@
+<div class="card overflow-hidden">
+  <div class="px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+    <div class="flex flex-wrap items-center gap-2.5 min-w-0">
+      <h2 class="text-base font-semibold text-text-primary"><%= t("comp_misc.flowchart_lifecycle.header_title") %></h2>
+      <%= render BadgeComponent.new(variant: flowchart.launched? ? :success : :default, size: :sm) do %>
+        <%= flowchart.launched? ? t("maint_core.flowcharts.status.launched") : t("common.status.draft") %>
+      <% end %>
+    </div>
+
+    <% if launch_editable? && flowchart.launched? %>
+      <div class="flex flex-wrap items-center gap-2">
+        <% if flowchart.pending_draft? %>
+          <%= button_to launch_path,
+              method: :post,
+              class: "btn btn-success btn-sm flex-shrink-0" do %>
+            <%= t("maint_core.flowcharts.launch_latest") %>
+          <% end %>
+        <% end %>
+        <%= button_to launch_path,
+            method: :delete,
+            data: { turbo_confirm: t("maint_core.flowcharts.take_offline_live_confirm") },
+            class: "btn btn-secondary btn-sm flex-shrink-0" do %>
+          <%= t("maint_core.flowcharts.show.take_offline") %>
+        <% end %>
+      </div>
+    <% elsif launch_editable? %>
+      <%= button_to launch_path,
+          method: :post,
+          class: "btn btn-success btn-sm flex-shrink-0" do %>
+        <%= t("maint_core.flowcharts.show.launch") %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="px-5 pb-4">
+    <p class="text-body-sm text-text-muted">
+      <%= hint %>
+    </p>
+  </div>
+
+  <div class="border-t border-border-subtle px-5 py-3.5">
+    <div class="flex flex-col sm:flex-row sm:items-center gap-2 min-w-0">
+      <span class="text-caption text-text-muted flex-shrink-0"><%= t("chrome.flowchart_info_card.uuid") %></span>
+      <code class="text-sm font-mono text-text-primary break-all min-w-0 flex-1"><%= flowchart.uuid %></code>
+      <button type="button"
+              class="btn btn-ghost btn-sm flex-shrink-0 self-start"
+              data-controller="click-to-copy"
+              data-click-to-copy-text-value="<%= flowchart.uuid %>"
+              data-click-to-copy-copied-feedback-value="<%= t("common.actions.copied") %>"
+              data-action="click->click-to-copy#copy">
+        <%= t("common.actions.copy") %>
+      </button>
+    </div>
+  </div>
+</div>

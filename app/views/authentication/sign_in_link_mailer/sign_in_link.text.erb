@@ -1,0 +1,10 @@
+<% sign_in_url = sign_in_link_url(token: @token) %>
+<%= t("auth.mailer.sign_in_link.greeting", email: @resource.email) %>
+
+<%= t("auth.mailer.sign_in_link.instructions") %>
+
+<%= sign_in_url %>
+
+<%= t("auth.mailer.sign_in_link.ignore") %>
+
+<%= t("auth.mailer.sign_in_link.footer") %>

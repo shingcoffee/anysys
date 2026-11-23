@@ -1,0 +1,4342 @@
+---
+- :generator: CodeGenerators::ElementTypes::Decision::DecisionGenerator
+  :generator_key: decision
+  :registered_names:
+  - decision
+  :ui_key: decision
+  :kind: :element_type
+  :phase: element_decision
+  :ui_ref: schemas.js::decision
+  :generator_path: app/services/code_generators/element_types/decision/decision_generator.rb
+  :contract:
+    :keys_read:
+    - condition
+    - defaultBranchIndex
+    :enums: {}
+    :required:
+    - condition
+    :fields:
+      condition:
+        :type: :condition
+        :required: true
+      defaultBranchIndex:
+        :type: :integer
+        :required: false
+        :default: -1
+        :min: -1
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::End::EndGenerator
+  :generator_key: end
+  :registered_names:
+  - end
+  :ui_key: end
+  :kind: :element_type
+  :phase: element_end
+  :ui_ref: schemas.js::end
+  :generator_path: app/services/code_generators/element_types/end/end_generator.rb
+  :contract:
+    :keys_read:
+    - httpStatus
+    - responseBody
+    - responseType
+    - returnValue
+    :enums:
+      responseType:
+      - http_response
+      - none
+      - value
+    :required: []
+    :fields:
+      httpStatus:
+        :type: :integer
+        :required: false
+        :default: 200
+        :min: 100
+        :max: 599
+      responseBody:
+        :type: :string
+        :required: false
+      responseType:
+        :type: :enum
+        :required: false
+        :values:
+        - none
+        - value
+        - http_response
+        :default: none
+      returnValue:
+        :type: :expression
+        :required: false
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Loop::LoopGenerator
+  :generator_key: loop
+  :registered_names:
+  - loop
+  :ui_key: loop
+  :kind: :element_type
+  :phase: element_loop
+  :ui_ref: schemas.js::loop
+  :generator_path: app/services/code_generators/element_types/loop/loop_generator.rb
+  :contract:
+    :keys_read:
+    - accumulatorVariable
+    - breakCondition
+    - collection
+    - condition
+    - indexVariable
+    - itemVariable
+    - iterations
+    - loopType
+    - skipCondition
+    :enums:
+      loopType:
+      - do_while
+      - for_each
+    :required: []
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Start::StartGenerator
+  :generator_key: start
+  :registered_names:
+  - start
+  :ui_key: start
+  :kind: :element_type
+  :phase: element_start
+  :ui_ref: schemas.js::start
+  :generator_path: app/services/code_generators/element_types/start/start_generator.rb
+  :contract:
+    :keys_read: []
+    :enums: {}
+    :required: []
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Subflow::SubflowGenerator
+  :generator_key: subflow
+  :registered_names:
+  - subflow
+  :ui_key: subflow
+  :kind: :element_type
+  :phase: element_subflow
+  :ui_ref: schemas.js::subflow
+  :generator_path: app/services/code_generators/element_types/subflow/subflow_generator.rb
+  :contract:
+    :keys_read:
+    - flowchartId
+    :enums: {}
+    :required:
+    - flowchartId
+    :fields:
+      flowchartId:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Timer::TimerGenerator
+  :generator_key: timer
+  :registered_names:
+  - timer
+  :ui_key: timer
+  :kind: :element_type
+  :phase: element_timer
+  :ui_ref: schemas.js::timer
+  :generator_path: app/services/code_generators/element_types/timer/timer_generator.rb
+  :contract:
+    :keys_read:
+    - duration
+    - durationUnit
+    :enums:
+      durationUnit:
+      - hours
+      - minutes
+      - seconds
+    :required:
+    - duration
+    :fields:
+      duration:
+        :type: :integer
+        :required: true
+        :default: 30
+        :min: 1
+        :max: 86400
+      durationUnit:
+        :type: :enum
+        :required: false
+        :values:
+        - seconds
+        - minutes
+        - hours
+        :default: seconds
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Background::EnqueueJobGenerator
+  :generator_key: enqueue_job
+  :registered_names:
+  - enqueue_job
+  :ui_key: enqueue_job
+  :kind: :step_action
+  :phase: background
+  :ui_ref: action_configs/background_actions.js::enqueue_job
+  :generator_path: app/services/code_generators/element_types/process/background/enqueue_job_generator.rb
+  :contract:
+    :keys_read:
+    - jobArgs
+    - jobClass
+    - performMode
+    - priority
+    - queueName
+    - waitUntil
+    :enums:
+      performMode:
+      - later
+      - now
+      queueName:
+      - default
+      - high
+      - low
+      - mailers
+    :required:
+    - jobClass
+    :fields:
+      jobClass:
+        :type: :string
+        :required: true
+      performMode:
+        :type: :enum
+        :required: false
+        :values:
+        - later
+        - now
+      queueName:
+        :type: :enum
+        :required: false
+        :values:
+        - default
+        - low
+        - high
+        - mailers
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Background::ScheduleJobGenerator
+  :generator_key: schedule_job
+  :registered_names:
+  - schedule_job
+  :ui_key: schedule_job
+  :kind: :step_action
+  :phase: background
+  :ui_ref: action_configs/background_actions.js::schedule_job
+  :generator_path: app/services/code_generators/element_types/process/background/schedule_job_generator.rb
+  :contract:
+    :keys_read:
+    - cronExpression
+    - intervalSeconds
+    - jobArgs
+    - jobClass
+    - recurrenceLimit
+    - runAt
+    - scheduleType
+    - timezone
+    :enums:
+      scheduleType:
+      - at_time
+      - cron
+      - recurring
+    :required:
+    - jobClass
+    :fields:
+      intervalSeconds:
+        :type: :integer
+        :required: false
+        :min: 1
+        :max: 86400
+      jobClass:
+        :type: :string
+        :required: true
+      recurrenceLimit:
+        :type: :integer
+        :required: false
+        :min: 1
+        :max: 100
+      scheduleType:
+        :type: :enum
+        :required: false
+        :values:
+        - cron
+        - at_time
+        - recurring
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Caching::CacheDeleteGenerator
+  :generator_key: cache_delete
+  :registered_names:
+  - cache_delete
+  :ui_key: cache_delete
+  :kind: :step_action
+  :phase: caching
+  :ui_ref: action_configs/caching_actions.js::cache_delete
+  :generator_path: app/services/code_generators/element_types/process/caching/cache_delete_generator.rb
+  :contract:
+    :keys_read:
+    - cacheKey
+    - confirmPattern
+    - scope
+    - tags
+    :enums: {}
+    :required: []
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Caching::CacheFetchGenerator
+  :generator_key: cache_fetch
+  :registered_names:
+  - cache_fetch
+  :ui_key: cache_fetch
+  :kind: :step_action
+  :phase: caching
+  :ui_ref: action_configs/caching_actions.js::cache_fetch
+  :generator_path: app/services/code_generators/element_types/process/caching/cache_fetch_generator.rb
+  :contract:
+    :keys_read:
+    - cacheKey
+    - fallbackExpression
+    - forceRefresh
+    - raceConditionTtl
+    - resultVar
+    - skipNilCache
+    - ttl
+    - versionKey
+    :enums: {}
+    :required:
+    - cacheKey
+    - fallbackExpression
+    :fields:
+      cacheKey:
+        :type: :string
+        :required: true
+      fallbackExpression:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Caching::CacheReadGenerator
+  :generator_key: cache_read
+  :registered_names:
+  - cache_read
+  :ui_key: cache_read
+  :kind: :step_action
+  :phase: caching
+  :ui_ref: action_configs/caching_actions.js::cache_read
+  :generator_path: app/services/code_generators/element_types/process/caching/cache_read_generator.rb
+  :contract:
+    :keys_read:
+    - cacheKey
+    - decompressOnRead
+    - defaultValue
+    - fallbackExpression
+    - mode
+    - namespace
+    - onMiss
+    - resultVar
+    - ttl
+    - versionCheck
+    :enums:
+      onMiss:
+      - default
+      - nil
+      decompressOnRead:
+      - 'false'
+      - 'true'
+    :required:
+    - cacheKey
+    :fields:
+      cacheKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Caching::CacheWriteGenerator
+  :generator_key: cache_write
+  :registered_names:
+  - cache_write
+  :ui_key: cache_write
+  :kind: :step_action
+  :phase: caching
+  :ui_ref: action_configs/caching_actions.js::cache_write
+  :generator_path: app/services/code_generators/element_types/process/caching/cache_write_generator.rb
+  :contract:
+    :keys_read:
+    - action
+    - cacheKey
+    - compress
+    - namespace
+    - race_condition_ttl
+    - raw
+    - sourceVariable
+    - tags
+    - ttl
+    - version
+    :enums:
+      compress:
+      - 'false'
+      - 'true'
+      raw:
+      - 'false'
+      - 'true'
+      action:
+      - delete
+      - write_if_absent
+    :required:
+    - cacheKey
+    :fields:
+      cacheKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Communication::ApiCallGenerator
+  :generator_key: api_call
+  :registered_names:
+  - api_call
+  - API_call
+  :ui_key: API_call
+  :kind: :step_action
+  :phase: communication
+  :ui_ref: action_configs/communication_actions.js::API_call
+  :generator_path: app/services/code_generators/element_types/process/communication/api_call_generator.rb
+  :contract:
+    :keys_read:
+    - acceptEncoding
+    - authType
+    - bodyFormat
+    - bodyTemplate
+    - connectTimeout
+    - cookies
+    - followRedirects
+    - headers
+    - httpMethod
+    - maxRedirects
+    - queryParams
+    - readTimeout
+    - responseFormat
+    - responseParseKey
+    - resultVar
+    - retryOnStatus
+    - retryOnStatusAttempts
+    - url
+    - userAgent
+    :enums:
+      bodyFormat:
+      - binary
+      - form
+      - json
+      - multipart
+      - text
+      - xml
+      followRedirects:
+      - 'false'
+      - 'true'
+      responseFormat:
+      - binary
+      - json
+      - text
+      httpMethod:
+      - DELETE
+      - GET
+      - PATCH
+      - POST
+      - PUT
+      authType:
+      - apiKey
+      - basic
+      - bearer
+      - none
+    :required:
+    - url
+    :fields:
+      authType:
+        :type: :enum
+        :required: false
+        :values:
+        - none
+        - bearer
+        - basic
+        - apiKey
+      bodyFormat:
+        :type: :enum
+        :required: false
+        :values:
+        - json
+        - form
+        - multipart
+        - text
+        - xml
+        - binary
+      followRedirects:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      httpMethod:
+        :type: :enum
+        :required: false
+        :values:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+      responseFormat:
+        :type: :enum
+        :required: false
+        :values:
+        - json
+        - text
+        - binary
+      url:
+        :type: :expression
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Communication::NotifyGenerator
+  :generator_key: notify
+  :registered_names:
+  - notify
+  :ui_key: notify
+  :kind: :step_action
+  :phase: communication
+  :ui_ref: action_configs/communication_actions.js::notify
+  :generator_path: app/services/code_generators/element_types/process/communication/notify_generator.rb
+  :contract:
+    :keys_read:
+    - category
+    - channel
+    - fallbackChannel
+    - fallbackChannels
+    - fromNumber
+    - messageTemplate
+    - metadata
+    - priority
+    - recipientExpression
+    - slackChannel
+    - slackMentionUsers
+    - slackWebhookUrl
+    - targetUrl
+    - twilioConfig
+    - twilioSid
+    - twilioToken
+    :enums:
+      channel:
+      - email
+      - in_app
+      - slack
+      - sms
+      fallbackChannel:
+      - email
+      - in_app
+      - slack
+      - sms
+      priority:
+      - high
+      - low
+      - normal
+    :required: []
+    :fields:
+      channel:
+        :type: :enum
+        :required: false
+        :values:
+        - email
+        - slack
+        - sms
+        - in_app
+      fallbackChannel:
+        :type: :enum
+        :required: false
+        :values:
+        - email
+        - slack
+        - sms
+        - in_app
+      priority:
+        :type: :enum
+        :required: false
+        :values:
+        - low
+        - normal
+        - high
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Communication::SendEmailGenerator
+  :generator_key: send_email
+  :registered_names:
+  - send_email
+  :ui_key: send_email
+  :kind: :step_action
+  :phase: communication
+  :ui_ref: action_configs/communication_actions.js::send_email
+  :generator_path: app/services/code_generators/element_types/process/communication/send_email_generator.rb
+  :contract:
+    :keys_read:
+    - attachments
+    - bcc
+    - bodyTemplate
+    - cc
+    - from
+    - headers
+    - htmlBody
+    - mailerAction
+    - mailerClass
+    - mailerMethod
+    - priority
+    - replyTo
+    - subject
+    - textBody
+    - toExpression
+    :enums:
+      mailerMethod:
+      - custom
+      - default
+      priority:
+      - high
+      - low
+      - normal
+    :required:
+    - toExpression
+    :fields:
+      mailerMethod:
+        :type: :enum
+        :required: false
+        :values:
+        - default
+        - custom
+      priority:
+        :type: :enum
+        :required: false
+        :values:
+        - low
+        - normal
+        - high
+      toExpression:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Communication::SendTemplateEmailGenerator
+  :generator_key: send_template_email
+  :registered_names:
+  - send_template_email
+  :ui_key: send_template_email
+  :kind: :step_action
+  :phase: communication
+  :ui_ref: action_configs/communication_actions.js::send_template_email
+  :generator_path: app/services/code_generators/element_types/process/communication/send_template_email_generator.rb
+  :contract:
+    :keys_read:
+    - bcc
+    - cc
+    - idempotencyKey
+    - replyTo
+    - templateId
+    - toExpression
+    - vars
+    :enums: {}
+    :required:
+    - templateId
+    - toExpression
+    :fields:
+      templateId:
+        :type: :string
+        :required: true
+      toExpression:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Communication::SendWebhookGenerator
+  :generator_key: send_webhook
+  :registered_names:
+  - send_webhook
+  :ui_key: send_webhook
+  :kind: :step_action
+  :phase: communication
+  :ui_ref: action_configs/communication_actions.js::send_webhook
+  :generator_path: app/services/code_generators/element_types/process/communication/send_webhook_generator.rb
+  :contract:
+    :keys_read:
+    - contentType
+    - deadLetterVar
+    - headers
+    - hmacAlgorithm
+    - idempotencyKey
+    - payloadExpression
+    - resultVar
+    - retryPolicy
+    - secretExpression
+    - signatureHeader
+    - url
+    :enums:
+      hmacAlgorithm:
+      - sha1
+      - sha256
+      - sha512
+      retryPolicy:
+      - exponential
+      - linear
+      - none
+      contentType:
+      - application/json
+      - application/x-www-form-urlencoded
+    :required:
+    - url
+    :fields:
+      contentType:
+        :type: :enum
+        :required: false
+        :values:
+        - application/json
+        - application/x-www-form-urlencoded
+      hmacAlgorithm:
+        :type: :enum
+        :required: false
+        :values:
+        - sha256
+        - sha512
+        - sha1
+      retryPolicy:
+        :type: :enum
+        :required: false
+        :values:
+        - none
+        - exponential
+        - linear
+      url:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Concurrency::AcquireLockGenerator
+  :generator_key: acquire_lock
+  :registered_names:
+  - acquire_lock
+  :ui_key: acquire_lock
+  :kind: :step_action
+  :phase: concurrency
+  :ui_ref: action_configs/concurrency_actions.js::acquire_lock
+  :generator_path: app/services/code_generators/element_types/process/concurrency/acquire_lock_generator.rb
+  :contract:
+    :keys_read:
+    - backoffStrategy
+    - holderIdentity
+    - jitter
+    - lockKey
+    - lockKeyVariable
+    - lockRetryCount
+    - onConflict
+    - retryDelay
+    - ttl
+    :enums:
+      backoffStrategy:
+      - constant
+      - exponential
+      onConflict:
+      - raise
+      - skip
+      - wait
+    :required: []
+    :fields:
+      backoffStrategy:
+        :type: :enum
+        :required: false
+        :values:
+        - constant
+        - exponential
+      onConflict:
+        :type: :enum
+        :required: false
+        :values:
+        - wait
+        - raise
+        - skip
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Concurrency::ReleaseLockGenerator
+  :generator_key: release_lock
+  :registered_names:
+  - release_lock
+  :ui_key: release_lock
+  :kind: :step_action
+  :phase: concurrency
+  :ui_ref: action_configs/concurrency_actions.js::release_lock
+  :generator_path: app/services/code_generators/element_types/process/concurrency/release_lock_generator.rb
+  :contract:
+    :keys_read:
+    - holderIdentity
+    - lockKey
+    - lockKeyVariable
+    - onMissing
+    :enums:
+      onMissing:
+      - ignore
+      - log
+      - raise
+    :required: []
+    :fields:
+      onMissing:
+        :type: :enum
+        :required: false
+        :values:
+        - ignore
+        - raise
+        - log
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::AnyAllNoneCheckGenerator
+  :generator_key: any_all_none_check
+  :registered_names:
+  - any_all_none_check
+  :ui_key: any_all_none_check
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::any_all_none_check
+  :generator_path: app/services/code_generators/element_types/process/data_operations/any_all_none_check_generator.rb
+  :contract:
+    :keys_read:
+    - checkType
+    - collectionKey
+    - conditionOperator
+    - conditions
+    - customExpression
+    - filterField
+    - filterOperator
+    - filterValue
+    - matchField
+    - matchValue
+    - outputKey
+    - predicateType
+    - valueList
+    :enums:
+      checkType:
+      - all
+      - any
+      - none
+      conditionOperator:
+      - AND
+      - OR
+      predicateType:
+      - any_of_values
+      - custom_expression
+      - match_field
+      - truthy
+    :required:
+    - collectionKey
+    :fields:
+      collectionKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::AssignValueGenerator
+  :generator_key: assign_value
+  :registered_names:
+  - assign_value
+  :ui_key: assign_value
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::assign_value
+  :generator_path: app/services/code_generators/element_types/process/data_operations/assign_value_generator.rb
+  :contract:
+    :keys_read:
+    - arrayValue
+    - booleanValue
+    - credentialPath
+    - ctxRefVariable
+    - envVarName
+    - floatValue
+    - hashValue
+    - integerValue
+    - randomLength
+    - randomType
+    - resultVar
+    - stringValue
+    - valueExpression
+    - valueType
+    :enums:
+      valueType:
+      - array
+      - boolean
+      - credential
+      - ctx_ref
+      - env_var
+      - expression
+      - float
+      - hash
+      - integer
+      - 'null'
+      - random
+      - string
+      randomType:
+      - float
+      - hex
+      - int
+      - uuid
+    :required:
+    - credentialPath
+    - ctxRefVariable
+    - envVarName
+    - randomType
+    - resultVar
+    :fields:
+      resultVar:
+        :type: :string
+        :required: true
+      valueType:
+        :type: :enum
+        :required: false
+        :values:
+        - string
+        - integer
+        - float
+        - boolean
+        - array
+        - hash
+        - expression
+        - 'null'
+        - ctx_ref
+        - env_var
+        - credential
+        - random
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::Base64EncodeDecodeGenerator
+  :generator_key: base64_encode_decode
+  :registered_names:
+  - base64_encode_decode
+  :ui_key: base64_encode_decode
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::base64_encode_decode
+  :generator_path: app/services/code_generators/element_types/process/data_operations/base64_encode_decode_generator.rb
+  :contract:
+    :keys_read:
+    - inputEncoding
+    - lineWidth
+    - operation
+    - outputKey
+    - sourceKey
+    - stripPadding
+    - urlSafe
+    :enums:
+      inputEncoding:
+      - binary
+      - utf8
+      operation:
+      - decode
+      - encode
+      urlSafe:
+      - 'false'
+      - 'true'
+      stripPadding:
+      - 'false'
+      - 'true'
+    :required:
+    - sourceKey
+    :fields:
+      inputEncoding:
+        :type: :enum
+        :required: false
+        :values:
+        - utf8
+        - binary
+      lineWidth:
+        :type: :integer
+        :required: false
+        :min: 0
+      sourceKey:
+        :type: :string
+        :required: true
+      stripPadding:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      urlSafe:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::CalculateGenerator
+  :generator_key: calculate
+  :registered_names:
+  - calculate
+  :ui_key: calculate
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::calculate
+  :generator_path: app/services/code_generators/element_types/process/data_operations/calculate_generator.rb
+  :contract:
+    :keys_read:
+    - collectionExpression
+    - customExpression
+    - emptyCollectionBehavior
+    - emptyCollectionDefault
+    - fieldName
+    - ignoreNils
+    - nullFilter
+    - operation
+    - precision
+    - resultVar
+    - roundingMode
+    :enums:
+      operation:
+      - avg
+      - count
+      - custom
+      - max
+      - min
+      - sum
+      emptyCollectionBehavior:
+      - nil
+      - zero
+      roundingMode:
+      - ceiling
+      - floor
+      - half_even
+      - half_up
+      ignoreNils:
+      - 'false'
+      - 'true'
+    :required: []
+    :fields:
+      emptyCollectionBehavior:
+        :type: :enum
+        :required: false
+        :values:
+        - zero
+        - nil
+      ignoreNils:
+        :type: :enum
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      precision:
+        :type: :integer
+        :required: false
+        :min: 0
+      roundingMode:
+        :type: :enum
+        :required: false
+        :values:
+        - half_up
+        - half_even
+        - floor
+        - ceiling
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::ChunkCollectionGenerator
+  :generator_key: chunk_collection
+  :registered_names:
+  - chunk_collection
+  :ui_key: chunk_collection
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::chunk_collection
+  :generator_path: app/services/code_generators/element_types/process/data_operations/chunk_collection_generator.rb
+  :contract:
+    :keys_read:
+    - chunkField
+    - chunkMode
+    - chunkPredicate
+    - chunkSize
+    - includeRemainder
+    - resultVar
+    - sourceVariable
+    - strict
+    :enums:
+      chunkMode:
+      - field
+      - predicate
+      - size
+      strict:
+      - 'false'
+      - 'true'
+      includeRemainder:
+      - 'false'
+      - 'true'
+    :required:
+    - chunkField
+    - chunkPredicate
+    - sourceVariable
+    :fields:
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::CoalesceValueGenerator
+  :generator_key: coalesce_value
+  :registered_names:
+  - coalesce_value
+  :ui_key: coalesce_value
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::coalesce_value
+  :generator_path: app/services/code_generators/element_types/process/data_operations/coalesce_value_generator.rb
+  :contract:
+    :keys_read:
+    - blankDefinition
+    - candidates
+    - operandList
+    - outputKey
+    - predicate
+    - returnFirstNonBlank
+    :enums:
+      predicate:
+      - blank
+      - false_or_nil
+      - nil
+      blankDefinition:
+      - empty
+      - nil
+      - whitespace
+      returnFirstNonBlank:
+      - 'false'
+      - 'true'
+    :required: []
+    :fields:
+      blankDefinition:
+        :type: :enum
+        :required: false
+        :values:
+        - nil
+        - empty
+        - whitespace
+      predicate:
+        :type: :enum
+        :required: false
+        :values:
+        - nil
+        - blank
+        - false_or_nil
+      returnFirstNonBlank:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::CompareDataGenerator
+  :generator_key: compare_data
+  :registered_names:
+  - compare_data
+  :ui_key: compare_data
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::compare_data
+  :generator_path: app/services/code_generators/element_types/process/data_operations/compare_data_generator.rb
+  :contract:
+    :keys_read:
+    - caseInsensitive
+    - comparisonType
+    - ignoreKeys
+    - leftKey
+    - mode
+    - numericTolerance
+    - outputKey
+    - rightKey
+    :enums:
+      comparisonType:
+      - deep_equal
+      - diff
+      - equality
+      - schema_match
+      mode:
+      - deep
+      - keys
+      - values
+      caseInsensitive:
+      - 'false'
+      - 'true'
+    :required:
+    - leftKey
+    - rightKey
+    :fields:
+      caseInsensitive:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      comparisonType:
+        :type: :enum
+        :required: false
+        :values:
+        - equality
+        - deep_equal
+        - schema_match
+        - diff
+      leftKey:
+        :type: :string
+        :required: true
+      mode:
+        :type: :enum
+        :required: false
+        :values:
+        - keys
+        - values
+        - deep
+      rightKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::DateTimeCalcGenerator
+  :generator_key: date_time_calc
+  :registered_names:
+  - date_time_calc
+  :ui_key: date_time_calc
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::date_time_calc
+  :generator_path: app/services/code_generators/element_types/process/data_operations/date_time_calc_generator.rb
+  :contract:
+    :keys_read:
+    - amount
+    - businessDays
+    - dstPolicy
+    - endVariable
+    - formatString
+    - inputFormat
+    - operation
+    - outputFormat
+    - sourceVariable
+    - targetVariable
+    - timezone
+    - timezoneAware
+    - unit
+    :enums:
+      operation:
+      - add
+      - difference
+      - format
+      - now
+      - parse
+      - subtract
+      outputFormat:
+      - iso8601
+      - rfc3339
+      - unix
+      - unix_ms
+      timezoneAware:
+      - 'false'
+      - 'true'
+      businessDays:
+      - 'false'
+      - 'true'
+      dstPolicy:
+      - preserve_utc
+      - preserve_wall
+    :required:
+    - amount
+    - endVariable
+    - formatString
+    - sourceVariable
+    - targetVariable
+    - unit
+    :fields:
+      businessDays:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      dstPolicy:
+        :type: :enum
+        :required: false
+        :values:
+        - preserve_wall
+        - preserve_utc
+      targetVariable:
+        :type: :string
+        :required: true
+      timezoneAware:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::FilterCollectionGenerator
+  :generator_key: filter_collection
+  :registered_names:
+  - filter_collection
+  :ui_key: filter_collection
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::filter_collection
+  :generator_path: app/services/code_generators/element_types/process/data_operations/filter_collection_generator.rb
+  :contract:
+    :keys_read:
+    - conditionOperator
+    - conditions
+    - filterField
+    - filterMode
+    - filterOperator
+    - filterValue
+    - nilHandling
+    - rejectMode
+    - secondaryFilter
+    - sourceVariable
+    - targetVariable
+    :enums:
+      conditionOperator:
+      - AND
+      - OR
+      rejectMode:
+      - 'false'
+      - 'true'
+      nilHandling:
+      - exclude
+      - include
+      - treat_as_false
+      filterOperator:
+      - blank
+      - eq
+      - gt
+      - gte
+      - includes
+      - lt
+      - lte
+      - ne
+      - present
+      filterMode:
+      - multi
+      - single
+    :required:
+    - filterField
+    - sourceVariable
+    :fields:
+      filterMode:
+        :type: :enum
+        :required: false
+        :values:
+        - single
+        - multi
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::FindInCollectionGenerator
+  :generator_key: find_in_collection
+  :registered_names:
+  - find_in_collection
+  :ui_key: find_in_collection
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::find_in_collection
+  :generator_path: app/services/code_generators/element_types/process/data_operations/find_in_collection_generator.rb
+  :contract:
+    :keys_read:
+    - defaultValue
+    - filterField
+    - filterOperator
+    - filterValue
+    - indexField
+    - indexVariable
+    - resultVar
+    - returnMode
+    - searchStrategy
+    - sourceVariable
+    :enums:
+      returnMode:
+      - all
+      - count
+      - first
+      - index
+      - last
+      filterOperator:
+      - blank
+      - eq
+      - gt
+      - gte
+      - includes
+      - lt
+      - lte
+      - ne
+      - present
+      searchStrategy:
+      - indexed_by
+      - linear
+    :required:
+    - sourceVariable
+    :fields:
+      returnMode:
+        :type: :enum
+        :required: false
+        :values:
+        - first
+        - all
+        - last
+        - index
+        - count
+      searchStrategy:
+        :type: :enum
+        :required: false
+        :values:
+        - linear
+        - indexed_by
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::FlattenCollectionGenerator
+  :generator_key: flatten_collection
+  :registered_names:
+  - flatten_collection
+  :ui_key: flatten_collection
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::flatten_collection
+  :generator_path: app/services/code_generators/element_types/process/data_operations/flatten_collection_generator.rb
+  :contract:
+    :keys_read:
+    - collectionKey
+    - depth
+    - outputKey
+    - preserveStructure
+    - removeNilElements
+    :enums:
+      removeNilElements:
+      - 'false'
+      - 'true'
+      preserveStructure:
+      - 'false'
+      - 'true'
+    :required:
+    - collectionKey
+    :fields:
+      collectionKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::FormatStringGenerator
+  :generator_key: format_string
+  :registered_names:
+  - format_string
+  :ui_key: format_string
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::format_string
+  :generator_path: app/services/code_generators/element_types/process/data_operations/format_string_generator.rb
+  :contract:
+    :keys_read:
+    - escapeHtml
+    - fallbackOnMissing
+    - formatStyle
+    - targetVariable
+    - template
+    - variablePaths
+    :enums:
+      formatStyle:
+      - liquid
+      - mustache
+      - printf
+    :required:
+    - targetVariable
+    - template
+    :fields:
+      targetVariable:
+        :type: :string
+        :required: true
+      template:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::GenerateIdGenerator
+  :generator_key: generate_id
+  :registered_names:
+  - generate_id
+  :ui_key: generate_id
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::generate_id
+  :generator_path: app/services/code_generators/element_types/process/data_operations/generate_id_generator.rb
+  :contract:
+    :keys_read:
+    - alphabet
+    - idType
+    - length
+    - outputKey
+    - pattern
+    - prefix
+    - separator
+    - size
+    - uppercase
+    :enums:
+      idType:
+      - custom_pattern
+      - hash
+      - nanoid
+      - ulid
+      - uuid
+      uppercase:
+      - 'false'
+      - 'true'
+    :required: []
+    :fields:
+      idType:
+        :type: :enum
+        :required: false
+        :values:
+        - uuid
+        - ulid
+        - nanoid
+        - hash
+        - custom_pattern
+      uppercase:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::GroupCollectionGenerator
+  :generator_key: group_collection
+  :registered_names:
+  - group_collection
+  :ui_key: group_collection
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::group_collection
+  :generator_path: app/services/code_generators/element_types/process/data_operations/group_collection_generator.rb
+  :contract:
+    :keys_read:
+    - customKeyExpression
+    - groupByExpression
+    - groupField
+    - includeCount
+    - sortGroups
+    - sourceVariable
+    - targetVariable
+    :enums:
+      includeCount:
+      - 'false'
+      - 'true'
+      sortGroups:
+      - count_asc
+      - count_desc
+      - key_asc
+      - key_desc
+      - none
+    :required:
+    - sourceVariable
+    :fields:
+      includeCount:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      sortGroups:
+        :type: :enum
+        :required: false
+        :values:
+        - key_asc
+        - key_desc
+        - count_asc
+        - count_desc
+        - none
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::HashManipulateGenerator
+  :generator_key: hash_manipulate
+  :registered_names:
+  - hash_manipulate
+  :ui_key: hash_manipulate
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::hash_manipulate
+  :generator_path: app/services/code_generators/element_types/process/data_operations/hash_manipulate_generator.rb
+  :contract:
+    :keys_read:
+    - caseInsensitive
+    - compareKey
+    - keys
+    - operation
+    - otherHashVariable
+    - outputKey
+    - renameMap
+    - sourceKey
+    - transformExpression
+    :enums:
+      operation:
+      - compact
+      - deep_dup
+      - deep_merge
+      - diff
+      - invert
+      - keys
+      - omit
+      - pick
+      - rename_keys
+      - stringify_keys
+      - symbolize_keys
+      - transform_keys
+      - transform_values
+      - values
+    :required:
+    - sourceKey
+    :fields:
+      sourceKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::LogGenerator
+  :generator_key: log
+  :registered_names:
+  - log
+  :ui_key: log
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::log
+  :generator_path: app/services/code_generators/element_types/process/data_operations/log_generator.rb
+  :contract:
+    :keys_read:
+    - contextFields
+    - filePath
+    - includeBacktrace
+    - logLevel
+    - logger
+    - maxMessageLength
+    - messageTemplate
+    - structured
+    - tags
+    :enums:
+      logLevel:
+      - debug
+      - error
+      - fatal
+      - info
+      - warn
+      logger:
+      - audit
+      - file
+      - rails
+      - stdout
+      includeBacktrace:
+      - 'false'
+      - 'true'
+      structured:
+      - 'false'
+      - 'true'
+    :required: []
+    :fields:
+      includeBacktrace:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      logLevel:
+        :type: :enum
+        :required: false
+        :values:
+        - debug
+        - info
+        - warn
+        - error
+        - fatal
+      logger:
+        :type: :enum
+        :required: false
+        :values:
+        - rails
+        - stdout
+        - file
+        - audit
+      maxMessageLength:
+        :type: :integer
+        :required: false
+        :min: 0
+      structured:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::MapCollectionGenerator
+  :generator_key: map_collection
+  :registered_names:
+  - map_collection
+  :ui_key: map_collection
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::map_collection
+  :generator_path: app/services/code_generators/element_types/process/data_operations/map_collection_generator.rb
+  :contract:
+    :keys_read:
+    - compactResult
+    - fieldMappings
+    - indexAwareMapping
+    - keyFormat
+    - parallel
+    - preserveNilElements
+    - sourceVariable
+    - targetVariable
+    :enums:
+      parallel:
+      - 'false'
+      - 'true'
+      compactResult:
+      - 'false'
+      - 'true'
+      preserveNilElements:
+      - 'false'
+      - 'true'
+      indexAwareMapping:
+      - 'false'
+      - 'true'
+    :required:
+    - sourceVariable
+    :fields:
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::MapValueGenerator
+  :generator_key: map_value
+  :registered_names:
+  - map_value
+  :ui_key: map_value
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::map_value
+  :generator_path: app/services/code_generators/element_types/process/data_operations/map_value_generator.rb
+  :contract:
+    :keys_read:
+    - caseSensitive
+    - defaultValue
+    - fallbackStrategy
+    - mappings
+    - matchMode
+    - multiMatch
+    - rules
+    - sourceVariable
+    - targetVariable
+    :enums:
+      matchMode:
+      - exact
+      - range
+      - regex
+      fallbackStrategy:
+      - default
+      - pass_through
+      - raise
+      multiMatch:
+      - 'false'
+      - 'true'
+      caseSensitive:
+      - 'false'
+      - 'true'
+    :required:
+    - sourceVariable
+    :fields:
+      caseSensitive:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      fallbackStrategy:
+        :type: :enum
+        :required: false
+        :values:
+        - default
+        - pass_through
+        - raise
+      matchMode:
+        :type: :enum
+        :required: false
+        :values:
+        - exact
+        - regex
+        - range
+      multiMatch:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::MathOperationGenerator
+  :generator_key: math_operation
+  :registered_names:
+  - math_operation
+  :ui_key: math_operation
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::math_operation
+  :generator_path: app/services/code_generators/element_types/process/data_operations/math_operation_generator.rb
+  :contract:
+    :keys_read:
+    - divideByZero
+    - maxValue
+    - minValue
+    - operation
+    - outputKey
+    - precision
+    - secondaryKey
+    - sourceKey
+    :enums:
+      operation:
+      - abs
+      - add
+      - ceil
+      - divide
+      - floor
+      - max
+      - min
+      - modulo
+      - multiply
+      - power
+      - round
+      - sqrt
+      - subtract
+      divideByZero:
+      - infinity
+      - nan
+      - nil
+      - raise
+      - zero
+    :required:
+    - operation
+    :fields:
+      divideByZero:
+        :type: :enum
+        :required: false
+        :values:
+        - raise
+        - nil
+        - zero
+        - infinity
+        - nan
+      operation:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::MergeDataGenerator
+  :generator_key: merge_data
+  :registered_names:
+  - merge_data
+  :ui_key: merge_data
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::merge_data
+  :generator_path: app/services/code_generators/element_types/process/data_operations/merge_data_generator.rb
+  :contract:
+    :keys_read:
+    - arrayMergeMode
+    - mergeStrategy
+    - mergeVariable
+    - onConflict
+    - sourceVariable
+    - targetVariable
+    :enums:
+      mergeStrategy:
+      - append
+      - deep
+      - replace
+      - shallow
+      arrayMergeMode:
+      - concat
+      - replace
+      - unique_union
+      onConflict:
+      - first
+      - last
+    :required:
+    - mergeVariable
+    - sourceVariable
+    :fields:
+      arrayMergeMode:
+        :type: :enum
+        :required: false
+        :values:
+        - concat
+        - replace
+        - unique_union
+      mergeStrategy:
+        :type: :enum
+        :required: false
+        :values:
+        - shallow
+        - deep
+        - replace
+        - append
+      mergeVariable:
+        :type: :string
+        :required: true
+      onConflict:
+        :type: :enum
+        :required: false
+        :values:
+        - first
+        - last
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::ParseDataGenerator
+  :generator_key: parse_data
+  :registered_names:
+  - parse_data
+  :ui_key: parse_data
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::parse_data
+  :generator_path: app/services/code_generators/element_types/process/data_operations/parse_data_generator.rb
+  :contract:
+    :keys_read:
+    - csvDelimiter
+    - csvHeaders
+    - format
+    - sourceVariable
+    - strictMode
+    - symbolizeKeys
+    - targetVariable
+    - xmlRoot
+    :enums:
+      format:
+      - csv
+      - properties
+      - xml
+      - yaml
+    :required:
+    - sourceVariable
+    :fields:
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::PartitionCollectionGenerator
+  :generator_key: partition_collection
+  :registered_names:
+  - partition_collection
+  :ui_key: partition_collection
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::partition_collection
+  :generator_path: app/services/code_generators/element_types/process/data_operations/partition_collection_generator.rb
+  :contract:
+    :keys_read:
+    - collectionKey
+    - conditionOperator
+    - conditions
+    - filterField
+    - filterMode
+    - filterOperator
+    - filterValue
+    - includeStats
+    - limit
+    - matchedKey
+    - unmatchedKey
+    :enums:
+      includeStats:
+      - 'false'
+      - 'true'
+      conditionOperator:
+      - AND
+      - OR
+      filterOperator:
+      - blank
+      - eq
+      - gt
+      - gte
+      - includes
+      - lt
+      - lte
+      - ne
+      - present
+      filterMode:
+      - multi
+      - single
+    :required:
+    - collectionKey
+    - filterField
+    :fields:
+      collectionKey:
+        :type: :string
+        :required: true
+      filterField:
+        :type: :string
+        :required: false
+      filterMode:
+        :type: :enum
+        :required: false
+        :values:
+        - single
+        - multi
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::PluckFieldsGenerator
+  :generator_key: pluck_fields
+  :registered_names:
+  - pluck_fields
+  :ui_key: pluck_fields
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::pluck_fields
+  :generator_path: app/services/code_generators/element_types/process/data_operations/pluck_fields_generator.rb
+  :contract:
+    :keys_read:
+    - fields
+    - flatten
+    - includeSourceIndex
+    - sourceVariable
+    - targetVariable
+    :enums:
+      flatten:
+      - 'false'
+      - 'true'
+      includeSourceIndex:
+      - 'false'
+      - 'true'
+    :required:
+    - sourceVariable
+    :fields:
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::ReduceCollectionGenerator
+  :generator_key: reduce_collection
+  :registered_names:
+  - reduce_collection
+  :ui_key: reduce_collection
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::reduce_collection
+  :generator_path: app/services/code_generators/element_types/process/data_operations/reduce_collection_generator.rb
+  :contract:
+    :keys_read:
+    - accumulatorType
+    - collectionKey
+    - customExpression
+    - field
+    - initialValue
+    - operation
+    - outputKey
+    :enums:
+      operation:
+      - sum
+      accumulatorType:
+      - custom
+      - empty_array
+      - empty_hash
+      - same_as_first
+      - zero
+    :required:
+    - collectionKey
+    :fields:
+      collectionKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::RegexExtractGenerator
+  :generator_key: regex_extract
+  :registered_names:
+  - regex_extract
+  :ui_key: regex_extract
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::regex_extract
+  :generator_path: app/services/code_generators/element_types/process/data_operations/regex_extract_generator.rb
+  :contract:
+    :keys_read:
+    - captureGroup
+    - fallbackValue
+    - flags
+    - operation
+    - pattern
+    - regexFlags
+    - replacement
+    - returnType
+    - sourceVariable
+    - targetVariable
+    :enums:
+      operation:
+      - match
+      - replace
+      - scan
+      - test
+      flags:
+      - i
+      - m
+      - x
+    :required:
+    - pattern
+    - sourceVariable
+    :fields:
+      pattern:
+        :type: :string
+        :required: true
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::SerializeDataGenerator
+  :generator_key: serialize_data
+  :registered_names:
+  - serialize_data
+  :ui_key: serialize_data
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::serialize_data
+  :generator_path: app/services/code_generators/element_types/process/data_operations/serialize_data_generator.rb
+  :contract:
+    :keys_read:
+    - csvColumns
+    - csvNestedSeparator
+    - encoding
+    - format
+    - jsonMaxDepth
+    - rootElement
+    - sourceVariable
+    - targetVariable
+    :enums:
+      format:
+      - csv
+      - json
+      - msgpack
+      - xml
+      - yaml
+    :required:
+    - sourceVariable
+    :fields:
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::SortCollectionGenerator
+  :generator_key: sort_collection
+  :registered_names:
+  - sort_collection
+  :ui_key: sort_collection
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::sort_collection
+  :generator_path: app/services/code_generators/element_types/process/data_operations/sort_collection_generator.rb
+  :contract:
+    :keys_read:
+    - locale
+    - sortDirection
+    - sortField
+    - sortFields
+    - sourceVariable
+    - stable
+    - targetVariable
+    :enums: {}
+    :required:
+    - sortField
+    - sourceVariable
+    :fields:
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::StringManipulateGenerator
+  :generator_key: string_manipulate
+  :registered_names:
+  - string_manipulate
+  :ui_key: string_manipulate
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::string_manipulate
+  :generator_path: app/services/code_generators/element_types/process/data_operations/string_manipulate_generator.rb
+  :contract:
+    :keys_read:
+    - delimiter
+    - encoding
+    - length
+    - operation
+    - operations
+    - outputKey
+    - padChar
+    - pattern
+    - regexEscape
+    - replacement
+    - sourceKey
+    :enums:
+      operation:
+      - camelize
+      - capitalize
+      - downcase
+      - gsub
+      - html_escape
+      - html_unescape
+      - join
+      - pad_left
+      - pad_right
+      - replace
+      - reverse
+      - split
+      - strip
+      - truncate
+      - underscore
+      - unicode_normalize
+      - upcase
+    :required:
+    - sourceKey
+    :fields:
+      sourceKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::TransformGenerator
+  :generator_key: transform
+  :registered_names:
+  - transform
+  :ui_key: transform
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::transform
+  :generator_path: app/services/code_generators/element_types/process/data_operations/transform_generator.rb
+  :contract:
+    :keys_read:
+    - computedFields
+    - convertTo
+    - customExpression
+    - dateFormat
+    - fieldMappings
+    - fieldsToRemove
+    - flattenSeparator
+    - sourceField
+    - targetField
+    - transformType
+    :enums:
+      transformType:
+      - add_computed_fields
+      - convertType
+      - flatten_nested
+      - formatDate
+      - mapFields
+      - remove_fields
+      - rename_fields
+      convertTo:
+      - float
+      - integer
+      - json
+    :required: []
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::TypeCastGenerator
+  :generator_key: type_cast
+  :registered_names:
+  - type_cast
+  :ui_key: type_cast
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::type_cast
+  :generator_path: app/services/code_generators/element_types/process/data_operations/type_cast_generator.rb
+  :contract:
+    :keys_read:
+    - format
+    - outputKey
+    - sourceKey
+    - targetType
+    - timezone
+    :enums:
+      targetType:
+      - array
+      - big_decimal
+      - boolean
+      - complex
+      - date
+      - date_time
+      - datetime
+      - float
+      - hash
+      - integer
+      - rational
+      - string
+      - symbol
+      - time
+    :required:
+    - sourceKey
+    :fields:
+      sourceKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::UniqCollectionGenerator
+  :generator_key: uniq_collection
+  :registered_names:
+  - uniq_collection
+  :ui_key: uniq_collection
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::uniq_collection
+  :generator_path: app/services/code_generators/element_types/process/data_operations/uniq_collection_generator.rb
+  :contract:
+    :keys_read:
+    - keepStrategy
+    - sourceVariable
+    - targetVariable
+    - uniqBy
+    - uniqField
+    :enums: {}
+    :required:
+    - sourceVariable
+    :fields:
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::DataOperations::ZipCollectionsGenerator
+  :generator_key: zip_collections
+  :registered_names:
+  - zip_collections
+  :ui_key: zip_collections
+  :kind: :step_action
+  :phase: data
+  :ui_ref: action_configs/data_actions.js::zip_collections
+  :generator_path: app/services/code_generators/element_types/process/data_operations/zip_collections_generator.rb
+  :contract:
+    :keys_read:
+    - collectionKeys
+    - fillValue
+    - mode
+    - outputKey
+    - resultShape
+    - zipStrategy
+    :enums:
+      zipStrategy:
+      - longest
+      - shortest
+      - strict
+      resultShape:
+      - hashes
+      - tuples
+    :required:
+    - collectionKeys
+    :fields:
+      resultShape:
+        :type: :enum
+        :required: false
+        :values:
+        - tuples
+        - hashes
+      zipStrategy:
+        :type: :enum
+        :required: false
+        :values:
+        - strict
+        - longest
+        - shortest
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::FileOperations::CompressFilesGenerator
+  :generator_key: compress_files
+  :registered_names:
+  - compress_files
+  :ui_key: compress_files
+  :kind: :step_action
+  :phase: file
+  :ui_ref: action_configs/file_actions.js::compress_files
+  :generator_path: app/services/code_generators/element_types/process/file_operations/compress_files_generator.rb
+  :contract:
+    :keys_read:
+    - compressionLevel
+    - entries
+    - format
+    - includeHidden
+    - outputKey
+    :enums:
+      format:
+      - gz
+      - tar
+      - tar_gz
+      - zip
+      includeHidden:
+      - 'false'
+      - 'true'
+    :required:
+    - entries
+    :fields:
+      entries:
+        :type: :string
+        :required: true
+      format:
+        :type: :enum
+        :required: false
+        :values:
+        - zip
+        - tar
+        - gz
+        - tar_gz
+      includeHidden:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::FileOperations::DecompressFilesGenerator
+  :generator_key: decompress_files
+  :registered_names:
+  - decompress_files
+  :ui_key: decompress_files
+  :kind: :step_action
+  :phase: file
+  :ui_ref: action_configs/file_actions.js::decompress_files
+  :generator_path: app/services/code_generators/element_types/process/file_operations/decompress_files_generator.rb
+  :contract:
+    :keys_read:
+    - filter
+    - format
+    - outputKey
+    - sourceKey
+    :enums:
+      format:
+      - auto
+      - gz
+      - tar
+      - tar_gz
+      - zip
+    :required:
+    - sourceKey
+    :fields:
+      format:
+        :type: :enum
+        :required: false
+        :values:
+        - auto
+        - zip
+        - tar
+        - gz
+        - tar_gz
+      sourceKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::FileOperations::DownloadFileGenerator
+  :generator_key: download_file
+  :registered_names:
+  - download_file
+  :ui_key: download_file
+  :kind: :step_action
+  :phase: file
+  :ui_ref: action_configs/file_actions.js::download_file
+  :generator_path: app/services/code_generators/element_types/process/file_operations/download_file_generator.rb
+  :contract:
+    :keys_read:
+    - chunked
+    - destination
+    - followRedirects
+    - headers
+    - maxRedirects
+    - maxSizeBytes
+    - resultVar
+    - timeoutSeconds
+    - url
+    - urlVariable
+    - validateChecksum
+    :enums:
+      destination:
+      - active_storage
+      - ctx_var
+      - temp_file
+      chunked:
+      - 'false'
+      - 'true'
+      followRedirects:
+      - 'false'
+      - 'true'
+    :required: []
+    :fields:
+      chunked:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      destination:
+        :type: :enum
+        :required: false
+        :values:
+        - ctx_var
+        - temp_file
+        - active_storage
+      followRedirects:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::FileOperations::GenerateCsvGenerator
+  :generator_key: generate_csv
+  :registered_names:
+  - generate_csv
+  :ui_key: generate_csv
+  :kind: :step_action
+  :phase: file
+  :ui_ref: action_configs/file_actions.js::generate_csv
+  :generator_path: app/services/code_generators/element_types/process/file_operations/generate_csv_generator.rb
+  :contract:
+    :keys_read:
+    - collectionKey
+    - columns
+    - delimiter
+    - encoding
+    - headerRow
+    - includeBom
+    - nestedSeparator
+    - outputKey
+    - quoteStrings
+    :enums:
+      encoding:
+      - ascii
+      - iso-8859-1
+      - utf-16
+      - utf-8
+      quoteStrings:
+      - 'false'
+      - 'true'
+      includeBom:
+      - 'false'
+      - 'true'
+      headerRow:
+      - 'false'
+      - 'true'
+    :required:
+    - collectionKey
+    - columns
+    :fields:
+      collectionKey:
+        :type: :string
+        :required: true
+      columns:
+        :type: :string
+        :required: true
+      encoding:
+        :type: :enum
+        :required: false
+        :values:
+        - utf-8
+        - utf-16
+        - ascii
+        - iso-8859-1
+      headerRow:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      includeBom:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      quoteStrings:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::FileOperations::GenerateFileGenerator
+  :generator_key: generate_file
+  :registered_names:
+  - generate_file
+  :ui_key: generate_file
+  :kind: :step_action
+  :phase: file
+  :ui_ref: action_configs/file_actions.js::generate_file
+  :generator_path: app/services/code_generators/element_types/process/file_operations/generate_file_generator.rb
+  :contract:
+    :keys_read:
+    - autoFilter
+    - columns
+    - dataExpression
+    - fileType
+    - filenameTemplate
+    - lineEnding
+    - outputDestination
+    - pageSize
+    - pretty
+    - resultVar
+    - rootElement
+    - sheetName
+    :enums:
+      fileType:
+      - csv
+      - json
+      - pdf
+      - txt
+      - xlsx
+      - xml
+      pageSize:
+      - a4
+      - legal
+      - letter
+      lineEnding:
+      - crlf
+      - lf
+      autoFilter:
+      - 'false'
+      - 'true'
+      pretty:
+      - 'false'
+      - 'true'
+      outputDestination:
+      - active_storage
+      - ctx_var
+    :required: []
+    :fields:
+      autoFilter:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      fileType:
+        :type: :enum
+        :required: false
+        :values:
+        - csv
+        - xlsx
+        - pdf
+        - json
+        - xml
+        - txt
+      lineEnding:
+        :type: :enum
+        :required: false
+        :values:
+        - lf
+        - crlf
+      outputDestination:
+        :type: :enum
+        :required: false
+        :values:
+        - ctx_var
+        - active_storage
+      pageSize:
+        :type: :enum
+        :required: false
+        :values:
+        - letter
+        - a4
+        - legal
+      pretty:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::FileOperations::ParseCsvGenerator
+  :generator_key: parse_csv
+  :registered_names:
+  - parse_csv
+  :ui_key: parse_csv
+  :kind: :step_action
+  :phase: file
+  :ui_ref: action_configs/file_actions.js::parse_csv
+  :generator_path: app/services/code_generators/element_types/process/file_operations/parse_csv_generator.rb
+  :contract:
+    :keys_read:
+    - colTypes
+    - delimiter
+    - encoding
+    - headerRow
+    - outputKey
+    - quoteChar
+    - skipRows
+    - sourceKey
+    :enums:
+      encoding:
+      - ascii
+      - iso-8859-1
+      - utf-16
+      - utf-8
+      headerRow:
+      - 'false'
+      - 'true'
+    :required:
+    - sourceKey
+    :fields:
+      encoding:
+        :type: :enum
+        :required: false
+        :values:
+        - utf-8
+        - utf-16
+        - ascii
+        - iso-8859-1
+      headerRow:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      sourceKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::FileOperations::UploadFileGenerator
+  :generator_key: upload_file
+  :registered_names:
+  - upload_file
+  :ui_key: upload_file
+  :kind: :step_action
+  :phase: file
+  :ui_ref: action_configs/file_actions.js::upload_file
+  :generator_path: app/services/code_generators/element_types/process/file_operations/upload_file_generator.rb
+  :contract:
+    :keys_read:
+    - allowedTypes
+    - attachmentName
+    - contentTypeVariable
+    - fileVariable
+    - filenameVariable
+    - maxSizeBytes
+    - recordExpression
+    - service
+    - sourceExpression
+    :enums:
+      service:
+      - active_storage
+    :required: []
+    :fields:
+      service:
+        :type: :enum
+        :required: false
+        :values:
+        - active_storage
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::AggregateQueryGenerator
+  :generator_key: aggregate_query
+  :registered_names:
+  - aggregate_query
+  :ui_key: aggregate_query
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::aggregate_query
+  :generator_path: app/services/code_generators/element_types/process/model_operations/aggregate_query_generator.rb
+  :contract:
+    :keys_read:
+    - aggregateField
+    - aggregateFunction
+    - aggregations
+    - conditionVariable
+    - conditions
+    - groupBy
+    - groupByFields
+    - having
+    - resultFormat
+    - resultVar
+    :enums:
+      resultFormat:
+      - hash
+      - scalar
+    :required:
+    - aggregateField
+    - aggregateFunction
+    - resultVar
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::BatchOperationGenerator
+  :generator_key: batch_operation
+  :registered_names:
+  - batch_operation
+  :ui_key: batch_operation
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::batch_operation
+  :generator_path: app/services/code_generators/element_types/process/model_operations/batch_operation_generator.rb
+  :contract:
+    :keys_read:
+    - batchSize
+    - conditions
+    - errorCollection
+    - fieldAssignments
+    - operationType
+    - progressVar
+    - sourceVariable
+    - stepBody
+    - structuredConditions
+    :enums:
+      errorCollection:
+      - 'false'
+      - 'true'
+    :required:
+    - sourceVariable
+    :fields:
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::BulkImportGenerator
+  :generator_key: bulk_import
+  :registered_names:
+  - bulk_import
+  :ui_key: bulk_import
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::bulk_import
+  :generator_path: app/services/code_generators/element_types/process/model_operations/bulk_import_generator.rb
+  :contract:
+    :keys_read:
+    - batchSize
+    - dataKey
+    - onDuplicateKey
+    - outputKey
+    - returning
+    - skipDuplicates
+    - timestamps
+    - uniqueBy
+    - validate
+    :enums:
+      onDuplicateKey:
+      - skip
+      - update
+      timestamps:
+      - 'false'
+      - 'true'
+      validate:
+      - 'false'
+      - 'true'
+      skipDuplicates:
+      - 'false'
+      - 'true'
+    :required:
+    - dataKey
+    :fields:
+      batchSize:
+        :type: :integer
+        :required: false
+        :min: 1
+      dataKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::CheckExistenceGenerator
+  :generator_key: check_existence
+  :registered_names:
+  - check_existence
+  :ui_key: check_existence
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::check_existence
+  :generator_path: app/services/code_generators/element_types/process/model_operations/check_existence_generator.rb
+  :contract:
+    :keys_read:
+    - checkMethod
+    - conditionVariable
+    - conditions
+    - negated
+    - resultVar
+    - structuredConditions
+    - withTransaction
+    :enums:
+      checkMethod:
+      - any
+      - exists
+      - none
+      negated:
+      - 'false'
+      - 'true'
+      withTransaction:
+      - 'false'
+      - 'true'
+    :required:
+    - resultVar
+    :fields:
+      resultVar:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::CloneModelGenerator
+  :generator_key: clone_model
+  :registered_names:
+  - clone_model
+  :ui_key: clone_model
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::clone_model
+  :generator_path: app/services/code_generators/element_types/process/model_operations/clone_model_generator.rb
+  :contract:
+    :keys_read:
+    - cloneAssociations
+    - deepClone
+    - depth
+    - excludeFields
+    - outputKey
+    - overrideAttributes
+    - overrideFields
+    - sourceKey
+    :enums:
+      cloneAssociations:
+      - all
+      - has_many
+      - none
+      deepClone:
+      - 'false'
+      - 'true'
+    :required:
+    - sourceKey
+    :fields:
+      deepClone:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      sourceKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::CountRecordsGenerator
+  :generator_key: count_records
+  :registered_names:
+  - count_records
+  :ui_key: count_records
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::count_records
+  :generator_path: app/services/code_generators/element_types/process/model_operations/count_records_generator.rb
+  :contract:
+    :keys_read:
+    - conditionVariable
+    - conditions
+    - distinct
+    - distinctField
+    - groupBy
+    - resultVar
+    - structuredConditions
+    :enums: {}
+    :required:
+    - resultVar
+    :fields:
+      resultVar:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::DestroyModelGenerator
+  :generator_key: destroy_model
+  :registered_names:
+  - destroy_model
+  :ui_key: destroy_model
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::destroy_model
+  :generator_path: app/services/code_generators/element_types/process/model_operations/destroy_model_generator.rb
+  :contract:
+    :keys_read:
+    - modelVariable
+    - strategy
+    :enums:
+      strategy:
+      - delete
+      - destroy
+      - destroy!
+    :required: []
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::FindModelGenerator
+  :generator_key: find_model
+  :registered_names:
+  - find_model
+  :ui_key: find_model
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::find_model
+  :generator_path: app/services/code_generators/element_types/process/model_operations/find_model_generator.rb
+  :contract:
+    :keys_read:
+    - findField
+    - findStrategy
+    - findValue
+    - includes
+    - lock
+    - readonly
+    - resultVar
+    :enums:
+      findStrategy:
+      - find
+      - find_by
+      - find_by_bang
+      - first
+      - last
+      - take
+      - where_first
+      - where_many
+      lock:
+      - 'false'
+      - 'true'
+      readonly:
+      - 'false'
+      - 'true'
+    :required: []
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::NewModelGenerator
+  :generator_key: new_model
+  :registered_names:
+  - new_model
+  :ui_key: new_model
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::new_model
+  :generator_path: app/services/code_generators/element_types/process/model_operations/new_model_generator.rb
+  :contract:
+    :keys_read:
+    - resultVar
+    :enums: {}
+    :required: []
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::PluckFieldsGenerator
+  :generator_key: pluck_model_fields
+  :registered_names:
+  - pluck_model_fields
+  :ui_key: pluck_model_fields
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::pluck_model_fields
+  :generator_path: app/services/code_generators/element_types/process/model_operations/pluck_fields_generator.rb
+  :contract:
+    :keys_read:
+    - conditionVariable
+    - conditions
+    - distinct
+    - fields
+    - limit
+    - orderBy
+    - resultVar
+    - structuredConditions
+    :enums:
+      distinct:
+      - 'false'
+      - 'true'
+    :required:
+    - resultVar
+    :fields:
+      distinct:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      limit:
+        :type: :integer
+        :required: false
+        :min: 1
+      resultVar:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::QueryModelsGenerator
+  :generator_key: query_models
+  :registered_names:
+  - query_models
+  :ui_key: query_models
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::query_models
+  :generator_path: app/services/code_generators/element_types/process/model_operations/query_models_generator.rb
+  :contract:
+    :keys_read:
+    - conditions
+    - distinct
+    - groupBy
+    - includes
+    - joins
+    - limit
+    - lock
+    - orderBy
+    - orderDirection
+    - pageSize
+    - pageVariable
+    - preload
+    - queryType
+    - readonly
+    - resultVar
+    - scopeArgs
+    - scopeName
+    - select
+    :enums:
+      queryType:
+      - scope
+      - where
+      distinct:
+      - 'false'
+      - 'true'
+      lock:
+      - 'false'
+      - 'true'
+      readonly:
+      - 'false'
+      - 'true'
+    :required: []
+    :fields:
+      distinct:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      lock:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      readonly:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::RawSqlQueryGenerator
+  :generator_key: raw_sql_query
+  :registered_names:
+  - raw_sql_query
+  :ui_key: raw_sql_query
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::raw_sql_query
+  :generator_path: app/services/code_generators/element_types/process/model_operations/raw_sql_query_generator.rb
+  :contract:
+    :keys_read:
+    - bindings
+    - outputKey
+    - resultShape
+    - singleResult
+    - sqlExpression
+    - sqlTemplate
+    :enums:
+      resultShape:
+      - array
+      - first_value
+      - hash
+      - single_row
+    :required: []
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::SaveModelGenerator
+  :generator_key: save_model
+  :registered_names:
+  - save_model
+  :ui_key: save_model
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::save_model
+  :generator_path: app/services/code_generators/element_types/process/model_operations/save_model_generator.rb
+  :contract:
+    :keys_read:
+    - bang
+    - contractRef
+    :enums:
+      bang:
+      - 'false'
+      - 'true'
+    :required: []
+    :fields:
+      bang:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::SoftDeleteModelGenerator
+  :generator_key: soft_delete_model
+  :registered_names:
+  - soft_delete_model
+  :ui_key: soft_delete_model
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::soft_delete_model
+  :generator_path: app/services/code_generators/element_types/process/model_operations/soft_delete_model_generator.rb
+  :contract:
+    :keys_read:
+    - deletedAtField
+    - deletedByField
+    - sourceKey
+    :enums: {}
+    :required:
+    - sourceKey
+    :fields:
+      sourceKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::TransitionStateGenerator
+  :generator_key: transition_state
+  :registered_names:
+  - transition_state
+  :ui_key: transition_state
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::transition_state
+  :generator_path: app/services/code_generators/element_types/process/model_operations/transition_state_generator.rb
+  :contract:
+    :keys_read:
+    - event
+    - modelVariable
+    - persistImmediately
+    :enums:
+      persistImmediately:
+      - 'false'
+      - 'true'
+    :required: []
+    :fields:
+      persistImmediately:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::UpdateModelGenerator
+  :generator_key: update_model
+  :registered_names:
+  - update_model
+  :ui_key: update_model
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::update_model
+  :generator_path: app/services/code_generators/element_types/process/model_operations/update_model_generator.rb
+  :contract:
+    :keys_read:
+    - lockVersion
+    - lockVersionVariable
+    - modelVariable
+    - returnChanges
+    - updateStrategy
+    :enums:
+      returnChanges:
+      - 'false'
+      - 'true'
+      lockVersion:
+      - 'false'
+      - 'true'
+    :required: []
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ModelOperations::UpsertModelGenerator
+  :generator_key: upsert_model
+  :registered_names:
+  - upsert_model
+  :ui_key: upsert_model
+  :kind: :step_action
+  :phase: model
+  :ui_ref: action_configs/model_actions.js::upsert_model
+  :generator_path: app/services/code_generators/element_types/process/model_operations/upsert_model_generator.rb
+  :contract:
+    :keys_read:
+    - createdKey
+    - matchFields
+    - method
+    - onConflict
+    - outputKey
+    - returning
+    - timestamps
+    - uniqueBy
+    :enums:
+      method:
+      - find_or_create_by
+      - find_or_initialize
+      - upsert
+      - upsert_all
+      onConflict:
+      - raise
+      - skip
+      - update
+      timestamps:
+      - 'false'
+      - 'true'
+    :required: []
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Realtime::BroadcastGenerator
+  :generator_key: broadcast
+  :registered_names:
+  - broadcast
+  :ui_key: broadcast
+  :kind: :step_action
+  :phase: realtime
+  :ui_ref: action_configs/realtime_actions.js::broadcast
+  :generator_path: app/services/code_generators/element_types/process/realtime/broadcast_generator.rb
+  :contract:
+    :keys_read:
+    - action
+    - broadcastType
+    - channelClass
+    - dataVariable
+    - localsVariable
+    - morphStrategy
+    - partialName
+    - signedStreamName
+    - streamName
+    - target
+    - turboFrame
+    :enums: {}
+    :required: []
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Realtime::PublishEventGenerator
+  :generator_key: publish_event
+  :registered_names:
+  - publish_event
+  :ui_key: publish_event
+  :kind: :step_action
+  :phase: realtime
+  :ui_ref: action_configs/realtime_actions.js::publish_event
+  :generator_path: app/services/code_generators/element_types/process/realtime/publish_event_generator.rb
+  :contract:
+    :keys_read:
+    - eventBus
+    - eventName
+    - idempotencyKey
+    - payloadExpression
+    - schemaVersion
+    :enums: {}
+    :required:
+    - eventName
+    :fields:
+      eventName:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Resilience::CircuitBreakerGenerator
+  :generator_key: circuit_breaker
+  :registered_names:
+  - circuit_breaker
+  :ui_key: circuit_breaker
+  :kind: :step_action
+  :phase: resilience
+  :ui_ref: action_configs/resilience_actions.js::circuit_breaker
+  :generator_path: app/services/code_generators/element_types/process/resilience/circuit_breaker_generator.rb
+  :contract:
+    :keys_read:
+    - breakerName
+    - fallbackExpression
+    - jitter
+    - resultVar
+    :enums: {}
+    :required:
+    - breakerName
+    :fields:
+      breakerName:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Resilience::IdempotencyCheckGenerator
+  :generator_key: idempotency_check
+  :registered_names:
+  - idempotency_check
+  :ui_key: idempotency_check
+  :kind: :step_action
+  :phase: resilience
+  :ui_ref: action_configs/resilience_actions.js::idempotency_check
+  :generator_path: app/services/code_generators/element_types/process/resilience/idempotency_check_generator.rb
+  :contract:
+    :keys_read:
+    - ctxField
+    - explicitKey
+    - keyExpression
+    - keyStrategy
+    - onDuplicate
+    - resultVar
+    - storeName
+    - ttlSeconds
+    :enums:
+      keyStrategy:
+      - ctx_field
+      - explicit
+      - hash_of_inputs
+      onDuplicate:
+      - raise
+      - return_stored
+      - skip
+    :required: []
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Resilience::RateLimiterGenerator
+  :generator_key: rate_limiter
+  :registered_names:
+  - rate_limiter
+  :ui_key: rate_limiter
+  :kind: :step_action
+  :phase: resilience
+  :ui_ref: action_configs/resilience_actions.js::rate_limiter
+  :generator_path: app/services/code_generators/element_types/process/resilience/rate_limiter_generator.rb
+  :contract:
+    :keys_read:
+    - algorithm
+    - burstAllowance
+    - capacity
+    - jitterPercent
+    - limiterName
+    - onExceed
+    - refillRate
+    - resultVar
+    - retryDelay
+    - window
+    :enums:
+      algorithm:
+      - fixed_window
+      - leaky_bucket
+      - sliding_window
+      - token_bucket
+      onExceed:
+      - drop
+      - raise
+      - return_false
+      - skip
+      - wait
+    :required:
+    - capacity
+    - limiterName
+    :fields:
+      burstAllowance:
+        :type: :integer
+        :required: false
+        :min: 0
+        :max: 100000
+      capacity:
+        :type: :integer
+        :required: true
+        :min: 1
+        :max: 100000
+      limiterName:
+        :type: :string
+        :required: true
+      window:
+        :type: :integer
+        :required: false
+        :min: 1
+        :max: 86400
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Resilience::RetryWithBackoffGenerator
+  :generator_key: retry_with_backoff
+  :registered_names:
+  - retry_with_backoff
+  :ui_key: retry_with_backoff
+  :kind: :step_action
+  :phase: resilience
+  :ui_ref: action_configs/resilience_actions.js::retry_with_backoff
+  :generator_path: app/services/code_generators/element_types/process/resilience/retry_with_backoff_generator.rb
+  :contract:
+    :keys_read:
+    - backoffStrategy
+    - defaultValue
+    - jitterPercent
+    - maxRetries
+    - onExhausted
+    - resultVar
+    - retryableErrors
+    :enums:
+      onExhausted:
+      - default_value
+      - raise
+      - return_false
+    :required:
+    - maxRetries
+    :fields:
+      maxRetries:
+        :type: :integer
+        :required: true
+        :min: 1
+        :max: 50
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Response::RedirectResponseGenerator
+  :generator_key: redirect_response
+  :registered_names:
+  - redirect_response
+  :ui_key: redirect_response
+  :kind: :step_action
+  :phase: response
+  :ui_ref: action_configs/response_actions.js::redirect_response
+  :generator_path: app/services/code_generators/element_types/process/response/redirect_response_generator.rb
+  :contract:
+    :keys_read:
+    - addReferrer
+    - flashMessage
+    - jsonApiFormat
+    - preserveQueryParams
+    - preserveQueryString
+    - queryParams
+    - resultVar
+    - status
+    - statusCode
+    - url
+    :enums:
+      statusCode:
+      - '301'
+      - '302'
+      - '303'
+      - '307'
+      - '308'
+      preserveQueryParams:
+      - 'false'
+      - 'true'
+      addReferrer:
+      - 'false'
+      - 'true'
+      jsonApiFormat:
+      - 'false'
+      - 'true'
+    :required:
+    - url
+    :fields:
+      url:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Response::RenderResponseGenerator
+  :generator_key: render_response
+  :registered_names:
+  - render_response
+  :ui_key: render_response
+  :kind: :step_action
+  :phase: response
+  :ui_ref: action_configs/response_actions.js::render_response
+  :generator_path: app/services/code_generators/element_types/process/response/render_response_generator.rb
+  :contract:
+    :keys_read:
+    - charset
+    - contentType
+    - csvBody
+    - csvFilename
+    - etag
+    - filePath
+    - flashMessage
+    - flashType
+    - headers
+    - jsonBody
+    - lastModified
+    - redirectPath
+    - redirectUrl
+    - responseFormat
+    - resultVar
+    - statusCode
+    - streamChunk
+    - templateLocals
+    - templateName
+    - textBody
+    - xmlBody
+    :enums:
+      responseFormat:
+      - csv
+      - file
+      - html
+      - json
+      - redirect
+      - stream
+      - text
+      - xml
+    :required: []
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::SchedulingTime::BusinessHoursCheckGenerator
+  :generator_key: business_hours_check
+  :registered_names:
+  - business_hours_check
+  :ui_key: business_hours_check
+  :kind: :step_action
+  :phase: scheduling
+  :ui_ref: action_configs/scheduling_actions.js::business_hours_check
+  :generator_path: app/services/code_generators/element_types/process/scheduling_time/business_hours_check_generator.rb
+  :contract:
+    :keys_read:
+    - dstPolicy
+    - holidays
+    - resultMode
+    - resultVar
+    - schedule
+    - timeVariable
+    - timezone
+    :enums:
+      dstPolicy:
+      - ignore
+      - respect
+      resultMode:
+      - bool
+      - minutes_until_open
+      - next_open
+    :required:
+    - schedule
+    :fields:
+      schedule:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::SchedulingTime::DeadlineCheckGenerator
+  :generator_key: deadline_check
+  :registered_names:
+  - deadline_check
+  :ui_key: deadline_check
+  :kind: :step_action
+  :phase: scheduling
+  :ui_ref: action_configs/scheduling_actions.js::deadline_check
+  :generator_path: app/services/code_generators/element_types/process/scheduling_time/deadline_check_generator.rb
+  :contract:
+    :keys_read:
+    - behaviorOnBreach
+    - breachedVar
+    - deadlineExpression
+    - deadlineFormat
+    - deadlineVariable
+    - gracePeriodSeconds
+    - referenceTime
+    - resultVar
+    :enums:
+      behaviorOnBreach:
+      - mark
+      - raise
+      - signal
+      deadlineFormat:
+      - iso8601
+      - rfc2822
+    :required: []
+    :fields:
+      gracePeriodSeconds:
+        :type: :integer
+        :required: false
+        :min: 0
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::SchedulingTime::TimezoneConvertGenerator
+  :generator_key: timezone_convert
+  :registered_names:
+  - timezone_convert
+  :ui_key: timezone_convert
+  :kind: :step_action
+  :phase: scheduling
+  :ui_ref: action_configs/scheduling_actions.js::timezone_convert
+  :generator_path: app/services/code_generators/element_types/process/scheduling_time/timezone_convert_generator.rb
+  :contract:
+    :keys_read:
+    - dstBehavior
+    - outputFormat
+    - preserveLocalTime
+    - resultVar
+    - sourceTimeVariable
+    - sourceTimezone
+    - targetTimezone
+    :enums:
+      outputFormat:
+      - iso8601
+      - rfc3339
+      - unix
+      dstBehavior:
+      - prefer_earlier
+      - prefer_later
+      - raise_on_ambiguous
+    :required:
+    - sourceTimeVariable
+    - targetTimezone
+    :fields:
+      dstBehavior:
+        :type: :enum
+        :required: false
+        :values:
+        - raise_on_ambiguous
+        - prefer_earlier
+        - prefer_later
+      sourceTimeVariable:
+        :type: :string
+        :required: true
+      targetTimezone:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Security::AuthenticateGenerator
+  :generator_key: authenticate
+  :registered_names:
+  - authenticate
+  :ui_key: authenticate
+  :kind: :step_action
+  :phase: security
+  :ui_ref: action_configs/security_actions.js::authenticate
+  :generator_path: app/services/code_generators/element_types/process/security/authenticate_generator.rb
+  :contract:
+    :keys_read:
+    - authMethod
+    - credentialSource
+    - expectedKeyVariable
+    - issuer
+    - lockoutSeconds
+    - maxAttempts
+    - secretVariable
+    - sourceVariable
+    - targetVariable
+    - tokenAlgorithm
+    - tokenType
+    - userVariable
+    :enums:
+      authMethod:
+      - api_key
+      - jwt
+      - password
+      - session
+      - token
+    :required:
+    - authMethod
+    :fields:
+      authMethod:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Security::AuthorizeGenerator
+  :generator_key: authorize
+  :registered_names:
+  - authorize
+  :ui_key: authorize
+  :kind: :step_action
+  :phase: security
+  :ui_ref: action_configs/security_actions.js::authorize
+  :generator_path: app/services/code_generators/element_types/process/security/authorize_generator.rb
+  :contract:
+    :keys_read:
+    - abilityAction
+    - abilityResource
+    - authType
+    - roleList
+    - roleMode
+    - roleName
+    - userExpression
+    :enums:
+      authType:
+      - ability_check
+      - multi_role
+      - role_check
+      roleMode:
+      - all_of
+      - any_of
+    :required:
+    - abilityAction
+    - abilityResource
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Security::DecryptDataGenerator
+  :generator_key: decrypt_data
+  :registered_names:
+  - decrypt_data
+  :ui_key: decrypt_data
+  :kind: :step_action
+  :phase: security
+  :ui_ref: action_configs/security_actions.js::decrypt_data
+  :generator_path: app/services/code_generators/element_types/process/security/decrypt_data_generator.rb
+  :contract:
+    :keys_read:
+    - algorithm
+    - encoding
+    - sourceKey
+    :enums:
+      encoding:
+      - base64
+      - base64url
+      - binary
+      - hex
+      - raw
+    :required:
+    - sourceKey
+    :fields:
+      sourceKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Security::EncryptDataGenerator
+  :generator_key: encrypt_data
+  :registered_names:
+  - encrypt_data
+  :ui_key: encrypt_data
+  :kind: :step_action
+  :phase: security
+  :ui_ref: action_configs/security_actions.js::encrypt_data
+  :generator_path: app/services/code_generators/element_types/process/security/encrypt_data_generator.rb
+  :contract:
+    :keys_read:
+    - action
+    - algorithm
+    - encoding
+    - sourceVariable
+    :enums:
+      encoding:
+      - base64
+      - base64url
+      - hex
+      - raw
+      action:
+      - decrypt
+      - encrypt
+    :required:
+    - sourceVariable
+    :fields:
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Security::GenerateTokenGenerator
+  :generator_key: generate_token
+  :registered_names:
+  - generate_token
+  :ui_key: generate_token
+  :kind: :step_action
+  :phase: security
+  :ui_ref: action_configs/security_actions.js::generate_token
+  :generator_path: app/services/code_generators/element_types/process/security/generate_token_generator.rb
+  :contract:
+    :keys_read:
+    - algorithm
+    - audience
+    - claims
+    - dataVariable
+    - digest
+    - expiresIn
+    - issuer
+    - keyId
+    - length
+    - notBefore
+    - payloadVariable
+    - secretSource
+    - secretVariable
+    - targetVariable
+    - tokenLength
+    - tokenType
+    :enums:
+      algorithm:
+      - HS256
+      - HS384
+      - HS512
+      - RS256
+      secretSource:
+      - credentials
+      - ctx
+      - env
+      tokenType:
+      - base58
+      - hex
+      - hmac
+      - jwt
+      - numeric_otp
+      - secure_random
+      - urlsafe_base64
+      - uuid
+    :required:
+    - dataVariable
+    - secretVariable
+    - targetVariable
+    :fields:
+      targetVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Security::HashDataGenerator
+  :generator_key: hash_data
+  :registered_names:
+  - hash_data
+  :ui_key: hash_data
+  :kind: :step_action
+  :phase: security
+  :ui_ref: action_configs/security_actions.js::hash_data
+  :generator_path: app/services/code_generators/element_types/process/security/hash_data_generator.rb
+  :contract:
+    :keys_read:
+    - algorithm
+    - cost
+    - encoding
+    - iterations
+    - pepper
+    - salt
+    - sourceVariable
+    - targetVariable
+    :enums:
+      algorithm:
+      - bcrypt
+      - pbkdf2
+      - scrypt
+      encoding:
+      - base64
+      - base64url
+    :required:
+    - sourceVariable
+    :fields:
+      sourceVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Security::MaskDataGenerator
+  :generator_key: mask_data
+  :registered_names:
+  - mask_data
+  :ui_key: mask_data
+  :kind: :step_action
+  :phase: security
+  :ui_ref: action_configs/security_actions.js::mask_data
+  :generator_path: app/services/code_generators/element_types/process/security/mask_data_generator.rb
+  :contract:
+    :keys_read:
+    - maskChar
+    - maskType
+    - outputKey
+    - preserveFormat
+    - regexPattern
+    - sourceKey
+    - visibleEnd
+    - visibleStart
+    :enums:
+      maskType:
+      - credit_card
+      - custom
+      - email
+      - first1_last1
+      - full
+      - last4
+      - phone
+      - ssn
+      preserveFormat:
+      - 'false'
+      - 'true'
+    :required:
+    - sourceKey
+    :fields:
+      sourceKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Security::SanitizeInputGenerator
+  :generator_key: sanitize_input
+  :registered_names:
+  - sanitize_input
+  :ui_key: sanitize_input
+  :kind: :step_action
+  :phase: security
+  :ui_ref: action_configs/security_actions.js::sanitize_input
+  :generator_path: app/services/code_generators/element_types/process/security/sanitize_input_generator.rb
+  :contract:
+    :keys_read:
+    - allowedAttributes
+    - allowedTags
+    - maxLength
+    - outputKey
+    - sanitizer
+    - scrubberVariable
+    - sourceKey
+    :enums: {}
+    :required:
+    - sourceKey
+    :fields:
+      sourceKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Security::VerifyTokenGenerator
+  :generator_key: verify_token
+  :registered_names:
+  - verify_token
+  :ui_key: verify_token
+  :kind: :step_action
+  :phase: security
+  :ui_ref: action_configs/security_actions.js::verify_token
+  :generator_path: app/services/code_generators/element_types/process/security/verify_token_generator.rb
+  :contract:
+    :keys_read:
+    - algorithm
+    - algorithmAllowlist
+    - leewaySeconds
+    - outputKey
+    - requiredClaims
+    - secretKey
+    - tokenKey
+    - verifyAudience
+    - verifyIssuer
+    :enums: {}
+    :required:
+    - secretKey
+    - tokenKey
+    :fields:
+      secretKey:
+        :type: :string
+        :required: true
+      tokenKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::ServiceInvocation::InvokeServiceGenerator
+  :generator_key: invoke_service
+  :registered_names:
+  - invoke_service
+  :ui_key: invoke_service
+  :kind: :step_action
+  :phase: service
+  :ui_ref: action_configs/service_actions.js::invoke_service
+  :generator_path: app/services/code_generators/element_types/process/service_invocation/invoke_service_generator.rb
+  :contract:
+    :keys_read:
+    - args
+    - invocationStyle
+    - kwargs
+    - methodName
+    - resultVar
+    - serviceClass
+    :enums:
+      invocationStyle:
+      - call
+      - class_method
+      - instance_method
+      - new_and_call
+    :required:
+    - resultVar
+    - serviceClass
+    :fields:
+      invocationStyle:
+        :type: :enum
+        :required: false
+        :values:
+        - call
+        - new_and_call
+        - class_method
+        - instance_method
+      resultVar:
+        :type: :string
+        :required: true
+      serviceClass:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Utility::AiInferenceGenerator
+  :generator_key: ai_inference
+  :registered_names:
+  - ai_inference
+  :ui_key: ai_inference
+  :kind: :step_action
+  :phase: utility
+  :ui_ref: action_configs/utility_actions.js::ai_inference
+  :generator_path: app/services/code_generators/element_types/process/utility/ai_inference_generator.rb
+  :contract:
+    :keys_read:
+    - maxTokens
+    - model
+    - outputFormat
+    - promptTemplate
+    - provider
+    - resultVar
+    - systemPrompt
+    - temperature
+    - tools
+    :enums:
+      provider:
+      - anthropic
+      - cohere
+      - ollama
+      - openai
+      outputFormat:
+      - json
+      - structured
+      - text
+    :required:
+    - promptTemplate
+    :fields:
+      maxTokens:
+        :type: :integer
+        :required: false
+        :min: 1
+      promptTemplate:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Utility::AuditLogGenerator
+  :generator_key: audit_log
+  :registered_names:
+  - audit_log
+  :ui_key: audit_log
+  :kind: :step_action
+  :phase: utility
+  :ui_ref: action_configs/utility_actions.js::audit_log
+  :generator_path: app/services/code_generators/element_types/process/utility/audit_log_generator.rb
+  :contract:
+    :keys_read:
+    - actorId
+    - actorType
+    - eventType
+    - ipAddress
+    - metadata
+    - persistTo
+    - resourceId
+    - resourceType
+    - severity
+    - userAgent
+    :enums: {}
+    :required:
+    - eventType
+    :fields: {}
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Utility::BarcodeGenerateGenerator
+  :generator_key: barcode_generate
+  :registered_names:
+  - barcode_generate
+  :ui_key: barcode_generate
+  :kind: :step_action
+  :phase: utility
+  :ui_ref: action_configs/utility_actions.js::barcode_generate
+  :generator_path: app/services/code_generators/element_types/process/utility/barcode_generate_generator.rb
+  :contract:
+    :keys_read:
+    - barcodeFormat
+    - dataVariable
+    - height
+    - includeText
+    - margin
+    - outputFormat
+    - resultVar
+    - textFont
+    - width
+    :enums: {}
+    :required:
+    - dataVariable
+    :fields:
+      dataVariable:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Utility::CurrencyConvertGenerator
+  :generator_key: currency_convert
+  :registered_names:
+  - currency_convert
+  :ui_key: currency_convert
+  :kind: :step_action
+  :phase: utility
+  :ui_ref: action_configs/utility_actions.js::currency_convert
+  :generator_path: app/services/code_generators/element_types/process/utility/currency_convert_generator.rb
+  :contract:
+    :keys_read:
+    - amount
+    - cacheRates
+    - fixedRate
+    - fromCurrency
+    - precision
+    - rateApiUrl
+    - rateSource
+    - ratesVariable
+    - resultVar
+    - rounding
+    - staticRates
+    - toCurrency
+    :enums:
+      rateSource:
+      - config
+      - ctx
+      - ctx_key
+      - external
+      - fixed
+      rounding:
+      - ceiling
+      - floor
+      - half_even
+      - half_up
+      cacheRates:
+      - 'false'
+      - 'true'
+    :required:
+    - amount
+    - toCurrency
+    :fields:
+      cacheRates:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+      precision:
+        :type: :integer
+        :required: false
+        :min: 0
+      rateSource:
+        :type: :enum
+        :required: false
+        :values:
+        - ctx
+        - config
+        - fixed
+        - external
+        - ctx_key
+      rounding:
+        :type: :enum
+        :required: false
+        :values:
+        - half_up
+        - half_even
+        - floor
+        - ceiling
+      toCurrency:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Utility::GeolocationLookupGenerator
+  :generator_key: geolocation_lookup
+  :registered_names:
+  - geolocation_lookup
+  :ui_key: geolocation_lookup
+  :kind: :step_action
+  :phase: utility
+  :ui_ref: action_configs/utility_actions.js::geolocation_lookup
+  :generator_path: app/services/code_generators/element_types/process/utility/geolocation_lookup_generator.rb
+  :contract:
+    :keys_read:
+    - cacheResults
+    - coord1
+    - fallbackProvider
+    - fieldsToReturn
+    - lookupKey
+    - mode
+    - provider
+    - resultVar
+    - sourceKey
+    - targetKey
+    :enums:
+      provider:
+      - google
+      - mapbox
+      lookupKey:
+      - address
+      - coords
+      - ip
+      - postal
+      cacheResults:
+      - 'false'
+      - 'true'
+      mode:
+      - distance
+      - ip_to_location
+    :required:
+    - sourceKey
+    :fields:
+      sourceKey:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Utility::I18nTranslateGenerator
+  :generator_key: i18n_translate
+  :registered_names:
+  - i18n_translate
+  :ui_key: i18n_translate
+  :kind: :step_action
+  :phase: utility
+  :ui_ref: action_configs/utility_actions.js::i18n_translate
+  :generator_path: app/services/code_generators/element_types/process/utility/i18n_translate_generator.rb
+  :contract:
+    :keys_read:
+    - count
+    - default
+    - fallbackLocale
+    - interpolations
+    - key
+    - locale
+    - raiseOnMissing
+    - resultVar
+    - scope
+    :enums:
+      raiseOnMissing:
+      - 'false'
+      - 'true'
+    :required:
+    - key
+    :fields:
+      raiseOnMissing:
+        :type: :boolean
+        :required: false
+        :values:
+        - 'true'
+        - 'false'
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Utility::QrCodeGenerateGenerator
+  :generator_key: qr_code_generate
+  :registered_names:
+  - qr_code_generate
+  :ui_key: qr_code_generate
+  :kind: :step_action
+  :phase: utility
+  :ui_ref: action_configs/utility_actions.js::qr_code_generate
+  :generator_path: app/services/code_generators/element_types/process/utility/qr_code_generate_generator.rb
+  :contract:
+    :keys_read:
+    - colorDark
+    - colorLight
+    - dataVariable
+    - errorCorrection
+    - margin
+    - outputFormat
+    - resultVar
+    - size
+    :enums: {}
+    :required:
+    - dataVariable
+    :fields:
+      dataVariable:
+        :type: :string
+        :required: true
+      margin:
+        :type: :integer
+        :required: false
+        :min: 0
+      size:
+        :type: :integer
+        :required: false
+        :min: 1
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Utility::TemplateRenderGenerator
+  :generator_key: template_render
+  :registered_names:
+  - template_render
+  :ui_key: template_render
+  :kind: :step_action
+  :phase: utility
+  :ui_ref: action_configs/utility_actions.js::template_render
+  :generator_path: app/services/code_generators/element_types/process/utility/template_render_generator.rb
+  :contract:
+    :keys_read:
+    - resultVar
+    - strictVariables
+    - template
+    - variables
+    :enums: {}
+    :required:
+    - template
+    :fields:
+      template:
+        :type: :string
+        :required: true
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Validation::BuildContractGenerator
+  :generator_key: build_contract
+  :registered_names:
+  - build_contract
+  :ui_key: build_contract
+  :kind: :step_action
+  :phase: validation
+  :ui_ref: action_configs/validation_actions.js::build_contract
+  :generator_path: app/services/code_generators/element_types/process/validation/build_contract_generator.rb
+  :contract:
+    :keys_read:
+    - contractClass
+    - modelVariable
+    - resultVar
+    :enums: {}
+    :required: []
+    :fields:
+      contractClass:
+        :type: :string
+        :required: false
+  :gaps: []
+- :generator: CodeGenerators::ElementTypes::Process::Validation::ValidateContractGenerator
+  :generator_key: validate_contract
+  :registered_names:
+  - validate_contract
+  - validate
+  :ui_key: validate
+  :kind: :step_action
+  :phase: validation
+  :ui_ref: action_configs/validation_actions.js::validate
+  :generator_path: app/services/code_generators/element_types/process/validation/validate_contract_generator.rb
+  :contract:
+    :keys_read:
+    - contractRef
+    :enums: {}
+    :required: []
+    :fields: {}
+  :gaps: []

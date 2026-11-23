@@ -1,0 +1,104 @@
+<section class="card" aria-labelledby="entry-account-heading" <%= tag.attributes(data: section_data) if picker? %>>
+  <header class="border-b border-border-subtle px-4 py-3.5 sm:px-5">
+    <h2 id="entry-account-heading" class="text-sm font-semibold text-text-primary">
+      <%= t("comp_admin.person_link.heading") %>
+    </h2>
+  </header>
+
+  <div class="relative flex flex-col gap-3 px-4 py-4 sm:px-5">
+    <% if linked? %>
+      <div class="flex items-start gap-3">
+        <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-accent-subtle text-xs font-semibold text-accent-text" aria-hidden="true">
+          <%= initials %>
+        </span>
+        <div class="min-w-0 flex-1">
+          <div class="flex items-start justify-between gap-2">
+            <%= link_to linked_name, user_path, class: "min-w-0 text-sm font-medium text-accent-text hover:underline break-words [overflow-wrap:anywhere]" %>
+            <% if inactive? %>
+              <%= render BadgeComponent.new(variant: :warning, size: :sm) do %>
+                <%= t("comp_admin.person_link.badge_deactivated") %>
+              <% end %>
+            <% end %>
+          </div>
+          <p class="text-sm text-text-muted break-words [overflow-wrap:anywhere]"><%= user.email %></p>
+        </div>
+      </div>
+      <% if inactive? %>
+        <p class="text-xs text-text-muted"><%= t("comp_admin.person_link.deactivated_note") %></p>
+      <% end %>
+    <% elsif writable? %>
+      <div class="relative">
+        <p class="mb-3 text-sm text-text-muted"><%= t("comp_admin.person_link.helper") %></p>
+        <%= render ButtonComponent.new(
+              variant: :secondary,
+              size: :sm,
+              type: :button,
+              class: "min-h-11 w-full sm:w-auto",
+              aria: { expanded: "false", haspopup: "listbox", controls: panel_id },
+              data: { person_link_picker_target: "trigger", action: "person-link-picker#open" }
+            ) do %>
+          <%= t("comp_admin.person_link.link_action") %>
+        <% end %>
+
+        <div id="<%= panel_id %>"
+             data-person-link-picker-target="panel"
+             class="dropdown-panel absolute z-50 mt-1 hidden w-full">
+          <div class="relative">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3" aria-hidden="true">
+              <svg class="h-4 w-4 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <input type="search"
+                   role="combobox"
+                   autocomplete="off"
+                   aria-expanded="false"
+                   aria-controls="<%= list_id %>"
+                   aria-autocomplete="list"
+                   aria-label="<%= t("comp_admin.person_link.search_aria") %>"
+                   placeholder="<%= t("comp_admin.person_link.search_placeholder") %>"
+                   class="input-field pl-9"
+                   data-person-link-picker-target="search"
+                   data-action="input->person-link-picker#query keydown->person-link-picker#keydown">
+          </div>
+          <div data-person-link-picker-target="status"
+               role="status"
+               aria-live="polite"
+               aria-atomic="true"
+               class="px-3 py-6 text-center text-sm text-text-muted">
+            <%= t("comp_admin.person_link.type_to_search") %>
+          </div>
+          <ul id="<%= list_id %>"
+              role="listbox"
+              aria-label="<%= t("comp_admin.person_link.listbox_aria") %>"
+              class="hidden max-h-64 overflow-y-auto"
+              data-person-link-picker-target="list"
+              data-action="click->person-link-picker#select"></ul>
+        </div>
+      </div>
+
+      <div data-person-link-picker-target="confirm" class="hidden space-y-3" data-action="keydown->person-link-picker#keydown">
+        <p data-person-link-picker-target="confirmName" class="text-sm text-text-primary break-words [overflow-wrap:anywhere]"></p>
+        <%= form_with url: link_path, method: :post, local: true, data: { person_link_picker_target: "form" } do %>
+          <input type="hidden" name="user_id" value="" autocomplete="off" data-person-link-picker-target="userId">
+          <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-2">
+            <%= render ButtonComponent.new(
+                  variant: :ghost,
+                  size: :sm,
+                  type: :button,
+                  class: "min-h-11 w-full sm:w-auto",
+                  data: { action: "person-link-picker#cancel" }
+                ) do %>
+              <%= t("common.actions.cancel") %>
+            <% end %>
+            <%= render ButtonComponent.new(variant: :primary, size: :sm, type: :submit, class: "min-h-11 w-full sm:w-auto") do %>
+              <%= t("comp_admin.person_link.confirm_submit") %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-sm text-text-tertiary"><%= t("common.labels.em_dash") %></p>
+    <% end %>
+  </div>
+</section>

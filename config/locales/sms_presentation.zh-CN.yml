@@ -1,0 +1,30 @@
+zh-CN:
+  sms_presentation:
+    fields:
+      dispatch_started_at: "分发开始时间"
+      delivery_attempts: "发送尝试次数"
+      provider_occurred_at: "服务商事件时间"
+      provider_status: "服务商状态"
+      provider_segments: "服务商报告的短信条数"
+    not_recorded: "未记录"
+    redacted: "已隐藏"
+    status_help:
+      queued: "短信等待分发，服务商尚未受理。"
+      pending: "短信正在分发，服务商受理及送达结果尚未确认。"
+      sent: "服务商已受理短信，但不代表收件人已收到。"
+      delivered: "服务商已确认短信送达收件人。"
+      failed: "发送或送达失败，详见下方记录的失败信息。"
+      unknown: "结果尚未确认。状态未知不代表失败。"
+      suppressed: "短信已被拦截，未发送至服务商。"
+      expired: "短信在分发前已过期，未发送至服务商。"
+    help:
+      sent_at: "服务商受理短信的时间，并非送达时间。"
+      provider_segments: "仅显示服务商实际报告的短信条数，不根据远程模板内容估算。"
+      variables: "仅展示变量名供参考，所有变量值均已隐藏。"
+    workflow_labels:
+      notify.f.smsTemplateKey.label: "短信模板标识"
+      notify.f.smsTemplateKey.ph: "例如：verify_code"
+      notify.f.smsVars.label: "短信变量（JSON 对象或上下文表达式）"
+      notify.f.smsVars.ph: '例如：{"code":"ctx.code"} 或 ctx.sms_vars（无变量时留空）'
+      notify.f.smsIdempotencyKey.label: "短信幂等键（可选表达式）"
+      notify.f.smsIdempotencyKey.ph: "例如：ctx.sms_idempotency_key"

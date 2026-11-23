@@ -1,0 +1,17 @@
+<nav aria-label="<%= nav_label %>" data-provider-switcher="true">
+  <div class="inline-flex w-fit flex-wrap gap-1 rounded-lg border border-border-subtle bg-surface-active p-1" role="list">
+    <% items.each do |item| %>
+      <% tab_opts = { role: "listitem", class: item_classes(item) } %>
+      <% tab_opts[:aria] = { current: "page" } if item.current? %>
+      <%= link_to item.path, **tab_opts do %>
+        <span><%= item.name %></span>
+        <% if item.active? %>
+          <span class="size-1.5 rounded-full bg-success sm:hidden" aria-hidden="true"></span>
+          <span class="hidden sm:inline-flex">
+            <%= render BadgeComponent.new(variant: :success, size: :sm) do %><%= t("common.status.active") %><% end %>
+          </span>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</nav>

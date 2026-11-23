@@ -1,0 +1,848 @@
+"zh-CN":
+  admin_modules:
+    errors:
+      lists:
+        segment_malformed: "细分规则格式有误，请重新构建受众。"
+      segments:
+        segment_malformed: "细分规则格式有误，请重新构建细分。"
+      validations:
+        cross_tenant_association: "必须属于同一客户"
+        invalid_recurrence_rule: "不是受支持的重复规则"
+        invalid_timezone: "不是有效的 IANA 时区"
+        key_format: "只能包含小写字母、数字和下划线"
+        template_not_active: "不是已注册且启用的模板"
+        invalid_email_format: "不是有效的邮箱地址"
+        missing_required_keys: "缺少必填键：%{keys}"
+        unknown_keys: "包含未知键：%{keys}"
+        variables_must_be_array_of_strings: "必须是字符串数组"
+
+    # 模块入口页面通用的导航 / 面包屑标签。
+    nav:
+      modules:         "模块"
+      overview:        "概览"
+      users:           "用户"
+      authentication:  "用户认证"
+      send_activities: "发送活动"
+      lists:           "列表"
+      email:           "邮件"
+      templates:       "模板"
+      messages:        "消息"
+      sms:             "短信"
+      website:         "网站"
+      block_list:      "屏蔽名单"
+
+    authentication:
+      events:
+        index:
+          title:              "登录与安全日志"
+          description:        "本租户登录、锁定、双重验证变更、密码重置及角色授予的审计日志。"
+          breadcrumb:         "安全日志"
+          search_placeholder: "按 IP 或设备搜索"
+          empty_title:        "暂无事件记录"
+          empty_description:  "用户登录及管理账户时，认证事件将显示在此处。"
+        columns:
+          event:      "事件"
+          user_id:    "用户 ID"
+          ip:         "IP 地址"
+          user_agent: "设备"
+          window:     "时间范围"
+        windows:
+          d1:  "最近 24 小时"
+          d7:  "最近 7 天"
+          d30: "最近 30 天"
+        kinds:
+          login_succeeded:          "登录成功"
+          login_failed:             "登录失败"
+          logout:                   "登出"
+          locked_out:               "已锁定"
+          mfa_enabled:              "已启用双重验证"
+          mfa_disabled:             "已停用双重验证"
+          mfa_verified:             "双重验证通过"
+          mfa_failed:               "双重验证失败"
+          password_reset_requested: "已请求密码重置"
+          password_reset_completed: "已完成密码重置"
+          role_granted:             "已授予角色"
+          role_revoked:             "已撤销角色"
+          throttled:                "触发限流"
+          oauth_authorized:         "已完成 OAuth 授权"
+
+    index:
+      description:    "进入本组织已开启功能的记录与操作。"
+      empty_title:    "暂无已启用的模块"
+      empty_body:     "在「维护」中开启模块后，即可使用其记录与功能。"
+      manage_modules: "管理模块"
+      manage_hint:    "为本组织启用或停用模块。"
+      pick_hint:      "在侧边栏选择模块以查看其记录。"
+      open:           "打开"
+      configure:      "配置"
+      quick_links:    "快捷入口"
+      sections:
+        records:       "记录与数据"
+        communication: "沟通触达"
+        growth:        "增长与安全"
+        other:         "更多模块"
+      howto:
+        title: "使用指南"
+        page_title: "%{name} 使用指南"
+        page_description: "了解如何开始使用%{name}。"
+        new_tab_hint: "（在新标签页中打开）"
+        steps:
+          authentication:
+            - "在「设置 / 用户认证」中检查成员注册选项。"
+            - "在「设置 / 用户认证」中配置找回密码策略。"
+            - "进入「用户」添加或管理账户，并为其分配管理员或成员角色。"
+            - "查看「安全日志」，了解登录及账户变更记录。"
+          email:
+            - "在「设置 / 邮件」中查看平台所有者设定的发送上限；邮件投递还需平台启用邮件服务商。"
+            - "创建用于发送的邮件模板。"
+            - "为目标受众创建收件人列表。"
+            - "用模板和列表创建发送活动，立即发送或预约发送，并查看结果。"
+          payment:
+            - "在「设置 / 支付」中配置并启用所需网关的商户账户。"
+            - "通过已接入的收银台完成收款，并在「交易」中跟踪状态。"
+            - "在「对账」中核对服务商结算文件与交易记录。"
+          sms:
+            - "在「设置 / 短信」中查看平台所有者设定的每日发送上限；请先由平台团队准备审核通过的发送方和模板。"
+            - "创建短信活动，选择受众和已审核模板，确认后再启动。"
+            - "在「受众」中添加联系人、建立分群，并查看退订名单。"
+            - "在「短信消息」中查看已发送短信的送达情况。"
+          captcha:
+            - "在「设置 / 验证码」中确认当前服务商；如未配置，请联系平台团队。"
+            - "在「设置 / 验证码」中为公开页面设置请求限额。"
+            - "打开「页面」，按需在公开表单中启用验证。"
+            - "在浏览器中测试受保护的页面，确认验证正常显示且提交成功。"
+          ai_assistant:
+            - "在「设置 / AI 助手」中选择首选语言，并查看平台所有者设定的录音时长上限。"
+            - "打开助手，提问或为工作区起草内容。"
+            - "应用建议前先检查改动；如已开通语音转写，也可使用语音输入。"
+          website:
+            - "在「设置 / 网站」中填写站点名称、主题和详细信息。"
+            - "进入「网站页面」创建或编辑页面，并发布需要向访客展示的页面。"
+            - "在「设置 / 网站」中发布站点。"
+            - "在浏览器中检查公开页面。"
+          with_links:
+            - "打开记录页面，了解模块功能。"
+            - "使用页面上的操作创建或查看记录。"
+          without_links:
+            - "在「设置」中查看此模块的选项。"
+            - "返回「模块」，查看工作区中提供该功能的位置。"
+
+    payments:
+      transactions:
+        description: "本组织已收取的付款。"
+      reconciliations:
+        description: "来自支付服务商的结算文件。"
+      disputes:
+        description: "拒付与卡片争议。"
+
+    users:
+      index:
+        description:        "管理该租户的用户账户"
+        search_placeholder: "搜索用户…"
+        empty_title:        "未找到用户"
+        empty_description:  "为该租户创建第一个用户。"
+        all_roles:          "全部角色"
+        locked_at:          "锁定时间"
+        reset_mfa_confirm:  "重置 %{name} 的双重验证？"
+        deactivate_confirm: "停用 %{name}？"
+      new:
+        title:    "新建用户"
+        subtitle: "为该租户创建新用户。"
+      edit:
+        title:    "编辑用户"
+        subtitle: "更新 %{name} 的信息。"
+      trash:
+        title:             "回收站"
+        description:       "已从目录中移出的账户。恢复后会重新出现。"
+        empty_title:       "回收站是空的"
+        empty_description: "移入回收站的账户会显示在这里。"
+      actions:
+        new_user:          "新建用户"
+        create_user:       "创建用户"
+        create_user_and_continue: "创建用户并继续"
+        update_user:       "更新用户"
+        create_first_user: "创建第一个用户"
+        reset_mfa:         "重置双重验证"
+        deactivate:        "停用"
+        activate:          "启用"
+        trash:             "回收站"
+        move_to_trash:     "移入回收站"
+        restore:           "恢复"
+      roles:
+        owner:  "所有者"
+        admin:  "管理员"
+        member: "会员"
+      form:
+        first_name_placeholder:            "名字"
+        last_name_placeholder:             "姓氏"
+        email_placeholder:                 "user@example.com"
+        password_placeholder_edit:         "留空以保持当前密码"
+        password_placeholder_new:          "至少 8 个字符"
+        password_hint:                     "留空以保持当前密码。"
+        generated_password_hint:           "系统将为该账号随机生成密码。"
+        confirm_password_label:            "确认密码"
+        password_confirmation_placeholder: "再次输入密码"
+        sections:
+          account:  "账户"
+          password: "密码"
+          access:   "权限"
+        role_hint:
+          member: "— 标准访问权限。"
+          admin:  "— 可管理用户。"
+          owner:  "— 完全访问权限，包括系统设置。"
+      show:
+        details:            "详情"
+        role:               "角色"
+        mfa:                "双重验证"
+        mfa_configured:     "已配置（未强制）"
+        mfa_not_set_up:     "未设置"
+        sign_in_activity:   "登录活动"
+        sign_in_and_devices: "登录与设备"
+        sign_in_count:      "登录次数"
+        last_sign_in:       "上次登录"
+        last_sign_in_ip:    "上次登录 IP"
+        current_sign_in:    "本次登录"
+        current_sign_in_ip: "本次登录 IP"
+        failed_attempts:    "失败尝试次数"
+        locked_at:          "（锁定于 %{time}）"
+        reset_mfa_confirm:  '确定为 “%{name}” 重置双重验证？重置后该用户需重新设置。'
+        deactivate_confirm: '确定停用 “%{name}”？'
+        trash_confirm:      "将「%{name}」移入回收站？之后可以恢复。"
+        restore_confirm:    "恢复「%{name}」？"
+        trusted_devices:       "受信任的设备"
+        trusted_devices_hint:  "登录时可跳过双重验证的设备。如有用户不再识别的设备，请撤销。"
+        trusted_devices_empty: "暂无受信任的设备。"
+        trusted_devices_count:
+          one: "%{count} 台设备"
+          other: "%{count} 台设备"
+        device_unknown:        "未知设备"
+        device_last_used:      "上次使用于 %{time}"
+        device_expires:        "有效期至 %{time}"
+        trusted_device_revoke: "撤销"
+        trusted_device_revoke_confirm: "确定撤销此受信任的设备？该用户下次通过此设备登录时将需要进行双重验证。"
+        profiles:
+          heading: "业务域档案"
+          missing_description: "此用户尚未在当前租户关联%{entity}档案。"
+          create_description: "尚未关联%{entity}档案。"
+          inactive_description: "请先启用此账号，再创建并关联%{entity}档案。"
+          create_profile: "创建档案"
+          create_title: "创建%{entity}档案"
+          view_entry: "查看详情"
+          view_entry_label: "查看详情：%{entity} #%{id}"
+          no_types: "当前租户暂无可用的业务域档案类型。"
+          no_fields: "暂无可显示的档案字段。"
+
+    emails:
+      dashboard:
+        title: "仪表盘"
+        description: "发送情况与互动概览"
+        daily_trend: "每日趋势（30 天）"
+        quick_actions:
+          new_template: "新建模板"
+          new_send_activity: "新建发送活动"
+          new_automation: "新建自动化"
+        stats:
+          metric: "指标"
+          trend_30_days: "趋势（30 天）"
+          sent: "已发送"
+          delivered: "已送达"
+          bounced: "已退信"
+          complained: "被投诉"
+          suppressed: "已拦截"
+          opened: "已打开"
+          clicked: "已点击"
+          unsubscribed: "已退订"
+
+      # Phase 6 — Analytics: reports, deliverability, engagement, CSV export.
+      # 与并行的 Phase 5 自动化工作命名空间隔离。
+      analytics:
+        date_range:
+          since: "开始日期"
+          until: "结束日期"
+          apply: "应用"
+        health:
+          description: "送达与互动健康状况"
+        reports:
+          title: "数据报表"
+          description: "支持日期范围与筛选条件的邮件绩效报表"
+          daily_trend: "每日趋势"
+          trend: "趋势"
+          export_csv: "导出 CSV"
+          stream: "发送流"
+          send_activity: "发送活动"
+          empty_daily: "此时间段内没有邮件发送活动。"
+          empty_streams: "此时间段内没有发送流数据。"
+          empty_send_activities: "此时间段内没有发送活动数据。"
+          unknown_stream: "未知发送流"
+          unknown_send_activity: "未知发送活动"
+        deliverability:
+          title: "送达质量"
+          description: "退信、投诉与拦截明细"
+          stats:
+            bounced: "已退信"
+            complained: "被投诉"
+            suppressed: "已拦截"
+            failed: "发送失败"
+          by_stream: "按发送流"
+          by_failure_code: "按失败代码"
+          recent_suppressions: "近期拦截"
+          count: "数量"
+          failure_code: "失败代码"
+          suppressed_at: "拦截时间"
+          stream: "发送流"
+          email: "邮箱"
+          reason: "原因"
+          empty_stream_breakdown: "此时间段内没有按发送流区分的送达问题。"
+          empty_failure_breakdown: "此时间段内没有退信失败代码。"
+          empty_suppressions: "此时间段内没有拦截记录。"
+        engagement:
+          title: "互动分析"
+          description: "打开、点击与设备分布"
+          top_links: "热门点击链接"
+          devices_heading: "设备分布"
+          opens_by_hour: "按小时打开"
+          opens_by_day: "按天打开"
+          url: "链接"
+          clicks: "点击数"
+          device: "设备"
+          opens: "打开数"
+          hour: "小时"
+          day: "日期"
+          devices:
+            desktop: "桌面"
+            mobile: "移动"
+            tablet: "平板"
+          empty_top_links: "此时间段内没有链接点击。"
+          empty_devices: "此时间段内没有设备数据。"
+          empty_opens_by_hour: "此时间段内没有按小时统计的打开。"
+          empty_opens_by_day: "此时间段内没有按天统计的打开。"
+
+      segments:
+        index:
+          title:              "细分"
+          description:        "使用规则构建可复用的受众细分。"
+          search_placeholder: "搜索细分…"
+        new:
+          title:              "新建细分"
+          subtitle:           "创建一个可复用的受众细分。"
+        edit:
+          title:              "编辑细分"
+          subtitle:           "更新细分规则。"
+        show:
+          rules:              "细分规则"
+        actions:
+          new_segment:        "新建细分"
+          refresh:            "刷新数量"
+        match_count:        "匹配订阅者"
+        refreshed_at:       "刷新时间"
+        form:
+          rules:              "细分规则"
+      signup_forms:
+        index:
+          title:              "注册表单"
+          description:        "管理将订阅者加入受众的公开注册表单。"
+          search_placeholder: "搜索表单…"
+        new:
+          title:              "新建注册表单"
+          subtitle:           "创建一个公开注册表单。"
+        edit:
+          title:              "编辑注册表单"
+          subtitle:           "更新注册表单设置。"
+        actions:
+          new_form:           "新建注册表单"
+        form:
+          key_hint:           "用于公开链接的固定小写标识（字母、数字、下划线、连字符）。"
+      suppressions:
+        title:              "拦截名单"
+        description:        "已从邮件发送中拦截的地址（硬退信、投诉或手动）"
+        search_placeholder: "搜索地址…"
+        empty_title:        "暂无拦截"
+        empty_description:  "退信或投诉的地址将显示在此处。"
+        scope:              "范围"
+        tenant:             "本租户"
+        global:             "全局"
+        reason:             "原因"
+        provider:           "提供商"
+        filter_reason:      "按原因筛选"
+        filter_provider:    "按提供商筛选"
+        bulk_unblock:       "解除拦截所选"
+        event_history:      "事件历史"
+        reasons:
+          hard_bounce:      "硬退信"
+          complaint:        "投诉"
+          unsubscribe:      "退订"
+          manual:           "手动"
+      streams:
+        title:              "邮件流"
+        description:        "管理发送流、默认值和投递设置"
+        search_placeholder: "搜索邮件流…"
+        empty_title:        "尚无邮件流"
+        empty_description:  "创建邮件流以配置发送行为。"
+        default:            "默认"
+        tracking:           "跟踪"
+        new:
+          title:            "新建邮件流"
+          subtitle:         "为事务性、营销或自动邮件创建发送流。"
+        edit:
+          title:            "编辑邮件流"
+          subtitle:         "更新邮件流设置和默认状态。"
+        actions:
+          new_stream:       "新建邮件流"
+        form:
+          key_hint:         "用于代码中引用的稳定小写标识符（字母、数字、下划线）。"
+          key_readonly_hint: "创建后标识不可更改。"
+          from_email:       "发件邮箱"
+          reply_to:         "回复邮箱"
+          throttle_per_minute: "每分钟节流"
+          tracking_enabled: "启用打开/点击跟踪"
+          default_for_kind: "作为该类别默认"
+          kinds:
+            transactional:  "事务性"
+            marketing:      "营销"
+            automated:      "自动"
+      preference_topics:
+        title:              "偏好主题"
+        description:        "管理公共偏好中心显示的订阅主题"
+        search_placeholder: "搜索主题…"
+        empty_title:        "尚无主题"
+        empty_description:  "创建主题以便用户在偏好中心管理订阅。"
+        required:           "必填"
+        default_subscribed: "默认订阅"
+        new:
+          title:            "新建偏好主题"
+          subtitle:         "创建用户可在偏好中心订阅的主题。"
+        edit:
+          title:            "编辑偏好主题"
+          subtitle:         "更新主题名称、描述和默认值。"
+        actions:
+          new_topic:        "新建主题"
+        form:
+          key_hint:         "用于代码中引用的稳定小写标识符（字母、数字、下划线）。"
+          key_readonly_hint: "创建后标识不可更改。"
+          description:      "描述"
+          default_subscribed: "默认订阅"
+          required:         "必填主题（用户不可退订）"
+      templates:
+        index:
+          title:              "邮件模板"
+          description:        "管理可复用的邮件模板"
+          search_placeholder: "搜索模板…"
+          empty_title:        "尚无模板"
+          empty_description:  "创建第一个邮件模板即可开始使用。"
+          delete_confirm:     "确定删除此模板吗？此操作无法撤销。"
+          columns:
+            template: "模板"
+            messages: "消息数"
+          filters:
+            status: "状态"
+        show:
+          versions:          "版本"
+          body_label:        "邮件正文"
+          body_hint:         "{{first_name}} 等变量将在发送时自动替换。"
+          body_empty:        "此模板尚无正文内容。"
+          plain_text_label:  "纯文本备用内容"
+          plain_text_empty:  "未设置纯文本备用内容，系统将根据 HTML 自动生成。"
+        preview_page:
+          title:             "预览"
+          hint:              "展示带 {{变量}} 占位的内容，不会填入示例值。"
+          back_to_template:  "返回模板"
+        new:
+          title:    "新建邮件模板"
+        edit:
+          title:        "编辑模板"
+          versions_button: "历史版本"
+          send_test_label: "发送测试邮件"
+          send_test_placeholder: "收件邮箱（留空则发送给自己）"
+          send_test_submit: "发送测试"
+          delete_confirm: "确定吗？"
+        versions:
+          title: "历史版本"
+          description: "%{name} 的变更历史"
+          show_title: "版本 (%{date})"
+          version_number: "版本 %{number}"
+          current: "当前版本"
+          restored: "模板已恢复至 %{date} 的版本。"
+          restore_confirm: "确定要将模板恢复到此版本吗？"
+          columns:
+            date: "日期"
+            version: "版本"
+        actions:
+          new_template: "新建模板"
+          preview: "预览"
+          duplicate_name: "%{name} 副本"
+        errors:
+          content_locked: "仍有进行中的发送使用此模板，暂时不能修改内容。"
+        status:
+          in_use: "仍有进行中的活动使用此模板，无法更改状态。"
+          invalid: "状态无效"
+          actions:
+            set_draft: "设为草稿"
+            set_active: "设为启用"
+            set_retired: "归档"
+        form:
+          details_title:         "模板详情"
+          name_placeholder:      "欢迎邮件"
+          subject_placeholder:   "欢迎 {{First name}}！"
+          subject_token_hint: "输入 {{ 即可插入变量。"
+          token_autocomplete_no_matches: "无匹配的变量"
+          body_title:            "邮件正文"
+          editor_label:          "编辑器"
+          rich_text_body:        "富文本正文"
+          insert_token:       "插入变量"
+          html_code:             "HTML 代码"
+          preview_empty_placeholder: "暂无主题"
+          plain_text_fallback:   "纯文本备用内容"
+          plain_text_placeholder: "若留空，将根据正文自动生成。"
+          plain_text_hint_html:  "由不渲染 HTML 的邮件客户端显示。"
+          create_submit:         "创建模板"
+          update_submit:         "更新模板"
+          statuses:
+            draft: "草稿"
+            active: "已启用"
+            retired: "已归档"
+          editor_types:
+            rich_text: "富文本"
+            code: "代码"
+          preview:
+            invalid_json: "变量 JSON 格式无效"
+            vars_must_be_object: "变量必须是对象"
+            loading: "加载中…"
+            sending: "正在发送…"
+            empty_subject: "（空主题）"
+            empty_text: "（空正文）"
+            error_loading: "预览加载失败"
+            email_required: "请输入邮箱地址"
+            send_failed: "测试邮件发送失败"
+            network_error: "发送测试邮件时网络出错"
+            popup_blocked: "无法打开预览标签页（是否被弹窗拦截？）"
+          workspace:
+            auto_refresh: "自动刷新"
+          token_search_placeholder: "搜索变量…"
+          token_group_catalog: "目录"
+          token_group_custom: "自定义"
+          activate_immediately: "立即启用此模板"
+
+      automations:
+        index:
+          title:              "自动化"
+          description:        "构建由触发条件驱动的邮件旅程，支持延时、发送和打标签。"
+          search_placeholder: "搜索自动化…"
+          empty_title:        "暂无自动化"
+          empty_description:  "创建首个自动化，在用户加入或获得标签时自动发送邮件。"
+        new:
+          title:    "新建自动化"
+          subtitle: "创建一条由触发条件驱动的邮件旅程。"
+        edit:
+          title:    "编辑自动化"
+          subtitle: "更新工作流、触发条件与步骤。"
+        show:
+          description:      "自动化详情与步骤概览"
+          steps_heading:    "步骤"
+          delay_minutes:
+            one:   "等待 %{count} 分钟"
+            other: "等待 %{count} 分钟"
+          template_missing: "模板已不存在"
+          tag_missing:      "标签已不存在"
+          no_steps:         "尚未配置步骤"
+          delete_confirm:   "确定删除此自动化？"
+        actions:
+          new_automation: "新建自动化"
+        columns:
+          trigger: "触发条件"
+        form:
+          trigger_label:          "触发条件"
+          steps_heading:          "步骤"
+          steps_hint:             "步骤按顺序执行。延时暂停旅程，发送邮件步骤投递模板，添加标签步骤应用标签。"
+          step_type_label:        "步骤类型"
+          delay_minutes_label:    "延时分钟数"
+          email_template_label:   "邮件模板"
+          select_template:        "— 选择模板 —"
+          tag_label:              "要应用的标签"
+          select_tag:             "— 选择标签 —"
+          add_step:               "添加步骤"
+          remove_step:            "移除步骤"
+        step_types:
+          delay:      "延时"
+          send_email: "发送邮件"
+          add_tag:    "添加标签"
+        trigger_kinds:
+          user_created: "用户已创建"
+          tag_added:    "已添加标签"
+      block_list:
+        title:       "屏蔽名单"
+        description: "已退订群发邮件的用户。事务性邮件不受影响。"
+      send_activities:
+        statuses:
+          pending:    "待发送"
+          processing: "发送中"
+          cancelled:  "已取消"
+          failed:     "失败"
+          succeed:    "成功"
+        errors:
+          lists_blank:      "至少需要包含 1 个列表"
+          lists_too_many:   "最多只能包含 %{max} 个列表"
+        index:
+          description:        "将模板发送到目标受众列表"
+          search_placeholder: "搜索发送活动…"
+          empty_title:        "尚无发送活动"
+          empty_description:  "创建第一个发送活动，即可向受众列表发信。"
+        new:
+          title:    "新建发送活动"
+          subtitle: "选择模板与受众列表进行发送。"
+        edit:
+          title:    "编辑发送活动"
+          subtitle: "更新发送活动设置。"
+        actions:
+          new_send_activity: "新建发送活动"
+        dead_letter:
+          stuck_reason: "卡在“发送中”状态已超过允许的最长时长，已由回收任务转入死信。"
+        form:
+          template_label:      "模板"
+          list_label:          "列表"
+          lists_label:         "列表"
+          lists_hint:          "最多可选择 %{max} 个列表。出现在多个列表中的收件人只会收到一封邮件。"
+          add_list:            "添加列表"
+          remove_list:         "移除列表"
+          select_template:     "— 选择模板 —"
+          select_list:         "— 选择列表 —"
+          schedule_label:      "计划时间"
+          timing_label:        "发送时间"
+          send_now_option:     "立即发送"
+          schedule_at_option:  "定时发送"
+          refresh_lists:       "刷新列表"
+          refresh_lists_error: "列表刷新失败，请重试。"
+          refresh_templates:   "刷新模板"
+          refresh_templates_error: "模板刷新失败，请重试。"
+          create_list:         "创建列表"
+          create_template:     "创建模板"
+          recurrence_label:    "重复发送（可选）"
+          recurrence_examples: "示例：FREQ=DAILY;INTERVAL=1, FREQ=WEEKLY;INTERVAL=2, FREQ=MONTHLY"
+          recurrence_presets:
+            none:              "不重复"
+            daily:             "每天"
+            weekly:            "每周"
+            monthly:           "每月"
+          segment_label:       "受众细分"
+          select_segment:      "— 可选细分 —"
+          segment_hint:        "通过可复用细分进一步筛选列表。"
+          stream_label:        "发送流"
+          select_stream:       "— 默认发送流 —"
+          stream_hint:         "更换本次投递使用的发送流。"
+          ab_test_enabled:     "启用 A/B 测试"
+          winner_metric:       "胜出指标"
+          metrics:
+            open_rate:         "打开率"
+            click_rate:        "点击率"
+          variant_label:       "变体 %{name}"
+          variant_subject_placeholder: "覆盖主题（可选）"
+          variant_body_placeholder: "覆盖正文 HTML（可选）"
+        review:
+          no_segment:          "无"
+          default_stream:      "默认"
+          send_now:            "立即发送"
+        wizard:
+          progress_label:      "发送活动创建进度"
+          invalid_step:        "不是有效的向导步骤"
+          invalid_recurrence_preset: "不是受支持的重复选项"
+          steps:
+            audience:          "受众"
+            content:           "内容"
+            schedule:          "发送时间"
+            review:            "检查"
+          errors:
+            field_required:    "请填写此字段后继续。"
+            list_required:     "请选择邮件列表后继续。"
+            lists_too_many:    "最多只能选 %{max} 个列表。"
+            template_required: "请选择邮件模板后继续。"
+            name_required:     "请输入此发送活动的名称。"
+            timing_required:   "请选择立即发送或定时发送后继续。"
+            schedule_required: "请选择日期和时间，或改选立即发送。"
+        show:
+          send_now:      "立即发送"
+          send_confirm:  "立即发送此活动？"
+          pause:         "暂停"
+          resume:        "恢复"
+          cancel_confirm: "取消此发送活动？"
+          failure_reason_label: "失败原因"
+          template:      "模板"
+          list:          "列表"
+          lists:         "列表"
+          unique_recipients: "去重收件人"
+          scheduled:     "计划时间"
+          not_scheduled: "未定时"
+          recurrence:    "重复发送"
+          started:       "开始时间"
+          completed:     "完成时间"
+          sent:          "已发送"
+          delivered:     "已送达"
+          failed:        "失败"
+          bounced:       "已退信"
+          suppressed:    "已拦截"
+      lists:
+        index:
+          title:              "邮件列表"
+          description:        "管理用于发送邮件的订阅者列表"
+          search_placeholder: "搜索列表…"
+          empty_title:        "尚无列表"
+          empty_description:  "创建第一个列表即可开始发送邮件。"
+          columns:
+            list:     "列表"
+            audience: "受众"
+          filters:
+            type: "类型"
+        new:
+          title:    "新建邮件列表"
+          subtitle: "为发送邮件创建订阅者列表。"
+        edit:
+          title:    "编辑列表"
+          subtitle: "更新订阅者列表设置。"
+        actions:
+          new_list: "新建列表"
+        form:
+          audience_segment: "受众条件"
+          audience_segment_hint: "列表用于发送活动时，仅包含符合这些条件的订阅者。"
+          types:
+            static: "静态列表"
+            dynamic: "动态细分"
+          static_emails:          "成员邮箱"
+          static_emails_placeholder: "one@example.com\ntwo@example.com"
+          static_emails_hint:     "每行输入一个邮箱，仅添加本组织已有会员。"
+        preview:
+          button: "预览"
+          heading: "匹配的订阅者"
+          match_count: "共 %{count} 位订阅者匹配"
+          empty_title: "没有匹配的订阅者"
+          empty_description: "请调整受众条件后再次预览。"
+          malformed: "细分规则格式有误，请重新构建受众。"
+          hint: "点击预览，查看符合这些条件的订阅者。"
+        show:
+          audience:             "受众"
+          segment_rules:        "细分规则"
+          segment_rules_hint:   "用于发送时评估的匹配条件。"
+          segment_rules_empty:  "尚未设置受众条件，请编辑列表添加。"
+          members:              "成员"
+          members_hint:         "此静态列表包含的订阅者。"
+          members_empty:        "尚无成员，请编辑列表添加邮箱地址。"
+          type:                 "类型"
+          delete_confirm:       "确定要删除此列表吗？"
+        default_first_name: "订阅者"
+        default_last_name:  "用户"
+
+    sms:
+      messages:
+        index:
+          title:              "短信消息"
+          description:        "查看已发送和已接收的短信消息"
+          search_placeholder: "搜索消息…"
+          empty_title:        "尚无消息"
+          empty_description:  "发送后，短信消息将显示在此处。"
+        show:
+          heading:           "短信消息 #%{id}"
+          details_title:     "消息详情"
+          to:                "收件人"
+          template:          "模板"
+          vendor_message_id: "供应商消息 ID"
+          sent_at:           "发送时间"
+          delivered_at:      "送达时间"
+          failure:           "失败"
+          variables:         "变量"
+      opt_outs:
+        title:              "退订名单"
+        description:        "已从短信发送中拦截的收件人（回复 STOP 或手动拦截）"
+        search_placeholder: "搜索号码…"
+        empty_title:        "暂无退订"
+        empty_description:  "退订短信的号码将显示在此处。"
+        scope:              "范围"
+        tenant:             "本租户"
+        global:             "全局"
+        reason:             "原因"
+      errors:
+        vars_must_be_object: "变量必须是对象"
+        daily_cap_exceeded: "已达每日短信发送上限。"
+        credentials_missing: "当前环境尚未配置可用的短信凭据。"
+        transport_error: "无法连接短信服务商，请稍后重试。"
+        provider_code_missing: "此模板未配置 %{provider} 渠道的模板编号。"
+
+    flash:
+      templates:
+        created:           "邮件模板创建成功"
+        updated:           "邮件模板更新成功"
+        deleted:           "邮件模板删除成功"
+        duplicated:        "邮件模板复制成功"
+        delete_restricted: "无法删除模板，仍有邮件正在引用"
+        invalid_email:     "%{email} 不是有效的邮箱地址。"
+        test_sent:         "测试邮件已发送至 %{email}。"
+        test_sent_multi:   "测试邮件已发送至 %{count} 位收件人。"
+        daily_cap_exceeded: "已达每日邮件发送上限。请明天再试，或在设置中提高上限。"
+        credentials_missing: "当前环境尚未配置可用的邮件凭据。"
+        suppressed:        "该地址已在拦截名单中，测试邮件未发送。"
+        blank_content:     "主题和正文不能为空。"
+
+
+      automations:
+        created:           "自动化创建成功"
+        updated:           "自动化更新成功"
+        deleted:           "自动化删除成功"
+        delete_restricted: "无法删除自动化——存在关联的参与记录"
+      send_activities:
+        created:               "发送活动创建成功"
+        updated:               "发送活动更新成功"
+        deleted:               "发送活动删除成功"
+        saved:                 "发送活动已保存"
+        cancelled:             "发送活动已取消"
+        sending:               "发送活动正在发送"
+        paused:                "发送活动已暂停"
+        resumed:               "发送活动已恢复"
+        delete_status_blocked: "%{status} 状态下无法删除发送活动，请先暂停或取消。"
+        edit_status_blocked: "%{status} 状态下无法编辑发送活动，仅草稿或已排期的活动可编辑。"
+        not_startable: "该发送活动当前无法发送（状态：%{status}）。"
+        not_cancellable: "该发送活动当前无法取消（状态：%{status}）。"
+      block_list:
+        user_unblocked:  "已解除该用户的屏蔽。"
+        users_unblocked: "已解除 %{count} 个用户的屏蔽。"
+      lists:
+        created:           "列表创建成功"
+        updated:           "列表更新成功"
+        deleted:           "列表删除成功"
+        delete_restricted: "无法删除列表，仍有发送活动在引用它"
+        unknown_emails:    "以下地址不是本组织成员，未加入名单：%{emails}"
+      segments:
+        created:           "细分创建成功"
+        updated:           "细分更新成功"
+        deleted:           "细分删除成功"
+        delete_restricted: "无法删除细分，仍有列表正在引用"
+        refresh_queued:    "细分数量刷新已排队"
+      signup_forms:
+        created:           "注册表单创建成功"
+        updated:           "注册表单更新成功"
+        deleted:           "注册表单删除成功"
+        delete_restricted: "无法删除注册表单"
+      streams:
+        created:                "邮件流创建成功"
+        updated:                "邮件流更新成功"
+        deleted:                "邮件流删除成功"
+        delete_default_blocked: "无法删除该类别唯一的启用邮件流。"
+      suppressions:
+        unblocked:              "已移除所选拦截。"
+      preference_topics:
+        created:                "偏好主题创建成功"
+        updated:                "偏好主题更新成功"
+        deleted:                "偏好主题删除成功"
+        delete_restricted:      "无法删除偏好主题，已有用户偏好引用"
+      users:
+        created:                 "用户“%{name}”创建成功。"
+        updated:                 "用户“%{name}”更新成功。"
+        activated:               "用户“%{name}”已激活。"
+        deactivated:             "用户“%{name}”已停用。"
+        deactivate_self_blocked: "无法停用自己的账户。"
+        mfa_reset:               "已重置“%{name}”的双重验证。"
+        mfa_reset_self_blocked:  "无法重置自己的双重验证，请由其他管理员操作。"
+        mfa_not_configured:      "该用户尚未配置双重验证。"
+        owner_account_protected: "仅平台所有者可管理平台所有者的账户。"
+        trusted_device_revoked:  "受信任的设备已撤销。"
+        profile_created:         "已创建并关联%{entity}档案。"
+        invalid_role:            "请选择有效角色。"
+        current_password_invalid: "当前密码不正确。"
+        trashed:                  "用户“%{name}”已移入回收站。"
+        restored:                 "用户“%{name}”已恢复。"
+        trash_self_blocked:       "无法将自己的账户移入回收站。"

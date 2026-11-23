@@ -1,0 +1,313 @@
+zh-CN:
+  activemodel:
+    errors:
+      models:
+        "payments/contracts/vault_card":
+          attributes:
+            provider:
+              tokenized_cards_unsupported: 不支持保存卡片
+  comp_payments:
+    gateways:
+      stripe:
+        name: "Stripe"
+      alipay:
+        name: "支付宝"
+    flash:
+      no_active_request: "没有有效的支付请求。"
+      refunded: "退款已提交。"
+      refund_processing: "退款正在处理中。"
+      refund_failed: "退款处理失败，请重试或联系客服。"
+      refund_not_captured: "该笔支付尚未扣款，无法退款。"
+      refund_amount_not_positive: "退款金额必须大于零。"
+      refund_exceeds_remainder: "退款金额 %{amount} 超出可退余额 %{remainder}。"
+      refund_billing_collection: "发票收款请在「账单」中退款，而非在「支付」中操作。"
+      subscription_cancel_unavailable: "未配置支付服务商，无法取消该订阅。"
+      webhook_redriven: "该 Webhook 事件已重新加入处理队列。"
+      webhook_redrive_not_retryable: "仅可重新处理已接收或失败的 Webhook 事件。"
+      already_settled: "该订单已支付。"
+      already_expired: "该订单已过期。"
+      provider_switch_blocked: "该订单仍有未关闭的支付尝试，请完成当前支付后再更换方式。"
+      charge_failed: "无法发起支付，请重试或更换支付方式。"
+      missing_ref: "缺少订单号"
+      order_not_found: "订单不存在"
+      no_account_row: "未找到 %{provider}/%{mode} 的商户号记录。"
+      gateway_not_eligible: "支付网关“%{provider}”不可用（需已启用且已配置）"
+    shared:
+      order_prefix: "订单 #"
+      waiting: "等待支付…"
+      default_badge: "默认"
+      stripe_unavailable: "无法加载安全支付表单，请刷新页面后重试。"
+
+    checkout:
+      no_methods: "该店铺暂无可用支付方式。"
+
+    handoff_entry:
+      title: "添加备注"
+      subtitle: "在继续付款前，可为本次付款添加备注（选填）。"
+      continue: "继续付款"
+      fields:
+        body:
+          label: "备注（选填）"
+          placeholder: "为本次付款填写备注"
+
+    h5_redirect:
+      redirecting: "正在跳转到您的支付应用…"
+      tap_to_continue: "点击继续"
+
+    jsapi:
+      completing: "正在完成支付…"
+
+    qr:
+      title: "扫码支付"
+      instruction: "使用 %{provider} 扫描下方二维码"
+
+    result:
+      success_title: "支付成功"
+      pending_title: "支付处理中"
+      failure_title: "支付未完成"
+      status_prefix: "状态："
+      return: "返回"
+      statuses:
+        pending: "待支付"
+        succeeded: "成功"
+        failed: "失败"
+        closed: "已关闭"
+        created: "已创建"
+
+    paypal:
+      sdk_error: "无法加载 PayPal SDK，请刷新后重试。"
+      cancelled: "支付已取消，您可以再试一次。"
+      error: "PayPal 出现问题，请重试。"
+
+    stripe:
+      unexpected_error: "发生意外错误，请重试。"
+      setup_intent_failed: "创建 SetupIntent 失败（{status}）"
+      missing_client_secret: "服务器未返回 client_secret"
+      missing_payment_method: "SetupIntent 未返回 payment_method id"
+      server_error: "服务器错误 {status}"
+      processing: "处理中…"
+
+    widget_checkout:
+      save_card: "保存此卡以便日后支付"
+      pay: "支付"
+      pay_aria: "支付 %{amount} %{currency}"
+      secured_by: "由 %{vendor} 提供安全保障，您的支付信息将被安全处理。"
+
+    credential_fields:
+      keep_hint: "留空以保留现有加密值。"
+
+    gateway_card:
+      mode_label: "模式："
+      not_configured: "尚未配置"
+      modes:
+        sandbox: "沙箱"
+        production: "生产"
+      configure: "配置 →"
+      configure_aria: "配置 %{name}"
+      set_default: "设为默认"
+      flows:
+        qr: "二维码"
+        h5: "H5 / 移动网页"
+        jsapi: "应用内 (JSAPI)"
+        card: "银行卡"
+      capabilities:
+        one_time: "单次支付"
+        recurring: "周期扣款"
+        tokenized_cards: "已保存的卡"
+        refunds: "退款"
+        reconciliation: "对账"
+        webhooks: "Webhook"
+
+    gateway_config:
+      credentials_heading: "凭据"
+      merchant_id_placeholder: "商户标识"
+      notify_url_label: "通知 URL 覆盖"
+      notify_url_placeholder: "留空则使用自动生成的 webhook URL"
+      default_currency_label: "默认货币"
+      test_connection: "测试连接"
+      save_changes: "保存更改"
+
+    gateway_gallery:
+      empty_title: "暂无可用的支付网关"
+      empty_hint: "请联系平台所有者启用网关。"
+
+    reconciliation:
+      title: "对账"
+      empty: "尚未下载账单"
+      download: "下载"
+      headers:
+        date: "日期"
+        provider: "服务商"
+        bill_type: "账单类型"
+        rows: "行数"
+        amount: "金额"
+        discrepancies: "差异"
+      statuses:
+        downloading: "下载中"
+        parsed: "已解析"
+        reconciled: "已对账"
+        discrepant: "有差异"
+        failed: "失败"
+      bill_types:
+        all: "全部"
+        success: "成功"
+        refund: "退款"
+
+    refund:
+      title_prefix: "退款支付 #"
+      order: "订单"
+      provider: "服务商"
+      original_amount: "原始金额"
+      amount_label: "金额"
+      maximum_prefix: "上限："
+      reason: "原因"
+      submit: "发起退款"
+
+    status_badge:
+      aria_status: "网关状态：%{label}"
+      states:
+        active: "已启用"
+        needs_setup: "需要配置"
+        disabled: "已停用"
+
+    webhook_events:
+      title: "Webhook 事件"
+      table_title: "最近事件"
+      table_subtitle: "来自支付网关的入站通知。"
+      empty: "暂无 Webhook 事件"
+      empty_description: "入站网关通知将显示在此处。"
+      redrive: "重新触发"
+      merchant_unknown: "—"
+      headers:
+        provider: "服务商"
+        event_type: "事件类型"
+        merchant: "商户"
+        created_at: "接收时间"
+        processed_at: "处理时间"
+      statuses:
+        received: "已接收"
+        processed: "已处理"
+        failed: "失败"
+
+    dispute_table:
+      title: "争议与拒付"
+      empty: "暂无争议"
+      headers:
+        provider: "服务商"
+        dispute_id: "争议编号"
+        reason: "原因"
+        amount: "金额"
+        opened_at: "发起时间"
+      statuses:
+        open: "待处理"
+        under_review: "审核中"
+        won: "已胜诉"
+        lost: "已拒付"
+        closed: "已关闭"
+      reasons:
+        bank_cannot_process: "银行无法处理"
+        check_returned: "支票退回"
+        credit_not_processed: "未入账"
+        customer_initiated: "客户发起"
+        debit_not_authorized: "未授权扣款"
+        duplicate: "重复扣款"
+        fraudulent: "欺诈"
+        general: "其他"
+        incorrect_account_details: "账户信息不正确"
+        insufficient_funds: "余额不足"
+        product_not_received: "未收到商品"
+        product_unacceptable: "商品不可接受"
+        subscription_canceled: "订阅已取消"
+        unrecognized: "无法识别"
+        MERCHANDISE_OR_SERVICE_NOT_RECEIVED: "未收到商品或服务"
+        MERCHANDISE_OR_SERVICE_NOT_AS_DESCRIBED: "商品或服务与描述不符"
+        UNAUTHORISED: "未授权"
+        CREDIT_NOT_PROCESSED: "未入账"
+        DUPLICATE_TRANSACTION: "重复交易"
+        INCORRECT_AMOUNT: "金额不正确"
+        PAYMENT_BY_OTHER_MEANS: "已通过其他方式支付"
+        CANCELED_RECURRING_BILLING: "已取消周期扣款"
+        PROBLEM_WITH_REMITTANCE: "汇款问题"
+        OTHER: "其他"
+
+    test_connection:
+      testing: "正在测试连接…"
+      verified: "连接已验证"
+      last_verified_prefix: "上次验证时间："
+      failed: "连接失败"
+      default_error_message: "连接测试失败。"
+      network_error_message: "请求失败——请检查您的网络连接。"
+      ping_assumed_ok: "已假定连接正常（无可用的连通性检测端点）。"
+      ping_success: "已成功连接到 %{label}。"
+      ping_api_error: "%{label} API 错误。"
+      ping_network_error: "网络错误。"
+      unknown_gateway: "未知的支付网关。"
+
+    transaction_table:
+      title: "交易"
+      empty: "暂无交易"
+      refund: "退款"
+      disputed: "争议中"
+      chargeback: "已拒付"
+      headers:
+        order: "订单"
+        provider: "服务商"
+        amount: "金额"
+      statuses:
+        created: "已创建"
+        pending: "处理中"
+        succeeded: "成功"
+        failed: "失败"
+        closed: "已关闭"
+
+    member:
+      payment_methods:
+        saved_cards_aria: "已保存的卡"
+        default_aria: "默认支付方式"
+        expires_prefix: "有效期至 "
+        remove_confirm: "移除此卡？"
+        no_cards: "暂无已保存的卡"
+        no_cards_hint: "在下方添加银行卡，享受更快捷的结账与周期扣款。"
+        add_card_aria: "添加新卡"
+        add_card_title: "添加卡"
+        save_card: "保存卡"
+        not_configured: "此账户尚未配置银行卡支付，请联系客服。"
+      subscriptions:
+        table_aria: "您的订阅"
+        status_aria: "状态：%{status}"
+        cancel_confirm: "取消此订阅？此操作无法撤销。"
+        complete_verification: "完成验证"
+        verify_error: "无法验证您的支付，请重试。"
+        empty_title: "暂无订阅"
+        empty_hint: "您暂无生效中的周期套餐，订阅后将显示在此处。"
+        headers:
+          plan: "套餐"
+          amount: "金额"
+          cycle: "周期"
+          card: "卡"
+          next_charge: "下次扣款"
+        cycles:
+          daily: "每日"
+          weekly: "每周"
+          monthly: "每月"
+          yearly: "每年"
+        statuses:
+          pending_sign: "待签约"
+          active: "已激活"
+          paused: "已暂停"
+          cancelled: "已取消"
+          expired: "已过期"
+
+    payment_method:
+      brands:
+        amex: "美国运通"
+        cartes_bancaires: "Cartes Bancaires"
+        diners: "大来"
+        discover: "Discover"
+        eftpos_au: "eftpos"
+        jcb: "JCB"
+        link: "Link"
+        mastercard: "Mastercard"
+        unionpay: "银联"
+        unknown: "未知"
+        visa: "Visa"

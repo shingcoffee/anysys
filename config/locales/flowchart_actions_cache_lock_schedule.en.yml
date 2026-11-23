@@ -1,0 +1,313 @@
+en:
+  flowchart_actions:
+    cache_read:
+      label: Cache Read
+      description: Read value from cache
+      fields:
+        cacheKey:
+          label: Cache Key
+          help: Tenant-scoped key to read.
+          placeholder: "e.g., user_42"
+        resultVar:
+          label: Result Variable
+          help: Context variable that receives the cached value.
+        namespace:
+          label: Namespace
+          help: Optional prefix prepended to the key.
+          placeholder: prepended to key as <namespace>:<cacheKey>
+        decompressOnRead:
+          label: Decompress On Read
+          help: Decompress the stored value when reading.
+        versionCheck:
+          label: Version Check
+          help: Expected cache version.
+          placeholder: "expected version, e.g. v1"
+        onMiss:
+          label: On Miss
+          help: What to write when the key is absent.
+          options:
+            nil: nil
+            default: default
+        defaultValue:
+          label: Default Value
+          help: Value used when onMiss is default.
+          placeholder: "used when onMiss = default"
+      errors:
+        wildcard: "%{field} cannot contain a wildcard"
+        too_long: "%{field} must be at most %{max_length} bytes"
+        invalid_expression: "%{field} must be a single safe Ruby expression"
+    cache_write:
+      label: Cache Write
+      description: Write value to cache
+      fields:
+        cacheKey:
+          label: Cache Key
+          help: Tenant-scoped key to write.
+          placeholder: "e.g., user_42"
+        action:
+          label: Action
+          help: Overwrite the key, or write only when it is absent.
+          options:
+            write: write
+            write_if_absent: write_if_absent
+        sourceVariable:
+          label: Source Variable
+          help: Context path holding the value to write.
+        ttl:
+          label: TTL (seconds)
+          help: Seconds until the entry expires.
+          placeholder: "e.g., 3600"
+        compress:
+          label: Compress
+          help: Compress the stored value.
+        raw:
+          label: Raw
+          help: Store the value without serialization.
+        race_condition_ttl:
+          label: Race Condition TTL (seconds)
+          help: Extra seconds Rails.cache keeps a stale value during a stampede.
+          placeholder: "e.g., 5"
+        raceConditionTtl:
+          label: Race Condition TTL (seconds)
+          help: Extra seconds Rails.cache keeps a stale value during a stampede.
+          placeholder: "e.g., 5"
+        namespace:
+          label: Namespace
+          help: Optional prefix prepended to the key.
+          placeholder: prepended to key
+        version:
+          label: Version
+          help: Cache version token.
+          placeholder: "e.g., v1"
+        tags:
+          label: Tags
+          help: Tag names used later by Cache Delete.
+      errors:
+        wildcard: "%{field} cannot contain a wildcard"
+        too_long: "%{field} must be at most %{max_length} bytes"
+    cache_delete:
+      label: Cache Delete
+      description: Delete value from cache
+      fields:
+        scope:
+          label: Scope
+          help: Delete one key, a pattern, a namespace, a tag, or every key for this tenant.
+          options:
+            key: Single Key
+            pattern: Pattern (glob)
+            namespace: Namespace Prefix
+            all: All (clear store)
+            tagged: Tagged Keys
+        cacheKey:
+          label: Cache Key / Pattern / Namespace
+          help: Key, glob, or namespace to delete.
+          placeholder: "e.g. user:42, user:*, tenant_42:"
+        tags:
+          label: Tags
+          help: Tag names whose members are deleted.
+        confirmPattern:
+          label: Pattern Size Guard
+          help: Refuse a pattern delete that matches 10,000 or more keys.
+      errors:
+        wildcard: "%{field} cannot contain a wildcard"
+        too_long: "%{field} must be at most %{max_length} bytes"
+    cache_fetch:
+      label: Cache Fetch
+      description: Fetch from cache with fallback block
+      fields:
+        cacheKey:
+          label: Cache Key
+          help: Tenant-scoped key to fetch.
+          placeholder: "e.g., user_42"
+        fallbackExpression:
+          label: Fallback Expression
+          help: Context path computed on a cache miss.
+        resultVar:
+          label: Result Var
+          help: Context variable that receives the fetched value.
+        ttl:
+          label: Ttl
+          help: Seconds until the fetched value expires.
+          placeholder: "e.g., 3600 (seconds)"
+        raceConditionTtl:
+          label: Race Condition TTL (s)
+          help: Extra seconds Rails.cache keeps a stale value during a stampede.
+        forceRefresh:
+          label: Force Refresh
+          help: Ignore a cached hit and recompute the fallback.
+        skipNilCache:
+          label: Skip Nil Cache
+          help: Do not store a nil fallback result.
+        versionKey:
+          label: Version Key
+          help: Cache version token.
+          placeholder: e.g., v2
+        namespace:
+          label: Namespace
+          help: Optional prefix prepended to the key.
+          placeholder: prepended to key as <namespace>:<cacheKey>
+      errors:
+        wildcard: "%{field} cannot contain a wildcard"
+        too_long: "%{field} must be at most %{max_length} bytes"
+    acquire_lock:
+      label: Acquire Lock
+      description: Acquire a distributed lock
+      fields:
+        lockKey:
+          label: Lock Key
+          help: Literal lock name (or use Lock Key Variable).
+          placeholder: "e.g., order_processing (or use Lock Key Variable)"
+        lockKeyVariable:
+          label: Lock Key Variable
+          help: Context path holding the lock key.
+          placeholder: ctx variable holding the lock key (or use Lock Key)
+        holderIdentity:
+          label: Holder Identity
+          help: Lock holder token. Defaults to a random hex string.
+          placeholder: lock holder token (defaults to SecureRandom.hex)
+        ttl:
+          label: TTL (seconds)
+          help: Seconds the lock is held if not released.
+          placeholder: Cache lock TTL (default 30)
+        onConflict:
+          label: On Conflict
+          help: What to do when the lock is already held. The step never waits.
+          options:
+            fail: Fail step (return false)
+            raise: Raise
+            skip: Skip (return true)
+        lockKeyVar:
+          label: Save lock key as
+          help: Context variable that later steps use to release the lock.
+        tokenVar:
+          label: Save lock token as
+          help: Context variable that later steps use as the holder token.
+      errors:
+        invalid_holder: "%{field} must be a single-line identifier, literal, or ctx[:key] expression"
+    release_lock:
+      label: Release Lock
+      description: Release a distributed lock
+      fields:
+        lockKey:
+          label: Lock Key
+          help: Literal lock name (or use Lock Key Variable).
+          placeholder: "e.g., order_processing (or use Lock Key Variable)"
+        lockKeyVariable:
+          label: Lock Key Variable
+          help: Context path holding the lock key.
+          placeholder: ctx variable holding the lock key (or use Lock Key)
+        holderIdentity:
+          label: Holder Identity
+          help: Holder token. Defaults to the token stored by Acquire Lock.
+          placeholder: "literal, ctx[:token], or ctx:token"
+        onMissing:
+          label: On Missing
+          help: What to do when the lock is not held by this token.
+          options:
+            ignore: Ignore
+            fail: Fail
+            log: Log warning
+      errors:
+        invalid_holder: "%{field} must be a single-line identifier, literal, or ctx[:key] expression"
+    deadline_check:
+      label: Deadline Check
+      description: Check if deadline has passed
+      fields:
+        deadlineVariable:
+          label: Deadline Variable
+          help: Context path holding the deadline value.
+          placeholder: ctx key holding the deadline value
+        deadlineFormat:
+          label: Deadline Format
+          help: How to parse a string deadline.
+          options:
+            iso8601: iso8601
+            rfc2822: rfc2822
+            auto: auto
+        referenceTime:
+          label: Reference Time
+          help: Context path for the clock. Blank uses the current time.
+          placeholder: ctx key for reference time (blank = Time.current)
+        gracePeriodSeconds:
+          label: Grace Period (seconds)
+          help: Seconds added to the deadline before a breach is flagged.
+          placeholder: seconds added to the deadline before a breach is flagged
+        warningSeconds:
+          label: Warning (seconds)
+          help: Remaining seconds at or below which the deadline is marked at risk. 0 disables the warning.
+        behaviorOnBreach:
+          label: Behavior On Breach
+          help: Mark a flag, or fail the step.
+          options:
+            mark: mark
+            raise: raise
+            fail: Fail the step
+        breachedVar:
+          label: Breached Variable
+          help: Context variable set to true when the deadline is breached.
+          placeholder: ctx variable to set when behavior = mark
+        resultVar:
+          label: Result Var
+          help: Context variable that receives the deadline status hash.
+        atRiskVar:
+          label: At-risk Variable
+          help: Context variable set to true when remaining time is within the warning window.
+    business_hours_check:
+      label: Business Hours Check
+      description: Check if within business hours
+      fields:
+        schedule:
+          label: Weekly Schedule
+          help: Weekday to HH:MM-HH:MM window.
+          placeholder: "day_name -> HH:MM-HH:MM (e.g., monday -> 09:00-17:00)"
+        holidays:
+          label: Holidays
+          help: Dates to treat as closed.
+          placeholder: YYYY-MM-DD -> holiday name (dates to skip)
+        timezone:
+          label: Timezone
+          help: IANA timezone used to evaluate the schedule.
+          placeholder: "IANA identifier, e.g., America/New_York"
+        timeVariable:
+          label: Time Variable
+          help: Context path holding a Time or ISO string. Blank uses now.
+          placeholder: ctx key holding a Time or ISO string (defaults to now)
+        resultMode:
+          label: Result Mode
+          help: Whether to return open, the next opening, or minutes until open.
+          options:
+            bool: Boolean (within hours?)
+            next_open: Next Open (ISO8601)
+            minutes_until_open: Minutes Until Open
+            add_business_minutes: Add Business Minutes
+        businessMinutes:
+          label: Business Minutes
+          help: Business minutes to add to the start time when Result Mode is Add Business Minutes.
+        resultVar:
+          label: Result Variable
+          help: Context variable that receives the check result.
+      errors:
+        invalid_timezone: timezone must be a valid IANA identifier
+        invalid_schedule: "%{field} must use weekday keys and HH:MM-HH:MM ranges"
+        invalid_holidays: "%{field} must use YYYY-MM-DD dates"
+  flowchart_runtime:
+    errors:
+      cache_read:
+        failed: "Could not read the cache (%{reason})."
+      cache_write:
+        failed: "Could not write the cache (%{reason})."
+      cache_delete:
+        failed: "Could not delete the cache entry (%{reason})."
+      cache_fetch:
+        failed: "Could not fetch the cache (%{reason})."
+      acquire_lock:
+        lock_busy: The lock is already held.
+        failed: "Could not acquire the lock (%{reason})."
+      release_lock:
+        not_held: The lock is not held by this token.
+        failed: "Could not release the lock (%{reason})."
+      deadline_check:
+        breached: The deadline has passed.
+        failed: "Could not check the deadline (%{reason})."
+      business_hours_check:
+        failed: "Could not check business hours (%{reason})."

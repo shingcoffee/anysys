@@ -1,0 +1,81 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "email",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.email.entries.analytics"), path: helpers.admin_modules_emails_dashboard_path(helpers.current_customer_id) },
+        { label: t("feature_modules.email.tabs.deliverability") }
+      ],
+      title: t("admin_modules.emails.analytics.deliverability.title"),
+      description: t("admin_modules.emails.analytics.deliverability.description")
+    ) do %>
+
+  <%= render "admin/modules/emails/shared/overview_tabs", active_tab: :deliverability %>
+
+  <div class="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+    <% %i[bounced complained suppressed failed].each do |key| %>
+      <%= render Emails::MetricCardComponent.new(
+            label: t("admin_modules.emails.analytics.deliverability.stats.#{key}"),
+            value: number_with_delimiter(totals[key]),
+            tone: key
+          ) %>
+    <% end %>
+  </div>
+
+  <div class="mb-8">
+      <h3 class="text-lg font-medium text-text-primary mb-4"><%= t("admin_modules.emails.analytics.deliverability.by_failure_code") %></h3>
+      <% if empty?(failure_breakdown) %>
+        <div class="bg-surface card p-6 text-center">
+          <p class="text-text-muted"><%= t("admin_modules.emails.analytics.deliverability.empty_failure_breakdown") %></p>
+        </div>
+      <% else %>
+        <div class="bg-surface card overflow-hidden">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-border-subtle">
+                <th class="p-3 text-sm font-medium text-text-muted"><%= t("admin_modules.emails.analytics.deliverability.failure_code") %></th>
+                <th class="p-3 text-sm font-medium text-text-muted text-right"><%= t("admin_modules.emails.analytics.deliverability.count") %></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle">
+              <% failure_breakdown.each do |code, count| %>
+                <tr>
+                  <td class="p-3 text-sm text-text-primary font-mono"><%= code %></td>
+                  <td class="p-3 text-sm text-text-primary text-right"><%= number_with_delimiter(count) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+  </div>
+
+  <div>
+    <h3 class="text-lg font-medium text-text-primary mb-4"><%= t("admin_modules.emails.analytics.deliverability.recent_suppressions") %></h3>
+    <% if empty?(suppressions) %>
+      <div class="bg-surface card p-6 text-center">
+        <p class="text-text-muted"><%= t("admin_modules.emails.analytics.deliverability.empty_suppressions") %></p>
+      </div>
+    <% else %>
+      <div class="bg-surface card overflow-hidden">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-border-subtle">
+              <th class="p-3 text-sm font-medium text-text-muted"><%= t("admin_modules.emails.analytics.deliverability.email") %></th>
+              <th class="p-3 text-sm font-medium text-text-muted"><%= t("admin_modules.emails.analytics.deliverability.reason") %></th>
+              <th class="p-3 text-sm font-medium text-text-muted"><%= t("admin_modules.emails.analytics.deliverability.suppressed_at") %></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border-subtle">
+            <% suppressions.each do |suppression| %>
+              <tr>
+                <td class="p-3 text-sm text-text-primary"><%= suppression.email %></td>
+                <td class="p-3 text-sm text-text-primary"><%= suppression.reason %></td>
+                <td class="p-3 text-sm text-text-primary"><%= l(suppression.created_at, format: :short) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  </div>
+<% end %>

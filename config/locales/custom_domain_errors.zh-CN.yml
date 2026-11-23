@@ -1,0 +1,6 @@
+zh-CN:
+  custom_domains:
+    errors:
+      invalid_domain: "请输入纯域名，不含协议、端口或路径。"
+      cname_unverified: "域名必须配置直接指向 anysys.net 的 CNAME。请检查 DNS 配置后重新保存。"
+      domain_taken: "此域名已被其他客户使用。"

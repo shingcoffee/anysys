@@ -1,0 +1,4 @@
+<%= render Admin::Settings::PageComponent.new(customer_id: current_customer.id,
+  title: t("settings_navigation.items.password_reset"), description: t("settings_people.recovery.description")) do %>
+  <%= render Admin::Settings::Modules::Authentication::PolicyFormComponent.new(policy: :recovery, enabled: @enabled, customer: current_customer) %>
+<% end %>

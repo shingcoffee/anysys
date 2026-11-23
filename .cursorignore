@@ -1,0 +1,59 @@
+# Logs and temporary files
+log/*.log
+log/**/*.log
+tmp/**/*
+*.log
+
+# Compiled and generated assets
+public/assets/**/*
+public/packs/**/*
+app/assets/builds/**/*
+
+# Storage and uploads
+storage/**/*
+tmp/storage/**/*
+
+# Dependencies and vendor
+vendor/bundle/**/*
+node_modules/**/*
+
+# Database files
+*.sqlite3
+*.sqlite3-*
+db/*.sqlite3
+
+# Cache
+tmp/cache/**/*
+
+# Test coverage / reports
+coverage/**/*
+spec/reports/**/*
+test/reports/**/*
+test-results/**/*
+
+# Build artifacts
+.byebug_history
+
+# Encrypted credentials
+config/credentials.yml.enc
+
+# Page layout template blobs (rarely useful for feature work)
+app/services/page_layout_templates/templates/**
+
+# Boilerplate public error pages
+public/400.html
+public/404.html
+public/422.html
+public/500.html
+public/406-unsupported-browser.html
+
+# VCS / deploy noise
+.git/**
+.kamal/**
+.superpowers/**
+.worktrees/**
+.copilot/**
+
+# Historical plan archives (open on demand)
+docs/plans/**
+docs/superpowers/**

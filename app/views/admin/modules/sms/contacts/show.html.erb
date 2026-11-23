@@ -1,0 +1,12 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "sms",
+      title: @contact.name.presence || @contact.phone_e164,
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.email.entries.audience"), path: admin_modules_sms_contacts_path(current_customer_id) },
+        { label: t("sms_campaign_http.navigation.contacts"), path: admin_modules_sms_contacts_path(current_customer_id) },
+        { label: @contact.name.presence || @contact.phone_e164 }
+      ]
+    ) do %>
+  <%= render Sms::Admin::ContactDetailsComponent.new(contact: @contact, consent_events: @consent_events, eligibility: @eligibility, consent_form_values: @consent_form_values, errors: @errors) %>
+<% end %>

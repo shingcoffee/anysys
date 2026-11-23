@@ -1,0 +1,23 @@
+zh-CN:
+  flowchart_elements:
+    decision:
+      fields:
+        routeBy:
+          label: 分支方式
+          help: 选择按主体取值匹配分支，还是按“是/否”条件分支。
+          options:
+            value: 按取值
+            condition: 按是/否
+        subject:
+          label: 主体
+          help: 与各分支匹配值进行比较的 Ruby 表达式。
+          placeholder: "ctx[:status]"
+        condition:
+          label: 条件
+          help: 各行以“与”或“或”连接，结果决定走“是”或“否”分支。
+      errors:
+        too_few_branches: 决策节点至少需要两条出向连接
+        duplicate_match_value: 匹配值不可重复
+        multiple_otherwise: 只能有一个“其他”分支
+        invalid_condition_match: 条件分支的匹配值只能是“是”（true）、“否”（false）或“其他”
+        missing_yes_branch: 条件路由需要“是”分支，并搭配“否”或“其他”

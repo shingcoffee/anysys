@@ -1,0 +1,14 @@
+<% if values.any? %>
+  <svg class="h-10 w-full overflow-visible <%= tone_class %>" viewBox="0 0 <%= width %> <%= height %>" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="sparkline-grad-<%= object_id %>" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="currentColor" stop-opacity="0.15"/>
+        <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <polygon points="<%= fill_points %>" fill="url(#sparkline-grad-<%= object_id %>)" />
+    <polyline points="<%= points %>" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+<% else %>
+  <div class="flex h-10 items-center text-xs text-text-muted"><%= t("common.labels.no_data") %></div>
+<% end %>

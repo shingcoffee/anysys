@@ -1,0 +1,13 @@
+<% presentation = Websites::HomeSite::Presentation.for(website: @website, page: @page) %>
+<% nav_pages = presentation ? presentation.nav_pages(@nav_pages) : (@nav_pages || []) %>
+<% if @website %>
+  <%= render (presentation&.header_class || Websites::NavComponent).new(website: @website, pages: nav_pages, current_slug: @page.try(:slug), theme: @theme) %>
+<% end %>
+<% if @page && @theme %>
+  <%= render Websites::PageComponent.new(page: @page, website: @website, nav_pages: nav_pages, presentation: presentation, theme: @theme) %>
+<% else %>
+  <main></main>
+<% end %>
+<% if @website %>
+  <%= render (presentation&.footer_class || Websites::FooterComponent).new(website: @website, theme: @theme) %>
+<% end %>

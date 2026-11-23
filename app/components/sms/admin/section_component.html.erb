@@ -1,0 +1,6 @@
+<%= render CardComponent.new(padding: :none, id: id, class: "min-w-0") do %>
+  <div class="p-4 sm:p-6 space-y-4 min-w-0">
+    <h2 class="section-header"><%= title %></h2>
+    <%= content %>
+  </div>
+<% end %>

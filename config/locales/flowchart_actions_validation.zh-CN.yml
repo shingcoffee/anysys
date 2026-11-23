@@ -1,0 +1,28 @@
+zh-CN:
+  flowchart_actions:
+    build_contract:
+      label: 构建契约
+      description: 构建包装主实体模型的 Reform 契约
+      fields:
+        contractClass:
+          label: 契约类
+          help: 用于包装模型以进行校验的 Ruby 类。
+          placeholder: 例如 EntityEntryContract
+        modelVariable:
+          label: 模型变量
+          help: 契约所包装记录的上下文路径。
+      errors:
+        invalid_class_name: "%{field} 必须是合法的 Ruby 类名"
+    validate_contract:
+      label: 校验
+      description: 针对 ctx[:params] 校验 Reform 契约
+      fields:
+        onInvalid:
+          label: 校验失败时
+          help: 使步骤失败，或继续执行以便后续判断根据校验结果分支。
+          options:
+            fail: 失败
+            continue: 继续
+        validVar:
+          label: 将是否通过校验保存为
+          help: 契约接受参数时设为 true 的变量。

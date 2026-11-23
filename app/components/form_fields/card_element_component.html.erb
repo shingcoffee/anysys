@@ -1,0 +1,6 @@
+<div class="rounded-xl border <%= neutral(:subtle_border) %> <%= neutral(:surface) %> p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
+  <h4 class="text-sm font-semibold <%= neutral(:strong_text) %> leading-snug"><%= title %></h4>
+  <% if content_present? %>
+    <p class="mt-2 text-sm <%= neutral(:muted_text) %> leading-relaxed"><%= content_text %></p>
+  <% end %>
+</div>

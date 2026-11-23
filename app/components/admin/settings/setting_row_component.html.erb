@@ -1,0 +1,20 @@
+<div class="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+  <div class="min-w-0">
+    <div class="flex flex-wrap items-center gap-2">
+      <% if label_for.present? %>
+        <label for="<%= label_for %>" class="text-sm font-medium text-text-primary <%= "form-label-required" if required %>"><%= label %></label>
+      <% else %>
+        <h3 class="text-sm font-medium text-text-primary"><%= label %></h3>
+      <% end %>
+      <% if state.present? %>
+        <span class="text-xs font-medium text-text-muted"><%= state %></span>
+      <% end %>
+    </div>
+    <% if description.present? %>
+      <p <% if description_id.present? %>id="<%= description_id %>"<% end %> class="mt-1 text-sm text-text-muted"><%= description %></p>
+    <% end %>
+  </div>
+  <% if content? %>
+    <div class="w-full shrink-0 sm:w-auto"><%= content %></div>
+  <% end %>
+</div>

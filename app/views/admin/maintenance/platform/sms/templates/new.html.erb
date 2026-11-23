@@ -1,0 +1,13 @@
+<% sms_module = FeatureModules::Module.find_by(key: "sms") %>
+<%= render Admin::Maintenance::Platform::ModuleSettings::ShellComponent.new(
+      feature_module: sms_module, customer_id: current_customer_id, current: :resources
+    ) do %>
+  <div class="w-full">
+    <%= render Admin::Maintenance::Platform::Sms::TemplateFormComponent.new(
+          template: @template,
+          form_url: admin_maintenance_platform_module_settings_sms_templates_path(customer_id: current_customer_id),
+          form_method: :post,
+          cancel_path: admin_maintenance_platform_module_settings_sms_templates_path(customer_id: current_customer_id)
+        ) %>
+  </div>
+<% end %>

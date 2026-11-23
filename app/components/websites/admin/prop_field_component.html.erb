@@ -1,0 +1,48 @@
+<% if href? %>
+  <%= render Websites::Admin::LinkFieldComponent.new(key: key, value: value, field_id: field_id, label: label, site_pages: site_pages, workspace: workspace?) %>
+<% elsif image? %>
+  <%= render Websites::Admin::MediaFieldComponent.new(key: key, value: value, field_id: field_id, label: label, uploadable: uploadable?, workspace: workspace?) %>
+<% else %>
+  <%= content_tag segmented? && workspace? ? :fieldset : :div, class: "flex min-w-0 flex-col #{workspace? ? 'group/prop-field gap-1' : 'gap-1.5'}#{' group/design' if design}", data: { count_field: (true if counted?) } do %>
+    <% if segmented? && workspace? %>
+      <legend id="<%= field_id %>_label" class="form-label mb-1 flex min-h-7 items-center pointer-coarse:min-h-9"><%= label %></legend>
+    <% else %>
+      <%= render Websites::Admin::FieldHeaderComponent.new(design: design) do |header| %>
+        <% if counted? %>
+          <% header.with_aside do %>
+            <p data-char-count class="text-caption tabular-nums <%= 'invisible group-focus-within/prop-field:visible' if workspace? %>"><%= t("website.admin.pages.form.char_count", count: value.length) %></p>
+          <% end %>
+        <% end %>
+        <label class="form-label mb-0 truncate" <% if segmented? %>id="<%= field_id %>_label"<% else %>for="<%= field_id %>"<% end %>><%= label %></label>
+      <% end %>
+    <% end %>
+    <% if kind == :textarea %>
+      <textarea id="<%= field_id %>" rows="<%= textarea_rows %>"
+                class="<%= writing_input_class %><%= ' min-h-[6rem]' unless workspace? %><%= ' text-lg leading-relaxed' if display_copy? %>"
+                data-prop="<%= key %>" data-action="<%= input_action %>"><%= value %></textarea>
+    <% elsif segmented? %>
+      <div class="<%= workspace? ? 'inline-flex w-fit max-w-full flex-wrap gap-0.5 self-start rounded-lg bg-canvas p-0.5' : 'inline-flex w-full sm:w-auto flex-wrap rounded-lg bg-canvas p-0.5 ring-1 ring-border-subtle' %>" role="radiogroup" aria-labelledby="<%= field_id %>_label">
+        <% options.each do |option| %>
+          <label class="relative cursor-pointer<%= ' flex-1 sm:flex-none' unless workspace? %>">
+            <input type="radio" class="peer absolute inset-0 z-10 m-0 cursor-pointer opacity-0" name="<%= field_id %>" value="<%= option %>" data-prop="<%= key %>" data-action="change->website-builder#markDirty" <%= 'checked' if value == option %>>
+            <span class="<%= segmented_item_class %>"><%= option_label_for(option) %></span>
+          </label>
+        <% end %>
+      </div>
+    <% elsif kind == :select %>
+      <select id="<%= field_id %>" class="input-field <%= workspace? ? 'h-9' : 'h-10' %>" data-prop="<%= key %>" data-action="change->website-builder#markDirty">
+        <% options.each do |option| %>
+          <option value="<%= option %>" <%= 'selected' if value == option %>><%= option_label_for(option) %></option>
+        <% end %>
+      </select>
+    <% else %>
+      <input type="<%= input_type %>" id="<%= field_id %>" class="<%= writing_input_class %>" value="<%= value %>" data-prop="<%= key %>" data-action="<%= input_action %>">
+    <% end %>
+    <% if hint == :rich_text %>
+      <p class="text-body-sm text-text-tertiary<%= ' hidden group-focus-within/prop-field:block' if workspace? %>"><%= t("website.admin.pages.form.rich_text_hint") %></p>
+    <% end %>
+    <% if design %>
+      <%= render design %>
+    <% end %>
+  <% end %>
+<% end %>

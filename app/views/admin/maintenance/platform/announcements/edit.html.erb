@@ -1,0 +1,15 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("maint_platform.announcements.breadcrumb.maintenance"), path: admin_maintenance_path(current_customer_id) },
+    { label: t("maint_platform.announcements.breadcrumb.announcements"), path: admin_maintenance_platform_announcements_path(current_customer_id) },
+    { label: @announcement.title, path: admin_maintenance_platform_announcement_path(current_customer_id, @announcement) },
+    { label: t("common.actions.edit") }
+  ],
+  title: t("maint_platform.announcements.edit.title"),
+  description: t("maint_platform.announcements.edit.description")
+) do %>
+  <%= render Admin::Maintenance::Platform::AnnouncementFormComponent.new(
+    announcement: @announcement,
+    customer_id: current_customer_id
+  ) %>
+<% end %>

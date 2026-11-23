@@ -1,0 +1,11 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "payment",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.payment.entries.disputes") }
+      ],
+      title: t("feature_modules.payment.entries.disputes"),
+      description: t("admin_modules.payments.disputes.description")
+    ) do %>
+  <%= render ::Payments::Admin::DisputeTableComponent.new(disputes: @disputes) %>
+<% end %>

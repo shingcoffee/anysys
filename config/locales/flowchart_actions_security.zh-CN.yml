@@ -1,0 +1,538 @@
+zh-CN:
+  flowchart_actions:
+    authorize:
+      label: 授权
+      description: 按角色或 CanCanCan 能力校验是否允许继续
+      fields:
+        authType:
+          label: 授权类型
+          help: 本步骤如何判断当前主体是否可继续。
+          options:
+            role_check: 角色校验
+            ability_check: 能力校验
+            multi_role: 多角色
+            record_owner: 记录所有者
+        userExpression:
+          label: 用户
+          help: 用户在上下文中的路径。默认读取 current_user（由“加载当前用户”写入）。
+        roleName:
+          label: 角色名
+          help: 用户必须具备的系统角色。
+          options:
+            owner: 平台所有者
+            admin: 管理员
+            member: 成员
+        abilityAction:
+          label: 能力动作
+          help: CanCanCan 动作名，例如 read、update。
+        abilityResource:
+          label: 能力资源
+          help: 被授权的记录或主体在上下文中的路径。
+        recordVariable:
+          label: 记录
+          help: 成员必须拥有的实体条目（user_id）在上下文中的路径。
+        roleList:
+          label: 角色列表
+          help: 要匹配的系统角色（owner、admin 或 member）。
+        roleMode:
+          label: 匹配方式
+          help: 满足任一角色即可，还是必须同时具备全部角色。
+          options:
+            any_of: 任一即可
+            all_of: 必须全部
+        onDenied:
+          label: 拒绝时
+          help: 授权失败时本步骤的处理方式。
+          options:
+            fail: 失败并停止
+            flag: 写入结果并继续
+        resultVar:
+          label: 将结果保存为
+          help: 当“拒绝时”为写入结果时，保存 true 或 false 的变量名。
+        deniedMessage:
+          label: 拒绝说明
+          help: “拒绝时”为失败并停止时使用的自定义本地化错误。
+      errors:
+        invalid_ability_action: "abilityAction 无效：%{action}。须匹配 /\\A[a-z_][a-z0-9_]*\\z/i"
+        invalid_role_list: "roleList 包含无效项：%{entries}。仅允许 owner、admin、member"
+    authenticate:
+      label: 认证
+      description: 校验用户或请求的凭据
+      fields:
+        authMethod:
+          label: 认证方式
+          help: 如何核验凭据。
+          options:
+            password: 密码
+            token: 令牌
+            api_key: API 密钥
+            session: 会话
+        credentialSource:
+          label: 凭据来源
+          help: 从何处读取提交的密钥。
+          options:
+            ctx: 上下文
+            params: 参数
+        sourceVariable:
+          label: 来源
+          help: 存放提交密钥的上下文路径或参数键。
+          placeholder: 例如 credentials、auth_token、Authorization
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        userVariable:
+          label: 用户变量
+          help: 待核验密码的用户在上下文中的路径。
+          placeholder: 例如 user
+        tokenType:
+          label: 令牌类型
+          help: 比较前去掉的前缀。
+          options:
+            bearer: Bearer
+            basic: Basic
+            custom: 自定义
+        expectedKeyVariable:
+          label: 期望密钥
+          help: 用于比较的密钥在上下文中的路径。
+          placeholder: 例如 stored_key
+        onFailure:
+          label: 失败时
+          help: 认证失败时本步骤的处理方式。
+          options:
+            fail: 失败并停止
+            flag: 写入结果并继续
+    encrypt_data:
+      label: 加密数据
+      description: 加密敏感数据
+      fields:
+        sourceVariable:
+          label: 来源
+          help: 明文在上下文中的路径。
+          placeholder: 例如 sensitive_data
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        algorithm:
+          label: 算法
+          help: 加密所用的密码算法。
+          options:
+            aes_256_gcm: aes-256-gcm
+        keySource:
+          label: 密钥来源
+          help: 从何处读取加密密钥。
+          options:
+            credentials: 凭据
+            env: 环境变量
+            ctx: 上下文
+            derived: 派生
+        keyPath:
+          label: 密钥路径
+          help: 凭据点分路径、环境变量名或上下文变量。
+          placeholder: 凭据点分路径、环境变量名或上下文变量
+        deriveKeyFrom:
+          label: 派生口令
+          help: 用于派生密钥的口令在上下文中的路径。
+        deriveKeySalt:
+          label: 派生盐值
+          help: 与租户编号一并混入派生过程的额外盐值。
+          placeholder: 例如 user-data-v1
+        encoding:
+          label: 编码
+          help: 密文写入结果时的编码方式。
+          options:
+            hex: hex
+            base64: base64
+            base64url: base64url
+            raw: 原始
+        purpose:
+          label: 密钥用途
+          help: 加密与解密必须共用的 MessageEncryptor 用途标识。
+      errors:
+        invalid_env_name: "keyPath 无效：%{value}。须为合法环境变量名"
+        invalid_credential_path: "keyPath 分段无效：%{value}。须为凭据键，例如 security.primary_key"
+    decrypt_data:
+      label: 解密数据
+      description: 解密已加密的数据
+      fields:
+        sourceVariable:
+          label: 来源
+          help: 密文在上下文中的路径。
+          placeholder: 例如 encrypted
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        algorithm:
+          label: 算法
+          help: 解密所用的密码算法。
+          options:
+            aes_256_gcm: aes-256-gcm
+        keySource:
+          label: 密钥来源
+          help: 从何处读取解密密钥。
+          options:
+            credentials: 凭据
+            env: 环境变量
+            ctx: 上下文
+            derived: 派生
+        keyPath:
+          label: 密钥路径
+          help: 凭据点分路径、环境变量名或上下文变量。
+          placeholder: 例如 security.primary_key 或 APP_DECRYPT_KEY
+        deriveKeyFrom:
+          label: 派生口令
+          help: 用于派生密钥的口令在上下文中的路径。
+        deriveKeySalt:
+          label: 派生盐值
+          help: 与租户编号一并混入派生过程的额外盐值。
+          placeholder: 例如 user-data-v1
+        encoding:
+          label: 编码
+          help: 已存储密文的编码方式。
+          options:
+            hex: hex
+            base64: base64
+            base64url: base64url
+            raw: 原始
+            binary: 二进制
+        purpose:
+          label: 密钥用途
+          help: 加密与解密必须共用的 MessageEncryptor 用途标识。
+      errors:
+        invalid_env_name: "keyPath 无效：%{value}。须为合法环境变量名"
+        invalid_credential_path: "keyPath 分段无效：%{value}。须为凭据键，例如 security.primary_key"
+    hash_data:
+      label: 哈希数据
+      description: 生成哈希摘要
+      fields:
+        sourceVariable:
+          label: 来源
+          help: 待哈希值在上下文中的路径。
+          placeholder: 例如 password
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        algorithm:
+          label: 算法
+          help: 哈希或口令算法。
+          options:
+            bcrypt: bcrypt
+            scrypt: scrypt
+            argon2: argon2
+            pbkdf2: pbkdf2
+            sha256: sha256
+            sha512: sha512
+            md5: md5
+        cost:
+          label: 成本（bcrypt）
+          help: bcrypt 成本因子（4–31）。
+        iterations:
+          label: 迭代次数
+          help: pbkdf2 或 scrypt 的拉伸轮数。
+        salt:
+          label: 盐值
+          help: 混入摘要的盐值在上下文中的路径。
+        pepper:
+          label: 胡椒值
+          help: 混入摘要的额外密钥在上下文中的路径。
+        encoding:
+          label: 编码
+          help: 摘要的编码方式（bcrypt、scrypt、argon2 不使用）。
+          options:
+            hex: hex
+            base64: base64
+            base64url: base64url
+        timeCost:
+          label: 时间成本
+          help: Argon2 时间成本（迭代次数）。
+        memoryCost:
+          label: 内存成本
+          help: Argon2 内存成本，以 2 的幂次表示（KiB）。
+    mask_data:
+      label: 掩码数据
+      description: 对敏感字段做展示掩码
+      fields:
+        sourceVariable:
+          label: 来源
+          help: 待掩码值在上下文中的路径。
+          placeholder: 例如 credit_card
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        maskType:
+          label: 掩码类型
+          help: 采用的掩码规则。
+          options:
+            email: 邮箱
+            phone: 电话
+            ssn: 社保号
+            credit_card: 银行卡
+            custom: 自定义
+            first1_last1: 首尾各一
+            full: 全部
+            last4: 末四位
+            name: 姓名
+            address: 地址
+            mobile: 手机号
+            id_number: 身份证号
+        visibleStart:
+          label: 起始可见
+          help: 开头保留的有效字符数。
+        visibleEnd:
+          label: 末尾可见
+          help: 末尾保留的有效字符数。
+        maskChar:
+          label: 掩码字符
+          help: 用于遮盖被掩部分的字符。
+        preserveFormat:
+          label: 保留格式
+          help: 保留连字符、空格等分隔符。
+        regexPattern:
+          label: 正则
+          help: maskType 为自定义时，匹配到的内容将被替换。
+          placeholder: 例如 \d
+    sanitize_input:
+      label: 净化输入
+      description: 净化用户提交的内容
+      fields:
+        sourceVariable:
+          label: 来源
+          help: 提交文本在上下文中的路径。
+          placeholder: 例如 user_input
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        sanitizer:
+          label: 净化器
+          help: 采用的净化策略。
+          options:
+            strip_tags: 去标签
+            escape_html: 转义 HTML
+            rails: Rails
+            loofah: Loofah
+            scrubber: Scrubber
+        scrubberVariable:
+          label: 清洗器变量
+          help: Rails HTML 清洗器在上下文中的路径。
+        allowedTags:
+          label: 允许的标签
+          help: Rails 净化器可保留的标签名。
+        allowedAttributes:
+          label: 允许的属性
+          help: Rails 净化器可保留的属性名。
+        stripTags:
+          label: 再去标签
+          help: 在所选净化器之后再做一次彻底去标签。
+        removeNullBytes:
+          label: 去除空字节
+          help: 从净化结果中删除空字节。
+        maxLength:
+          label: 最大长度
+          help: 将结果截断到该字符数（0 表示不截断）。
+        onOverflow:
+          label: 超长时
+          help: 净化后的文本超过最大长度时的处理方式。
+          options:
+            truncate: 截断
+            fail: 失败并停止
+        trimWhitespace:
+          label: 去除空白
+          help: 净化后再去掉首尾空白。
+      errors:
+        invalid_tags: "allowedTags 包含无效项：%{entries}"
+        invalid_attributes: "allowedAttributes 包含无效项：%{entries}"
+    generate_token:
+      label: 生成令牌
+      description: 生成认证令牌
+      fields:
+        tokenType:
+          label: 令牌类型
+          help: 要签发的令牌种类。
+          options:
+            jwt: JWT
+            hmac: HMAC
+            numeric_otp: 数字验证码
+            signed: 签名载荷
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        tokenLength:
+          label: 令牌长度
+          help: 数字验证码的位数。
+        dataVariable:
+          label: 数据变量
+          help: HMAC 待签名数据在上下文中的路径。
+        digest:
+          label: 摘要算法
+          help: HMAC 使用的摘要算法。
+          options:
+            sha1: sha1
+            sha256: sha256
+            sha512: sha512
+        payloadVariable:
+          label: 负载变量
+          help: JWT 负载哈希在上下文中的路径。
+        issuer:
+          label: 签发方
+          help: 写入 iss 声明的值。
+          placeholder: 例如 auth.example.com
+        audience:
+          label: 受众
+          help: 写入 aud 声明的值。
+          placeholder: 例如 api.example.com
+        subject:
+          label: 主体
+          help: 写入 sub 声明的值。
+          placeholder: 例如 user-123
+        includeIssuedAt:
+          label: 写入签发时间
+          help: 将 iat 声明写为当前时间。
+        notBefore:
+          label: 生效时间
+          help: nbf 声明的 Ruby 表达式。
+        expiresIn:
+          label: 有效期
+          help: 以秒数、ISO 8601 或 1h 之类的时长表示。
+          placeholder: 例如 3600 或 1h
+        claims:
+          label: 声明
+          help: 额外的 JWT 声明。值为 Ruby 表达式。
+        keyId:
+          label: 密钥编号
+          help: 签名 JWT 上可选的 kid 头。
+          placeholder: 例如 key-2026-01
+        algorithm:
+          label: 算法
+          help: JWT 签名算法。
+          options:
+            hs256: HS256
+            hs384: HS384
+            hs512: HS512
+            rs256: RS256
+        secretSource:
+          label: 密钥来源
+          help: 从何处读取签名密钥。
+          options:
+            credentials: 凭据
+            env: 环境变量
+            ctx: 上下文
+        secretVariable:
+          label: 密钥变量
+          help: 凭据路径、环境变量名或上下文键。切勿写入明文密钥。
+          placeholder: 凭据路径（a.b）、环境变量名或上下文键
+        purpose:
+          label: 令牌用途
+          help: 生成与校验必须共用的 MessageVerifier 用途标识。
+      errors:
+        invalid_env_name: "secretVariable 无效：%{value}。须为合法环境变量名"
+        invalid_credential_path: "secretVariable 分段无效：%{value}。须为凭据键，例如 jwt.hmac"
+    verify_token:
+      label: 校验令牌
+      description: 校验令牌是否有效
+      fields:
+        tokenType:
+          label: 令牌类型
+          help: 要校验的令牌种类（JWT 或签名载荷）。
+          options:
+            jwt: JWT
+            signed: 签名载荷
+        sourceVariable:
+          label: 来源
+          help: 待校验令牌在上下文中的路径。
+          placeholder: 存放令牌的上下文键（例如 auth_token）
+        secretSource:
+          label: 密钥来源
+          help: 从何处读取校验密钥。
+          options:
+            credentials: 凭据
+            env: 环境变量
+            ctx: 上下文
+        secretVariable:
+          label: 密钥变量
+          help: 凭据路径、环境变量名或上下文键。切勿写入明文密钥。
+          placeholder: 凭据路径（a.b）、环境变量名或上下文键
+        purpose:
+          label: 令牌用途
+          help: 生成与校验必须共用的 MessageVerifier 用途标识。
+        secretKey:
+          label: 密钥
+          help: 校验密钥在上下文中的路径。
+          placeholder: 存放密钥的上下文键（例如 jwt_secret）
+        algorithm:
+          label: 算法（回退）
+          help: 允许列表为空时使用的算法。
+          options:
+            hs256: HS256
+            hs384: HS384
+            hs512: HS512
+            rs256: RS256
+        algorithmAllowlist:
+          label: 算法白名单
+          help: 校验时接受的算法。
+        verifyIssuer:
+          label: 校验签发方（iss）
+          help: 期望的 iss 声明值。
+          placeholder: 期望的 iss 声明，例如 https://issuer.example
+        verifyAudience:
+          label: 校验受众（aud）
+          help: 期望的 aud 声明值。
+          placeholder: 期望的 aud 声明，例如 api.example
+        leewaySeconds:
+          label: 时钟容差（秒）
+          help: 允许的时钟偏差秒数。
+        requiredClaims:
+          label: 必需声明
+          help: 必须存在的声明名；若指定了值，还须与该值匹配。
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        onInvalid:
+          label: 无效时
+          help: 令牌无效时本步骤的处理方式。
+          options:
+            fail: 失败并停止
+            flag: 写入结果并继续
+        validVar:
+          label: 将有效性保存为
+          help: 当“无效时”为写入结果时，保存 true 或 false 的变量名。
+      errors:
+        invalid_algorithms: "algorithmAllowlist 包含无效项：%{entries}"
+        invalid_env_name: "secretVariable 无效：%{value}。须为合法环境变量名"
+        invalid_credential_path: "secretVariable 分段无效：%{value}。须为凭据键，例如 jwt.hmac"
+    register_member:
+      label: 注册会员
+      description: 将公开访客注册为无密码会员
+      fields:
+        personVar:
+          label: 人员
+          help: 本步骤写入的人员条目的上下文路径。
+        identityVar:
+          label: 身份
+          help: 用于注册的姓名与邮箱哈希在上下文中的路径。
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+  flowchart_runtime:
+    errors:
+      authorize:
+        denied: 您无权执行此操作。
+      register_member:
+        public_only: 仅未登录的访客可以注册。
+        person_entity_required: 注册需要使用人员实体的表单。
+        signup_disabled: 注册功能已关闭。
+        unavailable: 暂时无法完成注册，请稍后再试。
+      authenticate:
+        failed: 认证失败。
+      encrypt_data:
+        failed: 无法加密数据（%{reason}）。
+      decrypt_data:
+        failed: 无法解密数据（%{reason}）。
+      hash_data:
+        failed: 无法哈希数据（%{reason}）。
+      mask_data:
+        failed: 无法掩码数据（%{reason}）。
+      sanitize_input:
+        failed: 无法净化输入（%{reason}）。
+      generate_token:
+        failed: 无法生成令牌（%{reason}）。
+      verify_token:
+        failed: 无法校验令牌（%{reason}）。

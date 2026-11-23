@@ -1,0 +1,8 @@
+<%= render Emails::EngagementComponent.new(
+      since: @since,
+      until_date: @until_date,
+      top_links: @top_links,
+      opens_by_hour: @opens_by_hour,
+      opens_by_day: @opens_by_day,
+      devices: @devices
+    ) %>

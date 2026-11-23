@@ -1,0 +1,22 @@
+<section class="<%= padding_class %>">
+  <div class="<%= inner_measure_class %> flex flex-col <%= gap_class %>">
+    <%= header(kicker: prop("kicker"), heading: prop("heading"), subhead: prop("subhead")) %>
+    <% if items.any? %>
+      <div class="grid gap-x-10 gap-y-12 md:gap-y-16 <%= grid_class %>">
+        <% items.each do |item| %>
+          <article <%= item_attrs("items", class: "flex min-w-0 flex-col gap-3 border-t pt-6 #{hairline_class}") %>>
+            <% if present_text?(item["value"]) %>
+              <p <%= el_attrs("items.value", class: value_class) %>><%= item["value"] %></p>
+            <% end %>
+            <% if present_text?(item["label"]) %>
+              <h3 <%= el_attrs("items.label", class: "text-site-base font-medium md:text-site-md") %>><%= item["label"] %></h3>
+            <% end %>
+            <% if present_text?(item["body"]) %>
+              <p <%= el_attrs("items.body", class: "text-pretty text-site-sm leading-relaxed md:text-site-base #{muted_class}") %>><%= item["body"] %></p>
+            <% end %>
+          </article>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</section>

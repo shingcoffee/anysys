@@ -1,0 +1,848 @@
+en:
+  admin_modules:
+    errors:
+      lists:
+        segment_malformed: "Segment rules were malformed — please rebuild the audience."
+      segments:
+        segment_malformed: "Segment rules were malformed — please rebuild the segment."
+      validations:
+        cross_tenant_association: "must belong to the same customer"
+        invalid_recurrence_rule: "is not a supported recurrence rule"
+        invalid_timezone: "is not a valid IANA timezone"
+        key_format: "only lowercase letters, numbers, and underscores"
+        template_not_active: "is not a registered active template"
+        invalid_email_format: "is not a valid email"
+        missing_required_keys: "missing required keys: %{keys}"
+        unknown_keys: "has unknown keys: %{keys}"
+        variables_must_be_array_of_strings: "must be an array of strings"
+
+    # Shared navigation / breadcrumb labels reused across the module entry pages.
+    nav:
+      modules:         "Modules"
+      overview:        "Overview"
+      users:           "Users"
+      authentication:  "Authentication"
+      send_activities: "Send Activity"
+      lists:           "Lists"
+      email:           "Email"
+      templates:       "Templates"
+      messages:        "Messages"
+      sms:             "SMS"
+      website:         "Website"
+      block_list:      "Block-List"
+
+    authentication:
+      events:
+        index:
+          title:              "Sign-In & Security Log"
+          description:        "Audit log of sign-ins, lockouts, MFA changes, password resets, and role grants for this tenant."
+          breadcrumb:         "Security Log"
+          search_placeholder: "Search by IP or device"
+          empty_title:        "No events recorded"
+          empty_description:  "Authentication events will appear here as users sign in and manage their accounts."
+        columns:
+          event:      "Event"
+          user_id:    "User ID"
+          ip:         "IP address"
+          user_agent: "Device"
+          window:     "Time range"
+        windows:
+          d1:  "Last 24 hours"
+          d7:  "Last 7 days"
+          d30: "Last 30 days"
+        kinds:
+          login_succeeded:          "Sign-in succeeded"
+          login_failed:             "Sign-in failed"
+          logout:                   "Sign-out"
+          locked_out:               "Locked out"
+          mfa_enabled:              "MFA enabled"
+          mfa_disabled:             "MFA disabled"
+          mfa_verified:             "MFA verified"
+          mfa_failed:               "MFA failed"
+          password_reset_requested: "Password reset requested"
+          password_reset_completed: "Password reset completed"
+          role_granted:             "Role granted"
+          role_revoked:             "Role revoked"
+          throttled:                "Rate-limited"
+          oauth_authorized:         "OAuth authorized"
+
+    index:
+      description:    "Jump into records for features turned on for this organization."
+      empty_title:    "No modules enabled yet"
+      empty_body:     "Turn on a module in Maintenance to start using its records and features."
+      manage_modules: "Manage Modules"
+      manage_hint:    "Enable or disable modules for this organization."
+      pick_hint:      "Pick a module in the sidebar to view its records."
+      open:           "Open"
+      configure:      "Configure"
+      quick_links:    "Quick links"
+      sections:
+        records:       "Records & data"
+        communication: "Communication"
+        growth:        "Growth & protection"
+        other:         "More modules"
+      howto:
+        title: "How to use"
+        page_title: "How to use %{name}"
+        page_description: "A practical starting guide for %{name}."
+        new_tab_hint: "(opens in a new tab)"
+        steps:
+          authentication:
+            - "Review member sign-up in Settings / Authentication."
+            - "Set the password recovery policy in Settings / Authentication."
+            - "Open Users to add or manage people and assign their admin or member role."
+            - "Check the Security Log to review sign-ins and account changes."
+          email:
+            - "Review your sending limit in Settings / Email; the platform owner sets it, and delivery requires an active platform email provider."
+            - "Create an email template for your message."
+            - "Build a recipient list for your audience."
+            - "Create a Send Activity with that template and list, then send or schedule it and review the results."
+          payment:
+            - "In Settings / Payments, configure and activate a merchant account for the gateway you want to use."
+            - "Collect a payment through a connected checkout flow and track it in Transactions."
+            - "Match provider settlement files against your records in Reconciliations."
+          sms:
+            - "Review your daily send cap in Settings / SMS; the platform owner sets it, and your platform team must provide an approved sender and template."
+            - "Create a campaign, choose an audience and an approved template, then review it before launching."
+            - "Add contacts, build a segment, and review opt-outs in Audience."
+            - "Open Messages to review delivery for sent SMS."
+          captcha:
+            - "Check the active verification provider in Settings / Captcha; ask your platform team to set one up if needed."
+            - "Set request limits for public pages in Settings / Captcha."
+            - "Open Pages to enable a challenge on a public form when needed."
+            - "Test a protected page in a browser to confirm the challenge appears and submissions succeed."
+          ai_assistant:
+            - "Choose your preferred language in Settings / AI Assistant and review the recording limit set by the platform owner."
+            - "Open the assistant to ask questions or draft content for your workspace."
+            - "Review proposed changes before applying them; use dictation when audio transcription is available."
+          website:
+            - "Set your site's name, theme, and details in Settings / Website."
+            - "Open Website Pages to create or edit pages, then publish the pages you want visitors to see."
+            - "Publish the site in Settings / Website."
+            - "Check the public pages in a browser."
+          with_links:
+            - "Open a record page to explore the module."
+            - "Use the actions on that page to create or review records."
+          without_links:
+            - "Review this module's options in Settings."
+            - "Return to Modules to see where this feature appears in your workspace."
+
+    payments:
+      transactions:
+        description: "Payments collected for this organization."
+      reconciliations:
+        description: "Settlement files from payment providers."
+      disputes:
+        description: "Chargebacks and card disputes."
+
+    users:
+      index:
+        description:        "Manage user accounts for this tenant"
+        search_placeholder: "Search users…"
+        empty_title:        "No users found"
+        empty_description:  "Create the first user for this tenant."
+        all_roles:          "All roles"
+        locked_at:          "Locked At"
+        reset_mfa_confirm:  "Reset MFA for %{name}?"
+        deactivate_confirm: "Deactivate %{name}?"
+      new:
+        title:    "New User"
+        subtitle: "Create a new user for this tenant."
+      edit:
+        title:    "Edit User"
+        subtitle: "Update details for %{name}."
+      trash:
+        title:             "Trash"
+        description:       "Accounts removed from the directory. Restore one to bring it back."
+        empty_title:       "Trash is empty"
+        empty_description: "Accounts you move to trash will appear here."
+      actions:
+        new_user:          "New User"
+        create_user:       "Create User"
+        create_user_and_continue: "Create User and Continue"
+        update_user:       "Update User"
+        create_first_user: "Create First User"
+        reset_mfa:         "Reset MFA"
+        deactivate:        "Deactivate"
+        activate:          "Activate"
+        trash:             "Trash"
+        move_to_trash:     "Move to trash"
+        restore:           "Restore"
+      roles:
+        owner:  "Owner"
+        admin:  "Admin"
+        member: "Member"
+      form:
+        first_name_placeholder:            "First name"
+        last_name_placeholder:             "Last name"
+        email_placeholder:                 "user@example.com"
+        password_placeholder_edit:         "Leave blank to keep current"
+        password_placeholder_new:          "Minimum 8 characters"
+        password_hint:                     "Leave blank to keep the current password."
+        generated_password_hint:           "A random password is generated for this account."
+        confirm_password_label:            "Confirm password"
+        password_confirmation_placeholder: "Repeat password"
+        sections:
+          account:  "Account"
+          password: "Password"
+          access:   "Access"
+        role_hint:
+          member: "— standard access."
+          admin:  "— can manage users."
+          owner:  "— full access including system settings."
+      show:
+        details:            "Details"
+        role:               "Role"
+        mfa:                "MFA"
+        mfa_configured:     "Configured (not enforced)"
+        mfa_not_set_up:     "Not set up"
+        sign_in_activity:   "Sign-In Activity"
+        sign_in_and_devices: "Sign-In & Devices"
+        sign_in_count:      "Sign-In Count"
+        last_sign_in:       "Last Sign In"
+        last_sign_in_ip:    "Last Sign-In IP"
+        current_sign_in:    "Current Sign In"
+        current_sign_in_ip: "Current Sign-In IP"
+        failed_attempts:    "Failed Attempts"
+        locked_at:          "(Locked at %{time})"
+        reset_mfa_confirm:  'Are you sure you want to reset MFA for "%{name}"? They will need to set up MFA again.'
+        deactivate_confirm: 'Are you sure you want to deactivate "%{name}"?'
+        trash_confirm:      'Move "%{name}" to trash? You can restore the account later.'
+        restore_confirm:    'Restore "%{name}"?'
+        trusted_devices:       "Trusted Devices"
+        trusted_devices_hint:  "Devices that skip two-factor at sign-in. Revoke any the user no longer recognizes."
+        trusted_devices_empty: "No trusted devices."
+        trusted_devices_count:
+          one: "%{count} device"
+          other: "%{count} devices"
+        device_unknown:        "Unknown device"
+        device_last_used:      "Last used %{time}"
+        device_expires:        "Expires %{time}"
+        trusted_device_revoke: "Revoke"
+        trusted_device_revoke_confirm: "Revoke this trusted device? The user will be asked for two-factor on their next sign-in from it."
+        profiles:
+          heading: "Domain profiles"
+          missing_description: "This user has no linked %{entity} profile in this tenant."
+          create_description: "No %{entity} profile is linked yet."
+          inactive_description: "Activate this account to create a linked %{entity} profile."
+          create_profile: "Create profile"
+          create_title: "Create %{entity} profile"
+          view_entry: "View details"
+          view_entry_label: "View details: %{entity} #%{id}"
+          no_types: "No domain profile types are available for this tenant."
+          no_fields: "No profile fields are available to display."
+
+    emails:
+      dashboard:
+        title: "Dashboard"
+        description: "Deliverability and engagement overview"
+        daily_trend: "Daily trend (30 days)"
+        quick_actions:
+          new_template: "New Template"
+          new_send_activity: "New Send Activity"
+          new_automation: "New Automation"
+        stats:
+          metric: "Metric"
+          trend_30_days: "Trend (30 days)"
+          sent: "Sent"
+          delivered: "Delivered"
+          bounced: "Bounced"
+          complained: "Complained"
+          suppressed: "Suppressed"
+          opened: "Opened"
+          clicked: "Clicked"
+          unsubscribed: "Unsubscribed"
+
+      # Phase 6 — Analytics: reports, deliverability, engagement, CSV export.
+      # Kept in a dedicated namespace separate from the parallel Phase 5 automations work.
+      analytics:
+        date_range:
+          since: "Since"
+          until: "Until"
+          apply: "Apply"
+        health:
+          description: "Deliverability and engagement health"
+        reports:
+          title: "Reports"
+          description: "Email performance reports with date ranges and filters"
+          daily_trend: "Daily trend"
+          trend: "Trend"
+          export_csv: "Export CSV"
+          stream: "Stream"
+          send_activity: "Send Activity"
+          empty_daily: "No email activity in this period."
+          empty_streams: "No stream data in this period."
+          empty_send_activities: "No send activity data in this period."
+          unknown_stream: "Unknown stream"
+          unknown_send_activity: "Unknown send activity"
+        deliverability:
+          title: "Deliverability"
+          description: "Bounce, complaint, and suppression breakdowns"
+          stats:
+            bounced: "Bounced"
+            complained: "Complained"
+            suppressed: "Suppressed"
+            failed: "Failed"
+          by_stream: "By stream"
+          by_failure_code: "By failure code"
+          recent_suppressions: "Recent suppressions"
+          count: "Count"
+          failure_code: "Failure code"
+          suppressed_at: "Suppressed at"
+          stream: "Stream"
+          email: "Email"
+          reason: "Reason"
+          empty_stream_breakdown: "No deliverability issues by stream in this period."
+          empty_failure_breakdown: "No bounce failure codes in this period."
+          empty_suppressions: "No suppressions in this period."
+        engagement:
+          title: "Engagement"
+          description: "Opens, clicks, and device breakdowns"
+          top_links: "Top clicked links"
+          devices_heading: "Devices"
+          opens_by_hour: "Opens by hour"
+          opens_by_day: "Opens by day"
+          url: "URL"
+          clicks: "Clicks"
+          device: "Device"
+          opens: "Opens"
+          hour: "Hour"
+          day: "Day"
+          devices:
+            desktop: "Desktop"
+            mobile: "Mobile"
+            tablet: "Tablet"
+          empty_top_links: "No link clicks in this period."
+          empty_devices: "No device data in this period."
+          empty_opens_by_hour: "No opens by hour in this period."
+          empty_opens_by_day: "No opens by day in this period."
+
+      segments:
+        index:
+          title:              "Segments"
+          description:        "Build reusable audience segments with rules."
+          search_placeholder: "Search segments…"
+        new:
+          title:              "New Segment"
+          subtitle:           "Create a reusable audience segment."
+        edit:
+          title:              "Edit Segment"
+          subtitle:           "Update the segment rules."
+        show:
+          rules:              "Segment Rules"
+        actions:
+          new_segment:        "New segment"
+          refresh:            "Refresh count"
+        match_count:        "Matching subscribers"
+        refreshed_at:       "Refreshed at"
+        form:
+          rules:              "Segment Rules"
+      signup_forms:
+        index:
+          title:              "Signup Forms"
+          description:        "Manage public signup forms that add subscribers to your audience."
+          search_placeholder: "Search forms…"
+        new:
+          title:              "New Signup Form"
+          subtitle:           "Create a public signup form."
+        edit:
+          title:              "Edit Signup Form"
+          subtitle:           "Update the signup form settings."
+        actions:
+          new_form:           "New signup form"
+        form:
+          key_hint:           "A stable lowercase identifier used in the public URL (letters, numbers, underscores, hyphens)."
+      suppressions:
+        title:              "Suppressions"
+        description:        "Addresses suppressed from email (hard bounces, complaints, or manual)"
+        search_placeholder: "Search addresses…"
+        empty_title:        "No suppressions"
+        empty_description:  "Bounced or complained addresses will appear here."
+        scope:              "Scope"
+        tenant:             "This tenant"
+        global:             "Global"
+        reason:             "Reason"
+        provider:           "Provider"
+        filter_reason:      "Filter by reason"
+        filter_provider:    "Filter by provider"
+        bulk_unblock:       "Unblock selected"
+        event_history:      "Event history"
+        reasons:
+          hard_bounce:      "Hard bounce"
+          complaint:        "Complaint"
+          unsubscribe:      "Unsubscribe"
+          manual:           "Manual"
+      streams:
+        title:              "Message Streams"
+        description:        "Manage sending streams, defaults, and delivery settings"
+        search_placeholder: "Search streams…"
+        empty_title:        "No streams yet"
+        empty_description:  "Create a message stream to configure sending behaviour."
+        default:            "Default"
+        tracking:           "Tracking"
+        new:
+          title:            "New Message Stream"
+          subtitle:         "Create a stream for transactional, marketing, or automated mail."
+        edit:
+          title:            "Edit Message Stream"
+          subtitle:         "Update stream settings and default status."
+        actions:
+          new_stream:       "New stream"
+        form:
+          key_hint:         "A stable lowercase identifier used in code (letters, numbers, underscores)."
+          key_readonly_hint: "The key cannot be changed after creation."
+          from_email:       "From email"
+          reply_to:         "Reply-to"
+          throttle_per_minute: "Throttle per minute"
+          tracking_enabled: "Enable open/click tracking"
+          default_for_kind: "Default for this kind"
+          kinds:
+            transactional:  "Transactional"
+            marketing:      "Marketing"
+            automated:      "Automated"
+      preference_topics:
+        title:              "Preference Topics"
+        description:        "Manage subscription topics shown in the public preference center"
+        search_placeholder: "Search topics…"
+        empty_title:        "No topics yet"
+        empty_description:  "Create a topic so users can manage their subscriptions."
+        required:           "Required"
+        default_subscribed: "Subscribed by default"
+        new:
+          title:            "New Preference Topic"
+          subtitle:         "Create a topic users can subscribe to in the preference center."
+        edit:
+          title:            "Edit Preference Topic"
+          subtitle:         "Update the topic name, description, and defaults."
+        actions:
+          new_topic:        "New topic"
+        form:
+          key_hint:         "A stable lowercase identifier used in code (letters, numbers, underscores)."
+          key_readonly_hint: "The key cannot be changed after creation."
+          description:      "Description"
+          default_subscribed: "Subscribed by default"
+          required:         "Required topic (users cannot unsubscribe)"
+      templates:
+        index:
+          title:              "Email Templates"
+          description:        "Manage reusable email templates"
+          search_placeholder: "Search templates…"
+          empty_title:        "No templates yet"
+          empty_description:  "Create your first email template to get started."
+          delete_confirm:     "Delete this template? This cannot be undone."
+          columns:
+            template: "Template"
+            messages: "Messages"
+          filters:
+            status: "Status"
+        show:
+          versions:          "Versions"
+          body_label:        "Email body"
+          body_hint:         "Tokens such as {{first_name}} are filled in when the email is sent."
+          body_empty:        "This template has no body yet."
+          plain_text_label:  "Plain-text fallback"
+          plain_text_empty:  "No plain-text fallback — a text version will be generated from the HTML."
+        preview_page:
+          title:             "Preview"
+          hint:              "Authored content with {{tokens}} shown as labels — sample values are not filled in."
+          back_to_template:  "Back to template"
+        new:
+          title:    "New Email Template"
+        edit:
+          title:        "Edit Template"
+          versions_button: "Versions"
+          send_test_label: "Send test email"
+          send_test_placeholder: "Recipient email (blank = you)"
+          send_test_submit: "Send test"
+          delete_confirm: "Are you sure?"
+        versions:
+          title: "Version History"
+          description: "History of changes for %{name}"
+          show_title: "Version from %{date}"
+          version_number: "Version %{number}"
+          current: "Current"
+          restored: "Template restored to version from %{date}."
+          restore_confirm: "Are you sure you want to restore the template to this version?"
+          columns:
+            date: "Date"
+            version: "Version"
+        actions:
+          new_template: "New Template"
+          preview: "Preview"
+          duplicate_name: "Copy of %{name}"
+        errors:
+          content_locked: "This template can't be edited while a send is still using it."
+        status:
+          in_use: "Status can't be changed while a send activity still uses this template."
+          invalid: "invalid status"
+          actions:
+            set_draft: "Set draft"
+            set_active: "Set active"
+            set_retired: "Archive"
+        form:
+          details_title:         "Template details"
+          name_placeholder:      "Welcome email"
+          subject_placeholder:   "Welcome {{First name}}!"
+          subject_token_hint: "Type {{ to insert a token."
+          token_autocomplete_no_matches: "No matching tokens"
+          body_title:            "Email body"
+          editor_label:          "Editor"
+          rich_text_body:        "Rich text body"
+          insert_token:       "Insert token"
+          html_code:             "HTML code"
+          preview_empty_placeholder: "No subject yet"
+          plain_text_fallback:   "Plain text fallback"
+          plain_text_placeholder: "Auto-generated from the body if left blank."
+          plain_text_hint_html:  "Shown by email clients that don't render HTML."
+          create_submit:         "Create template"
+          update_submit:         "Update template"
+          statuses:
+            draft: "Draft"
+            active: "Active"
+            retired: "Archived"
+          editor_types:
+            rich_text: "Rich Text"
+            code: "Code"
+          preview:
+            invalid_json: "Invalid JSON in vars"
+            vars_must_be_object: "Vars must be an object"
+            loading: "Loading..."
+            sending: "Sending..."
+            empty_subject: "(Empty Subject)"
+            empty_text: "(Empty Text)"
+            error_loading: "Error loading preview"
+            email_required: "Please enter an email address"
+            send_failed: "Failed to send test email"
+            network_error: "Network error sending test email"
+            popup_blocked: "Unable to open preview tab (popup blocked?)"
+          workspace:
+            auto_refresh: "Auto-refresh"
+          token_search_placeholder: "Search tokens…"
+          token_group_catalog: "Catalog"
+          token_group_custom: "Custom"
+          activate_immediately: "Activate template immediately"
+
+      automations:
+        index:
+          title:              "Automations"
+          description:        "Build triggered email journeys with delays, sends, and tags."
+          search_placeholder: "Search automations…"
+          empty_title:        "No automations yet"
+          empty_description:  "Create your first automation to send emails when users join or receive a tag."
+        new:
+          title:    "New Automation"
+          subtitle: "Create a triggered email journey."
+        edit:
+          title:    "Edit Automation"
+          subtitle: "Update the workflow, trigger, and steps."
+        show:
+          description:      "Automation details and step overview"
+          steps_heading:    "Steps"
+          delay_minutes:
+            one:   "Wait %{count} minute"
+            other: "Wait %{count} minutes"
+          template_missing: "Template no longer exists"
+          tag_missing:      "Tag no longer exists"
+          no_steps:         "No steps configured"
+          delete_confirm:   "Delete this automation?"
+        actions:
+          new_automation: "New automation"
+        columns:
+          trigger: "Trigger"
+        form:
+          trigger_label:          "Trigger"
+          steps_heading:          "Steps"
+          steps_hint:             "Steps run in order. Delays pause the journey, send_email dispatches a template, and add_tag applies a tag."
+          step_type_label:        "Step type"
+          delay_minutes_label:    "Delay minutes"
+          email_template_label:   "Email template"
+          select_template:        "— select template —"
+          tag_label:              "Tag to apply"
+          select_tag:             "— select tag —"
+          add_step:               "Add step"
+          remove_step:            "Remove step"
+        step_types:
+          delay:      "Delay"
+          send_email: "Send email"
+          add_tag:    "Add tag"
+        trigger_kinds:
+          user_created: "User created"
+          tag_added:    "Tag added"
+      block_list:
+        title:       "Block-List"
+        description: "Users who opted out of bulk email. Transactional email is unaffected."
+      send_activities:
+        statuses:
+          pending:    "Pending"
+          processing: "Processing"
+          cancelled:  "Cancelled"
+          failed:     "Failed"
+          succeed:    "Succeed"
+        errors:
+          lists_blank:      "must include at least 1 list"
+          lists_too_many:   "may include at most %{max} lists"
+        index:
+          description:        "Send a template to an audience list"
+          search_placeholder: "Search send activity…"
+          empty_title:        "No send activity yet"
+          empty_description:  "Create your first send activity to email an audience list."
+        new:
+          title:    "New Send Activity"
+          subtitle: "Choose a template and audience list to send."
+        edit:
+          title:    "Edit Send Activity"
+          subtitle: "Update the send activity settings."
+        actions:
+          new_send_activity: "New Send Activity"
+        dead_letter:
+          stuck_reason: "Stuck in 'processing' past the maximum allowed duration; dead-lettered by the reaper."
+        form:
+          template_label:      "Template"
+          list_label:          "List"
+          lists_label:         "Lists"
+          lists_hint:          "Select up to %{max} lists. Recipients on more than one list receive a single email."
+          add_list:            "Add list"
+          remove_list:         "Remove list"
+          select_template:     "— select template —"
+          select_list:         "— select list —"
+          schedule_label:      "Schedule time"
+          timing_label:        "Send timing"
+          send_now_option:     "Send Now"
+          schedule_at_option:  "Schedule at"
+          refresh_lists:       "Refresh lists"
+          refresh_lists_error: "We couldn't refresh the lists. Please try again."
+          refresh_templates:   "Refresh templates"
+          refresh_templates_error: "We couldn't refresh the templates. Please try again."
+          create_list:         "Create list"
+          create_template:     "Create template"
+          recurrence_label:    "Recurrence (optional)"
+          recurrence_examples: "Examples: FREQ=DAILY;INTERVAL=1, FREQ=WEEKLY;INTERVAL=2, FREQ=MONTHLY"
+          recurrence_presets:
+            none:              "None"
+            daily:             "Daily"
+            weekly:            "Weekly"
+            monthly:           "Monthly"
+          segment_label:       "Audience Segment"
+          select_segment:      "— optional segment —"
+          segment_hint:        "Further refine the list by a reusable segment."
+          stream_label:        "Send Stream"
+          select_stream:       "— default stream —"
+          stream_hint:         "Override the stream used for delivery."
+          ab_test_enabled:     "Enable A/B test"
+          winner_metric:       "Winner metric"
+          metrics:
+            open_rate:         "Open rate"
+            click_rate:        "Click rate"
+          variant_label:       "Variant %{name}"
+          variant_subject_placeholder: "Subject override (optional)"
+          variant_body_placeholder: "Body HTML override (optional)"
+        review:
+          no_segment:          "None"
+          default_stream:      "Default"
+          send_now:            "Send immediately"
+        wizard:
+          progress_label:      "Send activity builder progress"
+          invalid_step:        "is not a valid wizard step"
+          invalid_recurrence_preset: "is not a supported recurrence option"
+          steps:
+            audience:          "Audience"
+            content:           "Content"
+            schedule:          "Schedule"
+            review:            "Review"
+          errors:
+            field_required:    "Please complete this field to continue."
+            list_required:     "Select an email list to continue."
+            lists_too_many:    "Select at most %{max} lists to continue."
+            template_required: "Select an email template to continue."
+            name_required:     "Enter a name for this send activity."
+            timing_required:   "Choose Send now or Schedule at to continue."
+            schedule_required: "Choose a date and time, or select Send now."
+        show:
+          send_now:      "Send Now"
+          send_confirm:  "Send this activity now?"
+          pause:         "Pause"
+          resume:        "Resume"
+          cancel_confirm: "Cancel this send activity?"
+          failure_reason_label: "Failure reason"
+          template:      "Template"
+          list:          "List"
+          lists:         "Lists"
+          unique_recipients: "Unique recipients"
+          scheduled:     "Scheduled"
+          not_scheduled: "not scheduled"
+          recurrence:    "Recurrence"
+          started:       "Started"
+          completed:     "Completed"
+          sent:          "Sent"
+          delivered:     "Delivered"
+          failed:        "Failed"
+          bounced:       "Bounced"
+          suppressed:    "Suppressed"
+      lists:
+        index:
+          title:              "Email Lists"
+          description:        "Manage subscriber lists for email sends"
+          search_placeholder: "Search lists…"
+          empty_title:        "No lists yet"
+          empty_description:  "Create your first list to start sending email."
+          columns:
+            list:     "List"
+            audience: "Audience"
+          filters:
+            type: "Type"
+        new:
+          title:    "New Email List"
+          subtitle: "Create a new subscriber list for email sends."
+        edit:
+          title:    "Edit List"
+          subtitle: "Update the subscriber list settings."
+        actions:
+          new_list: "New List"
+        form:
+          audience_segment: "Audience conditions"
+          audience_segment_hint: "Include subscribers that match these conditions when the list is used for a send activity."
+          types:
+            static: "Static list"
+            dynamic: "Dynamic segment"
+          static_emails:          "Member emails"
+          static_emails_placeholder: "one@example.com\ntwo@example.com"
+          static_emails_hint:     "Enter one email per line. Only existing members of this organization are added."
+        preview:
+          button: "Preview"
+          heading: "Matching subscribers"
+          match_count: "%{count} subscribers match"
+          empty_title: "No subscribers match"
+          empty_description: "Adjust the audience conditions and preview again."
+          malformed: "Segment rules were malformed — please rebuild the audience."
+          hint: "Preview to see which subscribers match these conditions."
+        show:
+          audience:             "Audience"
+          segment_rules:        "Segment rules"
+          segment_rules_hint:   "Conditions evaluated when this list is used for a send."
+          segment_rules_empty:  "No audience conditions yet — edit the list to add them."
+          members:              "Members"
+          members_hint:         "Subscribers included in this static list."
+          members_empty:        "No members yet — edit the list to add email addresses."
+          type:                 "Type"
+          delete_confirm:       "Are you sure you want to delete this list?"
+        default_first_name: "Subscriber"
+        default_last_name:  "User"
+
+    sms:
+      messages:
+        index:
+          title:              "SMS Messages"
+          description:        "View sent and received SMS messages"
+          search_placeholder: "Search messages…"
+          empty_title:        "No messages yet"
+          empty_description:  "SMS messages will appear here once they are sent."
+        show:
+          heading:           "SMS Message #%{id}"
+          details_title:     "Message Details"
+          to:                "To"
+          template:          "Template"
+          vendor_message_id: "Vendor Message ID"
+          sent_at:           "Sent At"
+          delivered_at:      "Delivered At"
+          failure:           "Failure"
+          variables:         "Variables"
+      opt_outs:
+        title:              "Opt-outs"
+        description:        "Recipients suppressed from SMS (replied STOP, or manually blocked)"
+        search_placeholder: "Search numbers…"
+        empty_title:        "No opt-outs"
+        empty_description:  "Numbers that opt out of SMS will appear here."
+        scope:              "Scope"
+        tenant:             "This tenant"
+        global:             "Global"
+        reason:             "Reason"
+      errors:
+        vars_must_be_object: "Vars must be an object"
+        daily_cap_exceeded: "Daily SMS send cap exceeded."
+        credentials_missing: "No active SMS credentials are configured for this environment."
+        transport_error: "The SMS provider could not be reached. Please try again."
+        provider_code_missing: "This template has no code for the %{provider} provider."
+
+    flash:
+      templates:
+        created:           "Template created"
+        updated:           "Template updated"
+        deleted:           "Template deleted"
+        duplicated:        "Template duplicated"
+        delete_restricted: "Cannot delete template — emails reference it"
+        invalid_email:     "%{email} is not a valid email address."
+        test_sent:         "Test email sent to %{email}."
+        test_sent_multi:   "Test email sent to %{count} recipient(s)."
+        daily_cap_exceeded: "Daily email send cap reached. Try again tomorrow or raise the cap in Settings."
+        credentials_missing: "No active email credential is configured for this environment."
+        suppressed:        "That address is on the suppression list, so the test was not sent."
+        blank_content:     "Subject and body can't be blank."
+
+
+      automations:
+        created:           "Automation created"
+        updated:           "Automation updated"
+        deleted:           "Automation deleted"
+        delete_restricted: "Cannot delete automation — enrollments reference it"
+      send_activities:
+        created:               "Send activity created"
+        updated:               "Send activity updated"
+        deleted:               "Send activity deleted"
+        saved:                 "Send activity saved"
+        cancelled:             "Send activity cancelled"
+        sending:               "Send activity sending"
+        paused:                "Send activity paused"
+        resumed:               "Send activity resumed"
+        delete_status_blocked: "Cannot delete a send activity while it is %{status}. Pause or cancel it first."
+        edit_status_blocked: "Cannot edit a send activity while it is %{status}. Only draft or scheduled activities can be edited."
+        not_startable: "This send activity can't be sent now (it is %{status})."
+        not_cancellable: "This send activity can't be cancelled (it is %{status})."
+      block_list:
+        user_unblocked:  "User unblocked."
+        users_unblocked: "%{count} user(s) unblocked."
+      lists:
+        created:           "List created"
+        updated:           "List updated"
+        deleted:           "List deleted"
+        delete_restricted: "Cannot delete list — a send activity still references it"
+        unknown_emails:    "These addresses are not members of this organization and were not added: %{emails}"
+      segments:
+        created:           "Segment created"
+        updated:           "Segment updated"
+        deleted:           "Segment deleted"
+        delete_restricted: "Cannot delete segment — lists still use it"
+        refresh_queued:    "Segment count refresh queued"
+      signup_forms:
+        created:           "Signup form created"
+        updated:           "Signup form updated"
+        deleted:           "Signup form deleted"
+        delete_restricted: "Cannot delete signup form"
+      streams:
+        created:                "Stream created"
+        updated:                "Stream updated"
+        deleted:                "Stream deleted"
+        delete_default_blocked: "Cannot delete the only active stream for this kind."
+      suppressions:
+        unblocked:              "Selected suppressions removed."
+      preference_topics:
+        created:                "Preference topic created"
+        updated:                "Preference topic updated"
+        deleted:                "Preference topic deleted"
+        delete_restricted:      "Cannot delete preference topic — user preferences reference it"
+      users:
+        created:                 'User "%{name}" was successfully created.'
+        updated:                 'User "%{name}" was successfully updated.'
+        activated:               'User "%{name}" has been activated.'
+        deactivated:             'User "%{name}" has been deactivated.'
+        deactivate_self_blocked: "You cannot deactivate your own account."
+        mfa_reset:               'MFA has been reset for "%{name}".'
+        mfa_reset_self_blocked:  "You cannot reset your own MFA. Ask another admin to do it."
+        mfa_not_configured:      "MFA is not configured for this user."
+        owner_account_protected: "Only the platform owner can manage the platform owner's account."
+        trusted_device_revoked:  "Trusted device revoked."
+        profile_created:         "%{entity} profile created and linked."
+        invalid_role:            "Choose a valid role."
+        current_password_invalid: "Current password is invalid."
+        trashed:                  'User "%{name}" was moved to trash.'
+        restored:                 'User "%{name}" was restored.'
+        trash_self_blocked:       "You cannot move your own account to trash."

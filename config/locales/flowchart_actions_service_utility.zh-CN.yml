@@ -1,0 +1,454 @@
+---
+zh-CN:
+  flowchart_actions:
+    invoke_service:
+      label: 调用服务
+      description: 调用外部或内部服务
+      fields:
+        serviceClass:
+          label: 服务类
+          help: 本步骤调用的白名单 Ruby 类。
+          placeholder: 例如 PaymentService 或 Payments::Processor
+        invocationStyle:
+          label: 调用方式
+          help: 类与方法的调用形态。
+          options:
+            call: Class.call(*args, **kwargs)
+            new_and_call: Class.new(*args, **kwargs).call
+            class_method: Class.<methodName>(*args, **kwargs)
+            instance_method: Class.new.<methodName>(*args, **kwargs)
+        methodName:
+          label: 方法名
+          help: class_method、instance_method 时必填。
+          placeholder: class_method / instance_method 时必填
+        args:
+          label: 位置参数
+          help: 传给调用的位置参数。
+          placeholder: 参数名 → 存放取值的上下文变量
+        kwargs:
+          label: 关键字参数
+          help: 传给调用的关键字参数。
+          placeholder: 关键字 → 存放取值的上下文变量
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+          placeholder: 例如 service_result
+        passContext:
+          label: 传入上下文
+          help: "将运行上下文作为 ctx: 关键字传入。被调用的服务必须接受该参数。"
+      errors:
+        invalid_class_name: "%{field} 必须是合法的 Ruby 类名"
+        not_allowlisted: "%{field} 不在白名单中"
+        active_record_class: "%{field} 不能是 ActiveRecord 类"
+        invalid_method_name: "%{field} 必须是合法的 Ruby 方法名"
+        forbidden_method: "%{field} 不能调用 %{method}"
+        invalid_keyword: "关键字参数名 %{name} 不是合法标识符"
+        missing_call: "%{field} 必须定义 self.call(**kwargs)"
+    audit_log:
+      label: 审计日志
+      description: 写入审计日志
+      fields:
+        eventType:
+          label: 事件类型
+          help: 写入审计事件与日志行的稳定事件名。
+          placeholder: 例如 user.login、order.approved
+        resourceType:
+          label: 资源类型
+          help: 事件所指向的资源类型。
+          placeholder: 例如 Order、User
+        resourceId:
+          label: 资源 ID（上下文键）
+          help: 存放资源 ID 的上下文路径。
+          placeholder: 例如 order_id
+        actorId:
+          label: 操作者 ID（上下文键）
+          help: 存放操作者 ID 的上下文路径。
+          placeholder: 例如 acting_user_id
+        actorType:
+          label: 操作者类型
+          help: 操作者类型（用户、系统等）。
+          placeholder: 例如 User、System
+        metadata:
+          label: 元数据
+          help: 附加在审计事件与日志行上的键值对。
+          placeholder: 字段 → 上下文键或 ctx.path
+        ipAddress:
+          label: IP 地址（上下文键）
+          help: 存放客户端 IP 的上下文路径。
+          placeholder: 例如 client_ip
+        userAgent:
+          label: User Agent（上下文键）
+          help: 存放客户端 UA 的上下文路径。
+          placeholder: 例如 client_agent
+        severity:
+          label: 严重级别
+          help: 写入审计事件并用于日志行的严重级别。
+          options:
+            debug: debug
+            info: info
+            warn: warn
+            error: error
+            critical: critical
+        outcome:
+          label: 审计结果
+          help: 写入审计事件元数据的成功或失败标记。
+          options:
+            success: 成功
+            failure: 失败
+        changesVariable:
+          label: 变更
+          help: 存放差异哈希的上下文路径，写入 metadata.changes。
+          placeholder: 例如 record_diff
+    ai_inference:
+      label: AI 推理
+      description: 运行 AI/ML 推理
+      fields:
+        provider:
+          label: 提供商
+          help: 远程推理厂商。
+          options:
+            openai: openai
+            anthropic: anthropic
+            cohere: cohere
+            ollama: ollama
+        model:
+          label: 模型
+          help: 发给提供商的模型标识。
+          placeholder: 例如 gpt-4o、claude-4-sonnet
+        promptTemplate:
+          label: 提示词模板
+          help: 含 {{ variable }} 占位符的提示词。
+          placeholder: 含 {{ variable }} 占位符的提示词……
+        systemPrompt:
+          label: 系统提示
+          help: 可选的系统指令。
+          placeholder: 系统指令……
+        maxTokens:
+          label: 最大 Token 数
+          help: 向提供商请求的最大 token 数。
+        temperature:
+          label: 温度
+          help: 采样温度。
+          placeholder: 0 到 2
+        tools:
+          label: 工具
+          help: 告知提供商的函数名（不在本地执行）。
+        outputFormat:
+          label: 输出格式
+          help: 模型文本的存储形态。
+          options:
+            text: text
+            json: json
+            structured: structured
+        jsonRepair:
+          label: 修复 JSON
+          help: 解析 JSON 输出前去掉 Markdown 代码围栏。
+        onInvalidJson:
+          label: JSON 无效时
+          help: JSON 输出无法解析时的处理方式。
+          options:
+            fail: 失败并停止
+            as_text: 回退为原文
+        resultVar:
+          label: 保存结果为
+          help: 后续步骤读取的变量名。
+      errors:
+        unsupported_provider: 该提供商不支持工具
+        invalid_tool_name: "工具名 %{name} 不是合法标识符"
+    i18n_translate:
+      label: I18n 翻译
+      description: 使用 I18n 翻译文本
+      fields:
+        key:
+          label: 翻译键
+          help: 要查找的 I18n 键。
+          placeholder: 例如 notifications.new_orders
+        locale:
+          label: 语言区域
+          help: 使用的语言区域。留空则用请求语言。
+          placeholder: 例如 I18n.locale、'en' 或 ctx.user.locale
+        localeFrom:
+          label: 语言区域来源
+          help: 存放语言区域的上下文路径；设置后覆盖“语言区域”字段。
+          placeholder: 例如 locale
+        fallbackLocale:
+          label: 回退语言区域
+          help: 主查找缺失时尝试的语言区域。
+          placeholder: 翻译缺失时尝试的语言，例如 'en'
+        interpolations:
+          label: 插值
+          help: 代入译文的取值。
+          placeholder: 名称 => 取值
+        scope:
+          label: 作用域
+          help: 可选的 I18n 作用域。
+          placeholder: i18n 作用域，例如 activerecord.models
+        default:
+          label: 默认值
+          help: 键缺失时的回退文本。
+          placeholder: 回退译文
+        count:
+          label: 数量
+          help: 复数形式所用数量。
+          placeholder: 复数数量，例如 ctx.items_count
+        raiseOnMissing:
+          label: 缺失时失败
+          help: 译文缺失时使步骤失败。
+        resultVar:
+          label: 保存结果为
+          help: 后续步骤读取的变量名。
+    currency_convert:
+      label: 货币换算
+      description: 在不同货币之间换算
+      fields:
+        amount:
+          label: 金额
+          help: 存放金额的上下文路径。
+          placeholder: 存放金额的上下文键
+        fromCurrency:
+          label: 源货币
+          help: 源货币代码。
+          placeholder: 例如 USD
+        toCurrency:
+          label: 目标货币
+          help: 目标货币代码。
+          placeholder: 例如 EUR
+        rateSource:
+          label: 汇率来源
+          help: 汇率的读取位置。
+          options:
+            ctx: 上下文中的目标汇率
+            ctx_key: 上下文中的汇率表（交叉汇率）
+            config: 静态汇率表
+            fixed: 固定汇率
+            external: 外部汇率接口
+        fixedRate:
+          label: 固定汇率
+          help: rateSource 为 fixed 时使用的汇率。
+          placeholder: 例如 0.92
+        rounding:
+          label: 舍入
+          help: 换算金额的舍入方式。
+          options:
+            half_up: half_up
+            half_even: half_even
+            floor: floor
+            ceiling: ceiling
+        precision:
+          label: 精度
+          help: 舍入后保留的小数位。
+          placeholder: 小数位数
+        cacheRates:
+          label: 缓存汇率
+          help: 为本租户缓存成功的外部汇率。
+        ratesVariable:
+          label: 汇率变量
+          help: 存放汇率表的上下文路径。
+          placeholder: "存放汇率哈希的上下文键（默认：exchange_rates）"
+        staticRates:
+          label: 静态汇率
+          help: rateSource 为 config 时使用的内联汇率表。
+          placeholder: "静态汇率哈希，例如 { USD: 1.0, EUR: 0.92 }"
+        rateApiUrl:
+          label: 汇率接口地址
+          help: 外部汇率端点。
+          placeholder: 例如 https://api.exchangerate.host/latest
+        resultVar:
+          label: 保存结果为
+          help: 后续步骤读取的变量名。
+        fromCurrencyFrom:
+          label: 源币种变量
+          help: 设置后覆盖“源币种”的上下文路径。
+          placeholder: 例如 source_currency
+        toCurrencyFrom:
+          label: 目标币种变量
+          help: 设置后覆盖“目标币种”的上下文路径。
+          placeholder: 例如 target_currency
+        onMissingRate:
+          label: 缺汇率时
+          help: 找不到汇率时的处理方式。
+          options:
+            fail: 失败并停止
+            identity: 原样返回
+      errors:
+        invalid_currency: "%{field} 必须是三字母 ISO 货币代码"
+    geolocation_lookup:
+      label: 地理定位查询
+      description: 查询地理位置数据
+      fields:
+        mode:
+          label: 模式
+          help: ip_to_location 或 distance
+          placeholder: ip_to_location 或 distance
+          options:
+            ip_to_location: ip_to_location
+            distance: distance
+        sourceVariable:
+          label: 源
+          help: 本步骤读取的上下文路径。
+          placeholder: 例如 ip_address
+        otherVariable:
+          label: 另一值
+          help: 距离模式下的第二组坐标。
+          placeholder: 例如 destination
+        provider:
+          label: 提供商
+          help: 地理编码厂商。
+          options:
+            google: google
+            mapbox: mapbox
+        lookupKey:
+          label: 查找键
+          help: 如何解释源值。
+          options:
+            ip: ip
+            postal: postal
+            address: address
+            coords: coords
+        fieldsToReturn:
+          label: 返回字段
+          help: 可选，只保留部分位置字段。
+          placeholder: 字段名 → 标签
+        fallbackProvider:
+          label: 回退提供商
+          help: 主查询为空时使用的第二厂商。
+          options:
+            google: google
+            mapbox: mapbox
+        cacheResults:
+          label: 缓存结果
+          help: 为本租户缓存成功的查询。
+        language:
+          label: 语言
+          help: 发送给地理编码厂商的语言代码。
+          placeholder: 例如 en 或 zh-CN
+        resultVar:
+          label: 保存结果为
+          help: 后续步骤读取的变量名。
+    barcode_generate:
+      label: 生成条码
+      description: 生成条码
+      fields:
+        sourceVariable:
+          label: 源
+          help: 存放待编码内容的上下文路径。
+          placeholder: 存放条码数据的上下文键（例如 sku）
+        format:
+          label: 条码格式
+          help: 符号体系，含二维码。
+          options:
+            code128: Code128
+            code39: Code39
+            ean13: EAN-13
+            ean8: EAN-8
+            upca: UPC-A
+            itf: ITF
+            codabar: Codabar
+            qr: QR
+        width:
+          label: 宽度（模块）
+          help: 模块宽度（像素）。
+          placeholder: 模块宽度（像素）
+        height:
+          label: 高度
+          help: 条高（像素）。
+          placeholder: 条高（像素）
+        margin:
+          label: 边距
+          help: 静区 / 边距（像素）。
+          placeholder: 静区 / 边距（像素）
+        outputFormat:
+          label: 输出格式
+          help: 写入结果变量的图像编码。
+          options:
+            png: PNG
+            svg: SVG
+            jpg: JPG
+            base64: Base64（PNG）
+            ascii: ASCII
+        includeText:
+          label: 包含文本
+          help: 绘制可读文字（仅 SVG）。
+        textFont:
+          label: 文字字体
+          help: 可读文字所用字体。
+          placeholder: 例如 Helvetica
+          options:
+            helvetica: Helvetica
+            arial: Arial
+            dejavusans: DejaVuSans
+            freesans: FreeSans
+        size:
+          label: 尺寸
+          help: 二维码模块尺寸（像素）。
+          placeholder: 模块尺寸（像素/模块）
+        errorCorrection:
+          label: 纠错级别
+          help: 二维码纠错级别。
+          options:
+            l: L（低约 7%）
+            m: M（中约 15%）
+            q: Q（四分位约 25%）
+            h: H（高约 30%）
+        colorDark:
+          label: 深色
+          help: 二维码深色模块颜色。
+          placeholder: "#000000"
+        colorLight:
+          label: 浅色
+          help: 二维码浅色模块颜色。
+          placeholder: "#FFFFFF"
+        resultVar:
+          label: 保存结果为
+          help: 后续步骤读取的变量名。
+          placeholder: 存放结果的上下文键
+    template_render:
+      label: 渲染模板
+      description: 用数据渲染模板
+      fields:
+        template:
+          label: 模板
+          help: 含 {{ variable }} 占位符的 Liquid 模板。
+          placeholder: Hello {{ name }}
+        variables:
+          label: 变量
+          help: 覆盖运行上下文的额外绑定。
+          placeholder: 名称 => 上下文表达式
+        strictVariables:
+          label: 严格变量
+          help: 引用缺失变量时失败。
+        outputFormat:
+          label: 输出格式
+          help: 纯文本保留原值；HTML 会转义插值。
+          options:
+            text: 纯文本
+            html: HTML
+        trimWhitespace:
+          label: 去除空白
+          help: 去掉渲染结果的首尾空白。
+        resultVar:
+          label: 保存结果为
+          help: 后续步骤读取的变量名。
+          placeholder: 例如 rendered
+  flowchart_runtime:
+    errors:
+      invoke_service:
+        failed: 服务无法调用（%{reason}）。
+        rejected: 服务拒绝了该请求。
+      ai_inference:
+        failed: 推理请求失败（%{reason}）。
+        empty: 模型返回了空响应。
+        not_configured: 尚未配置生成用的模型提供商。
+        unsupported_provider: 当前生成提供商无法运行此步骤。
+      i18n_translate:
+        failed: 无法查找译文（%{reason}）。
+      currency_convert:
+        failed: 金额无法换算（%{reason}）。
+      geolocation_lookup:
+        failed: 无法解析位置（%{reason}）。
+        empty: 未返回位置。
+        invalid_coordinates: 两个点都需要纬度和经度。
+      barcode_generate:
+        failed: 无法生成条码（%{reason}）。
+      template_render:
+        failed: 无法渲染模板（%{reason}）。

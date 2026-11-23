@@ -1,0 +1,8 @@
+<%# Read by the entity-quick-add-dialog controller; its opener then reloads the record page, which shows the kept notice. %>
+<turbo-frame id="<%= Admin::Entities::QuickAddDialogComponent.frame_id(quick_add_depth) %>">
+  <p role="status"
+     class="py-16 text-center text-body-sm text-text-muted"
+     data-entity-quick-add-dialog-target="created"
+     data-entry-id="<%= @entry.id %>"
+     data-entry-label=""><%= flash[:notice] %></p>
+</turbo-frame>

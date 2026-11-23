@@ -1,0 +1,255 @@
+en:
+  sms_campaign_ui:
+    shared:
+      navigation: SMS workspace
+      errors: Please correct the following errors.
+      evaluated_at: Evaluated at
+      refresh: Refresh
+      reload_saved: Reload saved values
+    fields:
+      consent_status: Marketing consent
+      custom_attributes_json: Custom attributes (JSON)
+      occurred_at: Occurred at
+      reference: Evidence reference
+      statement: Consent statement
+      segment_rules_json: Segment rules (JSON)
+      segment_id: Segment
+      template_id: Approved marketing template
+      variable_map_json: Variable mappings (JSON)
+      send_timing: Delivery timing
+      scheduled_local: Local date and time
+      quiet_hours_start: Quiet hours start (0–23)
+      quiet_hours_end: Quiet hours end (0–23)
+      frequency_window_hours: Frequency window (hours)
+      send_rate_per_minute: Send rate (recipients/minute)
+      deadline_hours: Deadline (hours)
+      phone_field: Telephone field
+      name_field: Name field
+      attribute_map_json: Custom attribute mappings (JSON)
+    statuses:
+      sent: API accepted
+    sources:
+      recipient_unsubscribe: Recipient unsubscribe
+      provider_opt_out: Provider opt-out
+    encodings:
+      gsm7: GSM-7
+      ucs2: UCS-2
+      utf16: UTF-16
+    contacts:
+      description: Manage phone numbers and record explicit marketing permission.
+      add: Add contact
+      edit: Edit contact
+      save: Save contact
+      back: Back to contacts
+      sync: Sync from Entity
+      permission: Marketing permission
+      eligibility: Send eligibility
+      consent_changed_at: Last recorded consent change
+      synced_at: Last synchronized
+      history: Consent history
+      no_history: No consent events recorded
+      recorded_at: Recorded at
+      actor: Actor
+      evidence: Evidence
+      record_consent: Record consent event
+      grant: Grant consent
+      revoke: Revoke consent
+      archive: Archive contact
+      restore: Restore contact
+      archive_help: Archiving retains consent evidence and campaign history. Archived contacts cannot receive campaign messages.
+      no_implied_consent: Adding a contact does not grant SMS consent.
+      phone_help: Enter an international number or a national number with its country code.
+      country_help: Use a two-letter country code, such as CN. Country does not determine timezone.
+      timezone_help: Use an IANA timezone, such as Asia/Shanghai. A blank contact timezone uses the campaign timezone.
+      attributes_help: 'Use up to 32 scalar attributes, at most 8 KiB in total. Keys use lowercase letters, digits, and underscores. Example: {"city":"Shanghai","vip":true}. Nested objects and arrays are not allowed.'
+      occurred_help: Enter an ISO 8601 timestamp with an explicit offset, such as 2026-10-13T10:00:00+08:00. Future times are not allowed.
+      statement_help: Required when granting consent. Record the actual marketing permission the recipient gave.
+      grant_help: Consent and sendability are separate. Recording a grant does not remove an existing opt-out.
+      empty_title: Add your first SMS contact
+      search: Search name or phone
+    segments:
+      description: Build dynamic audiences from contact fields and scalar attributes.
+      create: Create segment
+      edit: Edit segment
+      save: Save segment
+      back: Back to segments
+      details: Segment details
+      rules: Audience rules
+      samples: Sample contacts
+      rules_help: AND/OR joins apply left to right unless nested in a group. An empty root considers all contacts. Matching does not grant marketing permission.
+      invalid_rules_help: Correct the original rules JSON before previewing again. Invalid rules never select all contacts.
+      delete: Delete segment
+      delete_help: A segment referenced by a draft cannot be deleted. Review dependent campaigns first.
+      empty_title: Create your first SMS segment
+      empty_help: Segments dynamically match contacts. Add contacts, then define the audience you need.
+      search: Search segments
+    campaigns:
+      description: Plan, launch, and report on targeted messages.
+      create: Create campaign
+      edit: Edit draft
+      save_draft: Save draft
+      preview: Preview campaign
+      launch: Launch campaign
+      schedule: Schedule campaign
+      cancel: Cancel remaining messages
+      report: View report
+      csv: Download CSV
+      back: Back to campaigns
+      steps_label: Campaign sections
+      step: '%{number} %{label}'
+      all_contacts: All contacts
+      matched: Matched contacts
+      eligible: Currently eligible
+      audience_estimate: Audience estimate
+      excluded_counts: Excluded contacts
+      deferred_counts: Eligible contacts waiting
+      manage_contacts: Manage contacts
+      manage_segments: Manage segments
+      eligibility_help: Only active contacts with positive marketing consent and no opt-out are eligible. Segment membership alone does not permit sending.
+      start_snapshot_help: Audience membership is captured when sending starts.
+      preview_needed: Preview this audience to see current counts.
+      no_contacts: Add contacts or explicitly sync from an Entity, then record consent separately.
+      choose_template: Choose a marketing template
+      no_templates: No active approved marketing templates are available. Save your draft and ask the platform owner to configure a template.
+      sms_settings: SMS settings
+      platform_templates: Manage platform templates
+      template_key: Template key
+      required_vars: Required variables
+      mapping_help: Map exactly the selected template's variables. Use a field with an explicit fallback or a literal value. Missing or blank fields without a fallback skip that recipient. A variable-free template uses {}.
+      allowed_fields: 'Permitted fields: name, phone_e164, country_code, timezone, curated attributes.<key>, and the server-generated unsubscribe_url. No expressions or code are evaluated.'
+      mapping_example_help: This example shows a contact field with fallback, a literal offer, and a signed unsubscribe URL. Replace the example keys with the selected template's required variables.
+      sample_message: Sample message
+      sample: Sample contact
+      automatic_sample: Automatic sample
+      sample_help: Select a contact and submit Preview campaign to regenerate the sample. A sample does not add the contact to the audience or override permission.
+      preview_unavailable: Message text is managed by the provider; preview text is unavailable.
+      encoding: Estimated encoding
+      units: Estimated units
+      segments: Estimated segments
+      estimate_help: Estimates use the approved preview mirror only; actual provider segment counts may differ.
+      scheduled_help: Required only for scheduled campaigns. Incomplete drafts can be saved.
+      timezone_help: Use an IANA timezone, such as Asia/Shanghai. Ambiguous or nonexistent local times must be corrected.
+      quiet_hours: Quiet hours
+      quiet_help: Use the recipient's timezone, falling back to the campaign timezone. Messages wait until quiet hours end, only before the absolute deadline.
+      frequency_help: Allow one campaign attempt per phone within this window, including unknown outcomes.
+      rate_help: This limits campaign admission. The shared account ceiling and other traffic can further delay dispatch.
+      deadline_help: The deadline starts at the intended campaign start and does not reset after quiet hours or other delays.
+      save_first: Save this draft to launch it from the review page.
+      saved_settings: Saved campaign settings
+      blockers: Resolve before launch
+      review_required: Review the saved settings and resolve missing requirements before launching. Edit mappings or add consented contacts, then preview again.
+      acceptance_help: Provider acceptance is not confirmed delivery. Delivery updates may arrive after dispatch work is complete.
+      cancel_help: Messages already attempted will continue to receive delivery updates.
+      completed_help: Completed means dispatch work is finished. Provider delivery updates can still arrive later; unknown does not mean failed.
+      delete: Delete draft
+      delete_help: Delete this unlaunched draft. Launched campaigns and delivery reports are retained.
+      sending_facts: Sending facts
+      intended_start_at: Intended start
+      expires_at: Absolute deadline
+      earliest_dispatch_at: Earliest dispatch
+      account_rate_per_second: Shared account rate (messages/second)
+      effective_rate_per_minute: Effective ceiling (recipients/minute)
+      estimated_minimum_duration_seconds: Minimum estimated duration (seconds)
+      duration_help: This is a lower bound. Shared traffic, recipient quiet hours, and provider queues can extend sending time.
+      launched_at: Launched at
+      started_at: Started at
+      heartbeat_at: Last worker heartbeat
+      finished_at: Dispatch work finished at
+      empty_title: Create your first SMS campaign
+      empty_help: Select a consented audience, personalize approved content, and review before launching.
+      search: Search campaigns
+    metrics:
+      matched_count: Matched
+      eligible_at_start_count: Eligible at start
+      attempted_count: Attempted
+    report:
+      title: Delivery report
+      campaign_details: Campaign details
+      not_started: The audience will be captured when sending starts
+      outcomes: Delivery outcomes and milestones
+      milestone_help: Attempted and API accepted are historical milestones. Delivery states are current outcomes. These counts overlap and must not be added together.
+      skips_delays: Skips and delays
+      skip_counts: Terminal reasons
+      deferred_counts: Current delays
+      snapshot_at: Audience snapshot at
+      refreshed_at: Report evaluated at
+      delivery_rate: Delivery rate
+      delivery_rate_help: Delivered divided by attempted. With no attempts the rate is unknown.
+      provider_segments_missing_count: Messages without a provider segment count
+      segment_help: Only positive recorded provider segment facts are summed. Missing counts remain unknown. This is not a billing quote.
+      search: Search recipient name or phone
+      message_details: Message details
+      attempted_at: Attempted at
+      current_delay: Current delay
+      no_recipients: No recipient records
+    entity_sync:
+      title: Sync SMS contacts from an Entity
+      description: Preview and explicitly synchronize bounded batches of contact data.
+      choose_source: Choose source
+      choose_entity: Choose an Entity
+      choose_phone: Choose a telephone field
+      load_fields: Load fields
+      mapping: Mapping
+      attributes_help: 'Map contact attribute keys to scalar Entity field slugs. Example: {"city":"city","vip":"vip"}. No permission fields are imported.'
+      no_consent: Synchronization does not grant consent.
+      no_sources: No accessible supported Entity sources are available.
+      no_phone_fields: Select a supported Entity with a telephone value-type field. A phone-like label is not sufficient.
+      preview: Preview first 100
+      preview_title: Preview batch
+      result_title: Batch result
+      execute: Sync this batch
+      continue: Preview next 100
+      scanned: Scanned
+      unchanged: Unchanged
+      invalid: Invalid
+      conflicts: Conflicts
+      entry_id: Entry
+      outcome: Outcome
+    reasons:
+      contact_archived: Contact archived
+      phone_changed: Phone changed
+      consent_missing: Positive consent missing
+      opted_out: Opted out
+      personalization_missing: Personalization missing
+      frequency_capped: Frequency limit reached
+      campaign_cancelled: Campaign cancelled
+      campaign_failed: Campaign failed
+      campaign_expired: Campaign deadline reached
+      module_disabled: SMS module disabled
+      template_invalid: Template invalid
+      template_required: Select a marketing template
+      credentials_missing: Sending account is not configured
+      daily_cap_exceeded: Daily capacity exceeded
+      rate_limited: Rate limited
+      quiet_hours: Waiting for quiet hours to end
+      campaign_rate: Waiting for campaign rate capacity
+      account_rate: Waiting for shared account capacity
+      daily_cap: Waiting for daily capacity
+      phone_window: Waiting for phone frequency capacity
+      outside_audience: Personalization sample only — outside the audience
+      audience_too_large: Narrow the audience to at most 10,000 contacts
+      audience_empty: Add eligible consented contacts
+      mapping_incomplete: Complete all required variable mappings
+      schedule_in_past: Choose a future scheduled time
+      account_rate_invalid: Correct the shared account send rate
+      schedule_required: Set a scheduled time
+      review_changed: The saved settings changed. Review them again.
+      invalid_source_data: Source data does not satisfy contact bounds
+      invalid_name: Source name is not a scalar value
+      phone_missing: Phone number missing
+      source_conflict: Contact is linked to a different source
+      identity_conflict: Contact identity conflicts with an existing contact
+    platform:
+      purpose: Purpose
+      purpose_help: Campaigns require a marketing template. Classification is frozen when a campaign launches.
+      body_template: Preview message text (optional)
+      body_help: 'Mirror the actual provider-approved content using simple placeholders such as {{name}}. This preview text is not sent as a raw message. Verify the approved template includes a real opt-out mechanism.'
+      sender_rate_help: Greater than 0 and at most 1. This ceiling is shared by every tenant, campaign, and direct send using this account.
+    unsubscribe:
+      title: Unsubscribe from SMS
+      help: Confirm to stop marketing messages for this number from this organization.
+      confirm: Confirm unsubscribe
+      success: You have unsubscribed
+      success_help: Remaining unattempted marketing messages for this organization and phone number will be blocked.
+      invalid_title: Unsubscribe link unavailable
+      invalid_help: This link is invalid or has expired.

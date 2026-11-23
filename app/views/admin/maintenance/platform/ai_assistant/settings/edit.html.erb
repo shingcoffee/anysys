@@ -1,0 +1,9 @@
+<%= render Admin::Maintenance::Platform::ModuleSettings::ShellComponent.new(
+  feature_module: @feature_module, customer_id: current_customer_id, current: :providers
+) do %>
+  <%= render Admin::Maintenance::Platform::AiAssistant::SettingsComponent.new(
+        settings: @settings, mode: @mode || :edit_vendor, customer_id: current_customer.id,
+        providers: @providers, transcribe_key: @transcribe_key, generation_key: @generation_key,
+        transcribe_settings: @transcribe_settings, generation_settings: @generation_settings,
+        errors: @errors || []) %>
+<% end %>

@@ -1,0 +1,38 @@
+<%= section(ui("campaigns.sample_message")) do %>
+  <% if @contacts.any? %>
+    <div class="space-y-1.5 min-w-0">
+      <%= label_tag :preview_contact_id, ui("campaigns.sample"), class: "form-label" %>
+      <%= select_tag :preview_contact_id, options_for_select([[ui("campaigns.automatic_sample"), ""]] + @contacts.map { |c| [c[:name].presence || c[:phone_e164], c[:id]] }, @selected_contact_id), class: "input-field w-full", aria: { describedby: "sms-preview-contact-help" } %>
+      <p id="sms-preview-contact-help" class="text-sm text-text-secondary"><%= ui("campaigns.sample_help") %></p>
+    </div>
+  <% end %>
+  <% Array(@preview&.dig(:samples)).first(5).each do |sample| %>
+    <article class="rounded-lg border border-border-subtle p-4 space-y-3 min-w-0">
+      <h3 class="font-medium break-words"><%= sample[:name].presence || sample[:phone_e164] %></h3>
+      <p class="text-sm"><%= sample[:eligible] ? t("sms_campaign_ui.campaigns.eligible") : reason_label(sample[:reason]) %></p>
+      <% if sample[:rendered_body].present? %>
+        <p class="whitespace-pre-wrap break-words [overflow-wrap:anywhere]"><%= sample[:rendered_body] %></p>
+      <% else %>
+        <p class="text-text-secondary"><%= ui("campaigns.preview_unavailable") %></p>
+      <% end %>
+      <dl class="space-y-2"><% (sample[:vars] || {}).each do |name, value| %><%= fact(name, value) %><% end %></dl>
+      <dl class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <% [:encoding, :units, :segments].each do |key| %>
+          <%= fact(ui("campaigns.#{key}"), sample[key].nil? ? t("common.status.unknown") : (key == :encoding ? label_text(:encodings, sample[key], default: t("common.status.unknown")) : sample[key])) %>
+        <% end %>
+      </dl>
+      <p class="text-sm text-text-secondary"><%= ui("campaigns.estimate_help") %></p>
+    </article>
+  <% end %>
+  <% if @preview %>
+    <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <% [:intended_start_at, :expires_at, :earliest_dispatch_at].each do |key| %><%= fact(ui("campaigns.#{key}"), time_value(@preview[key])) %><% end %>
+      <% [:account_rate_per_second, :effective_rate_per_minute, :estimated_minimum_duration_seconds].each do |key| %><%= fact(ui("campaigns.#{key}"), @preview[key].nil? ? t("common.status.unknown") : @preview[key]) %><% end %>
+    </dl>
+    <p class="text-sm text-text-secondary"><%= ui("campaigns.duration_help") %></p>
+    <% if @preview[:blockers].present? %>
+      <h3 class="font-semibold text-danger"><%= ui("campaigns.blockers") %></h3>
+      <ul class="list-disc pl-5 text-danger"><% @preview[:blockers].each do |code| %><li><%= reason_label(code) %></li><% end %></ul>
+    <% end %>
+  <% end %>
+<% end %>

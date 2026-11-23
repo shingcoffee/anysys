@@ -1,0 +1,192 @@
+zh-CN:
+  flowchart_actions:
+    calculate_pricing:
+      label: 计价
+      description: 按明细行汇总订单、发票或报价金额。
+      fields:
+        sourceVariable:
+          label: 明细行
+          help: 明细行数组在上下文中的路径（每行为含数量与单价的哈希）。
+        quantityField:
+          label: 数量字段
+          help: 从每行读取数量的键名。
+        unitPriceField:
+          label: 单价字段
+          help: 从每行读取单价的键名。
+        lineDiscountField:
+          label: 行折扣字段
+          help: 可选。每行折扣额的键名；留空表示不使用行折扣。
+        lineTaxRateField:
+          label: 行税率字段
+          help: 可选。每行税率（百分比）覆盖的键名；留空则使用订单税率。
+        discountType:
+          label: 订单折扣
+          help: 订单级折扣的计算方式。金额折扣按比例分摊到各行，且不会使行金额低于零。
+          options:
+            none: 无
+            percent: 百分比
+            amount: 金额
+        discountValue:
+          label: 折扣值
+          help: 按订单折扣类型填写百分比（0–100）或金额。若设置了折扣变量，运行时以其为准。
+        discountVariable:
+          label: 折扣变量
+          help: 可选。其数值将覆盖折扣值的上下文路径（例如优惠券）。
+        taxMode:
+          label: 计税方式
+          help: 价外税在净额之上加税；价内税从含税价中拆税；无则不计税。
+          options:
+            exclusive: 价外税
+            inclusive: 价内税
+            none: 无
+        taxRate:
+          label: 税率
+          help: 订单级税率（百分比，0–100）。行税率字段可按行覆盖。
+        shippingAmount:
+          label: 运费
+          help: 计入订单的运费，单位与行价相同。
+        shippingVariable:
+          label: 运费变量
+          help: 可选。其数值将覆盖运费的上下文路径（例如运费查询结果）。
+        shippingTaxable:
+          label: 运费计税
+          help: 开启后，运费按订单税率与计税方式计税。
+        precision:
+          label: 精度
+          help: 各项金额保留的小数位数（0–6）。
+        roundingMode:
+          label: 舍入
+          help: 按所选精度舍入金额的方式。
+          options:
+            half_up: 四舍五入
+            half_even: 银行家舍入
+            floor: 向下
+            ceiling: 向上
+        roundPer:
+          label: 舍入层级
+          help: 按行先舍入再汇总；按合计则行内精确计算，仅对订单合计舍入。
+          options:
+            line: 按行
+            total: 按合计
+        currency:
+          label: 币种
+          help: 可选。写入结果的币种代码（不参与换算）。
+        resultVar:
+          label: 将结果保存为
+          help: 存放计价哈希的上下文变量。金额为指定精度的十进制字符串（例如 "10.00"），以便 JSON 序列化时保持精确。键为 lines、subtotal、discount、tax、shipping、total、currency。
+    allocate_amount:
+      label: 分摊金额
+      description: 将金额拆成若干份，各份之和始终等于原金额。
+      fields:
+        amount:
+          label: 金额
+          help: 待拆分金额在上下文中的路径。
+        method:
+          label: 方式
+          help: 均分按份数等额拆分；比例按权重拆分；百分比要求权重之和为 100。
+          options:
+            even: 均分
+            ratio: 比例
+            percent: 百分比
+        parts:
+          label: 份数
+          help: 均分的份数（1–1000）。
+        weightsVariable:
+          label: 权重
+          help: 数字数组，或在指定权重字段时为哈希数组，在上下文中的路径。
+        weightField:
+          label: 权重字段
+          help: 权重项为哈希时读取的键名。留空则依次尝试 weight、value、ratio、percent、share。
+        precision:
+          label: 精度
+          help: 每份金额保留的小数位数（0–6）。
+        remainderStrategy:
+          label: 余数
+          help: 舍入后剩余单位的归属，使各份之和仍等于原金额。
+          options:
+            largest_remainder: 最大余数
+            first: 计入首份
+            last: 计入末份
+            largest_share: 计入最大份额
+        resultVar:
+          label: 将结果保存为
+          help: 存放分摊结果数组的上下文变量。各元素为十进制字符串（例如 "33.34"），以便 JSON 序列化时保持精确。
+    build_installment_plan:
+      label: 生成分期计划
+      description: 生成还款、订阅或分期付款日程。
+      fields:
+        principal:
+          label: 本金
+          help: 本金（贷款、订阅总额或融资额）在上下文中的路径。
+        annualRate:
+          label: 年利率
+          help: 名义年利率（百分比，0–100）。若设置了利率变量，运行时以其为准。
+        rateVariable:
+          label: 利率变量
+          help: 可选。其数值将覆盖年利率的上下文路径。
+        periods:
+          label: 期数
+          help: 付款次数（1–600）。
+        frequency:
+          label: 频率
+          help: 各期到期日的间隔，以及将年利率换算为期利率的除数。
+          options:
+            monthly: 每月
+            quarterly: 每季
+            semiannual: 每半年
+            annual: 每年
+            weekly: 每周
+            biweekly: 每两周
+        method:
+          label: 算法
+          help: 等额本息每期付款相同；等额本金本金均摊、利息递减；先息后本到期还本；平息按原始本金计息。
+          options:
+            annuity: 等额本息
+            equal_principal: 等额本金
+            interest_only: 先息后本
+            flat: 平息
+        startDateVariable:
+          label: 起息日
+          help: 可选。计划起始日在上下文中的路径。默认使用应用时区的当天。
+        firstPaymentOffset:
+          label: 首期偏移
+          help: 起始日后、首个到期日之前间隔的期数（0 表示起始日到期）。
+        downPayment:
+          label: 首付
+          help: 生成计划前从本金中扣除的金额。
+        precision:
+          label: 精度
+          help: 各项金额保留的小数位数（0–6）。
+        roundingMode:
+          label: 舍入
+          help: 按所选精度舍入金额的方式。
+          options:
+            half_up: 四舍五入
+            half_even: 银行家舍入
+            floor: 向下
+            ceiling: 向上
+        finalPaymentAdjust:
+          label: 调整末期
+          help: 开启后，末行吸收舍入尾差，使本金合计精确等于融资金额。
+        resultVar:
+          label: 将日程保存为
+          help: 存放分期行数组的上下文变量。金额为十进制字符串（例如 "888.49"）；due_date 为 ISO8601 日期（YYYY-MM-DD）。
+        totalsVar:
+          label: 将合计保存为
+          help: 存放付款、本金与利息合计（十进制字符串）的上下文变量。
+  flowchart_runtime:
+    errors:
+      calculate_pricing:
+        failed: 无法计算价格（%{reason}）。
+        invalid_line: 第 %{line} 行的数量或单价不是非负数字。
+      allocate_amount:
+        failed: 无法分摊该金额（%{reason}）。
+        invalid_amount: 金额必须是数字。
+        invalid_weights: 权重必须是非空的非负数列表，且不能全为零。
+        percent_total: 百分比权重之和必须为 100（当前为 %{total}）。
+      build_installment_plan:
+        failed: 无法生成分期计划（%{reason}）。
+        invalid_principal: 本金必须是大于零的数字。
+        invalid_periods: 分期数必须是 1 至 %{max} 之间的整数。
+        invalid_start_date: 首期还款日期无效。
+        down_payment_exceeds_principal: 首付必须小于本金。

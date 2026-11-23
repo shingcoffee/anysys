@@ -1,0 +1,30 @@
+en:
+  sms_presentation:
+    fields:
+      dispatch_started_at: "Dispatch started at"
+      delivery_attempts: "Delivery attempts"
+      provider_occurred_at: "Provider event time"
+      provider_status: "Provider status"
+      provider_segments: "Provider-reported segments"
+    not_recorded: "Not recorded"
+    redacted: "Redacted"
+    status_help:
+      queued: "Queued for dispatch; the provider has not accepted this message yet."
+      pending: "Dispatch is in progress; provider acceptance and delivery are not yet confirmed."
+      sent: "The provider accepted this message. This does not confirm delivery to the recipient."
+      delivered: "Delivery to the recipient was confirmed by the provider."
+      failed: "The send or delivery failed. See the recorded failure details below."
+      unknown: "The outcome is not confirmed. Unknown does not mean failed."
+      suppressed: "This message was suppressed and was not sent to the provider."
+      expired: "This message expired before dispatch and was not sent to the provider."
+    help:
+      sent_at: "When the provider accepted the message, not when it was delivered."
+      provider_segments: "Only actual provider-reported segments are shown. Remote template content is not estimated."
+      variables: "Variable names are shown for reference. All values are redacted."
+    workflow_labels:
+      notify.f.smsTemplateKey.label: "SMS template key"
+      notify.f.smsTemplateKey.ph: "e.g., verify_code"
+      notify.f.smsVars.label: "SMS variables (JSON object or context expression)"
+      notify.f.smsVars.ph: 'e.g., {"code":"ctx.code"} or ctx.sms_vars (leave blank for no variables)'
+      notify.f.smsIdempotencyKey.label: "SMS idempotency key (optional expression)"
+      notify.f.smsIdempotencyKey.ph: "e.g., ctx.sms_idempotency_key"

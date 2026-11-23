@@ -1,0 +1,8 @@
+<%= render PageShortcuts::ManagementComponent.new(
+      shortcuts: @shortcuts,
+      available_targets: @available_targets,
+      customer_id: current_customer_id,
+      errors: @errors || [],
+      form_values: @form_values || {},
+      editing_shortcut: @editing_shortcut
+    ) %>

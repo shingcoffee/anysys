@@ -1,0 +1,333 @@
+en:
+  flowchart_actions:
+    assign_value:
+      label: Assign Value
+      description: Set a ctx variable
+      fields:
+        valueType:
+          label: Value Type
+          help: Kind of value written into the result variable.
+          options:
+            string: string
+            integer: integer
+            float: float
+            boolean: boolean
+            array: array
+            hash: hash
+            expression: expression
+            "null": "null"
+            ctx_ref: ctx_ref
+            random: random
+            first_present: first_present
+        valueExpression:
+          label: Value Expression
+          help: Ruby expression evaluated and stored.
+        stringValue:
+          label: String Value
+          help: Literal string assigned to the result.
+        integerValue:
+          label: Integer Value
+          help: Literal integer assigned to the result.
+        floatValue:
+          label: Float Value
+          help: Literal number assigned to the result.
+        booleanValue:
+          label: Boolean Value
+          help: Literal true or false assigned to the result.
+        arrayValue:
+          label: Array Value
+          help: Literal list assigned to the result.
+        hashValue:
+          label: Hash Value
+          help: Literal key/value pairs assigned to the result.
+        ctxRefVariable:
+          label: Ctx Ref Variable
+          help: Existing context path whose value is copied.
+        randomType:
+          label: Random Type
+          help: Kind of random value to generate.
+          options:
+            uuid: uuid
+            hex: hex
+            int: int
+            float: float
+        randomLength:
+          label: Random Length
+          help: "For hex: byte count; for int: upper bound"
+        candidates:
+          label: Candidates
+          help: Context paths tried in order until one is present.
+        literalCandidates:
+          label: Literal Candidates
+          help: Fallback literals tried after the context paths.
+        predicate:
+          label: Predicate
+          help: What counts as missing when choosing the first present value.
+          options:
+            nil: nil
+            blank: blank
+            false_or_nil: false_or_nil
+        blankDefinition:
+          label: Blank Definition
+          help: How blankness is decided for first_present.
+          options:
+            nil: nil
+            empty: empty
+            whitespace: whitespace
+    calculate:
+      label: Calculate
+      description: Compute/aggregate values
+      fields:
+        operation:
+          label: Operation
+          help: Aggregation applied to the collection.
+          options:
+            sum: sum
+            count: count
+            avg: avg
+            min: min
+            max: max
+            product: product
+            concat: concat
+            custom: custom
+        fieldName:
+          label: Field Name
+          help: Item field aggregated for sum, avg, min, max, product, or concat.
+        separator:
+          label: Separator
+          help: String inserted between concatenated field values.
+        customExpression:
+          label: Custom Expression
+          help: Ruby expression over _collection used when operation is custom.
+        emptyCollectionDefault:
+          label: Empty Collection Default
+          help: Value returned when collection is empty
+        emptyCollectionBehavior:
+          label: Empty Collection Behavior
+          help: Fallback used when the collection is empty and no default is set.
+          options:
+            zero: zero
+            nil: nil
+        ignoreNils:
+          label: Ignore Nils
+          help: Drop nil items before aggregating.
+        nullFilter:
+          label: Null Filter
+          help: Compact nil items the same way Ignore Nils does.
+        precision:
+          label: Precision
+          help: Decimal places for avg/result
+        roundingMode:
+          label: Rounding Mode
+          help: How the aggregate is rounded when precision is set.
+          options:
+            half_up: half_up
+            half_even: half_even
+            floor: floor
+            ceiling: ceiling
+    filter_collection:
+      label: Filter Collection
+      description: Filter items in a collection
+      fields:
+        returns:
+          label: Returns
+          help: What this step stores from the filtered collection.
+          options:
+            items: items
+            split: split
+            first: first
+            last: last
+            index: index
+            count: count
+            any: any
+            all: all
+            none: none
+        rejectedVar:
+          label: Save rejected as
+          help: Variable that receives items that failed the predicate when returns is split.
+        filterMode:
+          label: Filter Mode
+          help: One field condition or a list of conditions.
+          options:
+            single: single
+            multi: multi
+        filterField:
+          label: Filter Field
+          help: Item field compared by the predicate.
+        filterOperator:
+          label: Filter Operator
+          help: Comparison used against Filter Value.
+          options:
+            eq: eq
+            ne: ne
+            gt: gt
+            lt: lt
+            gte: gte
+            lte: lte
+            includes: includes
+            blank: blank
+            present: present
+        filterValue:
+          label: Filter Value
+          help: Value compared to the field.
+        conditions:
+          label: Conditions
+          help: List of {field, operator, value} rows joined by Condition Operator.
+        conditionOperator:
+          label: Condition Operator
+          help: How multiple conditions are joined.
+          options:
+            and: AND
+            or: OR
+        rejectMode:
+          label: Reject Mode
+          help: Keep items that fail the predicate instead of those that match.
+        nilHandling:
+          label: Nil Handling
+          help: How nil items are treated by the predicate.
+          options:
+            include: include
+            exclude: exclude
+            treat_as_false: treat_as_false
+        secondaryFilter:
+          label: Secondary Filter
+          help: Extra Ruby predicate AND-joined onto the field conditions.
+        defaultValue:
+          label: Default Value
+          help: Value stored when first, last, or index finds nothing.
+        limit:
+          label: Limit
+          help: Maximum number of matched (and rejected, when splitting) items to keep. 0 keeps all.
+    collection_manipulate:
+      label: Collection Manipulate
+      description: Map, pluck, group, sort, unique, chunk, flatten, or zip a collection
+      fields:
+        operation:
+          label: Operation
+          help: How the collection is rewritten.
+          options:
+            map: map
+            pluck: pluck
+            group: group
+            sort: sort
+            unique: unique
+            chunk: chunk
+            flatten: flatten
+            zip: zip
+        sources:
+          label: Sources
+          help: Context paths of the collections zipped together.
+        fieldMappings:
+          label: Field Mappings
+          help: Source field path to target key for each mapped item.
+        keyFormat:
+          label: Key Format
+          help: Whether mapped keys are symbols or strings.
+          options:
+            symbol: symbol
+            string: string
+        compactResult:
+          label: Compact Result
+          help: Drop nil items from the mapped list.
+        preserveNilElements:
+          label: Preserve Nil Elements
+          help: Keep nil source items as nil in the mapped list.
+        fields:
+          label: Fields
+          help: Field paths plucked from each item, with optional aliases.
+        flattenSingle:
+          label: Flatten Single Field
+          help: Return the plucked value itself when only one field is selected.
+        includeSourceIndex:
+          label: Include Source Index
+          help: Add source_index to each plucked row.
+        groupField:
+          label: Group Field
+          help: Item field used as the group key.
+        groupByExpression:
+          label: Group By Expression
+          help: Ruby expression that computes the group key for each item.
+        includeCount:
+          label: Include Count
+          help: Store each group as items plus a count.
+        sortGroups:
+          label: Sort Groups
+          help: Order of keys in the grouped hash.
+          options:
+            none: none
+            key_asc: key_asc
+            key_desc: key_desc
+            count_asc: count_asc
+            count_desc: count_desc
+        sortField:
+          label: Sort Field
+          help: Item field used to sort the collection.
+        sortDirection:
+          label: Sort Direction
+          help: Ascending or descending sort.
+          options:
+            asc: asc
+            desc: desc
+        nullsFirst:
+          label: Nulls First
+          help: Place items with a nil sort field before the others.
+        uniqField:
+          label: Unique Field
+          help: Item field used to decide uniqueness. Leave blank to compare whole items.
+        keepStrategy:
+          label: Keep Strategy
+          help: Which duplicate to keep.
+          options:
+            first: first
+            last: last
+        chunkMode:
+          label: Chunk Mode
+          help: How the collection is split into chunks.
+          options:
+            size: size
+            predicate: predicate
+            field: field
+        chunkSize:
+          label: Chunk Size
+          help: Number of items in each size chunk.
+        includeRemainder:
+          label: Include Remainder
+          help: Keep the final short chunk when splitting by size.
+        chunkPredicate:
+          label: Chunk Predicate
+          help: Expression over consecutive items a and b that starts a new chunk.
+        chunkField:
+          label: Chunk Field
+          help: Consecutive items that share this field value stay in one chunk.
+        depth:
+          label: Depth
+          help: Levels to flatten (0 = unlimited)
+        removeNilElements:
+          label: Remove Nil Elements
+          help: Drop nils after flattening.
+        zipStrategy:
+          label: Zip Strategy
+          help: How collections of different lengths are aligned.
+          options:
+            strict: strict
+            longest: longest
+            shortest: shortest
+        resultShape:
+          label: Result Shape
+          help: Whether each zipped row is a tuple or a hash.
+          options:
+            tuples: tuples
+            hashes: hashes
+        fillValue:
+          label: Fill Value
+          help: Value used to pad shorter collections when strategy is longest.
+  flowchart_runtime:
+    errors:
+      assign_value:
+        blank: No candidate produced a present value.
+      calculate:
+        empty: The collection is empty.
+      filter_collection:
+        invalid: The collection could not be filtered.
+      collection_manipulate:
+        failed: "Collection operation failed (%{reason})"

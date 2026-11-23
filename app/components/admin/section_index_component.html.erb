@@ -1,0 +1,16 @@
+<nav class="card hidden overflow-hidden lg:block" aria-labelledby="<%= heading_id %>">
+  <h2 id="<%= heading_id %>" class="border-b border-border-subtle px-4 py-3.5 text-sm font-semibold text-text-primary sm:px-5"><%= t("admin_misc.entities.entry_detail.sections_heading") %></h2>
+  <ul class="p-2">
+    <% items.each do |item| %>
+      <li>
+        <a href="#<%= item[:id] %>" <%= tag.attributes(data: { action: link_action }) %> class="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-text-secondary transition-base hover:bg-surface-hover hover:text-text-primary focus-visible:bg-surface-hover focus-visible:text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+          <span class="size-2 shrink-0 rounded-full <%= dot_class(item) %>" aria-hidden="true"></span>
+          <span class="min-w-0 flex-1 truncate" title="<%= item[:label] %>"><%= item[:label] %></span>
+          <% if item[:count].present? %>
+            <span class="shrink-0 text-xs text-text-muted tabular-nums"><%= item[:count] %></span>
+          <% end %>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+</nav>

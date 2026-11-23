@@ -1,0 +1,12 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "sms",
+      title: @segment.name,
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.email.entries.audience"), path: admin_modules_sms_contacts_path(current_customer_id) },
+        { label: t("admin_modules.emails.segments.index.title"), path: admin_modules_sms_segments_path(current_customer_id) },
+        { label: @segment.name }
+      ]
+    ) do %>
+  <%= render Sms::Admin::SegmentDetailsComponent.new(segment: @segment, preview: @preview) %>
+<% end %>

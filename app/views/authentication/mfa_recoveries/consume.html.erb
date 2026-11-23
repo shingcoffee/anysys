@@ -1,0 +1,21 @@
+<%= render Member::AuthShellComponent.new(
+      customer: current_customer,
+      title:    t("auth.mfa_recoveries.consume.shell_title"),
+      subtitle: t("auth.mfa_recoveries.consume.shell_subtitle")
+    ) do %>
+
+  <div class="mb-8">
+    <h2 class="text-subtitle mb-1"><%= t("auth.mfa_recoveries.consume.heading") %></h2>
+    <p class="text-body-sm"><%= t("auth.mfa_recoveries.consume.subheading") %></p>
+  </div>
+
+  <%= form_tag consume_mfa_recovery_path(current_customer_id), method: :post, class: "space-y-5" do %>
+    <%= hidden_field_tag :token, @token %>
+    <button type="submit" class="btn-member w-full justify-center"><%= t("auth.mfa_recoveries.consume.submit") %></button>
+  <% end %>
+
+  <p class="mt-6 text-center text-sm text-text-tertiary">
+    <%= link_to t("auth.common.back_to_sign_in"), new_user_session_path,
+          class: "font-medium text-member-accent-text hover:underline" %>
+  </p>
+<% end %>

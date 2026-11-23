@@ -1,0 +1,756 @@
+---
+zh-CN:
+  maint_platform:
+    errors:
+      validations:
+        invalid_industry: 不是有效的行业
+        invalid_template: 不是有效的模板
+        variables_must_be_array_of_strings: 必须是字符串数组
+        sms_provider_codes_required: 至少需要一个提供商模板码
+        required_needs_active_module: 须先启用模块，才能设为必需
+        handoff_needs_active_module: 须先启用模块，才能设为交接目标
+
+    flash:
+      sms_credentials:
+        created: 短信凭据创建成功
+        updated: 短信凭据更新成功
+        delivery_updated: 发送服务商已更新
+      sms_templates:
+        registered: 模板注册成功
+        updated: 模板更新成功
+        retired: 模板已停用（历史记录已保留）
+        deleted: 模板删除成功
+      emails_credentials:
+        created: 邮件凭据创建成功
+        updated: 邮件凭据更新成功
+        delivery_updated: 发送服务商已更新
+      code_generators:
+        config_object_required: "配置必须是 JSON 对象"
+        invalid_json: "JSON 无效：%{error}"
+        generator_not_found: 未找到生成器
+        file_exists: "文件已存在：%{file}"
+        created: 生成器创建成功
+        updated_versioned: 生成器更新成功（v%{version}）
+        updated: 生成器更新成功
+        deleted: 生成器删除成功
+      customer_contexts:
+        now_acting_as: 正在以 %{name} 的身份操作
+        returned_to_platform: 已返回平台上下文
+        customer_not_found: 未找到客户
+      announcements:
+        created: 公告已创建。
+        updated: 公告已更新。
+        deleted: 公告已删除。
+      customers:
+        restored: 客户“%{name}”已恢复
+        permanently_deleted: 已永久删除 %{count} 个客户。
+        created: 客户创建成功。
+        updated: 客户更新成功。
+        deleted: 客户删除成功。
+        platform_protected: 不能删除平台客户。
+      industry_templates:
+        mapping_not_found: 未找到映射
+        invalid_industry: "行业无效：%{industry}"
+        defaults_seeded: 已填充默认映射（新建 %{count} 个）
+        reset_to_defaults: 所有映射已重置为默认值。
+        new_mappings_created: 已新建 %{count} 个模板映射。
+        mappings_updated: 已更新“%{industry}”的模板映射。
+        invalid_template_keys: 部分所选模板无效。
+      billing:
+        plan_archived: "套餐已归档，现有订阅及账单历史已保留。"
+        coupon_archived: "优惠券已归档，已兑换权益及账单历史已保留。"
+        invoice_unchanged: "账单结算状态未变更。"
+        invoice_settlement_review: "已记录付款，其对订阅的影响需由平台复核。"
+        subscription_unchanged: "订阅状态未变更。"
+        subscription_cancelled: "订阅 #%{id} 已立即取消。"
+        coupon_created: 优惠券“%{code}”已创建。
+        coupon_updated: 优惠券“%{code}”已更新。
+        coupon_deleted: 优惠券已删除。
+        invoice_marked_paid: 账单 %{number} 已标记为已付款。
+        invoice_voided: 账单 %{number} 已作废。
+        invoice_cannot_mark_paid: 此账单无法标记为已付款。
+        invoice_cannot_void: 此账单无法作废。
+        invoice_collection_triggered: 已发起账单 %{number} 的收款。
+        invoice_collection_skipped: 账单 %{number} 非待收款状态，未发起收款。
+        plan_created: 套餐“%{name}”已创建。
+        plan_updated: 套餐“%{name}”已更新。
+        plan_deleted: 套餐已删除。
+        plan_in_use: 该套餐仍有生效中的订阅，无法删除。
+        settings_updated: 计费设置已更新。
+        countable_items_updated: 计量项已更新。
+        countable_items_update_failed: 计量项未能更新。
+        update_failed: "更新失败：%{error}"
+      payments:
+        gateway_availability_updated: 网关可用性已更新。
+      module_settings:
+        updated: "%{name} 已更新。"
+        update_failed: "更新失败。"
+        token_attribute_forbidden: "凭据字段不可启用为邮件模板变量。"
+    billing:
+      breadcrumbs:
+        maintenance: 维护
+        billing: 计费
+        module_settings: 模块设置
+        coupons: 优惠券
+        plans: 套餐
+        invoices: 账单
+        subscriptions: 订阅
+      countable_items:
+        show:
+          title: 计量项
+          description: 配置作为计费计量项跟踪的资源类型。
+      coupons:
+        index:
+          title: 计费优惠券
+          description: 管理折扣优惠券。
+          new_coupon: 新建优惠券
+        new:
+          title: 新建优惠券
+          description: 创建折扣优惠券。
+        edit:
+          title: 编辑优惠券
+          description: 更新优惠券详情。
+        show:
+          description: 优惠券详情。
+          details: 详情
+          code: 代码
+          discount_type: 折扣类型
+          discount_value: 折扣值
+          duration: 有效期
+          cycles: "%{count} 个周期"
+          redemptions: 兑换次数
+          expires_at: 过期时间
+          never: 永不
+          redeemable_now: 当前可兑换？
+      invoices:
+        index:
+          title: 所有账单
+          description: 跨租户账单总览。
+        show:
+          draft: "（草稿）"
+          title_fallback: 账单
+          description: 账单详情、行项目和管理操作。
+      plans:
+        index:
+          title: 计费套餐
+          description: 管理平台计费套餐目录。
+          new_plan: 新建套餐
+        new:
+          title: 新建套餐
+          description: 向目录新增计费套餐。
+        edit:
+          title: 编辑套餐
+          description: 更新套餐详情。
+        show:
+          description_fallback: 套餐详情。
+          code: 代码
+          interval: 计费周期
+          price_usd: 价格 (USD)
+          price_cny: 价格 (CNY)
+          trial_days: 试用天数
+          display_position: 显示位置
+          default_plan: 默认套餐
+          unlimited: 不限
+          plan_limits: 套餐限额
+          details: 详情
+      settings:
+        show:
+          title: 计费设置
+          description: 适用于所有客户的全局计费配置。
+        edit:
+          title: 编辑计费设置
+          description: 更新全局计费配置。
+      subscriptions:
+        index:
+          title: 所有订阅
+          description: 跨租户订阅总览。
+        show:
+          subscription_number: '订阅 #%{id}'
+          description: 订阅详情与账单。
+    emails:
+      breadcrumbs:
+        maintenance: 维护
+        module_settings: 模块设置
+        email: 邮件
+        credentials: 凭据
+      credentials:
+        new_credential: 新建凭据
+        index:
+          title: 邮件凭据
+          description: 邮件投递的 SMTP + DKIM 凭据
+          search_placeholder: 搜索凭据…
+          empty_title: 尚未配置邮件凭据
+          empty_description: 添加第一个 SMTP 凭据以启用邮件投递。
+        new:
+          title: 新建邮件凭据
+          description: 配置 SMTP 网关访问凭据及可选的 DKIM 签名。
+        edit:
+          title: 编辑邮件凭据
+          description: 更新 SMTP 网关访问凭据和 DKIM 签名配置。
+        form:
+          provider_label: 服务商
+          mode_label: 模式
+          status_label: 状态
+          identity_title: 账号
+          identity_hint: 此凭据所属的服务商与环境。
+          identity_hint_locked: 凭据填写完整后，可为所选服务商启用此环境。
+          secret_title: 密钥
+          secret_hint: 加密存储。编辑时留空则保留现有值。
+          host_label: 主机
+          port_label: 端口
+          username_label: 用户名
+          domain_label: 域名
+          authentication_label: 验证方式
+          smtp_legend: SMTP 设置
+          enable_starttls: 启用 STARTTLS
+          ssl_label: SSL
+          password_keep_hint: 留空以保留现有加密值。
+          modes:
+            sandbox: 沙箱
+            production: 生产
+          authentications:
+            plain: PLAIN
+            login: LOGIN
+            cram_md5: CRAM-MD5
+          daily_limit_label: 每日上限
+          daily_limit_placeholder: 留空则不限制
+          dkim_legend: DKIM 签名
+          enable_dkim: 启用 DKIM 签名
+          dkim_domain_label: DKIM 域名
+          dkim_selector_label: DKIM 选择器
+          dkim_key_keep_hint: 留空以保留现有加密值。
+          dkim_private_key_label: DKIM 私钥 (PEM)
+          dns_txt_hint: DNS TXT 记录（添加到您的 DNS 服务商）
+      platform_settings:
+        title: "邮件 — 平台设置"
+        page_description: "为每个环境选择当前投递服务商，仅在需要更换凭据时编辑对应服务商。"
+        nav_label: "服务商"
+        delivery_section: "投递"
+        delivery_section_hint: "每个环境仅启用一家服务商，切换不会修改凭据。"
+        delivery_mode_hint:
+          sandbox: "用于非生产发送。"
+          production: "用于租户正式发送。"
+        vendor_section: "服务商"
+        vendor_section_hint: "所选服务商在各环境的凭据。"
+        edit_delivery: "更换服务商"
+        edit_credentials: "编辑凭据"
+        add_credentials: "添加凭据"
+        provider: "服务商"
+        not_assigned: "未指定"
+        credentials_section_hint_show: "密钥加密存储，永不完整展示。"
+        mode_empty: "此环境尚未配置凭据。"
+        masked: "••••••"
+        errors:
+          missing_credential: "%{provider}（%{mode}）尚无凭据。"
+    sms:
+      breadcrumbs:
+        maintenance: 维护
+        module_settings: 模块设置
+        sms: 短信
+        credentials: 凭据
+        templates: 模板
+      credentials:
+        new_credential: 新建凭据
+        index:
+          title: 短信凭据
+          description: 短信投递的网关凭据
+          search_placeholder: 搜索凭据…
+          empty_title: 尚未配置短信凭据
+          empty_description: 添加第一个凭据以启用短信投递。
+        new:
+          title: 新建短信凭据
+          description: 配置网关访问凭据。
+        edit:
+          title: 编辑短信凭据
+          description: 更新网关访问凭据。
+        form:
+          provider_label: 服务商
+          identity_title: 账号
+          identity_hint: 此凭据所属的服务商与环境。
+          identity_hint_locked: 凭据填写完整后，可为所选服务商启用此环境。
+          secret_title: 密钥
+          secret_hint: 加密存储。编辑时留空则保留现有值。
+          secret_hint_new: 加密存储，发送消息时需要。
+          secret_keep_hint: 留空 access_key_secret 则保留现有加密值。
+          access_key_secret_label: 访问密钥密文
+          provider_fields_legend: "%{provider} 设置"
+      platform_settings:
+        title: "短信 — 平台设置"
+        page_description: "为每个环境选择当前投递服务商，仅在需要更换凭据时编辑对应服务商。"
+        nav_label: "服务商"
+        delivery_section: "投递"
+        delivery_section_hint: "每个环境仅启用一家服务商，切换不会修改凭据。"
+        delivery_mode_hint:
+          sandbox: "用于非生产发送。"
+          production: "用于租户正式发送。"
+        vendor_section: "服务商"
+        vendor_section_hint: "所选服务商在各环境的凭据。"
+        edit_delivery: "更换服务商"
+        edit_credentials: "编辑凭据"
+        add_credentials: "添加凭据"
+        provider: "服务商"
+        not_assigned: "未指定"
+        credentials_section_hint_show: "密钥加密存储，永不完整展示。"
+        mode_empty: "此环境尚未配置凭据。"
+        masked: "••••••"
+        errors:
+          missing_credential: "%{provider}（%{mode}）尚无凭据。"
+      templates:
+        new_template: 新建模板
+        index:
+          title: 短信模板
+          description: 短信投递的共享消息模板
+          search_placeholder: 搜索模板…
+          sort_label: 模板排序
+          current_sort: "当前按%{column}%{direction}排列"
+          sort_directions:
+            asc: 升序
+            desc: 降序
+          delete_confirm: 删除或停用此模板？
+          empty_title: 尚未注册模板
+          empty_description: 创建模板以开始发送短信消息。
+        new:
+          title: 新建短信模板
+          description: 注册一个新的共享短信模板。
+        edit:
+          title: 编辑短信模板
+          description: 更新短信模板设置。
+        form:
+          key_label: 模板键（snake_case，例如 verify_code）
+          key_placeholder: verify_code
+          provider_code_label: "%{provider} 代码"
+          variables_label: 变量（逗号分隔，按模板顺序）
+          variables_placeholder: code, minutes
+          details_title: 模板
+          details_hint: 键名、说明、状态与替换变量。
+          codes_title: 服务商代码
+          codes_hint: 服务商侧的模板标识。
+    announcements:
+      breadcrumb:
+        maintenance: 维护
+        announcements: 公告
+      index:
+        title: 公告
+        description: 向租户管理员发布有时限的通知。
+        new_action: 新建公告
+        search_placeholder: 按标题搜索…
+        empty_title: 暂无公告
+        empty_description: 创建一条展示在租户管理员仪表盘上的通知。
+        empty_action: 新建公告
+        delete_confirm: 删除“%{title}”？此操作不可撤销。
+        columns:
+          title: 标题
+          severity: 级别
+          status: 状态
+          audience: 受众
+          starts_at: 开始
+          ends_at: 结束
+          updated_at: 更新
+        filters:
+          status: 状态
+          severity: 级别
+      new:
+        title: 新建公告
+        description: 撰写双语通知并选择可见对象。
+      edit:
+        title: 编辑公告
+        description: 更新通知内容、生效时间或受众。
+      form:
+        content: 内容
+        display: 展示
+        audience: 受众
+        title: 标题
+        body_en: 英文正文
+        body_zh: 中文正文
+        link_url: 了解更多链接
+        link_url_hint: 可选，必须以 http:// 或 https:// 开头。
+        severity: 级别
+        status: 状态
+        starts_at: 开始时间
+        ends_at: 结束时间
+        window_hint: 留空则不限制开始或结束时间。
+        audience_all: 全部客户
+        audience_all_hint: 所有租户，包括之后新建的客户。
+        audience_selected: 指定客户
+        audience_selected_hint: 仅符合下方条件的客户可见。
+        audience_conditions_hint: 按客户属性筛选，与邮件受众条件的用法相同。
+        preview_action: 预览受众
+        preview_loading: 正在统计受众…
+        preview_error: 无法统计该受众。
+        preview_count: "有 {count} 个客户符合这些条件。"
+        preview_empty: 没有客户符合这些条件。
+        create: 创建公告
+        update: 保存更改
+        errors:
+          target_rules_blank: 请至少添加一条客户条件。
+          target_rules_invalid: 受众条件不是有效的 JSON。
+      severities:
+        info: 提示
+        warning: 警告
+        critical: 紧急
+      audience:
+        all: 全部客户
+        selected: 指定客户
+      lifecycle:
+        draft: 草稿
+        scheduled: 已排期
+        live: 生效中
+        ended: 已结束
+      show:
+        targets: 目标客户
+        targets_all: 所有租户，包括之后新建的客户。
+        targets_matching:
+          one: "当前有 %{count} 个客户符合条件。"
+          other: "当前有 %{count} 个客户符合条件。"
+        targets_empty: 当前没有客户符合这些条件。
+        targets_truncated: 共 %{count} 个匹配客户，此处显示前 %{shown} 个。
+        learn_more: 了解更多
+      fields:
+        id: 客户 ID
+        name: 名称
+        alias: 别名
+        industry: 行业
+        tier: 套餐
+        status: 状态
+        locale: 语言
+        contact: 联系人
+        phone: 电话
+        address: 地址
+        created_at: 创建时间
+        updated_at: 更新时间
+    support_tickets:
+      breadcrumb:
+        maintenance: 维护
+        support_tickets: 支持工单
+      index:
+        title: 支持工单
+        description: 租户管理员提交的应用内工单。
+        search_placeholder: 按主题搜索…
+        empty_title: 暂无支持工单
+        empty_description: 租户管理员向平台所有者提交工单后，会显示在这里。
+        columns:
+          subject: 主题
+          customer: 客户
+          requester: 提交人
+          status: 状态
+          last_message_at: 最近消息
+        filters:
+          status: 状态
+      show:
+        resolve: 标记为已解决
+        resolve_confirm: 将此支持工单标记为已解决？
+        reply: 回复
+        resolved_note: 该工单已解决。
+        images: 截图
+        meta:
+          details: 工单详情
+          customer: 客户
+          requester: 提交人
+          opened: 创建时间
+          last_message: 最近消息
+    customers:
+      breadcrumb:
+        maintenance: 维护
+        customers: 客户
+      index:
+        title: 客户
+        description: 管理租户账户
+        new_action: 新建客户
+        search_placeholder: 搜索名称、编号或域名
+        act_as: 以此身份操作
+        delete_confirm: 删除“%{name}”？将移至回收站。
+        empty_title: 暂无客户
+        empty_description: 从添加第一个客户开始。
+        empty_action: 添加第一个客户
+      edit:
+        title: 编辑%{name}
+        untitled: 此组织
+        description: 更新组织资料和服务方案。下方公开主机名单独保存。
+      new:
+        title: 新建客户
+        description: 为平台添加新的租户账户。
+      select:
+        subtitle: 选择客户以查看其流程图
+        empty_title: 暂无客户
+        empty_description: 先创建第一个客户，才能构建流程图。
+      show:
+        description: 此租户的组织资料、服务方案，以及指向该租户的公开主机名。
+        edit_profile: 编辑资料
+        move_to_trash: 移入回收站
+        delete_confirm: 将「%{name}」移入回收站？之后可以恢复。
+        in_trash: 此组织在回收站中，请先恢复再编辑资料或新增主机名。
+        language_browser: 跟随浏览器
+        account: 账户
+        account_hint: 此租户的标识信息和已记录的服务方案。
+        not_set: 未填写
+        unknown: 未知
+      trash:
+        title: 回收站
+        description: 已删除的客户可在此恢复
+        empty_trash: 清空回收站
+        empty_trash_confirm: 确定永久删除全部 %{count} 个客户？此操作无法撤销。
+        restore: 恢复
+        restore_confirm: 恢复 %{name}？
+        empty_title: 回收站为空
+        empty_description: 已删除的客户将显示在此处。
+        back_action: 返回客户列表
+    industry_templates:
+      breadcrumbs:
+        maintenance: 维护
+        industry_template_mappings: 行业模板映射
+        industry_mappings: 行业映射
+      edit:
+        manage_title_html: 管理"%{industry}"的模板
+        intro: 选择与此行业关联的布局模板。
+        of_selected: "共 %{count} 项已选"
+        all_filter: 全部 (%{count})
+        select_all_visible: 全选可见项
+        deselect_all_visible: 取消全选可见项
+        save_mappings: 保存映射
+        templates_selected: 个模板已选
+      index:
+        title: 行业模板映射
+        description: 管理各行业可用的模板，共 %{count} 个模板。
+        seed_unmapped: 填充未映射
+        sync_new: 同步新增项
+        reset_confirm: 此操作将把所有行业模板映射重置为默认值，是否继续？
+        reset_all: 全部重置
+        industries_count: "%{count} 个行业"
+        mappings_count: "%{count} 个映射"
+        loading_templates: "正在加载模板…"
+        load_failed: "加载模板失败，请重试。"
+      cards:
+        template_associations: 模板关联
+        templates_associated: "/ %{count} 个模板已关联"
+        bulk_edit: 批量编辑
+        search_placeholder: 按名称、描述或类别搜索…
+        clear_search: 清除搜索
+        templates_found: 个匹配模板
+        associated: 已关联
+        available: 可用
+        no_templates_found: 未找到模板
+        no_templates_hint: 请尝试调整搜索或类别筛选
+        preview_title: 模板预览
+        preview_description: 模板描述
+        preview_category: 类别
+        preview_theme: 现代
+    module_settings:
+      breadcrumbs:
+        maintenance: 维护
+        module_settings: 模块设置
+      index:
+        title: 模块设置
+        description: 平台级模块配置，此处的更改会影响所有使用这些模块的客户。
+        stats_summary: "共 %{total} 个 · %{active} 个已启用 · %{required} 个必需"
+        empty: 暂无可用模块
+        empty_description: 此平台尚未注册功能模块。
+        search_placeholder: 搜索模块…
+        filter_group_label: 筛选模块
+        filter_all: 全部
+        filter_active: 已启用
+        filter_inactive: 未启用
+        filter_required: 必需
+        configure: 配置
+        filter_empty_title: 没有匹配的模块
+        filter_empty_description: 请尝试其他搜索词或筛选。
+        health:
+          label: 配置状态
+          ready: 就绪
+          configured: 已配置
+          unknown: 尚未评估
+          inactive: 未启用
+        configuration_context:
+          label: 配置
+          provider: 服务商指派
+          defaults: 平台默认值
+          none: 无额外设置
+        stats:
+          total: 全部
+          active: 已启用
+          required: 必需
+      show:
+        platform_scope: 此处的更改会影响所有使用此模块的客户。
+        actions:
+          open: 打开
+        module_key: 模块标识
+        version: 版本
+        details:
+          title: 模块信息
+          description: 此模块在平台上的注册方式。
+        sections:
+          availability: 可用性
+          availability_hint: 客户能否启用此模块、是否为必需模块，以及其他资源能否交接至此模块。
+          configuration: 配置
+          technical: 技术
+          advanced: 高级
+        module_status: 模块状态
+        module_status_hint: 开启后客户才能启用此模块。
+        locked_hint: 已锁定 — 此模块始终启用且为必需。
+        required_module: 必需模块
+        required_module_hint: 对所有客户启用，客户无法关闭。
+        required_disabled_hint: 请先启用模块，再将其设为必需。
+        required_confirm: 这将为所有现有客户启用该模块，是否继续？
+        handoff_target: 交接目标
+        handoff_target_hint: 页面提交后可交接至此模块。
+        handoff_on_label: 已启用交接
+        handoff_disabled_hint: 请先启用模块，再允许交接。
+        nav:
+          label: 模块分区
+          overview: 概览
+          configuration: 配置
+          resources: 资源
+          operations: 操作
+          developer: 开发者
+          credentials: 凭据
+          templates: 模板
+          providers: 服务商
+          vendor: 服务商
+          skeletons: 骨架
+          layouts: 版式
+          webhooks: Webhook
+          advanced: 高级
+        tabs:
+          nav_label: 模块设置分区
+          settings: 设置
+          technical: 技术参考
+          no_settings: 此模块暂无更多设置。
+          no_settings_description: 当此模块定义了平台默认值或服务商凭据时，将显示在此处。
+        authentication:
+          title: 客户注册
+          subtitle: 公开站点 /auth/sign_up 上的组织注册。
+          customer_signup: 允许公开客户注册
+          customer_signup_hint: 关闭后访客无法从公开站点创建新组织。
+        sms:
+          title: 短信配置
+          subtitle: 平台级网关凭据与共享消息模板。
+          credentials: 凭据
+          templates: 模板
+        email:
+          title: 邮件配置
+          subtitle: 平台级邮件网关凭据与 SMTP 设置。
+          credentials: 凭据
+        ai_assistant:
+          title: AI 助手配置
+          subtitle: 所有租户共用的平台级服务商凭据。
+          credentials: 凭据
+        payment:
+          title: 可用支付方式
+          subtitle: 控制客户可启用的支付网关。
+          available: 可用
+          unavailable: 不可用
+          available_count: "%{total} 个网关中 %{count} 个可用"
+          empty_title: 尚未注册支付网关
+          empty_description: 在 app/services/payments/gateways 下新增网关文件后即可在此启用。
+          gateway_available_label: "%{gateway} 可用性"
+          flows:
+            qr: 扫码支付
+            h5: 移动网页
+            jsapi: 应用内支付
+            card: 托管卡支付
+        models:
+          title: 模型
+          subtitle: 此模块拥有的数据表，以及客户是否可扩展。
+          count:
+            one: "%{count} 个模型"
+            other: "%{count} 个模型"
+          class: 类
+          table_name: 表名
+          columns: 列
+          associations: 关联
+          extendable: 可扩展
+          extendable_label: "允许扩展 %{model}"
+          extendable_attributes: "允许扩展的属性"
+          extendable_attributes_hint: "选择此模型中可供扩展使用的列。"
+          extendable_attribute_label: "允许 %{model} 扩展 %{attribute}"
+          extendable_attributes_count:
+            one: "%{count} 个属性"
+            other: "%{count} 个属性"
+          allowed: 允许
+          not_allowed: 不允许
+          empty: 此模块暂无模型。
+          empty_description: 此模块不存储自有数据。
+          reference_subtitle: 设置客户可扩展的模型，以及可用作模板 Token 的属性。
+          list_label: 模块模型
+          column_count:
+            one: "%{count} 列"
+            other: "%{count} 列"
+          association_count:
+            one: "%{count} 个关联"
+            other: "%{count} 个关联"
+          extendable_off_hint: 开启“可扩展”后，可选择扩展可使用的属性。
+          filter_attributes: 筛选属性
+          filter_empty: 没有匹配的属性。
+          no_attributes: 此模型暂无可配置的属性。
+        tokens:
+          title: "模型属性与模板 Token"
+          subtitle: "配置哪些模型属性可作为邮件和短信模板中的引用 Token"
+          available: "可用作 Token"
+          not_available: "未标记为变量"
+          saving: "保存中…"
+          failed: "保存失败"
+          attribute: "属性"
+          attribute_label: "属性显示名称"
+          type: "数据类型"
+          token_status: "模板 Token"
+        schema:
+          title: 默认值
+          subtitle: 客户未设置时使用这些值。
+          setting: 设置
+          default: 默认值
+          save_defaults: 保存默认值
+        summary:
+          availability: 可用性
+          configuration: 配置
+          version: 版本
+          configuration_available: 有可配置项
+          configuration_none: 无额外设置
+          unavailable: "—"
+        next_actions:
+          title: 后续操作
+          description: 请前往与当前任务对应的分区继续操作。
+          hint: 使用模块导航配置服务商、资源、运维或开发者设置。
+        captcha:
+          title: "验证码配置"
+          subtitle: "服务商凭据与受保护公开页面限额。"
+          credentials: "服务商凭据"
+          pages_title: "受保护的公开页面"
+          pages_subtitle: "按 IP 对这些公开 URL 做访问限流，超出限额后显示验证码。默认 100 次 / 5 分钟。"
+          skip_title: "跳过验证码"
+          skip_subtitle: "这些 URL 不会显示验证码，移回受保护列表即可恢复原限额。"
+          protected_search: "搜索受保护的 URL"
+          skip_search: "搜索跳过的 URL"
+          protected_empty: "当前没有受验证码保护的 URL。从跳过列表移回即可设置限额。"
+          skip_empty: "当前没有跳过验证码的 URL。从受保护列表移入即可关闭挑战。"
+          search_empty: "没有匹配的 URL。"
+          protected_count:
+            one: "已保护 %{count} 项"
+            other: "已保护 %{count} 项"
+          total_count: "%{count}"
+          empty: "未发现公开的平台表单。"
+          empty_description: "公开表单和页面可用后会显示在此处。"
+          empty_section_description: "请使用其他 URL 的限流控件将其移入此分区。"
+          collection:
+            resource: 资源
+            path: 路径
+            throttle: 访问限流
+      collections:
+        sms_templates: 短信模板
+        webhook_events: Webhook 事件
+      workspace:
+        provider_health: 服务商健康状况与凭据
+        stages:
+          assignment: 分配
+          provider: 服务商
+          health: 服务商健康状况
+          credentials: 凭据
+          advanced_options: 高级选项
+        platform_scope: 此处的更改将平台级应用于所有使用此模块的客户。
+        form_actions_label: 表单操作
+        cancel: 取消
+        status:
+          mandatory: 强制启用
+          required: 必需
+          active: 已启用
+          inactive: 未启用
+    captcha: {}
+    code_generators: {}

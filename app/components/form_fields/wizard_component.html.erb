@@ -1,0 +1,110 @@
+<div
+  class="wizard-container"
+  <% wizard_data.each do |key, value| %>
+    data-<%= key.to_s.dasherize %>="<%= value %>"
+  <% end %>
+>
+  <!-- Step indicators -->
+  <nav class="mb-8" aria-label="<%= t("comp_form_fields.wizard.steps_aria") %>">
+    <ol class="flex items-center">
+      <% step_indicator_items.each_with_index do |item, idx| %>
+        <li class="flex items-center <%= idx < total_steps - 1 ? 'flex-1' : '' %>">
+          <button
+            type="button"
+            class="flex items-center gap-2 group focus:outline-none"
+            data-action="wizard#goToStep"
+            data-step="<%= item[:number] %>"
+            data-wizard-target="stepIndicator"
+            data-step-index="<%= idx %>"
+          >
+            <span
+              class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold transition-all duration-200"
+              data-wizard-target="stepBadge"
+              data-step-index="<%= idx %>"
+            >
+              <span data-wizard-target="stepNumber" data-step-index="<%= idx %>"><%= item[:number] %></span>
+              <svg data-wizard-target="stepCheck" data-step-index="<%= idx %>" class="hidden w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </span>
+            <span
+              class="text-sm font-medium transition-colors duration-200 hidden sm:block"
+              data-wizard-target="stepLabel"
+              data-step-index="<%= idx %>"
+            ><%= item[:name] %></span>
+          </button>
+          <% if idx < total_steps - 1 %>
+            <div
+              class="flex-1 h-0.5 mx-3 rounded-full transition-colors duration-300"
+              data-wizard-target="stepConnector"
+              data-step-index="<%= idx %>"
+            ></div>
+          <% end %>
+        </li>
+      <% end %>
+    </ol>
+  </nav>
+
+  <form action="<%= action %>" method="<%= form_method %>" enctype="multipart/form-data" data-wizard-target="form">
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <%= content %>
+
+    <div data-wizard-target="stepsContainer">
+      <% steps.each do |step| %>
+        <%= step %>
+      <% end %>
+    </div>
+
+    <!-- Navigation -->
+    <div class="flex flex-wrap items-center justify-between gap-2 mt-8 pt-6 border-t border-gray-100">
+      <!-- Left side: Cancel (step 1) or Previous (steps 2+) -->
+      <div>
+        <button
+          type="button"
+          class="<%= secondary_button_classes %>"
+          data-action="wizard#cancel"
+          data-wizard-target="cancelButton"
+        >
+          <%= t("common.actions.cancel") %>
+        </button>
+        <% if allow_back %>
+          <button
+            type="button"
+            class="<%= secondary_button_classes %> hidden"
+            data-action="wizard#previous"
+            data-wizard-target="prevButton"
+          >
+            <%= t("comp_form_fields.wizard.previous") %>
+          </button>
+        <% end %>
+      </div>
+
+      <!-- Right side: Next or Submit -->
+      <div class="flex items-center gap-3">
+        <% if show_progress %>
+          <span class="text-sm text-gray-400" data-wizard-target="stepCounter">
+            <%= t("comp_form_fields.wizard.step_counter", total: total_steps) %>
+          </span>
+        <% end %>
+        <button
+          type="button"
+          class="<%= primary_button_classes %>"
+          data-action="wizard#next"
+          data-wizard-target="nextButton"
+        >
+          <%= t("comp_form_fields.wizard.next") %>
+        </button>
+        <button
+          type="submit"
+          class="<%= primary_button_classes %> hidden"
+          data-wizard-target="submitButton"
+        >
+          <%= submit_text %>
+        </button>
+        <% if extra_action %>
+          <span class="hidden" data-wizard-target="submitButton"><%= render extra_action %></span>
+        <% end %>
+      </div>
+    </div>
+  </form>
+</div>

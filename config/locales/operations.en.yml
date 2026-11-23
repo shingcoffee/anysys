@@ -1,0 +1,63 @@
+en:
+  operations:
+    violations:
+      generic: "This operation could not be completed (%{code})."
+      did_you_mean: " Did you mean: %{candidates}?"
+      schema:
+        required: "Missing required property %{property}."
+        enum: "Value must be one of: %{allowed}."
+        type: "Value must be of type %{expected}."
+        unknown_property: "Unknown property."
+        pattern: "Value must match pattern %{expected}."
+        format: "Value must match format %{expected}."
+        min_length: "Value must be at least %{expected} characters."
+        max_length: "Value must be at most %{expected} characters."
+        min_items: "Array must have at least %{expected} items."
+        max_items: "Array must have at most %{expected} items."
+        minimum: "Value must be at least %{expected}."
+        maximum: "Value must be at most %{expected}."
+        unique_items: "Array items must be unique."
+        min_properties: "Object must have at least %{expected} properties."
+        max_properties: "Object must have at most %{expected} properties."
+        invalid: "Value does not match the input schema."
+      operation:
+        unknown: "Unknown operation. Available: %{available}."
+        version_changed: "This operation contract has changed since the proposal was created."
+      permission:
+        denied: "You are not allowed to perform this operation."
+      conflict:
+        version_changed: "The target changed since it was read. Re-read and try again."
+      idempotency:
+        key_reused: "This idempotency key was already used with different input."
+      proposal:
+        not_pending: "This proposal is not waiting for confirmation."
+        already_pending: "A proposal is already waiting for confirmation. Combine the updates into one call."
+      attempts:
+        exhausted: "This operation has no retry attempts remaining."
+      domain:
+        invalid: "The change was rejected: %{errors}."
+      internal:
+        error: "The operation failed unexpectedly. Try again or report this to an administrator."
+      quota:
+        exceeded: "This customer has reached the quota for this resource."
+    guidance:
+      succeeded: "The operation completed."
+      confirmation_required: "Wait for the administrator to review and apply the plan. Do not claim the change is applied."
+      dry_run: "The operation is valid. Nothing was written."
+      invalid: "Correct the errors and call %{operation} again."
+      conflict: "Re-read the target and call %{operation} again."
+      forbidden: "Explain why the operation is not allowed. Do not retry."
+      failed: "Explain that the operation failed unexpectedly. Do not retry the same call blindly."
+      fix_payload: "Correct the fix_payload items and call %{operation} again; do not mention them to the user."
+      attempts_remaining: " Attempts remaining: %{attempts}."
+      ask_user: "Ask the user about the ask_user items in one round: one question per item, offering any listed candidates as options."
+      refresh: "Re-read the target and call %{operation} again."
+      blocked: "Explain the blocked items to the user; do not retry."
+    problems:
+      succeeded: "The operation completed."
+      confirmation_required: "Confirmation required"
+      dry_run: "Dry run"
+      invalid: "Invalid operation input"
+      conflict: "The target changed"
+      forbidden: "Forbidden"
+      failed: "The operation failed"

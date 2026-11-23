@@ -1,0 +1,12 @@
+zh-CN:
+  routes_audit:
+    invalid_selection: "请选择有效的记录 ID。"
+    restoration_failed: "无法恢复该记录。"
+    invalid_definition: "实体定义的 JSON 结构无效。"
+    entry_deletion_failed: "无法删除所选记录。"
+    version_promotion_failed: "无法应用该实体版本。"
+    customer_purge_failed: "无法永久删除所选客户。"
+    customer_deletion_failed: "无法删除该客户。"
+    pages:
+      invalid_action: "请选择有效的页面操作。"
+      update_failed: "无法更新所选页面。"

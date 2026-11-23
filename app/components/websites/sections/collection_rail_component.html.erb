@@ -1,0 +1,31 @@
+<section class="<%= padding_class %>">
+  <div class="<%= inner_measure_class %>">
+    <%= header(kicker: prop("kicker"), heading: prop("heading"), subhead: prop("subhead")) %>
+  </div>
+  <% if items.any? %>
+    <div class="mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-2 [scrollbar-width:none] sm:mt-12 sm:gap-5 md:gap-6 <%= RAIL_INSET_CLASS %>">
+      <% items.each do |item| %>
+        <% href = item_href(item) %>
+        <% item_tag = href.present? ? "a" : "article" %>
+        <<%= item_tag %> <%= item_attrs("items", class: "group flex #{card_width_class} shrink-0 snap-start flex-col gap-3", href: href.presence) %>>
+          <div class="relative <%= aspect_class %> <%= image_frame_class %>">
+            <%= render_media(item["image_url"], alt: item["title"].to_s, css_class: "absolute inset-0 size-full object-cover transition duration-700 ease-out #{href.present? ? "group-hover:scale-[1.04]" : ""}") %>
+          </div>
+          <div class="flex min-w-0 flex-col gap-1">
+            <% if present_text?(item["title"]) %>
+              <h3 <%= el_attrs("items.title", class: "flex items-center gap-1.5 #{card_title_class}") %>>
+                <span class="min-w-0 truncate"><%= item["title"] %></span>
+                <% if href.present? %>
+                  <svg class="size-4 shrink-0 opacity-40 transition duration-300 group-hover:translate-x-0.5 group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+                <% end %>
+              </h3>
+            <% end %>
+            <% if present_text?(item["meta"]) %>
+              <p <%= el_attrs("items.meta", class: "truncate text-site-sm md:text-site-base #{muted_class}") %>><%= item["meta"] %></p>
+            <% end %>
+          </div>
+        </<%= item_tag %>>
+      <% end %>
+    </div>
+  <% end %>
+</section>

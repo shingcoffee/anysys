@@ -1,0 +1,132 @@
+<div class="mx-auto max-w-3xl">
+  <% if announcement.errors.any? %>
+    <div class="mb-5">
+      <%= render AlertComponent.new(message: announcement.errors.full_messages.to_sentence, type: :error) %>
+    </div>
+  <% end %>
+
+  <%= form_with model: announcement, url: form_url, method: form_method,
+                scope: :platform_announcement, class: "flex flex-col gap-5" do |f| %>
+
+    <section class="card overflow-hidden">
+      <header class="border-b border-border-subtle px-6 py-4">
+        <h2 class="section-header"><%= t("maint_platform.announcements.form.content") %></h2>
+      </header>
+      <div class="flex flex-col gap-5 px-6 py-5">
+        <div>
+          <%= f.label :title, t("maint_platform.announcements.form.title"), class: "form-label form-label-required" %>
+          <%= f.text_field :title, maxlength: 120, class: "input-field" %>
+        </div>
+
+        <div>
+          <%= f.label :body_en, t("maint_platform.announcements.form.body_en"), class: "form-label form-label-required" %>
+          <%= f.text_area :body_en, rows: 3, maxlength: 500, class: "input-field" %>
+        </div>
+
+        <div>
+          <%= f.label :body_zh, t("maint_platform.announcements.form.body_zh"), class: "form-label form-label-required" %>
+          <%= f.text_area :body_zh, rows: 3, maxlength: 500, class: "input-field" %>
+        </div>
+
+        <div>
+          <%= f.label :link_url, t("maint_platform.announcements.form.link_url"), class: "form-label" %>
+          <%= f.url_field :link_url, maxlength: 2048, class: "input-field" %>
+          <p class="mt-1.5 text-caption"><%= t("maint_platform.announcements.form.link_url_hint") %></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card overflow-hidden">
+      <header class="border-b border-border-subtle px-6 py-4">
+        <h2 class="section-header"><%= t("maint_platform.announcements.form.display") %></h2>
+      </header>
+      <div class="flex flex-col gap-5 px-6 py-5">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <%= f.label :severity, t("maint_platform.announcements.form.severity"), class: "form-label form-label-required" %>
+            <%= f.select :severity, severity_options, {}, class: "input-field" %>
+          </div>
+
+          <div>
+            <%= f.label :status, t("maint_platform.announcements.form.status"), class: "form-label form-label-required" %>
+            <%= f.select :status, status_options, {}, class: "input-field" %>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <%= f.label :starts_at, t("maint_platform.announcements.form.starts_at"), class: "form-label" %>
+            <%= f.datetime_local_field :starts_at, class: "input-field" %>
+          </div>
+
+          <div>
+            <%= f.label :ends_at, t("maint_platform.announcements.form.ends_at"), class: "form-label" %>
+            <%= f.datetime_local_field :ends_at, class: "input-field" %>
+          </div>
+        </div>
+        <p class="text-caption"><%= t("maint_platform.announcements.form.window_hint") %></p>
+      </div>
+    </section>
+
+    <section class="card overflow-hidden"
+             data-controller="platform-announcement-audience"
+             data-platform-announcement-audience-preview-url-value="<%= audience_preview_url %>"
+             data-platform-announcement-audience-loading-text-value="<%= t("maint_platform.announcements.form.preview_loading") %>"
+             data-platform-announcement-audience-error-text-value="<%= t("maint_platform.announcements.form.preview_error") %>"
+             data-platform-announcement-audience-count-text-value="<%= t("maint_platform.announcements.form.preview_count") %>"
+             data-platform-announcement-audience-empty-text-value="<%= t("maint_platform.announcements.form.preview_empty") %>">
+      <header class="border-b border-border-subtle px-6 py-4">
+        <h2 class="section-header"><%= t("maint_platform.announcements.form.audience") %></h2>
+      </header>
+      <div class="flex flex-col gap-5 px-6 py-5">
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-border-subtle p-4 hover:bg-surface-hover has-[:checked]:border-accent-muted has-[:checked]:bg-accent-subtle">
+            <%= f.radio_button :audience, "all",
+                  class: "mt-0.5 h-4 w-4 border-border-strong text-accent focus:ring-accent",
+                  data: { action: "change->platform-announcement-audience#toggleAudience" } %>
+            <span class="min-w-0">
+              <span class="block text-body font-medium text-text-primary"><%= t("maint_platform.announcements.form.audience_all") %></span>
+              <span class="mt-0.5 block text-caption"><%= t("maint_platform.announcements.form.audience_all_hint") %></span>
+            </span>
+          </label>
+
+          <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-border-subtle p-4 hover:bg-surface-hover has-[:checked]:border-accent-muted has-[:checked]:bg-accent-subtle">
+            <%= f.radio_button :audience, "selected",
+                  class: "mt-0.5 h-4 w-4 border-border-strong text-accent focus:ring-accent",
+                  data: { action: "change->platform-announcement-audience#toggleAudience" } %>
+            <span class="min-w-0">
+              <span class="block text-body font-medium text-text-primary"><%= t("maint_platform.announcements.form.audience_selected") %></span>
+              <span class="mt-0.5 block text-caption"><%= t("maint_platform.announcements.form.audience_selected_hint") %></span>
+            </span>
+          </label>
+        </div>
+
+        <div data-platform-announcement-audience-target="panel"
+             class="<%= "hidden" unless selected_audience? %>">
+          <p class="mb-3 text-caption"><%= t("maint_platform.announcements.form.audience_conditions_hint") %></p>
+          <%= render Emails::Audience::SegmentBuilderComponent.new(
+                list: target_rules_source,
+                catalog: customer_field_catalog,
+                param_name: target_rules_param_name,
+                preview: false,
+                output_data: target_rules_output_data
+              ) %>
+
+          <div class="mt-4 flex flex-wrap items-center gap-3 border-t border-border-subtle pt-4">
+            <button type="button" class="btn btn-secondary text-sm"
+                    data-action="platform-announcement-audience#preview">
+              <%= t("maint_platform.announcements.form.preview_action") %>
+            </button>
+            <p class="text-caption" aria-live="polite"
+               data-platform-announcement-audience-target="output"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="flex items-center justify-end gap-3">
+      <%= link_to t("common.actions.cancel"), index_path, class: "btn btn-secondary" %>
+      <%= f.submit submit_label, class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,11 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "payment",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.payment.entries.reconciliations"), path: admin_modules_payments_reconciliations_path(current_customer_id) },
+        { label: @bill.bill_date.to_s }
+      ],
+      title: t("feature_modules.payment.entries.reconciliations")
+    ) do %>
+  <%= render ::Payments::Admin::ReconciliationTableComponent.new(bills: [@bill]) %>
+<% end %>

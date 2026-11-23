@@ -1,0 +1,14 @@
+<%= render Billing::Admin::PlatformPageComponent.new(
+  customer_id: current_customer_id,
+  section: :countable_items,
+  title: t("maint_platform.billing.countable_items.show.title"),
+  description: t("maint_platform.billing.countable_items.show.description"),
+  actions: [
+    { label: t("comp_billing.countable_items_form.save_changes"), variant: :primary, form: "countable-items-form" }
+  ]
+) do %>
+  <%= render Billing::Admin::CountableItemsFormComponent.new(
+    items:       @items,
+    customer_id: current_customer_id
+  ) %>
+<% end %>

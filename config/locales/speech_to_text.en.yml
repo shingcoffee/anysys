@@ -1,0 +1,28 @@
+en:
+  speech_to_text:
+    widget:
+      mic_label: "Dictate"
+      stop_label: "Stop recording"
+      recording: "Recording…"
+      transcribing: "Transcribing…"
+      permission_denied: "Microphone permission denied."
+      no_microphone: "No microphone was found."
+      insecure: "Voice input requires HTTPS or localhost."
+      unavailable: "Voice input is not available in this browser."
+      too_long: "Recording is too long (maximum {seconds} seconds)."
+      too_large: "Audio file is too large."
+      generic_error: "Could not transcribe audio. Try again."
+      empty: "No speech detected."
+      vendor_down: "Transcription service is unavailable. Try again."
+      disabled: "Speech to text is not available."
+      rate_limited: "Too many transcriptions. Try again later."
+    errors:
+      audio_blank: "Audio can't be blank."
+      audio_too_large: "Audio file is too large."
+      audio_content_type: "Audio file is invalid."
+      audio_size_unknown: "Audio file size could not be determined."
+      audio_destination: "Audio destination is invalid."
+      field_dom_id_blank: "Field can't be blank."
+      rate_limited: "Too many transcriptions. Try again later."
+      rate_limited_burst: "You're recording too quickly. Wait a moment and try again."
+      too_long: "Recording is too long."

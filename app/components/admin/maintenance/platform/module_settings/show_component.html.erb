@@ -1,0 +1,329 @@
+<% if developer? %>
+  <div class="flex flex-col gap-6" data-module-settings-pane="developer" data-developer-reference="true">
+    <div data-module-settings-section="handoff">
+      <%= render Admin::Maintenance::Platform::ModuleSettings::SectionCardComponent.new(
+            title: t("maint_platform.module_settings.show.handoff_target"),
+            description: t("maint_platform.module_settings.show.handoff_target_hint")
+          ) do %>
+        <%= render Admin::Maintenance::Platform::ModuleSettings::SettingRowComponent.new(
+              label: t("maint_platform.module_settings.show.handoff_on_label"),
+              disabled_reason: handoff_disabled_reason
+            ) do |row| %>
+          <%= render Admin::Maintenance::Platform::ModuleToggleComponent.new(
+                url: setting_path,
+                field: "handoff_enabled",
+                on: feature_module.handoff_enabled?,
+                disabled: !feature_module.active?,
+                aria_label: t("maint_platform.module_settings.show.handoff_target"),
+                html_attributes: row.control_html_attributes,
+                show_label: false
+              ) %>
+        <% end %>
+        <div class="border-t border-border-subtle" data-module-settings-section="contract">
+          <%= render Admin::Maintenance::Platform::ModuleHandoffComponent.new(feature_module: feature_module) %>
+        </div>
+      <% end %>
+    </div>
+
+    <div data-module-settings-section="models">
+      <%= render Admin::Maintenance::Platform::ModuleSettings::SectionCardComponent.new(
+            title: t("maint_platform.module_settings.show.models.title"),
+            description: t("maint_platform.module_settings.show.models.reference_subtitle"),
+            action: capture { content_tag(:span, t("maint_platform.module_settings.show.models.count", count: module_models.size), class: "text-caption") }
+          ) do %>
+        <% if module_models.any? %>
+          <div class="grid grid-cols-1 lg:grid-cols-[15rem_minmax(0,1fr)]">
+            <nav class="min-w-0 border-b border-border-subtle p-2 lg:border-b-0 lg:border-r"
+                 aria-label="<%= t("maint_platform.module_settings.show.models.list_label") %>"
+                 data-module-settings-model-list="true">
+              <ul class="flex gap-1 overflow-x-auto lg:flex-col lg:overflow-visible">
+                <% module_models.each do |model| %>
+                  <li class="lg:w-full">
+                    <%= link_to model_path(model),
+                          class: model_link_classes(model),
+                          title: model[:name],
+                          aria: { current: (selected_model?(model) ? "page" : nil) },
+                          data: { module_settings_model_link: model[:name] } do %>
+                      <span class="min-w-0">
+                        <span class="block truncate text-sm font-medium"><%= model[:name].demodulize %></span>
+                        <span class="block truncate text-mono text-xs text-text-muted"><%= model[:table_name] %></span>
+                      </span>
+                      <% if feature_module.extendable_model?(model[:name]) %>
+                        <span class="size-2 shrink-0 rounded-full bg-accent" aria-hidden="true" title="<%= t("maint_platform.module_settings.show.models.extendable") %>"></span>
+                        <span class="sr-only"><%= t("maint_platform.module_settings.show.models.extendable") %></span>
+                      <% end %>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
+            </nav>
+
+            <% model = selected_model %>
+            <% extendable = feature_module.extendable_model?(model[:name]) %>
+            <% columns = model_columns(model) %>
+            <div class="min-w-0" data-module-settings-model="<%= model[:name] %>" data-controller="list-filter">
+              <header class="flex flex-col gap-4 border-b border-border-subtle px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+                <div class="min-w-0">
+                  <h3 class="break-all text-mono text-sm font-semibold text-text-primary"><%= model[:name] %></h3>
+                  <p class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-caption">
+                    <span class="text-code text-mono"><%= model[:table_name] %></span>
+                    <span><%= model_meta(model) %></span>
+                  </p>
+                </div>
+                <div class="flex shrink-0 items-center justify-between gap-3 sm:justify-end">
+                  <span class="text-sm font-medium text-text-primary" aria-hidden="true"><%= t("maint_platform.module_settings.show.models.extendable") %></span>
+                  <%= render Admin::Maintenance::Platform::ModuleToggleComponent.new(
+                        url: setting_path,
+                        field: "extendable",
+                        on: extendable,
+                        extra_params: { extendable_model: model[:name] },
+                        aria_label: t("maint_platform.module_settings.show.models.extendable_label", model: model[:name]),
+                        show_label: false
+                      ) %>
+                </div>
+              </header>
+
+              <% if columns.any? %>
+                <div class="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+                  <p class="text-caption">
+                    <% if extendable %>
+                      <%= t("maint_platform.module_settings.show.models.extendable_attributes_hint") %>
+                      <span class="font-medium text-text-secondary"><%= t("maint_platform.module_settings.show.models.extendable_attributes_count", count: extendable_attribute_count(model)) %></span>
+                    <% else %>
+                      <%= t("maint_platform.module_settings.show.models.extendable_off_hint") %>
+                    <% end %>
+                  </p>
+                  <label for="module-settings-attribute-filter" class="sr-only"><%= t("maint_platform.module_settings.show.models.filter_attributes") %></label>
+                  <input type="search" id="module-settings-attribute-filter" autocomplete="off"
+                         class="input-field sm:w-60"
+                         placeholder="<%= t("maint_platform.module_settings.show.models.filter_attributes") %>"
+                         data-list-filter-target="search"
+                         data-action="input->list-filter#search">
+                </div>
+
+                <div class="overflow-x-auto border-t border-border-subtle" data-list-filter-target="directory">
+                  <table class="min-w-full divide-y divide-border-subtle">
+                    <thead class="table-header">
+                      <tr>
+                        <th scope="col" class="px-4 py-2.5 text-left text-label sm:px-6"><%= t("maint_platform.module_settings.show.tokens.attribute") %></th>
+                        <th scope="col" class="hidden px-4 py-2.5 text-left text-label md:table-cell"><%= t("maint_platform.module_settings.show.tokens.type") %></th>
+                        <% if extendable %>
+                          <th scope="col" class="w-24 whitespace-nowrap px-4 py-2.5 text-center text-label"><%= t("maint_platform.module_settings.show.models.extendable") %></th>
+                        <% end %>
+                        <th scope="col" class="w-28 whitespace-nowrap px-4 py-2.5 text-center text-label sm:px-6"><%= t("maint_platform.module_settings.show.tokens.token_status") %></th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-border-subtle bg-surface">
+                      <% columns.each do |column| %>
+                        <% token_active = platform_token_keys.include?(token_source_key(model[:name], column[:name])) %>
+                        <tr class="table-row" data-list-filter-target="item" data-search-text="<%= attribute_search_text(column) %>">
+                          <td class="px-4 py-2.5 sm:px-6">
+                            <span class="block break-all text-mono text-sm text-text-primary"><%= column[:name] %></span>
+                            <span class="block text-xs text-text-muted"><%= column[:label] %></span>
+                          </td>
+                          <td class="hidden whitespace-nowrap px-4 py-2.5 text-mono text-xs text-text-muted md:table-cell"><%= column[:type] %></td>
+                          <% if extendable %>
+                            <td class="px-4 py-2.5 text-center">
+                              <%= form_with url: setting_path, method: :patch, local: true,
+                                    html: { class: "inline-flex", data: { controller: "auto-submit" } } do %>
+                                <%= hidden_field_tag :extendable_model, model[:name], id: nil %>
+                                <%= hidden_field_tag :extendable_attribute, column[:name], id: nil %>
+                                <%= hidden_field_tag :extendable_attribute_enabled, "0", id: nil %>
+                                <%= check_box_tag :extendable_attribute_enabled, "1",
+                                      feature_module.extendable_attribute_allowed?(model[:name], column[:name]),
+                                      id: extendable_attribute_field_id(model[:name], column[:name]),
+                                      class: "h-4 w-4 cursor-pointer rounded border-border text-accent focus:ring-accent",
+                                      aria: { label: t("maint_platform.module_settings.show.models.extendable_attribute_label", model: model[:name], attribute: column[:name]) },
+                                      data: { action: "change->auto-submit#submit" } %>
+                              <% end %>
+                            </td>
+                          <% end %>
+                          <td class="px-4 py-2.5 text-center sm:px-6">
+                            <div class="inline-flex items-center justify-center"
+                                 data-controller="template-token-checkbox"
+                                 data-template-token-checkbox-url-value="<%= setting_path %>"
+                                 data-template-token-checkbox-token-model-value="<%= model[:name] %>"
+                                 data-template-token-checkbox-token-attribute-value="<%= column[:name] %>"
+                                 data-template-token-checkbox-active-value="<%= token_active %>">
+                              <input type="checkbox"
+                                     data-template-token-checkbox-target="checkbox"
+                                     data-action="change->template-token-checkbox#toggle"
+                                     <%= "checked" if token_active %>
+                                     aria-label="<%= t("maint_platform.module_settings.show.tokens.token_status") %>: <%= model[:name] %>.<%= column[:name] %>"
+                                     class="h-4 w-4 cursor-pointer rounded border-border text-accent transition-opacity focus:ring-accent disabled:cursor-not-allowed disabled:opacity-50" />
+                            </div>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="hidden px-4 py-10 text-center text-caption sm:px-6" role="status" data-list-filter-target="empty">
+                  <%= t("maint_platform.module_settings.show.models.filter_empty") %>
+                </p>
+              <% else %>
+                <p class="px-4 py-10 text-center text-caption sm:px-6"><%= t("maint_platform.module_settings.show.models.no_attributes") %></p>
+              <% end %>
+            </div>
+          </div>
+        <% else %>
+          <%= render Admin::Maintenance::Platform::ModuleSettings::EmptySectionComponent.new(
+                title: t("maint_platform.module_settings.show.models.empty"),
+                description: t("maint_platform.module_settings.show.models.empty_description")
+              ) %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% elsif configuration? %>
+  <div class="flex w-full max-w-3xl flex-col gap-6" data-module-settings-pane="configuration">
+    <% if authentication? %>
+      <div data-module-settings-section="authentication">
+        <%= render Admin::Maintenance::Platform::ModuleSettings::SectionCardComponent.new(
+              title: t("maint_platform.module_settings.show.authentication.title"),
+              description: t("maint_platform.module_settings.show.authentication.subtitle")
+            ) do %>
+          <%= render Admin::Maintenance::Platform::ModuleSettings::SettingRowComponent.new(
+                label: t("maint_platform.module_settings.show.authentication.customer_signup"),
+                description: t("maint_platform.module_settings.show.authentication.customer_signup_hint")
+              ) do |row| %>
+            <%= render Admin::Maintenance::Platform::ModuleToggleComponent.new(
+                  url: setting_path,
+                  field: "allow_customer_signup",
+                  on: customer_signup_enabled,
+                  aria_label: t("maint_platform.module_settings.show.authentication.customer_signup"),
+                  html_attributes: row.control_html_attributes,
+                  show_label: false
+                ) %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if schema.any? %>
+      <div data-module-settings-section="defaults">
+        <%= render Admin::Maintenance::Platform::ModuleSettings::SectionCardComponent.new(
+              title: t("maint_platform.module_settings.show.schema.title"),
+              description: t("maint_platform.module_settings.show.schema.subtitle")
+            ) do %>
+          <%= form_with url: setting_path, method: :patch, local: true, class: "w-full" do %>
+            <div class="divide-y divide-border-subtle">
+              <% schema.each do |key, schema_def| %>
+                <% field_name = "config_defaults[#{key}]" %>
+                <% field_id = schema_field_id(key) %>
+                <% field_label = schema_field_label(key, schema_def) %>
+                <% description_id = "#{field_id}_description" %>
+                <%= render Admin::Maintenance::Platform::ModuleSettings::SettingRowComponent.new(
+                      label: field_label,
+                      description: schema_def["description"],
+                      description_id: description_id
+                    ) do |row| %>
+                  <div class="w-full sm:w-56">
+                    <% case schema_def["type"] %>
+                    <% when "boolean" %>
+                      <%= hidden_field_tag field_name, "0", id: nil %>
+                      <label for="<%= field_id %>" class="inline-flex cursor-pointer items-center sm:justify-end">
+                        <span class="sr-only"><%= field_label %></span>
+                        <%= check_box_tag field_name, "1", ActiveModel::Type::Boolean.new.cast(schema_def["default"]),
+                              id: field_id, class: "sr-only peer", **row.control_html_attributes %>
+                        <span class="relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent bg-border transition-colors duration-200 ease-in-out peer-checked:bg-accent peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2">
+                          <span class="pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-surface shadow ring-0 transition duration-200 ease-in-out peer-checked:translate-x-5"></span>
+                        </span>
+                      </label>
+                    <% when "number", "integer" %>
+                      <label for="<%= field_id %>" class="sr-only"><%= field_label %></label>
+                      <%= number_field_tag field_name, schema_def["default"],
+                            id: field_id, class: "input-field", **row.control_html_attributes %>
+                    <% when "select" %>
+                      <label for="<%= field_id %>" class="sr-only"><%= field_label %></label>
+                      <%= select_tag field_name,
+                            options_for_select(schema_option_pairs(key, schema_def), schema_def["default"]),
+                            id: field_id, class: "input-field", **row.control_html_attributes %>
+                    <% else %>
+                      <label for="<%= field_id %>" class="sr-only"><%= field_label %></label>
+                      <%= text_field_tag field_name, schema_def["default"],
+                            id: field_id, class: "input-field", **row.control_html_attributes %>
+                    <% end %>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+            <div class="flex justify-end border-t border-border-subtle bg-canvas-elevated px-4 py-3 sm:px-6">
+              <%= render ButtonComponent.new(variant: :primary, size: :sm, tag: :button, type: :submit) do %>
+                <%= t("maint_platform.module_settings.show.schema.save_defaults") %>
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% unless authentication? || schema.any? %>
+      <%= render EmptyStateComponent.new(
+            title: t("maint_platform.module_settings.show.tabs.no_settings"),
+            description: t("maint_platform.module_settings.show.tabs.no_settings_description")
+          ) %>
+    <% end %>
+  </div>
+<% else %>
+  <div class="flex flex-col gap-6" data-module-settings-pane="overview">
+    <div data-module-settings-section="availability">
+      <%= render Admin::Maintenance::Platform::ModuleSettings::SectionCardComponent.new(
+            title: t("maint_platform.module_settings.show.sections.availability"),
+            description: t("maint_platform.module_settings.show.sections.availability_hint")
+          ) do %>
+        <div class="divide-y divide-border-subtle">
+          <%= render Admin::Maintenance::Platform::ModuleSettings::SettingRowComponent.new(
+                label: t("maint_platform.module_settings.show.module_status"),
+                description: t("maint_platform.module_settings.show.module_status_hint"),
+                disabled_reason: feature_module.mandatory? ? t("maint_platform.module_settings.show.locked_hint") : nil
+              ) do |row| %>
+            <%= render Admin::Maintenance::Platform::ModuleToggleComponent.new(
+                  url: setting_path,
+                  field: "status_active",
+                  on: feature_module.active?,
+                  disabled: feature_module.mandatory?,
+                  aria_label: t("maint_platform.module_settings.show.module_status"),
+                  html_attributes: row.control_html_attributes,
+                  show_label: false
+                ) %>
+          <% end %>
+          <%= render Admin::Maintenance::Platform::ModuleSettings::SettingRowComponent.new(
+                label: t("maint_platform.module_settings.show.required_module"),
+                description: t("maint_platform.module_settings.show.required_module_hint"),
+                disabled_reason: required_disabled_reason
+              ) do |row| %>
+            <%= render Admin::Maintenance::Platform::ModuleToggleComponent.new(
+                  url: setting_path,
+                  field: "required",
+                  on: feature_module.required?,
+                  disabled: feature_module.mandatory? || !feature_module.active?,
+                  confirm: feature_module.required? ? nil : t("maint_platform.module_settings.show.required_confirm"),
+                  aria_label: t("maint_platform.module_settings.show.required_module"),
+                  html_attributes: row.control_html_attributes,
+                  show_label: false
+                ) %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <div data-module-settings-section="details">
+      <%= render Admin::Maintenance::Platform::ModuleSettings::SectionCardComponent.new(
+            title: t("maint_platform.module_settings.show.details.title"),
+            description: t("maint_platform.module_settings.show.details.description")
+          ) do %>
+        <dl class="grid grid-cols-1 gap-x-6 gap-y-4 px-4 py-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
+          <% detail_items.each do |item| %>
+            <div class="min-w-0">
+              <dt class="text-caption"><%= item[:label] %></dt>
+              <dd class="mt-1 <%= item[:mono] ? "text-mono text-sm text-text-primary" : "text-body-sm text-text-primary" %> break-words">
+                <%= item[:value] %>
+              </dd>
+            </div>
+          <% end %>
+        </dl>
+      <% end %>
+    </div>
+  </div>
+<% end %>

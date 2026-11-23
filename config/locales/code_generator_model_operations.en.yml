@@ -1,0 +1,15 @@
+en:
+  code_generator_model_operations:
+    find_model:
+      not_found: "No matching record was found"
+      errors:
+        unsafe_id_expression: "idExpression must be a ctx path (for example params.id) or a numeric literal"
+        unsafe_find_field: "findField must be a bare column identifier"
+    batch_operation:
+      errors:
+        incompatible_scope: "The batch source relation cannot use limit, distinct, lock, readonly, or offset"
+    bulk_import:
+      errors:
+        too_many_rows: "Cannot import %{count} rows (maximum is %{max})"
+    errors:
+      internal_column: "Cannot assign internal columns (%{columns})"

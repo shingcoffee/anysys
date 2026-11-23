@@ -1,0 +1,19 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: @module_key,
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("admin_misc.module_entries.breadcrumb") },
+        { label: @title }
+      ],
+      title: @title,
+      actions: []
+    ) do %>
+  <%= render AdminTableComponent.new(
+  rows:       @rows,
+  columns:    @columns,
+  pagination: @pagination,
+  params:     params.permit(:q, :sort, :dir, :page).to_h.symbolize_keys,
+  search:     { param: :q, placeholder: t("admin_misc.module_entries.search_placeholder") },
+  row_path:   @row_path
+) %>
+<% end %>

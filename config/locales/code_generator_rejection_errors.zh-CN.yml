@@ -1,0 +1,21 @@
+zh-CN:
+  code_generator_rejection_errors:
+    unsafe_expression: "%{field} 只允许是单个安全表达式"
+    active_record_class: "不能调用 ActiveRecord 类"
+    forbidden_method: "方法 %{method} 不在允许列表中"
+  flowchart_actions:
+    enqueue_job:
+      errors:
+        invalid_wait_until: "waitUntil 必须是受支持的时间表达式或 ctx 引用。"
+    circuit_breaker:
+      errors:
+        invalid_result_var: "resultVar 必须是有效标识符。"
+    rate_limiter:
+      errors:
+        invalid_result_var: "resultVar 必须是有效标识符。"
+    retry_with_backoff:
+      errors:
+        invalid_result_var: "resultVar 必须是有效标识符。"
+    idempotency_check:
+      errors:
+        explicit_key_required: "显式键策略必须配置 explicitKey。"

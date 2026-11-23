@@ -1,0 +1,86 @@
+<% unless any_plans? %>
+  <div class="card overflow-hidden">
+    <%= render Billing::Admin::EmptyStateComponent.new(
+      icon: :banknotes,
+      title: t("comp_billing.plan_catalog.empty_title"),
+      description: t("comp_billing.plan_catalog.empty_desc")
+    ) do |empty| %>
+      <% empty.with_action do %>
+        <%= link_to t("comp_billing.plan_catalog.create_first"), new_plan_path, class: "btn btn-primary btn-sm" %>
+      <% end %>
+    <% end %>
+  </div>
+<% else %>
+  <ul role="list" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+    <% plans.each do |plan| %>
+      <li class="card flex flex-col overflow-hidden <%= plan.active? ? '' : 'opacity-60' %>">
+        <div class="flex items-start justify-between gap-3 border-b border-border-subtle px-5 pt-5 pb-4">
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-2">
+              <h3 class="text-heading truncate"><%= plan.name %></h3>
+              <% if plan.is_default? %>
+                <%= render BadgeComponent.new(variant: :primary, size: :sm) do %><%= t("comp_billing.plan_catalog.default_badge") %><% end %>
+              <% end %>
+            </div>
+            <p class="mt-1 truncate font-mono text-caption text-text-tertiary"><%= plan.code %></p>
+          </div>
+          <span class="inline-flex shrink-0 items-center gap-1.5 text-caption font-medium <%= plan.active? ? 'text-success' : 'text-text-tertiary' %>">
+            <span class="h-1.5 w-1.5 rounded-full <%= plan.active? ? 'bg-success' : 'bg-text-muted' %>"></span>
+            <%= plan.active? ? t("common.status.active") : t("common.status.inactive") %>
+          </span>
+        </div>
+
+        <div class="px-5 py-4">
+          <% if free?(plan) %>
+            <p class="text-title text-text-primary"><%= t("comp_billing.plan_catalog.free") %></p>
+          <% else %>
+            <div class="flex items-baseline gap-1">
+              <span class="text-title tabular-nums text-text-primary"><%= format_amount(plan.amount_usd, "USD") %></span>
+              <span class="text-body-sm text-text-tertiary"><%= interval_suffix(plan) %></span>
+            </div>
+          <% end %>
+          <div class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-caption text-text-tertiary">
+            <span class="tabular-nums"><%= t("comp_billing.plan_catalog.amount_cny", amount: format_amount(plan.amount_cny, "CNY")) %></span>
+            <span aria-hidden="true">·</span>
+            <span><%= interval_label(plan) %></span>
+            <% if plan.trial_days.to_i.positive? %>
+              <span aria-hidden="true">·</span>
+              <span><%= t("comp_billing.plan_catalog.trial", days: plan.trial_days) %></span>
+            <% end %>
+          </div>
+        </div>
+
+        <% if items.any? %>
+          <div class="border-t border-border-subtle px-5 py-4">
+            <p class="text-label mb-2.5"><%= t("comp_billing.plan_catalog.limits") %></p>
+            <dl class="space-y-1.5">
+              <% items.each do |item| %>
+                <div class="flex items-center justify-between gap-2 text-body-sm">
+                  <dt class="truncate text-text-secondary"><%= item.label %></dt>
+                  <dd class="shrink-0 font-medium tabular-nums <%= unlimited?(plan, item) ? 'text-text-muted' : 'text-text-primary' %>">
+                    <%= limit_display(plan, item) %>
+                  </dd>
+                </div>
+              <% end %>
+            </dl>
+          </div>
+        <% end %>
+
+        <div class="mt-auto flex flex-wrap items-center gap-2 border-t border-border-subtle px-5 py-3">
+          <%= link_to t("common.actions.view"), plan_path(plan), class: "btn btn-ghost btn-sm" %>
+          <%= link_to t("common.actions.edit"), edit_plan_path(plan), class: "btn btn-secondary btn-sm" %>
+          <%= button_to plan_path(plan),
+                method: :delete,
+                class: "btn btn-ghost btn-sm text-danger hover:bg-danger-subtle",
+                title: t("comp_billing.plan_catalog.archive_title", name: plan.name),
+                form: { class: "ml-auto shrink-0" },
+                data: { turbo_confirm: t("comp_billing.plan_catalog.delete_confirm", name: plan.name) },
+                aria: { label: t("comp_billing.plan_catalog.archive_title", name: plan.name) } do %>
+            <%= render Billing::Admin::IconComponent.new(name: :archive, class_name: "h-4 w-4") %>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+<% if pagination %><%= render ::Admin::PaginationComponent.new(pagination: pagination, page_path: page_path) %><% end %>

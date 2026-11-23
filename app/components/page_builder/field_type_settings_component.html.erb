@@ -1,0 +1,408 @@
+<div data-page-builder-target="typeSettingsSection">
+
+                  <%# --- Text constraints --- %>
+                  <div class="hidden" data-type-setting="fieldMaxLength">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.max_length") %></label>
+                    <input type="number" data-page-builder-target="fieldMaxLength"
+                           data-property="max_length"
+                           data-action="input->page-builder#updateFieldProperty"
+                           min="0"
+                           class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                           placeholder="<%= t("comp_page_builder.field_type_settings.max_length_placeholder") %>">
+                  </div>
+
+                  <div class="hidden" data-type-setting="fieldMinLength">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.min_length") %></label>
+                    <input type="number" data-page-builder-target="fieldMinLength"
+                           data-property="min_length"
+                           data-action="input->page-builder#updateFieldProperty"
+                           min="0"
+                           class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                           placeholder="<%= t("comp_page_builder.field_type_settings.min_length_placeholder") %>">
+                  </div>
+
+                  <div class="hidden" data-type-setting="fieldPattern">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.pattern") %></label>
+                    <input type="text" data-page-builder-target="fieldPattern"
+                           data-property="pattern"
+                           data-action="input->page-builder#updateFieldProperty"
+                           class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                           placeholder="<%= t("comp_page_builder.field_type_settings.pattern_placeholder") %>">
+                  </div>
+
+                  <div class="hidden" data-type-setting="fieldAutocomplete">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.autocomplete") %></label>
+                    <select data-page-builder-target="fieldAutocomplete"
+                            data-property="autocomplete"
+                            data-action="change->page-builder#updateFieldProperty"
+                            class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                      <option value=""><%= t("comp_page_builder.field_type_settings.autocomplete_options.none") %></option>
+                      <option value="on"><%= t("comp_page_builder.field_type_settings.autocomplete_options.on") %></option>
+                      <option value="off"><%= t("comp_page_builder.field_type_settings.autocomplete_options.off") %></option>
+                      <option value="name"><%= t("comp_page_builder.field_type_settings.autocomplete_options.name") %></option>
+                      <option value="email"><%= t("comp_page_builder.field_type_settings.autocomplete_options.email") %></option>
+                      <option value="tel"><%= t("comp_page_builder.field_type_settings.autocomplete_options.tel") %></option>
+                      <option value="address-line1"><%= t("comp_page_builder.field_type_settings.autocomplete_options.address") %></option>
+                    </select>
+                  </div>
+
+                  <%# --- Textarea options --- %>
+                  <div class="hidden" data-type-setting="fieldRows">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.rows") %></label>
+                    <input type="number" data-page-builder-target="fieldRows"
+                           data-property="rows"
+                           data-action="input->page-builder#updateFieldProperty"
+                           min="1" max="20"
+                           class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                           placeholder="3">
+                  </div>
+
+                  <div class="hidden" data-type-setting="fieldResize">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.resize") %></label>
+                    <select data-page-builder-target="fieldResize"
+                            data-property="resize"
+                            data-action="change->page-builder#updateFieldProperty"
+                            class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                      <option value="vertical"><%= t("comp_page_builder.field_type_settings.resize_options.vertical") %></option>
+                      <option value="none"><%= t("comp_page_builder.field_type_settings.resize_options.none") %></option>
+                      <option value="both"><%= t("comp_page_builder.field_type_settings.resize_options.both") %></option>
+                    </select>
+                  </div>
+
+                  <%# --- Password options --- %>
+                  <div class="hidden" data-type-setting="fieldShowToggle">
+                    <label class="flex items-center">
+                      <input type="checkbox" data-page-builder-target="fieldShowToggle"
+                             data-property="show_toggle"
+                             data-action="change->page-builder#updateFieldProperty"
+                             class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                      <span class="ml-2 text-xs text-gray-700"><%= t("comp_page_builder.field_type_settings.show_password_toggle") %></span>
+                    </label>
+                  </div>
+
+                  <%# --- Selection enhancements --- %>
+                  <div class="hidden" data-type-setting="fieldAllowBlank">
+                    <label class="flex items-center">
+                      <input type="checkbox" data-page-builder-target="fieldAllowBlank"
+                             data-property="allow_blank"
+                             data-action="change->page-builder#updateFieldProperty"
+                             class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                      <span class="ml-2 text-xs text-gray-700"><%= t("comp_page_builder.field_type_settings.allow_blank") %></span>
+                    </label>
+                  </div>
+
+                  <div class="hidden" data-type-setting="fieldSearchable">
+                    <label class="flex items-center">
+                      <input type="checkbox" data-page-builder-target="fieldSearchable"
+                             data-property="searchable"
+                             data-action="change->page-builder#updateFieldProperty"
+                             class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                      <span class="ml-2 text-xs text-gray-700"><%= t("comp_page_builder.field_type_settings.searchable") %></span>
+                    </label>
+                  </div>
+
+                  <div class="hidden" data-type-setting="fieldInlineLayout">
+                    <label class="flex items-center">
+                      <input type="checkbox" data-page-builder-target="fieldInlineLayout"
+                             data-property="inline_layout"
+                             data-action="change->page-builder#updateFieldProperty"
+                             class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                      <span class="ml-2 text-xs text-gray-700"><%= t("comp_page_builder.field_type_settings.inline_layout") %></span>
+                    </label>
+                  </div>
+
+                  <div class="hidden grid grid-cols-2 gap-2" data-type-setting="fieldMinMaxSelections">
+                    <div>
+                      <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.min_selections") %></label>
+                      <input type="number" data-page-builder-target="fieldMinSelections"
+                             data-property="min_selections"
+                             data-action="input->page-builder#updateFieldProperty"
+                             min="0"
+                             class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                             placeholder="0">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.max_selections") %></label>
+                      <input type="number" data-page-builder-target="fieldMaxSelections"
+                             data-property="max_selections"
+                             data-action="input->page-builder#updateFieldProperty"
+                             min="0"
+                             class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                             placeholder="<%= t("comp_page_builder.field_type_settings.no_limit") %>">
+                    </div>
+                  </div>
+
+                  <%# --- Switch labels --- %>
+                  <div class="hidden grid grid-cols-2 gap-2" data-type-setting="fieldOnOffLabel">
+                    <div>
+                      <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.on_label") %></label>
+                      <input type="text" data-page-builder-target="fieldOnLabel"
+                             data-property="on_label"
+                             data-action="input->page-builder#updateFieldProperty"
+                             class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                             placeholder="<%= t("comp_page_builder.field_type_settings.yes_placeholder") %>">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.off_label") %></label>
+                      <input type="text" data-page-builder-target="fieldOffLabel"
+                             data-property="off_label"
+                             data-action="input->page-builder#updateFieldProperty"
+                             class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                             placeholder="<%= t("comp_page_builder.field_type_settings.no_placeholder") %>">
+                    </div>
+                  </div>
+
+                  <%# --- Numeric constraints --- %>
+                  <div class="hidden grid grid-cols-2 gap-2" data-type-setting="fieldMinMaxValue">
+                    <div>
+                      <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.min_value") %></label>
+                      <input type="number" data-page-builder-target="fieldMinValue"
+                             data-property="min_value"
+                             data-action="input->page-builder#updateFieldProperty"
+                             class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                             placeholder="<%= t("comp_page_builder.field_type_settings.no_minimum") %>">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.max_value") %></label>
+                      <input type="number" data-page-builder-target="fieldMaxValue"
+                             data-property="max_value"
+                             data-action="input->page-builder#updateFieldProperty"
+                             class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                             placeholder="<%= t("comp_page_builder.field_type_settings.no_maximum") %>">
+                    </div>
+                  </div>
+
+                  <div class="hidden" data-type-setting="fieldStep">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.step") %></label>
+                    <input type="number" data-page-builder-target="fieldStep"
+                           data-property="step"
+                           data-action="input->page-builder#updateFieldProperty"
+                           min="0"
+                           class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                           placeholder="1">
+                  </div>
+
+                  <div class="hidden" data-type-setting="fieldShowValue">
+                    <label class="flex items-center">
+                      <input type="checkbox" data-page-builder-target="fieldShowValue"
+                             data-property="show_value"
+                             data-action="change->page-builder#updateFieldProperty"
+                             class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                      <span class="ml-2 text-xs text-gray-700"><%= t("comp_page_builder.field_type_settings.show_value") %></span>
+                    </label>
+                  </div>
+
+                  <%# --- Currency --- %>
+                  <div class="hidden" data-type-setting="fieldCurrencySymbol">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.currency_symbol") %></label>
+                    <select data-page-builder-target="fieldCurrencySymbol"
+                            data-property="currency_symbol"
+                            data-action="change->page-builder#updateFieldProperty"
+                            class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                      <option value="$"><%= t("comp_page_builder.field_type_settings.currency_options.usd") %></option>
+                      <option value="€"><%= t("comp_page_builder.field_type_settings.currency_options.eur") %></option>
+                      <option value="£"><%= t("comp_page_builder.field_type_settings.currency_options.gbp") %></option>
+                      <option value="¥"><%= t("comp_page_builder.field_type_settings.currency_options.jpy_cny") %></option>
+                      <option value="₹"><%= t("comp_page_builder.field_type_settings.currency_options.inr") %></option>
+                    </select>
+                  </div>
+
+                  <div class="hidden" data-type-setting="fieldDecimalPlaces">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.decimal_places") %></label>
+                    <select data-page-builder-target="fieldDecimalPlaces"
+                            data-property="decimal_places"
+                            data-action="change->page-builder#updateFieldProperty"
+                            class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                      <option value="0">0</option>
+                      <option value="1">1</option>
+                      <option value="2" selected>2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                    </select>
+                  </div>
+
+                  <%# --- Rating --- %>
+                  <div class="hidden" data-type-setting="fieldMaxRating">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.max_rating") %></label>
+                    <select data-page-builder-target="fieldMaxRating"
+                            data-property="max_rating"
+                            data-action="change->page-builder#updateFieldProperty"
+                            class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5" selected>5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                    </select>
+                  </div>
+
+                  <div class="hidden" data-type-setting="fieldAllowHalf">
+                    <label class="flex items-center">
+                      <input type="checkbox" data-page-builder-target="fieldAllowHalf"
+                             data-property="allow_half"
+                             data-action="change->page-builder#updateFieldProperty"
+                             class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                      <span class="ml-2 text-xs text-gray-700"><%= t("comp_page_builder.field_type_settings.allow_half") %></span>
+                    </label>
+                  </div>
+
+                  <%# --- Date/Time constraints --- %>
+                  <div class="hidden grid grid-cols-2 gap-2" data-type-setting="fieldMinMaxConstraint">
+                    <div>
+                      <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.minimum") %></label>
+                      <input type="date" data-page-builder-target="fieldMinConstraint"
+                             data-property="min_constraint"
+                             data-action="input->page-builder#updateFieldProperty"
+                             class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.maximum") %></label>
+                      <input type="date" data-page-builder-target="fieldMaxConstraint"
+                             data-property="max_constraint"
+                             data-action="input->page-builder#updateFieldProperty"
+                             class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                  </div>
+
+                  <div class="hidden" data-type-setting="fieldTimeStep">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.time_step") %></label>
+                    <input type="number" data-page-builder-target="fieldTimeStep"
+                           data-property="time_step"
+                           data-action="input->page-builder#updateFieldProperty"
+                           min="1" max="60"
+                           class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                           placeholder="15">
+                  </div>
+
+                  <%# --- Contact --- %>
+                  <div class="hidden" data-type-setting="fieldAllowMultiple">
+                    <label class="flex items-center">
+                      <input type="checkbox" data-page-builder-target="fieldAllowMultiple"
+                             data-property="allow_multiple"
+                             data-action="change->page-builder#updateFieldProperty"
+                             class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                      <span class="ml-2 text-xs text-gray-700"><%= t("comp_page_builder.field_type_settings.allow_multiple") %></span>
+                    </label>
+                  </div>
+
+                  <div class="hidden" data-type-setting="fieldPhonePattern">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.phone_format") %></label>
+                    <input type="text" data-page-builder-target="fieldPhonePattern"
+                           data-property="phone_pattern"
+                           data-action="input->page-builder#updateFieldProperty"
+                           class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                           placeholder="<%= t("comp_page_builder.field_type_settings.phone_placeholder") %>">
+                  </div>
+
+                  <%# --- Rich Text --- %>
+                  <div class="hidden" data-type-setting="fieldToolbar">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.toolbar_options") %></label>
+                    <div class="space-y-1" data-page-builder-target="fieldToolbar">
+                      <label class="flex items-center">
+                        <input type="checkbox" data-property="toolbar_bold" data-action="change->page-builder#updateFieldProperty"
+                               class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" checked>
+                        <span class="ml-2 text-xs text-gray-700"><%= t("comp_page_builder.field_type_settings.toolbar.bold") %></span>
+                      </label>
+                      <label class="flex items-center">
+                        <input type="checkbox" data-property="toolbar_italic" data-action="change->page-builder#updateFieldProperty"
+                               class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" checked>
+                        <span class="ml-2 text-xs text-gray-700"><%= t("comp_page_builder.field_type_settings.toolbar.italic") %></span>
+                      </label>
+                      <label class="flex items-center">
+                        <input type="checkbox" data-property="toolbar_underline" data-action="change->page-builder#updateFieldProperty"
+                               class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" checked>
+                        <span class="ml-2 text-xs text-gray-700"><%= t("comp_page_builder.field_type_settings.toolbar.underline") %></span>
+                      </label>
+                      <label class="flex items-center">
+                        <input type="checkbox" data-property="toolbar_link" data-action="change->page-builder#updateFieldProperty"
+                               class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" checked>
+                        <span class="ml-2 text-xs text-gray-700"><%= t("comp_page_builder.field_type_settings.toolbar.link") %></span>
+                      </label>
+                      <label class="flex items-center">
+                        <input type="checkbox" data-property="toolbar_list" data-action="change->page-builder#updateFieldProperty"
+                               class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" checked>
+                        <span class="ml-2 text-xs text-gray-700"><%= t("comp_page_builder.field_type_settings.toolbar.list") %></span>
+                      </label>
+                      <label class="flex items-center">
+                        <input type="checkbox" data-property="toolbar_image" data-action="change->page-builder#updateFieldProperty"
+                               class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        <span class="ml-2 text-xs text-gray-700"><%= t("comp_page_builder.field_type_settings.toolbar.image") %></span>
+                      </label>
+                      <label class="flex items-center">
+                        <input type="checkbox" data-property="toolbar_heading" data-action="change->page-builder#updateFieldProperty"
+                               class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        <span class="ml-2 text-xs text-gray-700"><%= t("comp_page_builder.field_type_settings.toolbar.heading") %></span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <%# --- Signature --- %>
+                  <div class="hidden" data-type-setting="fieldCanvasHeight">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.canvas_height") %></label>
+                    <select data-page-builder-target="fieldCanvasHeight"
+                            data-property="canvas_height"
+                            data-action="change->page-builder#updateFieldProperty"
+                            class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                      <option value="sm"><%= t("comp_page_builder.field_type_settings.size_options.small") %></option>
+                      <option value="md" selected><%= t("comp_page_builder.field_type_settings.size_options.medium") %></option>
+                      <option value="lg"><%= t("comp_page_builder.field_type_settings.size_options.large") %></option>
+                    </select>
+                  </div>
+
+                  <div class="hidden" data-type-setting="fieldPenColor">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.pen_color") %></label>
+                    <input type="color" data-page-builder-target="fieldPenColor"
+                           data-property="pen_color"
+                           data-action="input->page-builder#updateFieldProperty"
+                           value="#000000"
+                           class="w-full h-8 px-1 py-1 border border-gray-300 rounded-md cursor-pointer">
+                  </div>
+
+                  <div class="hidden" data-type-setting="fieldPenWidth">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.pen_width") %></label>
+                    <select data-page-builder-target="fieldPenWidth"
+                            data-property="pen_width"
+                            data-action="change->page-builder#updateFieldProperty"
+                            class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                      <option value="thin"><%= t("comp_page_builder.field_type_settings.pen_width_options.thin") %></option>
+                      <option value="medium" selected><%= t("comp_page_builder.field_type_settings.pen_width_options.medium") %></option>
+                      <option value="thick"><%= t("comp_page_builder.field_type_settings.pen_width_options.thick") %></option>
+                    </select>
+                  </div>
+
+                  <%# --- File/Image --- %>
+                  <div class="hidden" data-type-setting="fieldAcceptTypes">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.accept_types") %></label>
+                    <input type="text" data-page-builder-target="fieldAcceptTypes"
+                           data-property="accept_types"
+                           data-action="input->page-builder#updateFieldProperty"
+                           class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                           placeholder="<%= t("comp_page_builder.field_type_settings.accept_types_placeholder") %>">
+                  </div>
+
+                  <div class="hidden" data-type-setting="fieldMaxFileSize">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.max_file_size") %></label>
+                    <input type="number" data-page-builder-target="fieldMaxFileSize"
+                           data-property="max_file_size"
+                           data-action="input->page-builder#updateFieldProperty"
+                           min="0"
+                           class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                           placeholder="10">
+                  </div>
+
+                  <%# --- Color --- %>
+                  <div class="hidden" data-type-setting="fieldColorFormat">
+                    <label class="block text-xs font-medium text-gray-700 mb-1"><%= t("comp_page_builder.field_type_settings.color_format") %></label>
+                    <select data-page-builder-target="fieldColorFormat"
+                            data-property="color_format"
+                            data-action="change->page-builder#updateFieldProperty"
+                            class="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                      <option value="hex" selected><%= t("comp_page_builder.field_type_settings.color_format_options.hex") %></option>
+                      <option value="rgb"><%= t("comp_page_builder.field_type_settings.color_format_options.rgb") %></option>
+                      <option value="hsl"><%= t("comp_page_builder.field_type_settings.color_format_options.hsl") %></option>
+                    </select>
+                  </div>
+                </div>

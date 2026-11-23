@@ -1,0 +1,162 @@
+"zh-CN":
+  comp_misc:
+    page_processing:
+      header: "提交处理"
+      description: "每次提交本页面都会运行此流程图，由它负责校验、保存并决定后续去向。"
+      current: "流程图"
+      default_badge: "默认"
+      none: "尚未绑定流程图，本页面无法接收提交。"
+      select_label: "绑定流程图"
+      select_hint: "列出本页面可用的流程图。已发布的页面只能绑定已发布且适用于其实体的流程图。"
+      draft_option: "%{name}（草稿）"
+    distribution:
+      header_title_html: "发布与访问"
+      audience_section: "谁可以打开"
+      audience: "受众"
+      visible: "可见"
+      open: "打开"
+      saving: "保存中…"
+      not_launched: "尚未上线"
+      not_visible: "对%{audience}不可见"
+      last_audience: "表单须至少面向一个受众。"
+      action_key_label: "操作标识"
+      action_key_help: "须以字母开头，仅可使用小写字母、数字和下划线。"
+      action_key_placeholder: "enroll"
+      action_url: "操作链接"
+      audience_url: "链接"
+      siblings_heading: "此操作中的其他页面"
+      siblings_empty: "暂无其他页面使用此操作。"
+      labels:
+        admin: "管理员"
+        member: "会员"
+        public: "公开"
+      hints:
+        admin: "本组织已登录的管理员和所有者。"
+        member: "本组织已登录的会员。"
+        public: "所有人，包括未登录的访客。"
+
+    publishing:
+      public_url: "公开 URL"
+      launch_to_generate: "上线后将生成公开访问链接。"
+
+    flowchart_lifecycle:
+      header_title: "发布"
+      draft_hint: "上线后，引用此流程图的页面与模块即可使用它。"
+      launched_hint: "此流程图已上线。编辑前请先下线——在重新上线之前，相关页面可能无法正常工作。"
+      launched_edit_hint: "此流程图已发布。编辑内容会保存为草稿版本，发布后才会生效。"
+      pending_hint: "线上页面正在运行 v%{live}。草稿 v%{draft} 中已保存的更改尚未发布。"
+
+    list:
+      no_records: "未找到记录"
+      range: "第 %{from}-%{to} 条，共 %{total} 条"
+      showing: "显示 %{range}"
+
+    block_list:
+      empty_title: "暂无被屏蔽的用户"
+      empty_body: "拒收群发邮件的用户将显示在此处。"
+      count:
+        one: "%{count} 位被屏蔽的用户"
+        other: "%{count} 位被屏蔽的用户"
+      unblock_selected: "解除屏蔽所选"
+      select_all: "全选"
+      email: "邮箱"
+      blocked_at: "屏蔽时间"
+      blocked_prefix: "屏蔽于："
+      unblock: "解除屏蔽"
+
+    segment_builder:
+      rules_json_aria: "分群规则 JSON"
+      group: "分组"
+      add_condition: "+ 添加条件"
+      add_group: "+ 添加分组"
+      field_aria: "字段"
+      operator_aria: "运算符"
+      value: "值"
+      remove: "移除"
+      remove_condition_aria: "移除条件"
+      remove_group: "移除分组"
+      and: "且"
+      or: "或"
+      operators:
+        equals: "等于"
+        not_equals: "不等于"
+        contains: "包含"
+        not_contains: "不包含"
+        is_blank: "为空"
+        is_present: "非空"
+        greater_than: "大于"
+        less_than: "小于"
+        after: "晚于"
+        before: "早于"
+
+    entity_info:
+      header: "实体信息"
+      kind: "种类"
+      bridge: "桥接"
+      standard: "标准"
+      extends: "扩展自"
+      extends_model: "扩展自 %{model}"
+      name_slug: "名称标识"
+      referenced_template: "引用的模板"
+      last_updated: "最后更新"
+
+    entity_access:
+      header_title: "条目"
+      open_entries: "打开条目"
+      hint: "浏览并管理此实体下存储的记录。"
+      entries_count:
+        one: "%{count} 条记录"
+        other: "%{count} 条记录"
+
+    element_palette:
+      search_placeholder: "搜索…"
+      elements: "元素"
+      flows: "流程"
+      loading: "加载中…"
+      start_disabled_title: "每个流程图仅允许一个开始元素"
+      no_other_flows: "暂无其他流程"
+      no_customer_context: "缺少客户上下文"
+      load_failed: "加载流程图失败"
+      no_flowcharts_available: "暂无可用流程图"
+      subflow_name_prefix: "子流程："
+
+    toolbar:
+      view_details: "查看流程图详情"
+      zoom_out: "缩小"
+      zoom_in: "放大"
+      fit_to_content: "适应画布"
+      validate: "校验"
+      test_runner: "测试运行器"
+      more_actions: "更多操作"
+      tidy_layout: "整理布局"
+      connection_routing: "连线走向"
+      generate_docs: "生成文档"
+      export_svg: "导出为 SVG"
+      export_png: "导出为 PNG"
+      clear_canvas: "清空画布"
+      undo: "撤销 (Ctrl+Z)"
+      redo: "重做 (Ctrl+Y)"
+      read_only_save: "已上线的流程图无法保存，请先下线。"
+      saved: "流程图保存成功"
+      save_failed: "流程图保存失败"
+      error_separator: "，"
+
+    inline_condition:
+      value_placeholder: "值"
+      operators:
+        is_empty: "为空"
+        is_not_empty: "非空"
+        contains: "包含"
+
+    flowchart_elements:
+      start: "开始"
+      process: "处理"
+      decision: "判断"
+      loop: "循环"
+      end: "结束"
+
+    code_editor:
+      validating: "校验中…"
+      all_checks_passed: "所有检查均已通过"
+      validation_failed: "校验失败"
+      request_failed_format: "请求失败：{message}"

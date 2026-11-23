@@ -1,0 +1,45 @@
+<article class="<%= card_classes %>">
+  <div class="flex flex-wrap items-start justify-between gap-3">
+    <h2 class="min-w-0 break-words text-base font-semibold text-text-primary"><%= gateway.display_name %></h2>
+    <% if default? %>
+      <%= render BadgeComponent.new(variant: :default, size: :sm) do %><%= t("comp_payments.shared.default_badge") %><% end %>
+    <% end %>
+  </div>
+
+  <% if account %>
+    <dl class="space-y-2 text-sm">
+      <div class="flex flex-wrap justify-between gap-2">
+        <dt class="text-text-secondary"><%= t("settings_modules.payments.environment") %></dt>
+        <dd class="font-medium text-text-primary"><%= mode_label %></dd>
+      </div>
+      <div class="flex flex-wrap justify-between gap-2">
+        <dt class="text-text-secondary"><%= t("settings_modules.payments.connection_details") %></dt>
+        <dd class="text-text-primary"><%= t("settings_modules.payments.#{credentials_present? ? 'credentials_saved' : 'not_configured'}") %></dd>
+      </div>
+    </dl>
+    <div class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-border-subtle pt-4">
+      <div class="flex items-center gap-2" data-controller="payments--gateway-toggle"
+           data-payments--gateway-toggle-url-value="<%= toggle_url %>"
+           data-payments--gateway-toggle-current-state-value="<%= account.status %>"
+           data-payments--gateway-toggle-enabled-label-value="<%= t("common.status.enabled") %>"
+           data-payments--gateway-toggle-disabled-label-value="<%= t("common.status.disabled") %>">
+        <label class="relative inline-flex min-h-11 items-center cursor-pointer">
+          <input type="checkbox" class="peer sr-only"
+                 aria-label="<%= t("settings_modules.payments.enable_provider", name: gateway.display_name, environment: mode_label) %>"
+                 data-payments--gateway-toggle-target="toggle" data-action="change->payments--gateway-toggle#toggle"
+                 <%= "checked" if toggle_enabled? %> <%= "disabled" unless toggle_interactive? %>>
+          <div class="relative h-5 w-9 rounded-full bg-border peer-checked:bg-accent peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all peer-checked:after:translate-x-4"></div>
+        </label>
+        <span class="text-sm text-text-secondary" data-payments--gateway-toggle-target="statusLabel" aria-live="polite"><%= toggle_enabled? ? t("common.status.enabled") : t("common.status.disabled") %></span>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <% if default_settable? %>
+          <%= button_to t("comp_payments.gateway_card.set_default"), set_default_url, method: :patch, params: { provider: gateway.key }, class: "btn btn-secondary" %>
+        <% end %>
+        <%= link_to t("comp_payments.gateway_card.configure"), configure_url, class: "btn btn-secondary", aria: { label: t("comp_payments.gateway_card.configure_aria", name: gateway.display_name) } %>
+      </div>
+    </div>
+  <% else %>
+    <p class="text-sm text-text-secondary"><%= t("settings_modules.payments.account_unavailable") %></p>
+  <% end %>
+</article>

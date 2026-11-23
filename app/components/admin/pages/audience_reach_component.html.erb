@@ -1,0 +1,12 @@
+<% if empty? %>
+  <span class="text-sm text-text-muted"><%= t("common.labels.em_dash") %></span>
+<% else %>
+  <span class="inline-flex flex-wrap items-center gap-x-2.5 gap-y-1" aria-label="<%= aria_label %>">
+    <% items.each do |item| %>
+      <span class="inline-flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full <%= item[:dot] %>" aria-hidden="true"></span>
+        <span class="text-sm text-text-secondary"><%= item[:label] %></span>
+      </span>
+    <% end %>
+  </span>
+<% end %>

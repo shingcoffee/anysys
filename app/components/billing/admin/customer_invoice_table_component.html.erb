@@ -1,0 +1,113 @@
+<div class="card min-w-0 max-w-full overflow-hidden">
+  <div class="flex flex-col gap-3 border-b border-border-subtle px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <h2 class="section-header"><%= t("settings_billing.invoices.history_heading") %></h2>
+    <nav aria-label="<%= t("settings_billing.invoices.quick_filters_aria") %>" class="print:hidden">
+      <div class="inline-flex max-w-full flex-wrap gap-1 rounded-lg bg-surface-active p-1">
+        <% quick_filter_pills.each do |pill| %>
+          <%= link_to pill[:label], pill[:href], class: quick_filter_class(pill[:current]), aria: { current: ("true" if pill[:current]) } %>
+        <% end %>
+      </div>
+    </nav>
+  </div>
+
+  <% if load_error %>
+    <div class="flex flex-col gap-3 p-4 sm:p-6" role="alert">
+      <%= render AlertComponent.new(message: t("comp_billing.history.load_failed"), type: :error, auto_dismiss: false) %>
+      <%= link_to t("common.actions.view"), history_path(**permitted_filters), class: "btn btn-secondary btn-sm" %>
+    </div>
+  <% elsif invoices.empty? %>
+    <div class="flex flex-col items-center gap-3 px-6 py-16 text-center">
+      <span class="flex size-14 items-center justify-center rounded-2xl bg-accent-subtle text-accent-text"><%= render Billing::Admin::IconComponent.new(name: :receipt, class_name: "size-7") %></span>
+      <div class="flex max-w-sm flex-col gap-1">
+        <p class="font-medium text-text-primary"><%= t(empty_key) %></p>
+        <p class="text-body-sm text-text-secondary"><%= t(filtered? ? "settings_billing.invoices.status_empty_hint" : "settings_billing.invoices.empty_hint") %></p>
+      </div>
+      <% if filtered? %>
+        <%= link_to t("common.actions.reset"), history_path, class: "btn btn-secondary btn-sm" %>
+      <% end %>
+    </div>
+  <% else %>
+    <ul class="divide-y divide-border-subtle lg:hidden" role="list">
+      <% invoices.each do |inv| %>
+        <li class="min-w-0 px-4 py-4">
+          <div class="flex min-w-0 flex-col gap-3">
+            <div class="flex items-start justify-between gap-3">
+              <div class="min-w-0">
+                <p class="min-w-0 break-all font-medium text-text-primary tabular-nums"><%= inv.number.presence || t("comp_billing.invoice_table.draft") %></p>
+                <% if period_label(inv) %><p class="mt-0.5 text-caption tabular-nums"><%= period_label(inv) %></p><% end %>
+              </div>
+              <p class="shrink-0 font-semibold text-text-primary tabular-nums"><%= format_amount(inv.total_cents, inv.currency) %></p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <%= render BadgeComponent.new(variant: status_variant(inv.status), size: :sm) do %><%= status_label(inv.status) %><% end %>
+              <% if show_collection_note?(inv) %><span class="text-body-sm text-text-secondary"><%= collection_label(inv) %></span><% end %>
+            </div>
+            <dl class="flex flex-wrap gap-x-5 gap-y-1 text-body-sm">
+              <div class="flex gap-1.5"><dt class="text-text-tertiary"><%= t("comp_billing.invoice_table.issued") %></dt><dd class="text-text-secondary tabular-nums"><%= date_label(inv.issued_at) %></dd></div>
+              <div class="flex gap-1.5"><dt class="text-text-tertiary"><%= t("comp_billing.invoice_table.due") %></dt><dd class="text-text-secondary tabular-nums"><%= date_label(inv.due_at) %></dd></div>
+            </dl>
+            <div class="flex items-center gap-2">
+              <% if can_pay_one_time?(inv) %>
+                <%= link_to t("settings_billing.invoices.pay_now"), one_time_payment_path(inv), class: "btn btn-primary btn-sm flex-1" %>
+              <% end %>
+              <%= link_to t("common.actions.view"), invoice_path(inv), class: "#{view_button_class(inv)} flex-1" %>
+              <%= link_to download_path(inv), class: "btn btn-ghost btn-sm px-2", title: t("common.actions.download"), aria: { label: t("common.actions.download") } do %>
+                <%= render Billing::Admin::IconComponent.new(name: :download, class_name: "size-4") %>
+              <% end %>
+            </div>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+
+    <div class="hidden max-w-full overflow-x-auto lg:block" role="region" aria-label="<%= t('comp_billing.invoice_table.invoices_heading') %>" tabindex="0">
+      <table class="min-w-full divide-y divide-border-subtle">
+        <caption class="<%= visually_hidden_class %>"><%= t("comp_billing.invoice_table.invoices_heading") %></caption>
+        <thead class="table-header">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left"><%= t("comp_billing.invoice_table.number") %></th>
+            <th scope="col" class="px-4 py-3 text-left"><%= t("comp_billing.invoice_table.issued") %></th>
+            <th scope="col" class="px-4 py-3 text-left"><%= t("comp_billing.invoice_table.due") %></th>
+            <th scope="col" class="px-4 py-3 text-left"><%= t("common.labels.status") %></th>
+            <th scope="col" class="px-4 py-3 text-right"><%= t("comp_billing.invoice_table.total") %></th>
+            <th scope="col" class="w-px px-6 py-3"><span class="<%= visually_hidden_class %>"><%= t("common.labels.actions") %></span></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-border-subtle">
+          <% invoices.each do |inv| %>
+            <tr class="table-row">
+              <th scope="row" class="px-6 py-4 text-left font-normal">
+                <div class="min-w-0">
+                  <%= link_to (inv.number.presence || t("comp_billing.invoice_table.draft")), invoice_path(inv), class: "whitespace-nowrap font-medium text-text-primary tabular-nums hover:text-accent-text" %>
+                  <% if period_label(inv) %><p class="mt-0.5 whitespace-nowrap text-caption tabular-nums"><%= period_label(inv) %></p><% end %>
+                </div>
+              </th>
+              <td class="whitespace-nowrap px-4 py-4 text-body-sm text-text-secondary tabular-nums"><%= date_label(inv.issued_at) %></td>
+              <td class="whitespace-nowrap px-4 py-4 text-body-sm tabular-nums <%= unpaid?(inv) ? 'font-medium text-warning' : 'text-text-secondary' %>"><%= date_label(inv.due_at) %></td>
+              <td class="px-4 py-4">
+                <div class="flex flex-col items-start gap-1">
+                  <%= render BadgeComponent.new(variant: status_variant(inv.status), size: :sm) do %><%= status_label(inv.status) %><% end %>
+                  <% if show_collection_note?(inv) %><span class="text-caption"><%= collection_label(inv) %></span><% end %>
+                </div>
+              </td>
+              <td class="whitespace-nowrap px-4 py-4 text-right font-semibold text-text-primary tabular-nums"><%= format_amount(inv.total_cents, inv.currency) %></td>
+              <td class="px-6 py-4">
+                <div class="flex items-center justify-end gap-1.5">
+                  <% if can_pay_one_time?(inv) %>
+                    <%= link_to t("settings_billing.invoices.pay_now"), one_time_payment_path(inv), class: "btn btn-primary btn-sm whitespace-nowrap" %>
+                  <% end %>
+                  <%= link_to t("common.actions.view"), invoice_path(inv), class: view_button_class(inv) %>
+                  <%= link_to download_path(inv), class: "btn btn-ghost btn-sm px-2", title: t("common.actions.download"), aria: { label: t("common.actions.download") } do %>
+                    <%= render Billing::Admin::IconComponent.new(name: :download, class_name: "size-4") %>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+  <% if pagination %><%= render ::Admin::PaginationComponent.new(pagination: pagination, page_path: pagination_path) %><% end %>
+</div>

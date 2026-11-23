@@ -1,0 +1,46 @@
+<div class="static sm:relative"
+     data-controller="notifications-menu"
+     data-notifications-menu-unread-title-template-value="<%= t("chrome.notifications.unread_titled_template") %>"
+     data-notifications-menu-title-value="<%= t("chrome.notifications.title") %>"
+     data-notifications-menu-overflow-value="<%= t("chrome.notifications.unread_overflow") %>">
+  <% if stream_name %>
+    <%= helpers.turbo_stream_from stream_name %>
+  <% end %>
+  <%= announcement_unread_html %>
+  <%= support_ticket_unread_html %>
+
+  <div class="relative">
+    <%= render trigger %>
+    <%= render badge %>
+  </div>
+
+  <div class="hidden absolute left-4 right-4 top-full mt-2 w-auto max-w-[calc(100vw-2rem)] sm:left-auto sm:right-0 sm:top-auto sm:w-[26rem] dropdown-panel py-0 z-40 overflow-hidden"
+       data-notifications-menu-target="panel"
+       role="dialog"
+       aria-label="<%= t("chrome.notifications.title") %>">
+    <div class="flex items-center justify-between gap-3 border-b border-border-subtle bg-canvas px-4 py-3">
+      <div class="flex min-w-0 items-center gap-2.5">
+        <span class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent-subtle text-accent" aria-hidden="true">
+          <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </span>
+        <div class="min-w-0">
+          <span class="flex items-center gap-2">
+            <span class="text-sm font-semibold text-text-primary"><%= t("chrome.notifications.title") %></span>
+            <%= render BadgeComponent.new(
+                  variant: :primary,
+                  size: :sm,
+                  data: { notifications_menu_target: "headerBadge" },
+                  class: "rounded-full tabular-nums #{"hidden" unless unread_count.positive?}"
+                ) { unread_count.positive? ? badge_label : "" } %>
+          </span>
+          <span class="block text-[11px] text-text-muted truncate"><%= t("chrome.notifications.subtitle") %></span>
+        </div>
+      </div>
+    </div>
+
+    <%= render inbox %>
+  </div>
+</div>

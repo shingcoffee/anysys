@@ -1,0 +1,82 @@
+<%
+  index_actions = []
+  if @website
+    if @website.published?
+      index_actions << {
+        label: t("website.admin.pages.index.view_site"),
+        path: page_shortcuts_mounted_path(PageShortcuts::PublicPath.website_home(customer_id: current_customer_id, host: request.host)),
+        variant: :secondary,
+        target: "_blank",
+        rel: "noopener"
+      }
+    end
+  end
+  index_actions << {
+    label: t("website.admin.pages.index.new_page"),
+    path: new_admin_modules_website_page_path(current_customer_id),
+    variant: :primary,
+    icon: :plus
+  }
+  index_badges = if @website&.published?
+    [{ label: t("website.admin.pages.index.site_live"), variant: :success }]
+  elsif @website
+    [{ label: t("website.admin.pages.index.site_unpublished"), variant: :warning }]
+  else
+    []
+  end
+%>
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "website",
+      breadcrumbs: [{ label: t("admin_modules.nav.modules") }, { label: t("admin_modules.nav.website") }],
+      title: t("website.admin.pages.index.title"),
+      description: t("website.admin.pages.index.description"),
+      badges: index_badges,
+      actions: index_actions
+    ) do %>
+  <div class="flex flex-col gap-5">
+    <% if @website %>
+      <%= render Websites::Admin::StudioStatusStripComponent.new(
+            website: @website,
+            customer_id: current_customer_id,
+            page_count: @pagination.is_a?(Hash) ? @pagination[:total] : Array(@rows).size
+          ) %>
+    <% end %>
+    <div aria-label="<%= t("website.admin.pages.index.list_label") %>">
+    <%= render AdminTableComponent.new(
+        rows:       @rows,
+        columns:    @columns,
+        pagination: @pagination,
+        params:     params.permit(:q, :sort, :dir, :page).to_h.symbolize_keys,
+        search:     { param: :q, placeholder: t("website.admin.pages.index.search_placeholder") },
+        row_path:   ->(page) { edit_admin_modules_website_page_path(current_customer_id, page) },
+        row_actions: ->(page) {
+          actions = [
+            { label: t("common.actions.edit"), path: edit_admin_modules_website_page_path(current_customer_id, page) },
+            {
+              label: t("website.admin.pages.edit.preview_label"),
+              path: preview_admin_modules_website_page_path(current_customer_id, page),
+              target: "_blank",
+              rel: "noopener"
+            }
+          ]
+          unless page.try(:home?)
+            actions << {
+              label: t("common.actions.delete"),
+              path: admin_modules_website_page_path(current_customer_id, page),
+              method: :delete,
+              tone: :danger,
+              data: { turbo_confirm: t("website.admin.pages.destroy.confirm") }
+            }
+          end
+          actions
+        },
+        empty_state: {
+          title: t("website.admin.pages.index.empty_title"),
+          description: t("website.admin.pages.index.empty_description"),
+          action_path: new_admin_modules_website_page_path(current_customer_id),
+          action_text: t("website.admin.pages.index.new_page")
+        }
+      ) %>
+    </div>
+  </div>
+<% end %>

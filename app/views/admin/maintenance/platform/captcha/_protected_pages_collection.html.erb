@@ -1,0 +1,62 @@
+<div data-captcha-page-list-target="directory" class="flex flex-col gap-3 p-4">
+  <% groups.each do |group| %>
+    <section data-captcha-page-list-target="group" role="presentation" class="overflow-hidden rounded-lg border border-border-subtle">
+      <header class="flex items-center gap-3 border-b border-border-subtle bg-surface-subtle px-4 py-3">
+        <span class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent-subtle text-accent ring-1 ring-accent/15" aria-hidden="true">
+          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="<%= component.group_icon_path(group[:key]) %>" />
+          </svg>
+        </span>
+        <h3 class="text-sm font-semibold text-text-primary"><%= group[:label] %></h3>
+        <%= render BadgeComponent.new(variant: :default, size: :sm) do %>
+          <%= t("maint_platform.module_settings.show.captcha.total_count", count: group[:items].size) %>
+        <% end %>
+      </header>
+      <ul role="presentation" class="divide-y divide-border-subtle">
+        <% group[:items].each do |item| %>
+          <li class="grid min-w-0 grid-cols-1 gap-3 px-4 py-4 lg:grid-cols-[minmax(12rem,1fr)_minmax(14rem,1.25fr)_minmax(14rem,1fr)] lg:items-start lg:gap-4"
+              role="row"
+              data-responsive-collection-record="<%= item[:key] %>"
+              data-captcha-page-list-target="row"
+              data-name="<%= item[:name] %>"
+              data-path="<%= item[:path] %>">
+              <div class="min-w-0" role="cell">
+                <span class="mb-1 block text-xs font-medium text-text-muted lg:hidden"
+                      data-responsive-collection-mobile-label><%= t("maint_platform.module_settings.show.captcha.collection.resource") %></span>
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="truncate text-sm font-medium text-text-primary"><%= item[:name] %></span>
+                  <% if item[:fail_closed] %>
+                    <%= render BadgeComponent.new(variant: :warning, size: :sm) do %><%= t("captcha.throttle.auth_warning") %><% end %>
+                  <% end %>
+                  <% unless item[:launched].nil? %>
+                    <%= render BadgeComponent.new(variant: item[:launched] ? :success : :default, size: :sm) do %>
+                      <%= item[:launched] ? t("common.status.launched") : t("captcha.customer_status.not_launched") %>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+              <div class="min-w-0" role="cell">
+                <span class="mb-1 block text-xs font-medium text-text-muted lg:hidden"
+                      data-responsive-collection-mobile-label><%= t("maint_platform.module_settings.show.captcha.collection.path") %></span>
+                <span class="block truncate text-xs text-text-muted"><%= item[:path] %></span>
+              </div>
+              <div class="min-w-0" role="cell">
+                <span class="mb-1 block text-xs font-medium text-text-muted lg:hidden"
+                      data-responsive-collection-mobile-label><%= t("maint_platform.module_settings.show.captcha.collection.throttle") %></span>
+                <%= render Captcha::ThrottlePickerComponent.new(
+                      url: item[:url],
+                      extra_params: item[:extra_params],
+                      preset: item[:preset],
+                      limit_count: item[:limit_count],
+                      period_minutes: item[:period_minutes],
+                      skipped: item[:skipped],
+                      include_skip: true,
+                      aria_label: component.surface_toggle_aria(item)
+                    ) %>
+              </div>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
+</div>

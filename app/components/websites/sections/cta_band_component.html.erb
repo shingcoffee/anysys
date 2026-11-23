@@ -1,0 +1,20 @@
+<section class="<%= spacing_class(theme.density == "compact" ? "py-12 md:py-16" : "py-16 md:py-24") %>">
+  <div class="<%= inner_measure_class %>">
+    <div class="relative isolate overflow-hidden rounded-[2rem] px-6 py-16 text-center sm:px-12 md:py-24 <%= cta_band_class %>">
+      <div class="pointer-events-none absolute -top-1/2 left-1/2 -z-10 h-[36rem] w-[48rem] max-w-[160%] -translate-x-1/2 rounded-full opacity-40 blur-3xl <%= glow_class %>" aria-hidden="true"></div>
+      <div class="mx-auto flex max-w-3xl flex-col items-center gap-6">
+        <% if present_text?(prop("headline")) %>
+          <h2 <%= el_attrs("headline", class: "text-balance break-words text-site-3xl leading-[1.08] sm:text-site-4xl md:text-site-6xl #{headline_font_class}") %>><%= prop("headline") %></h2>
+        <% end %>
+        <% if present_text?(prop("body")) %>
+          <p <%= el_attrs("body", class: "max-w-xl text-pretty text-site-lg leading-relaxed opacity-75 md:text-site-xl") %>><%= prop("body") %></p>
+        <% end %>
+        <% if present_text?(prop("button_label")) %>
+          <div class="pt-2" data-site-el="buttons">
+            <%= content_tag(resolved_href("button_href") ? :a : :span, prop("button_label"), href: resolved_href("button_href"), class: cta_band_button_class, **{ style: styler.button_css(:primary) }.compact) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>

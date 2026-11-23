@@ -1,0 +1,13 @@
+<%= render Mailers::ShellComponent.new(
+      preheader: t("billing_mailer.subscription_past_due.preheader"),
+      brand:     t("billing_mailer.shell.brand"),
+      heading:   t("billing_mailer.subscription_past_due.heading"),
+      title:     t("billing_mailer.subscription_past_due.title"),
+      body:      t("billing_mailer.subscription_past_due.intro"),
+      facts: [
+        { label: t("billing_mailer.subscription_past_due.label_plan"), value: @plan.name },
+        { label: t("billing_mailer.subscription_past_due.label_status"), value: t("comp_billing.subscription_summary.statuses.#{@subscription.status}") }
+      ],
+      note:      t("billing_mailer.subscription_past_due.outro"),
+      footer:    t("billing_mailer.shell.footer")
+    ) %>

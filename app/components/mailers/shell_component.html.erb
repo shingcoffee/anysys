@@ -1,0 +1,147 @@
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#f7f2ea;">
+  <%= preheader %>&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
+</div>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f7f2ea;margin:0;padding:0;">
+  <tr>
+    <td align="center" class="mail-outer" style="padding:48px 16px 60px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;">
+        <tr>
+          <td style="background-color:#fffdf8;border:1px solid #ebe0cc;border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(87,67,44,0.04),0 14px 36px rgba(87,67,44,0.06);">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+              <tr>
+                <td style="height:3px;background-color:#92400e;font-size:0;line-height:0;">&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="mail-pad mail-head-pad" style="padding:24px 40px;border-bottom:1px solid #f0e7d6;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tr>
+                      <td valign="middle" align="left" class="mail-stack" style="text-align:left;">
+                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="left">
+                          <tr>
+                            <td valign="middle" align="center" width="34" height="34" bgcolor="#92400e" style="width:34px;height:34px;background-color:#92400e;border-radius:8px;font-family:<%= serif %>;font-size:16px;font-weight:700;line-height:34px;mso-line-height-rule:exactly;color:#fffdf8;text-align:center;">
+                              <%= monogram %>
+                            </td>
+                            <td valign="middle" style="padding-left:12px;font-family:<%= serif %>;font-size:19px;font-weight:700;letter-spacing:0.01em;line-height:1.1;mso-line-height-rule:exactly;color:#1c1917;white-space:nowrap;">
+                              <%= brand %>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                      <td valign="middle" align="right" class="mail-stack mail-kicker" style="font-family:<%= sans %>;font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;line-height:1.1;mso-line-height-rule:exactly;color:#b45309;text-align:right;">
+                        <%= heading %>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td align="left" class="mail-pad mail-body-pad" style="padding:38px 40px 42px;font-family:<%= sans %>;color:#1c1917;text-align:left;">
+                  <h1 class="mail-title" style="margin:0 0 <%= greeting? ? 16 : 22 %>px;font-family:<%= serif %>;font-size:29px;line-height:1.3;mso-line-height-rule:exactly;font-weight:700;letter-spacing:-0.005em;color:#1c1917;text-align:left;">
+                    <%= title %>
+                  </h1>
+                  <% if greeting? %>
+                    <p style="margin:0 0 14px;font-size:15px;line-height:1.6;mso-line-height-rule:exactly;color:#8a817a;text-align:left;">
+                      <%= greeting %>
+                    </p>
+                  <% end %>
+                  <p class="mail-lede" style="margin:0 0 <%= highlight? || facts? || action? ? 30 : 0 %>px;font-size:16px;line-height:1.75;mso-line-height-rule:exactly;color:#57534e;text-align:left;">
+                    <%= body %>
+                  </p>
+                  <% if highlight? %>
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 24px;">
+                      <tr>
+                        <td align="left" bgcolor="#faf3e3" style="background-color:#faf3e3;border-radius:10px;padding:24px 28px;text-align:left;">
+                          <% if highlight_caption.present? %>
+                            <p style="margin:0 0 8px;font-family:<%= sans %>;font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;line-height:1.1;mso-line-height-rule:exactly;color:#b45309;text-align:left;">
+                              <%= highlight_caption %>
+                            </p>
+                          <% end %>
+                          <p class="mail-amount" style="margin:0;font-family:<%= serif %>;font-size:36px;line-height:1.15;mso-line-height-rule:exactly;font-weight:700;letter-spacing:-0.015em;font-variant-numeric:tabular-nums;color:#1c1917;text-align:left;">
+                            <%= highlight %>
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  <% end %>
+                  <% if facts? %>
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 <%= action? ? 30 : 8 %>px;">
+                      <tr>
+                        <td style="border-top:1px solid #f0e7d6;border-bottom:1px solid #f0e7d6;padding:6px 0;">
+                          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                            <% facts.each_with_index do |fact, index| %>
+                              <tr>
+                                <td valign="top" align="left" class="mail-fact-label" style="padding:12px 16px 12px 0;<%= "border-bottom:1px solid #f7f0e2;" if fact_rule?(index) %>font-family:<%= sans %>;font-size:13px;line-height:1.5;mso-line-height-rule:exactly;color:#a8a29e;width:42%;text-align:left;">
+                                  <%= fact.label %>
+                                </td>
+                                <td valign="top" align="right" style="padding:12px 0;<%= "border-bottom:1px solid #f7f0e2;" if fact_rule?(index) %>font-family:<%= fact.emphasize ? serif : sans %>;font-size:<%= fact.emphasize ? "17px" : "14px" %>;line-height:1.45;mso-line-height-rule:exactly;color:#1c1917;font-weight:<%= fact.emphasize ? "700" : "600" %>;font-variant-numeric:tabular-nums;text-align:right;">
+                                  <%= display_value(fact.value) %>
+                                </td>
+                              </tr>
+                            <% end %>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  <% end %>
+                  <% if action? %>
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="left">
+                      <tr>
+                        <td align="center" bgcolor="#92400e" style="background-color:#92400e;border-radius:8px;padding:15px 34px;mso-padding-alt:15px 34px;">
+                          <a href="<%= action_url %>" style="font-family:<%= sans %>;font-size:15px;font-weight:600;letter-spacing:0.005em;line-height:1;mso-line-height-rule:exactly;color:#fffdf8;text-decoration:none;">
+                            <%= action %>
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                    <% if fallback.present? %>
+                      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                        <tr>
+                          <td style="padding:26px 0 0;">
+                            <p style="margin:0;font-family:<%= sans %>;font-size:12px;line-height:1.6;mso-line-height-rule:exactly;color:#a8a29e;text-align:left;">
+                              <%= fallback %>
+                            </p>
+                            <p style="margin:6px 0 0;font-family:<%= sans %>;font-size:12px;line-height:1.6;mso-line-height-rule:exactly;word-break:break-all;text-align:left;">
+                              <a href="<%= action_url %>" style="color:#b45309;text-decoration:underline;"><%= action_url %></a>
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    <% end %>
+                  <% end %>
+                  <% if note.present? %>
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:28px 0 0;">
+                      <tr>
+                        <td style="border-top:1px solid #f0e7d6;padding:20px 0 0;">
+                          <p style="margin:0;font-family:<%= sans %>;font-size:14px;line-height:1.7;mso-line-height-rule:exactly;color:#78716c;text-align:left;">
+                            <%= note %>
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  <% end %>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" style="padding:26px 16px 0;text-align:center;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 14px;">
+              <tr>
+                <td style="width:28px;height:1px;background-color:#e6dac4;font-size:0;line-height:0;">&nbsp;</td>
+              </tr>
+            </table>
+            <% if ignore.present? %>
+              <p style="margin:0 0 8px;font-family:<%= sans %>;font-size:12px;line-height:1.7;mso-line-height-rule:exactly;color:#a8a29e;text-align:center;">
+                <%= ignore %>
+              </p>
+            <% end %>
+            <p style="margin:0;font-family:<%= sans %>;font-size:12px;line-height:1.7;mso-line-height-rule:exactly;color:#b4aca2;text-align:center;">
+              <%= footer %>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

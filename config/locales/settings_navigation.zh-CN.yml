@@ -1,0 +1,63 @@
+zh-CN:
+  settings_navigation:
+    menu: 设置菜单
+    categories:
+      organization: 组织
+    groups:
+      members: 会员
+      access_security: 访问与安全
+      website: 网站
+      messages: 消息
+      payments: 收款
+      billing: 账单
+    items:
+      member_portal: 会员中心
+      member_registration: 会员注册
+      password_reset: 密码重置
+      account_security: 账户安全
+      roles_permissions: 角色与权限
+      user_access: 用户访问权限
+      public_page_protection: 公开页面防护
+      website: 网站
+      ai_assistant: AI 助手
+      email_sending_limit: 邮件限额
+      email_personalization: 邮件个性化
+      sms_sending_limit: 短信限额
+      payment_providers: 收款服务商
+      plan_subscription: 套餐
+      billing_payment_methods: 付款方式
+      invoices: 账单明细
+    descriptions:
+      member_portal: 设置会员中心展示的页面和内容。
+      member_registration: 设置是否开放新会员注册。
+      password_reset: 管理会员密码找回功能。
+      account_security: 配置账户安全偏好。
+      roles_permissions: 查看角色并管理权限。
+      user_access: 管理用户的角色分配。
+      public_page_protection: 设置公开页面的请求限额。
+      website: 管理网站外观、内容与发布状态。
+      ai_assistant: 选择助手语言，并查看平台所有者设定的录音时长上限。
+      email_sending_limit: 查看平台所有者设定的每日邮件发送上限。
+      email_personalization: 管理邮件个性化字段。
+      sms_sending_limit: 查看平台所有者设定的每日短信发送上限。
+      payment_providers: 连接收款服务商，接收客户付款。
+      plan_subscription: 查看套餐并管理订阅。
+      billing_payment_methods: 管理订阅费用的付款方式。
+      invoices: 查看并下载组织账单。
+    synonyms:
+      member_portal: 会员 页面 可见性 个人资料 显示
+      member_registration: 注册 开放注册
+      password_reset: 忘记密码 找回密码 密码恢复
+      account_security: 身份验证 MFA 两步验证
+      roles_permissions: 角色 授权 权限
+      user_access: 用户 角色分配 访问
+      public_page_protection: captcha 验证码 限流 请求限额
+      website: 站点 主题 页脚 发布
+      ai_assistant: AI 语言 录音
+      email_sending_limit: 邮件 每日限额 配额
+      email_personalization: 模板 tokens 变量 合并字段
+      sms_sending_limit: SMS 短信 每日限额 配额
+      payment_providers: 商户账户 支付网关 收款
+      plan_subscription: 订阅 套餐 账单 服务
+      billing_payment_methods: 订阅 付款方式 银行卡
+      invoices: 账单 发票 收据 下载 打印

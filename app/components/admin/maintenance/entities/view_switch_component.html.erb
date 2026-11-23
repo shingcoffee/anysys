@@ -1,0 +1,8 @@
+<nav aria-label="<%= t("maint_core.entity_domains.views.label") %>" class="inline-flex w-full rounded-lg border border-border-subtle bg-surface p-0.5 sm:w-auto">
+  <% views.each do |view| %>
+    <%= link_to view[:label], view[:path],
+          class: ["inline-flex min-h-9 flex-1 items-center justify-center rounded-md px-3 text-sm font-medium transition-base sm:flex-none",
+                  view[:active] ? "bg-surface-active text-text-primary" : "text-text-secondary hover:text-text-primary"],
+          aria: { current: (view[:active] ? "page" : nil) } %>
+  <% end %>
+</nav>

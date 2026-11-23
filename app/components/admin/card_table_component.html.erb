@@ -1,0 +1,27 @@
+<div class="card overflow-hidden">
+  <% if title.present? %>
+    <div class="px-4 py-3 border-b border-border-subtle">
+      <h2 class="section-header"><%= title %></h2>
+    </div>
+  <% end %>
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-border-subtle">
+      <thead class="table-header">
+        <tr>
+          <% headers.each do |header| %>
+            <th class="<%= header_class(header) %>"><%= header[:label] %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-border-subtle">
+        <% if empty %>
+          <tr>
+            <td colspan="<%= colspan %>" class="px-4 py-12 text-center text-body-sm text-text-secondary"><%= empty_text %></td>
+          </tr>
+        <% else %>
+          <%= content %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

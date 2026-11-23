@@ -1,0 +1,10 @@
+{
+  "$defs": {
+    "label": {
+      "type": "string",
+      "description": "A short human-readable label.",
+      "minLength": 1,
+      "maxLength": 40
+    }
+  }
+}

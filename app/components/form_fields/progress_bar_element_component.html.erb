@@ -1,0 +1,11 @@
+<div>
+  <% if label_present? %>
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm font-medium text-gray-700"><%= label %></span>
+      <span class="text-xs font-medium <%= neutral(:faint_text) %>"><%= progress_value %>%</span>
+    </div>
+  <% end %>
+  <div class="w-full <%= neutral(:track) %> rounded-full h-2 overflow-hidden">
+    <div class="<%= color_class %> h-2 rounded-full transition-all duration-500 ease-out" style="width: <%= progress_value %>%"></div>
+  </div>
+</div>

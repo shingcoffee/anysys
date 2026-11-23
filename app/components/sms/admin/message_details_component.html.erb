@@ -1,0 +1,73 @@
+<%= render CardComponent.new(variant: :default, padding: :none) do %>
+  <div class="card-header">
+    <h2 class="section-header"><%= t("admin_modules.sms.messages.show.details_title") %></h2>
+  </div>
+  <dl class="grid grid-cols-1 gap-4 p-4 sm:p-6 md:grid-cols-2">
+    <div class="min-w-0 md:col-span-2">
+      <dt class="form-label"><%= t("common.labels.status") %></dt>
+      <dd class="mt-1" aria-describedby="<%= help_id(:status) %>">
+        <%= render BadgeComponent.new(variant: status_variant) do %><%= status_label %><% end %>
+      </dd>
+      <p id="<%= help_id(:status) %>" class="mt-2 text-caption text-text-secondary"><%= t("sms_presentation.status_help.#{message.status}") %></p>
+    </div>
+    <% if message.respond_to?(:campaign_id) && message.campaign_id.present? && message.customer_id == helpers.current_customer_id %>
+      <div class="min-w-0 md:col-span-2">
+        <dt class="form-label"><%= t("sms_campaign_http.navigation.campaigns") %></dt>
+        <dd class="mt-1"><%= link_to t("sms_campaign_ui.report.campaign_details"), helpers.admin_modules_sms_campaign_path(helpers.current_customer_id, message.campaign_id), class: "link" %></dd>
+      </div>
+    <% end %>
+    <% if message.respond_to?(:contact_id) && message.contact_id.present? && message.customer_id == helpers.current_customer_id %>
+      <div class="min-w-0 md:col-span-2">
+        <dt class="form-label"><%= t("chrome.customer_card.contact") %></dt>
+        <dd class="mt-1"><%= link_to t("chrome.customer_card.contact"), helpers.admin_modules_sms_contact_path(helpers.current_customer_id, message.contact_id), class: "link" %></dd>
+      </div>
+    <% end %>
+    <% self.class::FIELDS.each do |field, label_key, type| %>
+      <% value = field_value(field) %>
+      <% help_key = field_help_key(field) %>
+      <div class="min-w-0">
+        <dt class="form-label"><%= t(label_key) %></dt>
+        <dd class="mt-1 break-words text-body tabular-nums text-text-primary [overflow-wrap:anywhere]" <%= tag.attributes(aria: { describedby: help_key ? help_id(field) : nil }) %>>
+          <% if value.blank? %>
+            <%= missing_value(field) %>
+          <% elsif type == :time %>
+            <%= tag.time(helpers.format_datetime(value), datetime: value.iso8601) %>
+          <% else %>
+            <%= value %>
+          <% end %>
+        </dd>
+        <% if help_key %>
+          <p id="<%= help_id(field) %>" class="mt-2 text-caption text-text-secondary"><%= t(help_key) %></p>
+        <% end %>
+      </div>
+    <% end %>
+    <% if message.status == "failed" %>
+      <div class="min-w-0 md:col-span-2">
+        <dt class="form-label"><%= t("admin_modules.sms.messages.show.failure") %></dt>
+        <dd class="mt-1 break-words text-body text-danger [overflow-wrap:anywhere]">
+          <%= message.failure_code.presence || t("sms_presentation.not_recorded") %>
+          <%= t("common.labels.em_dash") %>
+          <%= message.displayed_failure_message.presence || t("sms_presentation.not_recorded") %>
+        </dd>
+      </div>
+    <% end %>
+    <div class="min-w-0 md:col-span-2">
+      <dt class="form-label"><%= t("admin_modules.sms.messages.show.variables") %></dt>
+      <dd class="mt-1 text-body text-text-primary" aria-describedby="<%= help_id(:variables) %>">
+        <% if variable_names.empty? %>
+          <%= t("sms_presentation.not_recorded") %>
+        <% else %>
+          <dl class="space-y-2">
+            <% variable_names.each do |name| %>
+              <div class="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
+                <dt class="min-w-0 break-words font-mono text-sm [overflow-wrap:anywhere]"><%= name %></dt>
+                <dd class="text-text-secondary"><%= t("sms_presentation.redacted") %></dd>
+              </div>
+            <% end %>
+          </dl>
+        <% end %>
+      </dd>
+      <p id="<%= help_id(:variables) %>" class="mt-2 text-caption text-text-secondary"><%= t("sms_presentation.help.variables") %></p>
+    </div>
+  </dl>
+<% end %>

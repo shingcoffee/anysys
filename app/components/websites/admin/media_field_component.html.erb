@@ -1,0 +1,50 @@
+<div data-image-field class="flex min-w-0 flex-col gap-1.5<%= ' group/media' if workspace? %>">
+  <label class="<%= workspace? ? visually_hidden_class : 'form-label mb-0' %>" for="<%= field_id %>"><%= label %></label>
+  <div class="min-w-0 <%= workspace? ? 'relative grid grid-cols-[5rem_minmax(0,1fr)] items-start gap-x-3 gap-y-1' : 'flex flex-col gap-3' %>" data-action="dragover->website-builder#allowImageDrop drop->website-builder#dropImage">
+    <div class="<%= 'contents' if workspace? %>">
+      <div class="overflow-hidden border border-border-subtle bg-canvas <%= workspace? ? 'row-span-2 h-16 w-20 shrink-0 rounded-md' : 'rounded-xl' %>">
+        <img data-image-preview alt="" data-action="error->website-builder#imageError<%= ' load->website-builder#imageLoaded' if workspace? %>"
+             class="<%= 'hidden ' unless previewable? %><%= workspace? ? 'h-full w-full object-cover' : 'aspect-[2/1] w-full object-cover' %>"
+             <% if previewable? %>src="<%= value %>"<% end %>>
+        <p data-image-empty class="<%= 'hidden ' if image_present? %>flex items-center justify-center text-center text-text-tertiary <%= workspace? ? 'h-full px-1 text-xs' : 'aspect-[2/1] px-4 text-sm' %>"><%= t(workspace? ? 'website.admin.pages.form.no_photo' : 'website.admin.pages.form.image_empty') %></p>
+      </div>
+      <div class="flex min-w-0 flex-1 flex-col <%= workspace? ? 'col-start-2 pr-9 pointer-coarse:pr-11' : 'mt-3 gap-2' %>">
+        <% if workspace? %>
+          <p data-image-present class="<%= 'hidden ' unless image_present? && previewable? %><%= visually_hidden_class %>"><%= t('website.admin.pages.form.photo_added') %></p>
+          <p data-image-failed class="<%= 'hidden ' unless image_present? && !previewable? %>text-body-sm text-text-tertiary"><%= t('website.admin.pages.form.preview_unavailable') %></p>
+        <% end %>
+        <div class="flex min-w-0 flex-wrap items-center gap-1">
+          <% if uploadable? %>
+            <label class="relative btn btn-secondary cursor-pointer px-3 <%= workspace? ? 'h-8 py-1 text-sm focus-within:ring-2 focus-within:ring-accent pointer-coarse:h-10' : 'h-10 py-1.5 text-sm' %>">
+              <input type="file" class="absolute inset-0 z-10 m-0 cursor-pointer opacity-0" accept="image/jpeg,image/png,image/webp,image/gif" data-action="change->website-builder#uploadImage" <% if workspace? %>aria-describedby="<%= field_id %>_status <%= field_id %>_help"<% end %>>
+              <span data-image-add class="<%= 'hidden' if image_present? %>"><%= t('website.admin.pages.form.add_photo') %></span>
+              <span data-image-replace class="<%= 'hidden' unless image_present? %>"><%= t('website.admin.pages.form.replace_photo') %></span>
+            </label>
+          <% end %>
+          <button type="button" <% if workspace? %>data-image-clear<% end %> data-action="click->website-builder#clearImage"
+                  class="<%= 'hidden ' if workspace? && !image_present? %>btn btn-ghost <%= workspace? ? "h-8 px-2.5 py-1 text-sm text-text-tertiary pointer-coarse:h-10 #{reveal_class}" : 'h-10 px-3 py-1.5 text-sm' %>"><%= t('website.admin.pages.form.clear_image') %></button>
+        </div>
+      </div>
+    </div>
+    <p data-image-status class="hidden text-sm text-danger <%= 'col-span-2 order-last' if workspace? %>" <% if workspace? %>id="<%= field_id %>_status" role="status" aria-live="polite"<% end %>></p>
+    <%= content_tag workspace? || uploadable? ? :details : :div, class: "group/url min-w-0 #{'col-start-2' if workspace?}" do %>
+      <% if workspace? || uploadable? %>
+        <% if workspace? %>
+          <summary title="<%= t('website.admin.pages.form.edit_image_link') %>" class="absolute right-0 top-0 flex size-8 cursor-pointer list-none items-center justify-center rounded-md text-text-tertiary transition-colors hover:bg-surface-active hover:text-text-primary group-open/url:bg-surface-active group-open/url:text-text-primary <%= reveal_class %> group-open/url:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent pointer-coarse:size-10 [&::-webkit-details-marker]:hidden">
+            <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M12.232 4.232a2.5 2.5 0 0 1 3.536 3.536l-1.225 1.224a.75.75 0 0 0 1.061 1.06l1.224-1.224a4 4 0 0 0-5.656-5.656l-3 3a4 4 0 0 0 .225 5.865.75.75 0 0 0 .977-1.138 2.5 2.5 0 0 1-.142-3.667l3-3Z"/><path d="M11.603 7.963a.75.75 0 0 0-.977 1.138 2.5 2.5 0 0 1 .142 3.667l-3 3a2.5 2.5 0 0 1-3.536-3.536l1.225-1.224a.75.75 0 0 0-1.061-1.06l-1.224 1.224a4 4 0 1 0 5.656 5.656l3-3a4 4 0 0 0-.225-5.865Z"/></svg>
+            <span class="<%= visually_hidden_class %>"><%= t('website.admin.pages.form.edit_image_link') %></span>
+          </summary>
+        <% else %>
+          <summary class="cursor-pointer list-none text-sm text-text-tertiary hover:text-text-secondary [&::-webkit-details-marker]:hidden"><%= t('website.admin.pages.form.use_image_url') %></summary>
+        <% end %>
+      <% end %>
+      <div class="flex min-w-0 flex-col gap-1.5 <%= 'mt-2' if !workspace? && uploadable? %>">
+        <input type="text" id="<%= field_id %>" class="input-field <%= workspace? ? 'h-9 min-w-0' : 'font-mono' %>" value="<%= value %>"
+               data-prop="<%= key %>" data-action="input->website-builder#markDirty input->website-builder#previewImage"
+                <% if workspace? %>aria-describedby="<%= field_id %>_status <%= field_id %>_help"<% end %>
+               placeholder="<%= t('website.admin.pages.form.image_placeholder') %>">
+        <p class="<%= workspace? ? visually_hidden_class : 'text-sm text-text-tertiary' %>" <% if workspace? %>id="<%= field_id %>_help"<% end %>><%= t('website.admin.pages.form.image_hint') %></p>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+zh-CN:
+  flowchart_elements:
+    conditions:
+      errors:
+        invalid_condition: 条件必须是一组平铺的条件行
+        empty_condition: 请至少添加一个条件
+        invalid_row: 第 %{index} 行条件必须是字段条件或记录数条件
+        nested_group: 第 %{index} 行条件不能是嵌套条件组
+        missing_entity: 第 %{index} 行条件需要选择实体
+        unknown_count_operator: 第 %{index} 行条件需要选择记录数比较方式
+        missing_left: 第 %{index} 行条件需要比较对象
+        missing_operator: 第 %{index} 行条件需要运算符
+        unknown_operator: 第 %{index} 行条件的运算符无效
+        missing_right: 第 %{index} 行条件的“%{operator}”需要比较值
+        invalid_regex: 第 %{index} 行条件的匹配模式无效
+    operators:
+      "==": 等于
+      "!=": 不等于
+      ">": 大于
+      ">=": 大于等于
+      "<": 小于
+      "<=": 小于等于
+      contains: 包含
+      starts_with: 以…开头
+      ends_with: 以…结尾
+      matches_regex: 匹配正则
+      in_range: 在范围内
+      is_type: 属于类型
+      is_true: 为真
+      is_false: 为假
+      is_empty: 为空
+      is_not_empty: 不为空
+      is_nil: 未设置

@@ -1,0 +1,27 @@
+<div class="<%= wrapper_classes %>">
+  <label for="<%= field_id %>" class="<%= label_classes %>">
+    <%= label %>
+    <%= required_indicator %>
+  </label>
+
+  <div class="relative">
+    <input type="time"
+           name="<%= field_name %>"
+           id="<%= field_id %>"
+           value="<%= value %>"
+           <% if min.present? %>min="<%= min %>"<% end %>
+           <% if max.present? %>max="<%= max %>"<% end %>
+           <% if step.present? %>step="<%= step %>"<% end %>
+           <%= 'required' if required %>
+           class="<%= input_classes %> pr-10">
+    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+      <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+  </div>
+
+  <% if html_attributes[:help_text].present? %>
+    <p class="mt-1 text-sm text-gray-500"><%= html_attributes[:help_text] %></p>
+  <% end %>
+</div>

@@ -1,0 +1,262 @@
+<% if customer_settings %>
+<%= render Billing::Admin::CustomerInvoiceDetailComponent.new(
+  invoice: invoice, customer_id: customer_id, download: download,
+  collection: collection, payment_action: payment_action, form: form
+) %>
+<% else %>
+<div data-controller="billing-invoice" class="min-w-0 space-y-6 text-body print:overflow-visible">
+  <div class="card overflow-hidden print:border-0 print:shadow-none">
+    <div class="space-y-5 p-5 sm:p-6">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div class="min-w-0 space-y-1">
+          <div class="flex flex-wrap items-center gap-2">
+            <h2 class="break-all text-heading"><%= t("comp_billing.invoice_detail.invoice_number", number: invoice.number.presence || t("comp_billing.invoice_detail.draft")) %></h2>
+            <%= render BadgeComponent.new(variant: status_variant, size: :md) do %><%= status_label %><% end %>
+          </div>
+          <p class="text-body-sm text-text-secondary"><%= t("comp_billing.invoice_detail.issued", date: date_label(invoice.issued_at)) %></p>
+        </div>
+        <div class="flex flex-wrap gap-2 print:hidden">
+          <button type="button" data-action="billing-invoice#print" class="btn btn-secondary btn-sm">
+            <%= render Billing::Admin::IconComponent.new(name: :printer, class_name: "h-4 w-4") %><%= t("comp_billing.invoice_detail.print") %>
+          </button>
+        </div>
+      </div>
+      <div>
+        <p class="text-caption"><%= t("comp_billing.invoice_detail.total") %></p>
+        <p class="text-title tabular-nums"><%= format_amount(invoice.total_cents) %></p>
+      </div>
+    </div>
+    <dl class="grid grid-cols-1 divide-y divide-border-subtle border-t border-border-subtle bg-canvas-elevated <%= platform? ? 'sm:grid-cols-2 lg:grid-cols-4' : 'sm:grid-cols-3' %> sm:divide-x sm:divide-y-0 print:bg-transparent">
+      <div class="min-w-0 px-5 py-3 sm:px-6">
+        <dt class="text-caption"><%= t("comp_billing.invoice_detail.billing_period") %></dt>
+        <dd class="mt-1 text-body-sm font-medium text-text-primary tabular-nums">
+          <% if invoice.period_start && invoice.period_end %>
+            <%= l(invoice.period_start.to_date, format: :long) %> – <%= l(invoice.period_end.to_date, format: :long) %>
+          <% else %>
+            <%= t("common.labels.em_dash") %>
+          <% end %>
+        </dd>
+      </div>
+      <div class="min-w-0 px-5 py-3 sm:px-6">
+        <dt class="text-caption"><%= t("comp_billing.invoice_detail.due_date") %></dt>
+        <dd class="mt-1 text-body-sm font-medium text-text-primary tabular-nums"><%= date_label(invoice.due_at) %></dd>
+      </div>
+      <div class="min-w-0 px-5 py-3 sm:px-6">
+        <dt class="text-caption"><%= t("comp_billing.invoice_detail.paid_at") %></dt>
+        <dd class="mt-1 text-body-sm font-medium text-text-primary tabular-nums"><%= invoice.paid_at.present? ? l(invoice.paid_at, format: :short) : t("common.labels.em_dash") %></dd>
+      </div>
+      <% if platform? %>
+        <div class="min-w-0 px-5 py-3 sm:px-6">
+          <dt class="text-caption"><%= t("comp_billing.invoice_detail.customer") %></dt>
+          <dd class="mt-1 text-body-sm font-medium text-text-primary tabular-nums"><%= invoice.customer_id %><% if customer_name %> <span class="font-normal text-text-secondary"><%= customer_name %></span><% end %></dd>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+
+  <% unless download %>
+    <% tone_icon, tone_classes = collection_tone %>
+    <section class="card overflow-hidden print:hidden" aria-labelledby="invoice-collection-heading">
+      <header class="card-header"><h3 id="invoice-collection-heading" class="section-header"><%= t("comp_billing.collection.heading") %></h3></header>
+      <div class="space-y-4 p-5 sm:p-6">
+        <div class="flex items-start gap-3">
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg <%= tone_classes %>"><%= render Billing::Admin::IconComponent.new(name: tone_icon, class_name: "h-4 w-4") %></span>
+          <div class="min-w-0 space-y-1 pt-1">
+            <p role="status" class="font-medium text-text-primary"><%= t("comp_billing.collection.states.#{collection_state}") %></p>
+            <% if fact(collection, :reason_key) %><p class="text-body-sm text-text-secondary"><%= t(fact(collection, :reason_key)) %></p><% end %>
+            <% if collection_state == "exhausted" %><p class="text-body-sm text-text-secondary"><%= t("comp_billing.invoice_detail.collection_exhausted") %></p><% end %>
+          </div>
+        </div>
+        <% if fact(invoice, :settlement_review_code).present? %><%= render AlertComponent.new(message: t("comp_billing.invoice_detail.settlement_review"), type: :warning, auto_dismiss: false) %><% end %>
+        <% if stripe_recovery? %>
+          <%= tag.div data: recovery_data, class: "max-w-xl space-y-3 rounded-lg border border-accent-muted bg-accent-subtle/50 p-4" do %>
+            <div class="rounded-lg border border-border bg-surface p-3" data-payments--stripe-card-target="element" aria-label="<%= t('settings_billing.invoices.complete_authentication') %>"></div>
+            <p data-payments--stripe-card-target="error" class="hidden text-body-sm text-danger" role="alert"></p>
+            <button type="button" data-action="click->payments--stripe-card#submit" class="btn btn-primary w-full sm:w-auto"><%= t("settings_billing.invoices.complete_authentication") %></button>
+          <% end %>
+        <% end %>
+        <dl class="grid gap-x-6 gap-y-3 border-t border-border-subtle pt-4 text-body-sm sm:grid-cols-2 lg:grid-cols-4">
+          <div><dt class="text-text-tertiary"><%= t("comp_billing.collection.current_mode") %></dt><dd class="mt-0.5 text-text-primary"><%= collection_mode_label(fact(collection, :effective_mode)) %></dd></div>
+          <div><dt class="text-text-tertiary"><%= t("comp_billing.collection.recorded_mode") %></dt><dd class="mt-0.5 text-text-primary"><%= collection_mode_label(invoice.collection_mode) %></dd></div>
+          <div><dt class="text-text-tertiary"><%= t("comp_billing.collection.failed_attempts") %></dt><dd class="mt-0.5 text-text-primary tabular-nums"><%= invoice.attempt_count %></dd></div>
+          <% if fact(collection, :next_attempt_at) && collection_state.in?(%w[ready retry_wait blocked]) %>
+            <div><dt class="text-text-tertiary"><%= t("comp_billing.invoice_detail.next_attempt") %></dt><dd class="mt-0.5 text-text-primary"><%= billing_time(fact(collection, :next_attempt_at)) %></dd></div>
+          <% end %>
+        </dl>
+        <div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+          <% unless platform? %>
+            <% if show_retry? %><%= button_to t("comp_billing.invoice_detail.pay_invoice"), retry_path, method: :post, class: "btn btn-primary w-full sm:w-auto" %><% end %>
+            <%= link_to t("settings_navigation.items.billing_payment_methods"), helpers.admin_settings_billing_payment_methods_path(customer_id), class: "btn btn-secondary btn-sm" %>
+          <% end %>
+          <%= link_to result_path, class: "btn btn-ghost btn-sm" do %>
+            <%= render Billing::Admin::IconComponent.new(name: :refresh, class_name: "h-4 w-4") %><%= t("comp_billing.collection.refresh") %>
+          <% end %>
+        </div>
+      </div>
+    </section>
+  <% end %>
+
+  <div class="card min-w-0 overflow-hidden print:overflow-visible print:border-0 print:shadow-none">
+    <div class="card-header">
+      <h3 class="section-header"><%= t("comp_billing.invoice_detail.line_items") %></h3>
+    </div>
+    <ul class="divide-y divide-border-subtle px-5 lg:hidden print:hidden" role="list">
+      <% if invoice.line_items.empty? %><li class="py-6 text-center text-body-sm text-text-secondary"><%= t("comp_billing.invoice_detail.no_line_items") %></li><% end %>
+      <% invoice.line_items.each do |item| %>
+        <li class="break-inside-avoid py-4">
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <p class="font-medium text-text-primary break-words"><%= item.description %></p>
+              <p class="mt-0.5 text-caption"><%= kind_label(item.kind) %></p>
+            </div>
+            <p class="shrink-0 font-medium tabular-nums <%= item.amount_cents.negative? ? 'text-success' : 'text-text-primary' %>"><%= format_amount(item.amount_cents) %></p>
+          </div>
+          <dl class="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-body-sm">
+            <div class="flex gap-1.5"><dt class="text-text-tertiary"><%= t("comp_billing.invoice_detail.qty") %></dt><dd class="text-text-secondary tabular-nums"><%= item.quantity %></dd></div>
+            <div class="flex gap-1.5"><dt class="text-text-tertiary"><%= t("comp_billing.invoice_detail.unit_price") %></dt><dd class="text-text-secondary tabular-nums"><%= format_amount(item.unit_amount_cents) %></dd></div>
+          </dl>
+        </li>
+      <% end %>
+    </ul>
+    <div class="hidden max-w-full overflow-x-auto lg:block print:block print:overflow-visible" role="region" aria-label="<%= t('comp_billing.invoice_detail.line_items') %>" tabindex="0">
+      <table class="min-w-full divide-y divide-border-subtle print:w-full print:table-fixed">
+        <caption class="<%= visually_hidden_class %>"><%= t("comp_billing.invoice_detail.line_items") %></caption>
+        <thead class="table-header">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left print:w-2/5"><%= t("common.labels.description") %></th>
+            <th scope="col" class="px-4 py-3 text-left"><%= t("comp_billing.invoice_detail.kind") %></th>
+            <th scope="col" class="px-4 py-3 text-right"><%= t("comp_billing.invoice_detail.qty") %></th>
+            <th scope="col" class="px-4 py-3 text-right"><%= t("comp_billing.invoice_detail.unit_price") %></th>
+            <th scope="col" class="px-6 py-3 text-right"><%= t("comp_billing.invoice_detail.amount") %></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-border-subtle">
+          <% if invoice.line_items.empty? %>
+            <tr>
+              <td colspan="5" class="px-6 py-8 text-center text-body-sm text-text-secondary"><%= t("comp_billing.invoice_detail.no_line_items") %></td>
+            </tr>
+          <% end %>
+          <% invoice.line_items.each do |item| %>
+            <tr class="break-inside-avoid">
+              <td class="px-6 py-3 text-text-primary break-words"><%= item.description %></td>
+              <td class="px-4 py-3 text-body-sm text-text-secondary"><%= kind_label(item.kind) %></td>
+              <td class="px-4 py-3 text-right text-body-sm text-text-secondary tabular-nums"><%= item.quantity %></td>
+              <td class="px-4 py-3 text-right text-body-sm text-text-secondary tabular-nums"><%= format_amount(item.unit_amount_cents) %></td>
+              <td class="px-6 py-3 text-right font-medium tabular-nums <%= item.amount_cents.negative? ? 'text-success' : 'text-text-primary' %>"><%= format_amount(item.amount_cents) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex break-inside-avoid justify-end border-t border-border-subtle bg-canvas-elevated px-5 py-4 sm:px-6 print:bg-transparent">
+      <dl class="w-full space-y-2 text-body-sm sm:w-72">
+        <div class="flex justify-between gap-4">
+          <dt class="text-text-secondary"><%= t("comp_billing.invoice_detail.subtotal") %></dt>
+          <dd class="tabular-nums text-text-primary"><%= format_amount(invoice.subtotal_cents) %></dd>
+        </div>
+        <% if invoice.discount_cents > 0 %>
+          <div class="flex justify-between gap-4">
+            <dt class="text-text-secondary"><%= t("comp_billing.invoice_detail.discount") %></dt>
+            <dd class="tabular-nums text-success">-<%= format_amount(invoice.discount_cents) %></dd>
+          </div>
+        <% end %>
+        <% if invoice.tax_cents > 0 %>
+          <div class="flex justify-between gap-4">
+            <dt class="text-text-secondary"><%= t("comp_billing.invoice_detail.tax") %></dt>
+            <dd class="tabular-nums text-text-primary"><%= format_amount(invoice.tax_cents) %></dd>
+          </div>
+        <% end %>
+        <div class="flex justify-between gap-4 border-t border-border-subtle pt-2">
+          <dt class="text-body font-semibold text-text-primary"><%= t("comp_billing.invoice_detail.total") %></dt>
+          <dd class="text-body font-semibold tabular-nums text-text-primary"><%= format_amount(invoice.total_cents) %></dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <% if show_operator_panel? %>
+    <%= render ::Admin::Settings::SectionComponent.new(title: t("comp_billing.operator.actions_heading"), id: "operator-actions") do %>
+      <div class="divide-y divide-border-subtle print:hidden">
+        <% if show_mark_paid? %>
+          <div class="space-y-4 py-4 first:pt-0 last:pb-0">
+            <div class="space-y-1">
+              <p class="font-medium text-text-primary"><%= t("comp_billing.invoice_detail.mark_paid") %></p>
+              <p class="text-body-sm text-text-secondary"><%= t("comp_billing.operator.manual_settlement_hint") %></p>
+            </div>
+            <%= form_with url: mark_paid_path, method: :post, scope: :settlement, class: "grid gap-4 md:grid-cols-2" do |f| %>
+              <% if form && form_errors.any? %><div class="md:col-span-2" role="alert"><%= render AlertComponent.new(message: form_errors.full_messages.to_sentence, type: :error, auto_dismiss: false) %></div><% end %>
+              <div>
+                <%= f.label :reference, t("comp_billing.operator.settlement_reference"), class: "form-label" %>
+                <%= f.text_field :reference, value: form ? form_value(:reference) : fact(settlement, :reference), required: true, class: "input-field", **field_options(:reference) %>
+                <p class="mt-1.5 text-caption"><%= t("comp_billing.operator.settlement_reference_hint") %></p>
+                <%= field_error(:reference) %>
+              </div>
+              <div>
+                <%= f.label :note, t("comp_billing.operator.settlement_note"), class: "form-label" %>
+                <%= f.text_area :note, value: form ? form_value(:note) : fact(settlement, :note), class: "input-field", **field_options(:note) %>
+                <p class="mt-1.5 text-caption"><%= t("comp_billing.operator.settlement_note_hint") %></p>
+                <%= field_error(:note) %>
+              </div>
+              <div class="md:col-span-2">
+                <%= f.submit t("comp_billing.invoice_detail.mark_paid"), class: "btn btn-primary btn-sm w-full sm:w-auto" %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        <% if show_retry? %>
+          <div class="flex flex-col gap-3 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between">
+            <p class="min-w-0 text-text-primary"><%= t("comp_billing.invoice_detail.retry") %></p>
+            <%= button_to t("comp_billing.invoice_detail.retry"),
+                retry_path,
+                method: :post,
+                data: { turbo_confirm: t("comp_billing.invoice_detail.retry_confirm", number: invoice.number) },
+                class: "btn btn-secondary btn-sm shrink-0 w-full sm:w-auto", form_class: "shrink-0" %>
+          </div>
+        <% end %>
+        <% if show_collection_authorization? %>
+          <div class="space-y-4 py-4 first:pt-0 last:pb-0">
+            <div class="space-y-1">
+              <p class="font-medium text-text-primary"><%= t("comp_billing.operator.authorize_recovery") %></p>
+              <p class="text-body-sm text-text-secondary"><%= t("comp_billing.operator.collection_authorization_hint") %></p>
+            </div>
+            <%= form_with url: retry_path, method: :post, scope: :collection, class: "grid gap-4 md:grid-cols-2" do |f| %>
+              <div>
+                <%= f.label :mode, t("comp_billing.settings_form.collection_mode_label"), class: "form-label" %>
+                <%= f.select :mode, %w[manual gateway].map { |mode| [t("comp_billing.settings_form.collection_modes.#{mode}"), mode] }, { selected: fact(collection, :mode) || fact(collection, :effective_mode) }, class: "input-field" %>
+              </div>
+              <div>
+                <%= f.label :note, t("comp_billing.operator.collection_note"), class: "form-label" %>
+                <%= f.text_area :note, value: fact(collection, :note), required: true, class: "input-field" %>
+                <p class="mt-1.5 text-caption"><%= t("comp_billing.operator.collection_note_hint") %></p>
+              </div>
+              <div class="md:col-span-2">
+                <%= f.submit t("comp_billing.operator.authorize_recovery"), class: "btn btn-secondary btn-sm w-full sm:w-auto" %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% if show_void? %>
+    <section class="card overflow-hidden border-danger/30 print:hidden">
+      <div class="border-b border-danger/20 px-4 py-3 sm:px-6">
+        <h3 class="section-header text-danger"><%= t("comp_billing.operator.danger_zone") %></h3>
+      </div>
+      <div class="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div class="min-w-0 max-w-2xl space-y-1">
+          <p class="font-medium text-text-primary"><%= t("comp_billing.invoice_detail.void") %></p>
+          <p class="text-body-sm text-text-secondary"><%= t("comp_billing.operator.void_consequence") %></p>
+        </div>
+        <%= button_to t("comp_billing.invoice_detail.void"),
+            void_path,
+            method: :post,
+            data: { turbo_confirm: t("comp_billing.invoice_detail.void_confirm", number: invoice.number) },
+            class: "btn btn-danger btn-sm shrink-0 w-full sm:w-auto", form_class: "shrink-0" %>
+      </div>
+    </section>
+  <% end %>
+</div>
+<% end %>

@@ -1,0 +1,93 @@
+<%
+  dashboard_url = admin_modules_emails_dashboard_path(current_customer_id)
+  csv_path = admin_modules_emails_dashboard_path(current_customer_id, format: :csv, since: params[:since], until: params[:until])
+  quick_actions = [
+    { label: t("admin_modules.emails.dashboard.quick_actions.new_template"), path: new_admin_modules_emails_template_path(current_customer_id), variant: :primary, icon: :plus },
+    { label: t("admin_modules.emails.analytics.reports.export_csv"), path: csv_path, variant: :secondary },
+    { label: t("admin_modules.emails.dashboard.quick_actions.new_send_activity"), path: new_admin_modules_emails_send_activity_path(current_customer_id), variant: :secondary, icon: :plus },
+  ]
+%>
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "email",
+      breadcrumbs: [{ label: t("admin_modules.nav.modules") }, { label: t("feature_modules.email.entries.analytics"), path: admin_modules_emails_dashboard_path(current_customer_id) }, { label: t("feature_modules.email.tabs.overview") }],
+      title: t("feature_modules.email.tabs.overview"),
+      description: t("admin_modules.emails.dashboard.description"),
+      actions: quick_actions
+    ) do %>
+
+  <%= render "admin/modules/emails/shared/analytics_tabs", active_tab: :overview %>
+
+  <div class="mb-6">
+    <%= render Emails::DateRangePickerComponent.new(url: dashboard_url, since: @since, until_date: @until_date) %>
+  </div>
+
+  <div class="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+    <% %i[sent delivered bounced complained suppressed opened clicked unsubscribed].each do |key| %>
+      <%= render Emails::MetricCardComponent.new(
+            label: t("admin_modules.emails.dashboard.stats.#{key}"),
+            value: number_with_delimiter(@stats[:totals][key]),
+            tone: key
+          ) %>
+    <% end %>
+  </div>
+
+  <h3 class="mb-4 text-sm font-semibold text-text-primary"><%= t("admin_modules.emails.dashboard.daily_trend") %></h3>
+
+  <div class="card mb-8 overflow-hidden">
+    <table class="w-full border-collapse text-left">
+      <thead>
+        <tr class="border-b border-border-subtle bg-surface-subtle">
+          <th class="p-4 text-sm font-semibold text-text-muted"><%= t("admin_modules.emails.dashboard.stats.metric") %></th>
+          <th class="p-4 text-sm font-semibold text-text-muted"><%= t("admin_modules.emails.dashboard.stats.trend_30_days") %></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-border-subtle">
+        <% [
+          { key: :sent, tone: "accent" },
+          { key: :delivered, tone: "success" },
+          { key: :bounced, tone: "danger" },
+          { key: :opened, tone: "info" },
+          { key: :clicked, tone: "accent" }
+        ].each do |metric| %>
+          <tr>
+            <td class="w-1/4 p-4 text-sm font-medium text-text-primary">
+              <%= t("admin_modules.emails.dashboard.stats.#{metric[:key]}") %>
+            </td>
+            <td class="w-3/4 p-4">
+              <%= render Emails::SparklineComponent.new(
+                    values: @stats[:daily].map { |d| d[metric[:key]] },
+                    tone: metric[:tone]
+                  ) %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <section>
+    <h3 class="text-sm font-semibold text-text-primary mb-4"><%= t("feature_modules.email.tabs.send_activities") %></h3>
+    <% if @report[:send_activities].blank? %>
+      <p class="text-text-muted"><%= t("admin_modules.emails.analytics.reports.empty_send_activities") %></p>
+    <% else %>
+      <div class="card overflow-hidden">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-border-subtle">
+              <th class="p-3 text-sm font-medium text-text-muted"><%= t("admin_modules.emails.analytics.reports.send_activity") %></th>
+              <th class="p-3 text-sm font-medium text-text-muted text-right"><%= t("admin_modules.emails.analytics.deliverability.count") %></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border-subtle">
+            <% @report[:send_activities].each do |id, count| %>
+              <tr>
+                <td class="p-3 text-sm text-text-primary"><%= @send_activity_names[id] || t("admin_modules.emails.analytics.reports.unknown_send_activity") %></td>
+                <td class="p-3 text-sm text-text-primary text-right"><%= number_with_delimiter(count) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  </section>
+<% end %>

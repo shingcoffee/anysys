@@ -1,0 +1,40 @@
+<section aria-label="<%= t("settings_billing.invoices.summary.aria_label") %>" data-invoice-summary>
+  <dl class="card grid overflow-hidden divide-y divide-border-subtle sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+    <div class="min-w-0 px-5 py-5 sm:px-6" data-summary="outstanding">
+      <dt class="flex items-center gap-2">
+        <span class="text-body-sm font-medium text-text-secondary"><%= t("settings_billing.invoices.summary.outstanding") %></span>
+        <% if outstanding? %><span class="size-2 rounded-full bg-warning" aria-hidden="true"></span><% end %>
+      </dt>
+      <dd class="mt-2 flex min-w-0 flex-col gap-1">
+        <% if outstanding? %>
+          <% outstanding.each do |row| %>
+            <p class="text-heading tabular-nums break-words"><%= billing_amount(fact(row, :total_cents), fact(row, :currency)) %></p>
+          <% end %>
+          <p class="flex flex-wrap items-center gap-x-2 text-body-sm text-text-secondary">
+            <span><%= t("settings_billing.invoices.summary.unpaid_count", count: unpaid_count) %></span>
+            <%= link_to t("settings_billing.invoices.summary.review_unpaid"), unpaid_path, class: "link" %>
+          </p>
+        <% else %>
+          <p class="text-heading tabular-nums"><%= t("settings_billing.invoices.summary.nothing_due") %></p>
+          <p class="text-body-sm text-text-secondary"><%= t("settings_billing.invoices.summary.all_paid") %></p>
+        <% end %>
+      </dd>
+    </div>
+
+    <div class="min-w-0 px-5 py-5 sm:px-6" data-summary="last-payment">
+      <dt class="text-body-sm font-medium text-text-secondary"><%= t("settings_billing.invoices.summary.last_payment") %></dt>
+      <dd class="mt-2 flex min-w-0 flex-col gap-1">
+        <% if last_paid %>
+          <p class="text-heading tabular-nums"><%= billing_amount(last_paid.total_cents, last_paid.currency) %></p>
+          <p class="text-body-sm text-text-secondary">
+            <%= t("settings_billing.invoices.summary.paid_on", date: date(last_paid.paid_at)) %>
+            <% if last_paid.number.present? %>· <%= link_to last_paid.number, helpers.admin_settings_billing_invoice_path(customer_id, last_paid), class: "link tabular-nums" %><% end %>
+          </p>
+        <% else %>
+          <p class="text-heading text-text-tertiary"><%= t("common.labels.em_dash") %></p>
+          <p class="text-body-sm text-text-secondary"><%= t("settings_billing.invoices.summary.no_payments") %></p>
+        <% end %>
+      </dd>
+    </div>
+  </dl>
+</section>

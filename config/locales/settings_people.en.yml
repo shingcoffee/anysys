@@ -1,0 +1,181 @@
+en:
+  settings_people:
+    member_description: Choose what members see in their portal and how each page is displayed.
+    pages_heading: Member pages
+    pages_heading_hint: Open a group to choose which pages members can see.
+    display_description: Choose how this page appears in the member portal. Changes take effect when you save.
+    sources:
+      builtin:
+        name: Core pages
+        description: Home, profile and security are always available to members.
+      modules:
+        name: Member modules
+        description: Choose which module pages members can see and customize their display.
+      entities:
+        name: Record pages
+        description: Customize the pages members use to view their own records.
+      pages:
+        name: Pages
+        description: Choose which launched forms appear in the member navigation.
+    pages_count:
+      one: "%{count} page"
+      other: "%{count} pages"
+    visible_count: "%{count} visible to members"
+    always_available: Always available
+    builtin_note: These core pages cannot be hidden or reordered.
+    immediate_save: Visibility changes save immediately.
+    display_settings: Display settings
+    search_pages: Search pages
+    no_pages: No pages to display.
+    navigation: Navigation text
+    display_name: Display name
+    relationship_name: "%{source} and %{target}"
+    relationship_description: "View your %{name} records."
+    list_display: List display
+    content_columns: Content columns
+    row_action: Row action
+    row_action_help: Each list row links to this action with the row id filled in on the target field.
+    record_details: Record details
+    details_fallback: Details
+    empty_state: Empty page message
+    advanced: Appearance and order
+    icon: Navigation icon
+    saved_icon: Current icon
+    order_hint: Lower numbers appear first in the member navigation.
+    icons:
+      home: Home
+      user: Person
+      shield_check: Security
+      rectangle_stack: Records
+      credit_card: Payment card
+      document_text: Document
+    registration:
+      description: Let new members register and confirm their email address.
+      label: Allow member registration
+      details: When registration is disabled
+      consequences: New registrations, pending email confirmation links and confirmation resend requests are unavailable until registration is enabled again.
+    recovery:
+      description: Let members request an email link to reset their password.
+      label: Allow password reset
+      details: When password reset is disabled
+      consequences: Reset requests and email reset links are unavailable. The password recovery link on the sign-in page leads to a disabled notice.
+    roles_description: Review roles, their access scope and the people assigned to them.
+    user_access_description: Review each user's current roles and manage their existing access.
+    scope: Access scope
+    role_details: Role details
+    built_in_role: Built-in role
+    custom_role: Custom role
+    owner_name: Platform owner
+    admin_name: Administrator
+    member_name: Member
+    owner_scope: Unrestricted access across all organizations.
+    admin_scope: Administrative access within this organization.
+    member_scope: Access to the member's own profile and records.
+    custom_scope: Access is determined by the permissions assigned to this role.
+    locked_permissions: Permissions are read-only
+    locked_note: These permissions are managed by the application and cannot be changed here.
+    all_access: All resources and actions
+    permissions: Permissions
+    permissions_description: Review access by area and action. Editable changes are applied when you save.
+    role_form_description: Set the role's name and description. Permissions are managed separately.
+    role_identifier: Role identifier
+    identifier_hint: A unique reference for this role. It cannot be changed after creation.
+    additional_details: Additional details
+    edit_access: Edit access
+    assigned_users: Assigned users
+    grant_label: "%{context} — %{resource}"
+    grant_contexts:
+      billing: Subscription & billing
+      code_generators: Automation tools
+    grant_resources:
+      sms_consent_events: Consent events
+      sms_entity_syncs: Contact synchronization
+      sms_campaign_launches: Launch campaigns
+      sms_campaign_reports: Campaign reports
+      other: Other resources
+      page_groups: Page groups
+      dashboards: Organization overview
+      platform_announcement_dismissals: Dismiss announcements
+      platform_announcement_reads: Read announcements
+      support_ticket_reads: Read support requests
+      support_ticket_messages: Support replies
+      support_ticket_resolutions: Resolve support requests
+      help_emails: Email support
+      entity_definitions: Record definitions
+      entity_entries: Record entries
+      entity_association_entries: Linked record rows
+      entity_entry_person_links: Record account links
+      entity_entry_journeys: Record journey starts
+      entity_entry_actions: Record actions
+      entity_index_settings: Record list preferences
+      module_entries: Module records
+      module_configs: Module configuration
+      transcriptions: Voice transcriptions
+      conversations: Assistant conversations
+      default_gateways: Default payment provider
+      skeletons: Website starters
+      cancellations: Cancel subscriptions
+      coupon_redemptions: Apply coupons
+      one_time_payments: One-time invoice payments
+      subscription_one_time_payments: One-time subscription payments
+      constant_copies: Copy option lists
+      shared_resource_overrides: Organization-specific overrides
+      module_enablements: Module availability
+      module_sub_toggles: Module feature availability
+      entity_restorations: Restore record definitions
+      entity_copies: Copy record definitions
+      entity_template_previews: Record template previews
+      entity_versions: Record definition history
+      template_picker_cards: Template selection
+      template_previews: Template previews
+      page_restorations: Restore pages
+      page_visibilities: Page visibility
+      page_versions: Page history
+      page_copies: Copy pages
+      page_template_applications: Apply page templates
+      field_templates: Reusable form fields
+      page_launches: Launch pages
+      page_previews: Page previews
+      page_renders: Page display
+      page_forms: Fill in forms
+      page_field_options: Form field choices
+      page_module_data: Page module content
+      customer_restorations: Restore organizations
+      surfaces: Protected account pages
+      platform_gateways: Available payment providers
+      webhook_events: Provider notifications
+      industry_template_assignments: Industry template assignments
+      industry_template_cards: Industry template selection
+      industry_template_default_seeds: Default industry templates
+      industry_template_new_template_seeds: New industry template suggestions
+      validations: Automation validation
+      test_runs: Automation test runs
+      source_previews: Automation code previews
+      io_params: Automation inputs and outputs
+      element_type_io_params: Step inputs and outputs
+      customer_contexts: Organization switching
+      user_activations: Account activation
+      user_mfa_resets: Reset two-step verification
+      user_trusted_devices: Trusted devices
+      user_profiles: User profiles
+      template_versions: Template history
+      send_activity_deliveries: Campaign deliveries
+      send_activity_cancellations: Cancel campaigns
+      sends: Send text messages
+      subscription_cancellations: Cancel payment subscriptions
+      publications: Website publishing
+      developer_docs: Developer reference
+      module_owner_configurations: Customer limits
+    areas:
+      admin: Administration
+      module_records: Module records
+      member: Member portal
+      public: Public pages
+      entities: Record types
+      pages: Pages
+      settings: Settings
+      maintenance: Administration tools
+      platform: Platform administration
+      authentication: Account access
+      user_role_assignments: User access
+      role_grants: Role permissions

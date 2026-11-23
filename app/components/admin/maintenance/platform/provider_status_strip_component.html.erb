@@ -1,0 +1,29 @@
+<div class="card px-4 sm:px-5 py-3 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+  <dl class="flex flex-wrap items-center gap-x-6 gap-y-2">
+    <div class="flex items-center gap-2">
+      <dt class="text-caption"><%= health_caption %></dt>
+      <dd>
+        <%= render BadgeComponent.new(variant: health_variant, size: :sm) do %><%= health_label %><% end %>
+      </dd>
+    </div>
+    <div class="flex items-center gap-2">
+      <dt class="text-caption"><%= role_caption %></dt>
+      <dd>
+        <% if role_active? %>
+          <%= render BadgeComponent.new(variant: :success, size: :sm) do %><%= role_active_label %><% end %>
+        <% else %>
+          <span class="text-body-sm text-text-secondary"><%= role_inactive_label %></span>
+        <% end %>
+      </dd>
+    </div>
+    <div class="flex items-center gap-2">
+      <dt class="text-caption"><%= platform_caption %></dt>
+      <dd class="text-body-sm text-text-primary font-medium"><%= platform_value %></dd>
+    </div>
+  </dl>
+  <% if content? %>
+    <div class="flex flex-wrap items-center gap-2 shrink-0">
+      <%= content %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,18 @@
+services:
+  web:
+    build: .
+    image: anysys:latest
+    ports:
+      - "80:80"
+    environment:
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY:?RAILS_MASTER_KEY is required}
+      APP_HOST: ${APP_HOST:?APP_HOST is the public hostname}
+      APP_PROTOCOL: ${APP_PROTOCOL:-https}
+      SOLID_QUEUE_IN_PUMA: "true"
+    volumes:
+      - anysys_storage:/rails/storage
+    init: true
+    restart: unless-stopped
+
+volumes:
+  anysys_storage:

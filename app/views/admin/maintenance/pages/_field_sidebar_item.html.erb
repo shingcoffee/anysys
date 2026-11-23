@@ -1,0 +1,45 @@
+<%# Sidebar field item for the page builder.
+     Locals: prop (Hash), search_text (String), bridge (Boolean, optional), source (String), source_section (String) %>
+<% has_html_type = prop['html_type'].present? %>
+<% icon_colors = html_type_icon_color(prop['html_type']) %>
+<div class="entity-field-item<%= ' entity-field-item--disabled' unless has_html_type %> flex items-center gap-2 px-1.5 py-[5px] rounded-md <%= has_html_type ? 'cursor-grab hover:bg-gray-50 active:bg-gray-100' : 'cursor-not-allowed opacity-50' %> transition-all duration-150 group"
+     <% if has_html_type %>
+       data-action="pointerdown->page-builder#dragPointerDown dblclick->page-builder#addField"
+       data-drag-kind="new"
+     <% end %>
+     data-field-type="entity"
+     data-property-slug="<%= prop['name_slug'] %>"
+     data-property-name="<%= prop['name'] %>"
+     data-property-html-type="<%= prop['html_type'] %>"
+     data-source="<%= local_assigns[:source] || 'entity' %>"
+     data-source-section="<%= local_assigns[:source_section] || '' %>"
+     <% if prop.dig('config', 'options').is_a?(Array) && prop.dig('config', 'options').any? %>
+       data-field-options="<%= prop.dig('config', 'options').to_json %>"
+     <% end %>
+     <% if prop.dig('config', 'options_source') == 'entity_entries' %>
+       data-dynamic-options="<%= prop['config'].slice('options_source', 'entity_id', 'label_field').to_json %>"
+     <% end %>
+     data-searchable-item
+     data-search-text="<%= search_text %>"
+     <% unless has_html_type %>
+       title="<%= t("maint_core.pages.field_item.no_html_type_title") %>"
+     <% end %>>
+  <%# Drag grip %>
+  <svg class="w-3 h-3 flex-shrink-0 <%= has_html_type ? 'text-transparent group-hover:text-gray-300' : 'text-transparent' %> transition-colors duration-150" fill="currentColor" viewBox="0 0 24 24">
+    <circle cx="8" cy="6" r="2"/><circle cx="16" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="8" cy="18" r="2"/><circle cx="16" cy="18" r="2"/>
+  </svg>
+  <%# Color-coded type icon %>
+  <div class="w-5 h-5 rounded flex items-center justify-center flex-shrink-0 <%= icon_colors.last %>">
+    <svg class="w-3 h-3 <%= icon_colors.first %>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="<%= html_type_icon_path(prop['html_type']) %>" />
+    </svg>
+  </div>
+  <%# Field name %>
+  <span class="text-[11px] leading-tight <%= has_html_type ? 'text-gray-600 group-hover:text-gray-900' : 'text-gray-400' %> truncate flex-1 transition-colors duration-150"><%= prop['name'] %></span>
+  <% if local_assigns[:bridge] %>
+    <span class="text-[8px] font-semibold uppercase tracking-wide text-amber-600 bg-amber-50 border border-amber-200/60 px-1 py-px rounded flex-shrink-0"><%= t("maint_core.pages.field_item.bridge_badge") %></span>
+  <% end %>
+  <% unless has_html_type %>
+    <span class="text-[8px] font-semibold uppercase tracking-wide text-gray-400 bg-gray-100 border border-gray-200/60 px-1 py-px rounded flex-shrink-0"><%= t("maint_core.pages.field_item.no_type_badge") %></span>
+  <% end %>
+</div>

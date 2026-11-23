@@ -1,0 +1,72 @@
+<%
+  show_actions = [
+    {
+      label: t("common.actions.edit"),
+      path: edit_admin_maintenance_flowchart_path(current_customer_id, @flowchart),
+      variant: :primary,
+      icon: :edit
+    }
+  ]
+  if (reset = definition_override_reset_action(@flowchart))
+    show_actions << reset
+  end
+  if can_destroy_definition?(@flowchart)
+    show_actions << {
+      label: t("common.actions.delete"),
+      path: admin_maintenance_flowchart_path(current_customer_id, @flowchart),
+      variant: :danger,
+      icon: :trash,
+      data: { turbo_method: :delete, turbo_confirm: t("maint_core.flowcharts.show.delete_confirm") }
+    }
+  end
+%>
+<%= render AdminPageComponent.new(
+  breadcrumbs: definition_resource_breadcrumbs(:flowcharts, @flowchart.name),
+  title: @flowchart.name,
+  description: @flowchart.description.presence,
+  actions: show_actions
+) do %>
+  <div class="flex flex-wrap items-center gap-2 mb-6">
+    <%= render BadgeComponent.new(variant: @flowchart.launched? ? :success : :default, size: :sm) do %>
+      <%= @flowchart.launched? ? t("maint_core.flowcharts.status.launched") : t("common.status.draft") %>
+    <% end %>
+  </div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+  <div class="lg:col-span-2 flex flex-col gap-6">
+    <%= render Flowcharts::LifecycleCardComponent.new(
+          flowchart: @flowchart,
+          customer_id: current_customer_id,
+          launch_editable: publishing_editable?(@flowchart)
+        ) %>
+
+    <%= render Flowcharts::VisualFlowComponent.new(flowchart: @flowchart) %>
+
+    <%= render ActivityTraceComponent.new(flowchart: @flowchart) %>
+
+    <details class="card overflow-hidden group">
+      <summary class="px-5 py-3.5 flex items-center justify-between gap-3 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+        <h2 class="text-sm font-medium text-text-primary"><%= t("maint_core.flowcharts.show.generated_activity") %></h2>
+        <span class="text-caption text-text-muted flex-shrink-0 group-open:hidden"><%= t("maint_core.flowcharts.show.generated_activity_expand") %></span>
+        <span class="text-caption text-text-muted flex-shrink-0 hidden group-open:inline"><%= t("maint_core.flowcharts.show.generated_activity_collapse") %></span>
+      </summary>
+      <div class="px-5 pb-5 border-t border-border-subtle pt-4">
+        <% if @flowchart.activity.present? %>
+          <%= render CodeBlockComponent.new(
+            code: @flowchart.activity,
+            language: "ruby",
+            filename: "#{@flowchart.name.parameterize(separator: '_')}_activity.rb"
+          ) %>
+        <% else %>
+          <p class="text-body-sm text-text-muted text-center py-8"><%= t("maint_core.flowcharts.show.no_activity") %></p>
+          <p class="text-caption text-center"><%= t("maint_core.flowcharts.show.no_activity_hint") %></p>
+        <% end %>
+      </div>
+    </details>
+  </div>
+
+  <div class="lg:sticky lg:top-6">
+    <%= render FlowchartInfoCardComponent.new(flowchart: @flowchart, pages: @bound_pages) %>
+  </div>
+</div>
+<% end %>

@@ -1,0 +1,68 @@
+<% content_for :title, t("member.profiles.edit.title") %>
+<% content_for :member_nav, "profile" %>
+<% chrome = member_chrome %>
+
+<%= render Member::PageLayoutComponent.new do |c| %>
+  <% c.with_primary do %>
+    <%= render Member::PageHeaderComponent.new(
+          title:    t("member.common.edit_profile"),
+          subtitle: t("member.profiles.edit.header_subtitle"),
+          eyebrow:  { label: t("member.profiles.edit.back_to_profile"), path: "/#{current_user.customer_id}/member/profile" }
+        ) %>
+
+    <%= render Member::PageSectionComponent.new do %>
+      <%= form_with model: @contract,
+            url:    "/#{current_user.customer_id}/member/profile",
+            scope:  :member_profiles_update_contract,
+            method: :patch,
+            class:  "space-y-5" do |f| %>
+
+        <% if @contract.errors.any? %>
+          <div class="<%= chrome.alert_class %>">
+            <ul class="list-disc space-y-1 pl-5">
+              <% @contract.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <%= f.label :first_name, t("member.profiles.show.fields.first_name"), class: chrome.form_label_class(required: true) %>
+            <%= f.text_field :first_name, class: chrome.input_class %>
+          </div>
+          <div>
+            <%= f.label :last_name, t("member.profiles.show.fields.last_name"), class: chrome.form_label_class(required: true) %>
+            <%= f.text_field :last_name, class: chrome.input_class %>
+          </div>
+        </div>
+
+        <div>
+          <%= f.label :email, t("member.profiles.show.fields.email"), class: chrome.form_label_class(required: true) %>
+          <%= f.email_field :email, class: chrome.input_class,
+                readonly: !current_user.password_set? %>
+        </div>
+
+        <% if current_user.password_set? %>
+          <div>
+            <%= f.label :current_password, t("member.profiles.edit.current_password"), class: chrome.form_label_class %>
+            <p class="mb-2 text-site-xs <%= chrome.muted_class %>"><%= t("member.profiles.edit.current_password_hint") %></p>
+            <%= f.password_field :current_password, autocomplete: "current-password", class: chrome.input_class %>
+          </div>
+        <% end %>
+
+        <div class="flex items-center gap-3 pt-2">
+          <%= f.submit t("member.profiles.edit.save_changes"), class: chrome.primary_button_class %>
+          <%= link_to t("common.actions.cancel"), "/#{current_user.customer_id}/member/profile", class: chrome.secondary_button_class %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% c.with_aside do %>
+    <%= render Member::PageSectionComponent.new(title: t("member.profiles.edit.tip")) do %>
+      <p class="<%= chrome.body_copy_class %>"><%= t("member.profiles.edit.tip_body_html") %></p>
+    <% end %>
+  <% end %>
+<% end %>

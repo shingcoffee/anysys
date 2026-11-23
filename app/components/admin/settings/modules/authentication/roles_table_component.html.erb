@@ -1,0 +1,10 @@
+<%= render AdminTableComponent.new(rows: rows, columns: columns, pagination: pagination, params: params,
+  search: { param: :q, placeholder: t("admin_settings.authentication.roles.index.search_placeholder") },
+  row_path: ->(role) { helpers.admin_settings_modules_authentication_role_path(customer.id, role) },
+  row_actions: method(:row_actions),
+  empty_state: {
+    title: t("admin_settings.authentication.roles.index.empty_title"),
+    description: t("admin_settings.authentication.roles.index.empty_description"),
+    action_path: helpers.new_admin_settings_modules_authentication_role_path(customer.id),
+    action_text: t("admin_settings.authentication.roles.index.empty_action")
+  }) %>

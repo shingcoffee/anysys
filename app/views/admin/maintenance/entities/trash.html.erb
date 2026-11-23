@@ -1,0 +1,46 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: definition_resource_breadcrumbs(:entities, t("maint_core.nav.trash")),
+  title: t("maint_core.nav.trash"),
+  description: t("maint_core.entities.trash.subtitle"),
+  actions: @pagination[:total] > 0 ? [
+    {
+      label: t("maint_core.trash.empty_trash"),
+      path: empty_trash_admin_maintenance_entities_path(current_customer_id),
+      variant: :danger,
+      icon: :trash,
+      data: { turbo_method: :delete, turbo_confirm: t("maint_core.entities.trash.empty_confirm", count: @pagination[:total]) }
+    }
+  ] : []
+) do %>
+  <%
+    trash_columns = [
+      { key: :display_label, label: t("common.labels.name"), sortable: false, searchable: false },
+      { key: :description, label: t("common.labels.description"), sortable: false, searchable: false,
+        cell: ->(entity) { entity.description.present? ? truncate(entity.description, length: 60) : t("common.labels.em_dash") } },
+      { key: :attributes_count, label: t("maint_core.entities.trash.col_attributes"), type: :number, sortable: false, searchable: false,
+        cell: ->(entity) { (entity.property_schema_json || []).length } },
+      { key: :updated_at, label: t("maint_core.trash.deleted_at"), type: :datetime, sortable: false, searchable: false }
+    ]
+  %>
+  <%= render AdminTableComponent.new(
+    rows: @entities,
+    columns: trash_columns,
+    pagination: @pagination,
+    params: params.permit(:page, :per_page).to_h.symbolize_keys,
+    base_path: trash_admin_maintenance_entities_path(current_customer_id),
+    row_actions: ->(entity) {
+      [{
+        label: t("maint_core.trash.restore"),
+        path: admin_maintenance_entity_restoration_path(current_customer_id, entity),
+        method: :patch,
+        data: { turbo_confirm: t("maint_core.entities.trash.restore_confirm", name: entity.display_label) }
+      }]
+    },
+    empty_state: {
+      title: t("maint_core.trash.is_empty"),
+      description: t("maint_core.entities.trash.empty_hint"),
+      action_path: admin_maintenance_entities_path(current_customer_id),
+      action_text: t("maint_core.entities.trash.back")
+    }
+  ) %>
+<% end %>

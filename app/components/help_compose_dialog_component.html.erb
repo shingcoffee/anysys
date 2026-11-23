@@ -1,0 +1,65 @@
+<div class="hidden fixed inset-0 z-[60] flex items-start justify-center p-4 sm:p-6"
+     data-help-menu-target="<%= dialog_target %>">
+  <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-[2px]"
+       data-action="click->help-menu#closeDialogs"></div>
+
+  <div role="dialog" aria-modal="true" aria-labelledby="<%= title_id %>"
+       class="relative mt-[8vh] w-full max-w-lg max-h-[82vh] flex flex-col overflow-hidden bg-surface rounded-xl shadow-float ring-1 ring-border"
+       <%= tag.attributes(data: stimulus_data) %>>
+    <header class="flex shrink-0 items-start justify-between gap-3 px-5 py-4 border-b border-border-subtle">
+      <div class="flex min-w-0 items-start gap-3">
+        <span class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent-subtle text-accent" aria-hidden="true">
+          <% if kind == :email %>
+            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>
+            </svg>
+          <% else %>
+            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          <% end %>
+        </span>
+        <div class="min-w-0 flex flex-col gap-0.5">
+          <h2 id="<%= title_id %>" class="text-sm font-semibold text-text-primary"><%= title %></h2>
+          <% if helper_text.present? %>
+            <p class="text-xs text-text-muted"><%= helper_text %></p>
+          <% end %>
+        </div>
+      </div>
+      <button type="button" aria-label="<%= t("common.actions.close") %>" class="icon-button -mr-1.5"
+              data-action="click->help-menu#closeDialogs">
+        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </header>
+
+    <%= form_with url: action, method: :post, multipart: true, class: "flex min-h-0 flex-1 flex-col" do %>
+      <div class="flex flex-col gap-4 overflow-y-auto px-5 py-4">
+        <div class="flex flex-col gap-1.5">
+          <label class="text-sm font-medium text-text-primary" for="<%= subject_id %>"><%= subject_label %></label>
+          <input type="text" name="<%= field_name(:subject) %>" id="<%= subject_id %>" required maxlength="120"
+                 placeholder="<%= subject_placeholder %>"
+                 class="input-field">
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label class="text-sm font-medium text-text-primary" for="<%= body_id %>"><%= message_label %></label>
+          <textarea name="<%= field_name(:body) %>" id="<%= body_id %>" required maxlength="5000" rows="6"
+                    placeholder="<%= message_placeholder %>"
+                    class="input-field min-h-[8.5rem] resize-y"></textarea>
+        </div>
+        <%= render HelpAttachmentsFieldComponent.new(
+              name: files_field_name,
+              accept: accept,
+              hint: files_hint,
+              label: files_label,
+              input_id: files_id
+            ) %>
+      </div>
+      <div class="flex shrink-0 items-center justify-end gap-2 border-t border-border-subtle px-5 py-3">
+        <button type="button" class="btn btn-secondary" data-action="click->help-menu#closeDialogs"><%= cancel_label %></button>
+        <button type="submit" class="btn btn-primary" data-help-attachments-target="submit"><%= submit_label %></button>
+      </div>
+    <% end %>
+  </div>
+</div>

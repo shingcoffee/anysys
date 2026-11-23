@@ -1,0 +1,15 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "email",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.email.entries.audience"), path: admin_modules_emails_lists_path(current_customer_id) },
+        { label: t("feature_modules.email.tabs.lists"), path: admin_modules_emails_lists_path(current_customer_id) },
+        { label: t("common.actions.new") }
+      ],
+      title: t("admin_modules.emails.lists.new.title"),
+      description: t("admin_modules.emails.lists.new.subtitle")
+    ) do %>
+  <div class="card p-6 sm:p-8 max-w-5xl">
+    <%= render "form", list: @list, url: admin_modules_emails_lists_path(current_customer_id), method: :post %>
+  </div>
+<% end %>

@@ -1,0 +1,105 @@
+<%# app/components/page_builder/rules_panel_component.html.erb %>
+<%# Rendered inside the drawer list layer. data-rules-panel is the JS refresh target. %>
+<div data-rules-panel class="px-4 py-4">
+
+  <%# Top bar: count + Add Rule %>
+  <div class="flex items-center justify-between mb-3">
+    <p class="text-xs text-gray-500"><%= t("comp_page_builder.rules_panel.count", count: rules.length) %></p>
+    <button type="button"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-md transition-colors"
+            data-action="click->page-builder#openRuleEditor">
+      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+      </svg>
+      <%= t("comp_page_builder.rules_panel.add") %>
+    </button>
+  </div>
+
+  <%# Search (shown when > 6 rules) %>
+  <% if show_search? %>
+    <div class="mb-3">
+      <input type="text"
+             placeholder="<%= t("comp_page_builder.rules_panel.search_placeholder") %>"
+             class="w-full px-2.5 py-1.5 text-xs border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500"
+             data-action="input->page-builder#filterPanel"
+             data-filter-panel="rules-panel"
+             data-filter-items="rule-id">
+    </div>
+  <% end %>
+
+  <% if empty? %>
+    <%# Empty state %>
+    <div class="flex flex-col items-center justify-center py-16 text-center px-4">
+      <div class="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center mb-3">
+        <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+        </svg>
+      </div>
+      <p class="text-sm font-medium text-gray-900 mb-1"><%= t("comp_page_builder.rules_panel.empty_title") %></p>
+      <p class="text-xs text-gray-500 max-w-[240px] mb-5"><%= t("comp_page_builder.rules_panel.empty_desc") %></p>
+      <button type="button"
+              class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1"
+              data-action="click->page-builder#openRuleEditor">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        <%= t("comp_page_builder.rules_panel.add") %>
+      </button>
+    </div>
+  <% else %>
+    <div class="space-y-2">
+      <% rules.each do |rule| %>
+        <div data-rule-id="<%= rule['id'] %>"
+             class="group p-3 bg-white rounded-lg border border-gray-200 hover:border-indigo-200 hover:shadow-sm transition-all">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <%# Enable/disable toggle %>
+              <button type="button"
+                      class="flex-shrink-0"
+                      title="<%= rule['enabled'] ? t('common.actions.disable') : t('common.actions.enable') %>"
+                      data-action="click->page-builder#toggleRule"
+                      data-rule-id="<%= rule['id'] %>">
+                <span class="block w-2 h-2 rounded-full <%= rule['enabled'] ? 'bg-emerald-500' : 'bg-gray-300' %>"></span>
+              </button>
+              <span class="text-sm font-medium text-gray-800 truncate"><%= rule['name'] || t("comp_page_builder.rules_panel.unnamed") %></span>
+            </div>
+            <%# Hover actions %>
+            <div class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+              <button type="button"
+                      class="p-1.5 text-gray-400 hover:text-amber-500 hover:bg-amber-50 rounded-md transition-colors"
+                      data-action="click->page-builder#duplicateRule"
+                      data-rule-id="<%= rule['id'] %>"
+                      title="<%= t("comp_page_builder.rules_panel.duplicate") %>">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                </svg>
+              </button>
+              <button type="button"
+                      class="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors"
+                      data-action="click->page-builder#editRule"
+                      data-rule-id="<%= rule['id'] %>"
+                      title="<%= t("comp_page_builder.rules_panel.edit") %>">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </button>
+              <button type="button"
+                      class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
+                      data-action="click->page-builder#deleteRule"
+                      data-rule-id="<%= rule['id'] %>"
+                      title="<%= t("comp_page_builder.rules_panel.delete") %>">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <% summary = rule_summary(rule) %>
+          <% if summary.present? %>
+            <div class="mt-1 text-xs text-gray-400 truncate"><%= summary %></div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

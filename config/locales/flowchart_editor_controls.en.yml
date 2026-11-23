@@ -1,0 +1,16 @@
+en:
+  maint_core:
+    flowcharts:
+      editor:
+        property_editor:
+          none_option_label: "None"
+          add_row_label: "Add row"
+          remove_row_title: "Remove"
+          search_placeholder: "Search…"
+          locale_en_label: "English"
+          locale_zh_cn_label: "Chinese"
+          reference_loading_label: "Loading…"
+          reference_empty_label: "No matches"
+          reference_error_label: "Could not load options"
+          reference_placeholder: "Select…"
+          default_placeholder_format: "Default: {value}"

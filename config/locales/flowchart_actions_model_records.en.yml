@@ -1,0 +1,183 @@
+en:
+  flowchart_actions:
+    new_model:
+      label: New record
+      description: Create a new unsaved record of the bound entity.
+      fields:
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        assignments:
+          label: Assignments
+          help: Bound-entity attributes mapped to Ruby expressions, applied to the new record.
+    find_model:
+      label: Find record
+      description: Load one record of the bound entity by id or by an attribute.
+      fields:
+        findBy:
+          label: Find by
+          help: Look the record up by its id or by one of its attributes.
+          options:
+            id: Id
+            attribute: Attribute
+            current_person: The signed-in member's own record
+        idSource:
+          label: Id
+          help: Context path of the id to look up.
+        findField:
+          label: Attribute
+          help: Attribute of the bound entity to match.
+        findValue:
+          label: Value
+          help: Context path of the value to match.
+        onNotFound:
+          label: When not found
+          help: What to do when no matching record exists.
+          options:
+            fail: Fail
+            "nil": Return nil
+            new: Build a new record
+        notFoundMessage:
+          label: Not-found message
+          help: Optional localized message used instead of the default when the step fails.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        foundVar:
+          label: Save found flag as
+          help: Optional variable set to true when a matching record was found.
+        lock:
+          label: Lock the row
+          help: Take a FOR UPDATE lock so a later write in this submit sees a consistent row.
+    save_model:
+      label: Save record
+      description: Persist the Reform contract's model through the bound entity.
+      fields:
+        onInvalid:
+          label: When invalid
+          help: Fail the step, or keep going so a later Decision can branch on the saved flag.
+          options:
+            fail: Fail
+            continue: Continue
+        savedVar:
+          label: Save success as
+          help: Optional variable set to true when the record was saved.
+    update_model:
+      label: Update record
+      description: Apply the contract or params to a loaded record and save it.
+      fields:
+        modelVariable:
+          label: Record
+          help: Context path of the record to update.
+        assignments:
+          label: Assignments
+          help: Bound-entity attributes mapped to Ruby expressions, applied before saving.
+        skipIfUnchanged:
+          label: Skip save when unchanged
+          help: Skip the write when the record has no pending changes.
+        changesVar:
+          label: Save changes as
+          help: Optional variable that receives the saved attribute changes.
+        valuesFrom:
+          label: Values from
+          help: Write assignments only, or also sync the contract or copy posted params.
+          options:
+            assignments: Assignments only
+            contract: Reform contract
+            params: Posted params
+      errors:
+        page_record_only: "%{field} can copy the contract or posted params only onto the page record (model)."
+    destroy_model:
+      label: Destroy record
+      description: Delete a loaded record, or archive it by setting a date-time attribute.
+      fields:
+        modelVariable:
+          label: Record
+          help: Context path of the record to destroy or archive.
+        mode:
+          label: Mode
+          help: Permanently delete the row, or stamp an archive timestamp instead.
+          options:
+            delete: Delete
+            archive: Archive
+        archiveField:
+          label: Archive field
+          help: Date-time attribute set to the current time when archiving.
+        archivedByField:
+          label: Archived-by field
+          help: Optional attribute set to the current user id when archiving.
+        onMissing:
+          label: When missing
+          help: What to do when the record variable is empty.
+          options:
+            fail: Fail
+            ignore: Ignore
+    clone_model:
+      label: Clone record
+      description: Duplicate a loaded record of the bound entity.
+      fields:
+        modelVariable:
+          label: Record
+          help: Context path of the record to copy.
+        excludeFields:
+          label: Exclude fields
+          help: Bound-entity attributes cleared on the copy.
+        overrides:
+          label: Overrides
+          help: Bound-entity attributes mapped to Ruby expressions, applied to the copy.
+        persist:
+          label: Save the clone
+          help: Persist the copy immediately through the bound entity.
+        onMissing:
+          label: When missing
+          help: What to do when the record variable is empty.
+          options:
+            fail: Fail
+            ignore: Ignore
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+    upsert_model:
+      label: Upsert record
+      description: Find a matching record of the bound entity and update it, or create one.
+      fields:
+        matchFields:
+          label: Match fields
+          help: Attributes used to find an existing record before creating one.
+        assignments:
+          label: Assignments
+          help: Bound-entity attributes mapped to Ruby expressions, merged onto params before writing.
+        onMatch:
+          label: When a match exists
+          help: Update the matching record, skip the write, or fail the step.
+          options:
+            update: Update
+            skip: Skip
+            fail: Fail
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        createdVar:
+          label: Save created flag as
+          help: Variable set to true when a new record was created.
+        valuesFrom:
+          label: Values from
+          help: Write assignments only, or also copy posted params onto the row.
+          options:
+            assignments: Assignments only
+            params: Posted params
+  flowchart_runtime:
+    errors:
+      clone_model:
+        failed: "The record could not be copied (%{reason})."
+      save_model:
+        failed: "The record could not be saved (%{reason})."
+      update_model:
+        failed: "The record could not be updated (%{reason})."
+      destroy_model:
+        failed: "The record could not be deleted (%{reason})."
+      upsert_model:
+        failed: "The record could not be saved (%{reason})."
+      record_missing: No record was loaded.
+      record_already_exists: A matching record already exists.
+      contract_missing: No validation contract was built.

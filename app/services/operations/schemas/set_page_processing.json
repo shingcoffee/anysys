@@ -1,0 +1,41 @@
+{
+  "title": "Set page processing",
+  "description": "Set the form processing that runs when one of this workspace's form pages is submitted.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "page",
+    "audience",
+    "processing"
+  ],
+  "properties": {
+    "page": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{1,62}$",
+      "description": "Action key of the page, as list_catalog lists it under pages. Example: student_new."
+    },
+    "audience": {
+      "type": "string",
+      "enum": ["admin", "member", "public"],
+      "description": "Which audience's page carries that action key.",
+      "x-enum-descriptions": {
+        "admin": "The page administrators fill in.",
+        "member": "The page signed-in members fill in.",
+        "public": "The page anonymous visitors fill in."
+      }
+    },
+    "processing": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "description": "Name of form processing this workspace has (list_catalog lists them under processing), or of the shared \"Save page record\"."
+    }
+  },
+  "examples": [
+    {
+      "page": "student_new",
+      "audience": "admin",
+      "processing": "Save student and notify registrar"
+    }
+  ]
+}

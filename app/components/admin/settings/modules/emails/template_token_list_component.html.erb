@@ -1,0 +1,66 @@
+<%= render Admin::Settings::PageComponent.new(
+  customer_id: customer_id, title: t("settings_navigation.items.email_personalization"),
+  description: t("settings_modules.email.description"),
+  breadcrumbs: [{ label: t("settings_navigation.items.email_personalization") }],
+  actions: [{ label: t("settings_modules.email.add_field"), path: new_path, variant: :primary, icon: :plus }]
+) do %>
+  <div class="flex flex-col gap-6">
+    <details class="group/item card min-w-0 overflow-hidden">
+      <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-3 px-4 py-4 transition-colors hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent sm:px-6 [&::-webkit-details-marker]:hidden">
+        <span class="min-w-0">
+          <span role="heading" aria-level="2" class="section-header block"><%= t("settings_modules.email.built_in") %></span>
+          <span class="mt-0.5 block text-caption"><%= t("settings_modules.email.built_in_hint") %></span>
+        </span>
+        <svg class="size-4 shrink-0 text-text-muted transition-transform group-open/item:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </summary>
+      <ul class="divide-y divide-border-subtle border-t border-border-subtle">
+        <% platform_tokens.each do |token| %>
+          <li class="flex flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
+            <div class="min-w-0">
+              <p class="break-words text-sm font-medium text-text-primary"><%= token.display_label %></p>
+              <p class="mt-1 text-sm text-text-secondary"><%= platform_description(token) %></p>
+            </div>
+            <%= render BadgeComponent.new(variant: :default, size: :sm) do %><%= t("settings_modules.email.read_only") %><% end %>
+          </li>
+        <% end %>
+      </ul>
+    </details>
+    <%= render Admin::Settings::SectionComponent.new(title: t("settings_modules.email.custom_fields"), description: t("settings_modules.email.custom_hint"), flush: true) do %>
+      <% if custom_tokens.empty? %>
+        <p class="px-4 py-4 text-sm text-text-muted sm:px-6"><%= t("settings_modules.email.empty") %></p>
+      <% else %>
+        <div class="flex flex-col gap-3 px-4 py-4 sm:px-6">
+          <% custom_token_groups.each_value do |tokens| %>
+            <details class="group/item min-w-0 overflow-hidden rounded-lg border border-border-subtle bg-surface">
+              <summary class="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent [&::-webkit-details-marker]:hidden">
+                <span class="flex min-w-0 items-center gap-3">
+                  <svg class="size-4 shrink-0 text-text-muted transition-transform group-open/item:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                  <span role="heading" aria-level="3" class="break-words text-sm font-semibold text-text-primary"><%= entity_label(tokens.first) %></span>
+                </span>
+                <span class="shrink-0 text-caption"><%= t("settings_modules.email.fields_count", count: tokens.size) %></span>
+              </summary>
+              <ul class="divide-y divide-border-subtle border-t border-border-subtle">
+                <% tokens.each do |token| %>
+                  <li class="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="min-w-0 space-y-1">
+                      <p class="break-words text-sm font-medium text-text-primary"><%= token.display_label %></p>
+                      <p class="break-words text-sm text-text-secondary"><%= attribute_label(token) %></p>
+                    </div>
+                    <div class="flex shrink-0 flex-wrap gap-2">
+                      <%= link_to t("common.actions.edit"), helpers.edit_admin_settings_modules_emails_template_token_path(customer_id, token), class: "btn btn-secondary", aria: { label: t("settings_modules.email.edit_named", name: token.display_label) } %>
+                      <%= button_to t("common.actions.delete"), helpers.admin_settings_modules_emails_template_token_path(customer_id, token), method: :delete, class: "btn btn-secondary", data: { turbo_confirm: t("admin_settings.emails.template_tokens.index.delete_confirm", name: token.display_label) }, aria: { label: t("settings_modules.email.delete_named", name: token.display_label) } %>
+                    </div>
+                  </li>
+                <% end %>
+              </ul>
+            </details>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

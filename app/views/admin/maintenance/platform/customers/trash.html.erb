@@ -1,0 +1,34 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("maint_platform.customers.breadcrumb.maintenance"), path: admin_maintenance_path(current_customer_id) },
+    { label: t("maint_platform.customers.breadcrumb.customers"), path: admin_maintenance_platform_customers_path(current_customer_id) },
+    { label: t("maint_platform.customers.trash.title") }
+  ],
+  title: t("maint_platform.customers.trash.title"),
+  description: t("maint_platform.customers.trash.description"),
+  actions: @pagination[:total] > 0 ? [
+    { label: t("maint_platform.customers.trash.empty_trash"), path: empty_trash_admin_maintenance_platform_customers_path(current_customer_id), variant: :danger, icon: :trash, data: { turbo_method: :delete, turbo_confirm: t("maint_platform.customers.trash.empty_trash_confirm", count: @pagination[:total]) } }
+  ] : []
+) do %>
+  <%= render AdminTableComponent.new(
+  rows:        @rows,
+  columns:     @columns,
+  pagination:  @pagination,
+  params:      params.permit(:q, :sort, :dir, :page, :per_page).to_h.symbolize_keys,
+  search:      { param: :q, placeholder: t("maint_platform.customers.index.search_placeholder") },
+  row_actions: ->(c) {
+    [{
+      label:  t("maint_platform.customers.trash.restore"),
+      path:   restoration_admin_maintenance_platform_customer_path(current_customer_id, c),
+      method: :patch,
+      data:   { turbo_frame: "_top", turbo_confirm: t("maint_platform.customers.trash.restore_confirm", name: c.name) }
+    }]
+  },
+  empty_state: {
+    title: t("maint_platform.customers.trash.empty_title"),
+    description: t("maint_platform.customers.trash.empty_description"),
+    action_path: admin_maintenance_platform_customers_path(current_customer_id),
+    action_text: t("maint_platform.customers.trash.back_action")
+  }
+  ) %>
+<% end %>

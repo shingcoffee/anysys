@@ -1,0 +1,63 @@
+<div class="flex flex-col gap-4">
+  <% if empty? %>
+    <%= render Admin::Maintenance::Platform::ModuleSettings::SectionCardComponent.new(
+          title: t("maint_platform.module_settings.show.captcha.pages_title"),
+          description: t("maint_platform.module_settings.show.captcha.pages_subtitle")
+        ) do %>
+      <%= render Admin::Maintenance::Platform::ModuleSettings::EmptySectionComponent.new(
+            title: t("maint_platform.module_settings.show.captcha.empty"),
+            description: t("maint_platform.module_settings.show.captcha.empty_description")
+          ) %>
+    <% end %>
+  <% else %>
+    <% sections.each do |section| %>
+      <% count_badge = capture do %>
+        <%= render BadgeComponent.new(variant: section[:badge_variant], size: :sm) do %>
+          <%= t("maint_platform.module_settings.show.captcha.total_count", count: section[:count]) %>
+        <% end %>
+      <% end %>
+      <%= render Admin::Maintenance::Platform::ModuleSettings::SectionCardComponent.new(
+            title: section[:title], description: section[:subtitle], action: count_badge
+          ) do %>
+
+        <div data-controller="captcha-page-list" class="flex flex-col">
+          <% unless section[:empty] %>
+            <div class="px-4 sm:px-5 py-3 border-b border-border-subtle">
+              <label class="sr-only" for="<%= section[:search_id] %>"><%= section[:search_label] %></label>
+              <input type="search"
+                     id="<%= section[:search_id] %>"
+                     class="input-field w-full sm:w-72"
+                     placeholder="<%= section[:search_label] %>"
+                     autocomplete="off"
+                     data-captcha-page-list-target="search"
+                     data-action="input->captcha-page-list#search">
+            </div>
+          <% end %>
+
+          <% if section[:empty] %>
+            <%= render Admin::Maintenance::Platform::ModuleSettings::EmptySectionComponent.new(
+                  title: section[:empty_copy],
+                  description: t("maint_platform.module_settings.show.captcha.empty_section_description")
+                ) %>
+          <% else %>
+            <%= render Admin::Maintenance::Platform::ModuleSettings::ResponsiveCollectionComponent.new(
+                  label: section[:title],
+                  columns: [
+                    t("maint_platform.module_settings.show.captcha.collection.resource"),
+                    t("maint_platform.module_settings.show.captcha.collection.path"),
+                    t("maint_platform.module_settings.show.captcha.collection.throttle")
+                  ],
+                  desktop_grid_class: "lg:grid-cols-[minmax(12rem,1fr)_minmax(14rem,1.25fr)_minmax(14rem,1fr)]"
+                ) do %>
+              <%= render "admin/maintenance/platform/captcha/protected_pages_collection",
+                    groups: section[:groups], component: self %>
+            <% end %>
+            <div class="hidden px-4 py-8 text-center" data-captcha-page-list-target="emptyFilter">
+              <p class="text-body-sm text-text-muted"><%= t("maint_platform.module_settings.show.captcha.search_empty") %></p>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

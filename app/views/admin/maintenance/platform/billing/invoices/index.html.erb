@@ -1,0 +1,17 @@
+<%= render Billing::Admin::PlatformPageComponent.new(
+  customer_id: current_customer_id,
+  section: :invoices,
+  title: t("maint_platform.billing.invoices.index.title"),
+  description: t("maint_platform.billing.invoices.index.description")
+) do %>
+  <%= render Billing::Admin::InvoiceTableComponent.new(
+    invoices:    @invoices,
+    customer_id: current_customer_id,
+    context:     :platform,
+    filters: @filters,
+    pagination: @pagination,
+    page_path: @page_path,
+    collection_by_invoice_id: @collection_by_invoice_id,
+    load_error: @load_error
+  ) %>
+<% end %>

@@ -1,0 +1,5 @@
+<% if @content.present? %>
+  <%= render inline: @content %>
+<% else %>
+  <p class="text-sm text-gray-400 text-center py-12"><%= t("public_views.public_pages.empty") %></p>
+<% end %>

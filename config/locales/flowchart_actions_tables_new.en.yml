@@ -1,0 +1,82 @@
+en:
+  flowchart_actions:
+    next_sequence_number:
+      label: Sequence number
+      description: Allocate the next tenant-scoped sequence number
+      fields:
+        sequenceName:
+          label: Sequence name
+          help: Identifier of the counter for this customer.
+          placeholder: e.g., order
+        prefix:
+          label: Prefix
+          help: Text prepended to the padded number.
+          placeholder: e.g., INV-
+        suffix:
+          label: Suffix
+          help: Text appended after the padded number.
+          placeholder: e.g., -CN
+        padding:
+          label: Padding
+          help: Zero-pad width of the numeric part (1–12).
+        startAt:
+          label: Start at
+          help: First number issued for a new period (1–1000000).
+        step:
+          label: Step
+          help: Amount added after each issue (1–1000).
+        resetEvery:
+          label: Reset every
+          help: When a new counter period starts for this name.
+          options:
+            never: never
+            year: year
+            month: month
+            day: day
+            week: week
+            quarter: quarter
+        dateSegment:
+          label: Date segment
+          help: Optional date inserted between the prefix and the padded number.
+          options:
+            none: none
+            year: year
+            year_month: year_month
+            date: date
+        separator:
+          label: Date separator
+          help: Separator between the date segment and the padded number.
+          placeholder: e.g., -
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+      errors:
+        invalid_identifier: "%{field} must be a valid identifier"
+    create_notification:
+      label: Create notification
+      description: Create an in-app notification for a user of this customer
+      fields:
+        recipient:
+          label: Recipient
+          help: Expression that evaluates to a user id of this customer.
+          placeholder: ctx[:current_user_id]
+        recipients:
+          label: Additional recipients
+          help: Extra context paths of user ids of this customer to notify.
+        title:
+          label: Title
+          help: Localized notification title.
+        body:
+          label: Body
+          help: Localized notification body.
+        page:
+          label: Page
+          help: Optional launched page of this customer, or a shared page.
+  flowchart_runtime:
+    errors:
+      next_sequence_number:
+        failed: The sequence number could not be allocated.
+      create_notification:
+        recipient_not_found: The notification recipient was not found for this customer.
+        page_not_found: The notification page is not a launched page of this customer.
+        failed: Could not create the notification (%{reason}).

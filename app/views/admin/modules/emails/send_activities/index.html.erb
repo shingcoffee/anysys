@@ -1,0 +1,23 @@
+<%# app/views/admin/modules/emails/send_activities/index.html.erb %>
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "email",
+      breadcrumbs: [{ label: t("admin_modules.nav.modules") }, { label: t("feature_modules.email.titles.send_activities") }],
+      title: t("feature_modules.email.titles.send_activities"),
+      description: t("admin_modules.emails.send_activities.index.description"),
+      actions: [{ label: t("admin_modules.emails.send_activities.actions.new_send_activity"), path: new_admin_modules_emails_send_activity_path(current_customer_id), variant: :primary, icon: :plus }]
+    ) do %>
+  <%= render AdminTableComponent.new(
+  rows:       @rows,
+  columns:    @columns,
+  pagination: @pagination,
+  params:     params.permit(:q, :sort, :dir, :page).to_h.symbolize_keys,
+  search:     { param: :q, placeholder: t("admin_modules.emails.send_activities.index.search_placeholder") },
+  row_path:   ->(c) { admin_modules_emails_send_activity_path(current_customer_id, c) },
+  empty_state: {
+    title: t("admin_modules.emails.send_activities.index.empty_title"),
+    description: t("admin_modules.emails.send_activities.index.empty_description"),
+    action_path: new_admin_modules_emails_send_activity_path(current_customer_id),
+    action_text: t("admin_modules.emails.send_activities.actions.new_send_activity")
+  }
+) %>
+<% end %>

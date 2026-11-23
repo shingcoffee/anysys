@@ -1,0 +1,98 @@
+<div class="condition-builder space-y-3"
+     data-controller="condition-builder"
+     data-condition-builder-target-value="<%= form_target %>"
+     data-condition-builder-fields-value="<%= ERB::Util.html_escape(all_fields.to_json) %>"
+     data-condition-builder-operators-value="<%= ERB::Util.html_escape(operators.to_json) %>">
+
+  <%# AND/OR Toggle %>
+  <div class="flex items-center gap-2 mb-2">
+    <span class="text-xs font-medium text-text-muted uppercase"><%= t("chrome.condition_builder.match") %></span>
+    <div class="inline-flex rounded-md shadow-sm" role="group">
+      <button type="button"
+              class="px-3 py-1 text-xs font-medium border rounded-l-md transition-base
+                     <%= top_operator == 'AND' ? 'bg-accent text-white border-accent' : 'bg-surface text-text-secondary border-border hover:bg-surface-hover' %>"
+              data-action="click->condition-builder#setOperator"
+              data-condition-builder-operator-param="AND">
+        <%= t("chrome.condition_builder.all") %>
+      </button>
+      <button type="button"
+              class="px-3 py-1 text-xs font-medium border-t border-b border-r rounded-r-md transition-base
+                     <%= top_operator == 'OR' ? 'bg-accent text-white border-accent' : 'bg-surface text-text-secondary border-border hover:bg-surface-hover' %>"
+              data-action="click->condition-builder#setOperator"
+              data-condition-builder-operator-param="OR">
+        <%= t("chrome.condition_builder.any") %>
+      </button>
+    </div>
+    <span class="text-xs text-text-secondary"><%= t("chrome.condition_builder.of_following_rules") %></span>
+  </div>
+
+  <%# Rules List %>
+  <div data-condition-builder-target="rulesList" class="space-y-2">
+    <% rules.each_with_index do |rule, index| %>
+      <%= render_rule(rule, index) %>
+    <% end %>
+  </div>
+
+  <%# Add Rule Button %>
+  <button type="button"
+          class="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-accent bg-accent-subtle rounded-md hover:bg-accent-muted/50 transition-base"
+          data-action="click->condition-builder#addRule">
+    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+    </svg>
+    <%= t("chrome.condition_builder.add_rule") %>
+  </button>
+
+  <%# Hidden field for serialized condition JSON %>
+  <input type="hidden"
+         data-condition-builder-target="output"
+         name="<%= form_target %>"
+         value="<%= ERB::Util.html_escape(conditions.to_json) %>">
+</div>
+
+<%# Rule template for JS cloning %>
+<template data-condition-builder-target="ruleTemplate">
+  <div class="flex flex-wrap items-center gap-2 p-2 bg-canvas-elevated rounded-md border border-border-subtle" data-condition-builder-target="rule">
+    <%# Field Picker %>
+    <select class="flex-1 min-w-0 px-2 py-1.5 text-xs border border-border rounded-md bg-surface focus:ring-1 focus:ring-accent focus:border-accent"
+            data-action="change->condition-builder#updateRule"
+            data-condition-builder-role="field">
+      <option value=""><%= t("chrome.condition_builder.select_field") %></option>
+      <optgroup label="<%= t("chrome.condition_builder.entity_fields") %>">
+        <% fields.each do |field| %>
+          <option value="<%= context_name %>.<%= field["name_slug"] %>"><%= field["name"] || field["name_slug"] %></option>
+        <% end %>
+      </optgroup>
+      <optgroup label="<%= t("chrome.condition_builder.system") %>">
+        <% system_fields.each do |field| %>
+          <option value="<%= field["name_slug"] %>"><%= field["name"] %></option>
+        <% end %>
+      </optgroup>
+    </select>
+
+    <%# Operator Picker %>
+    <select class="w-full sm:w-32 px-2 py-1.5 text-xs border border-border rounded-md bg-surface focus:ring-1 focus:ring-accent focus:border-accent"
+            data-action="change->condition-builder#updateRule"
+            data-condition-builder-role="operator">
+      <% operators.each do |op| %>
+        <option value="<%= op[:value] %>"><%= op[:label] %></option>
+      <% end %>
+    </select>
+
+    <%# Value Input %>
+    <input type="text"
+           class="flex-1 min-w-0 px-2 py-1.5 text-xs border border-border rounded-md focus:ring-1 focus:ring-accent focus:border-accent"
+           placeholder="<%= t("chrome.condition_builder.value") %>"
+           data-action="input->condition-builder#updateRule"
+           data-condition-builder-role="value">
+
+    <%# Remove Button %>
+    <button type="button"
+            class="flex-shrink-0 p-1 text-text-muted hover:text-danger transition-base"
+            data-action="click->condition-builder#removeRule">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+</template>

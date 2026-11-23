@@ -1,0 +1,25 @@
+<%= render Billing::Admin::CustomerBillingPageComponent.new(
+  customer_id: current_customer_id,
+  active: :invoices,
+  title: t("settings_billing.one_time_payment.title"),
+  description: t("settings_billing.one_time_payment.description"),
+  breadcrumbs: [
+    { label: t("settings_navigation.items.invoices"), path: admin_settings_billing_invoices_path(current_customer_id) },
+    { label: @invoice.number.presence || t("admin_settings.breadcrumbs.draft"), path: admin_settings_billing_invoice_path(current_customer_id, @invoice) },
+    { label: t("settings_billing.one_time_payment.title") }
+  ],
+  tab_counts: current_billing_tab_counts
+) do %>
+  <%= render Billing::Admin::OneTimePaymentComponent.new(
+    invoice: @invoice,
+    customer_id: current_customer_id,
+    providers: @providers,
+    payment_action: @payment_action,
+    post_url: admin_settings_billing_invoice_one_time_payment_path(current_customer_id, @invoice),
+    status_url: (@payment_action ? status_admin_settings_billing_invoice_one_time_payment_path(current_customer_id, @invoice, out_trade_no: @payment_action[:out_trade_no]) : nil),
+    confirm_url: confirm_admin_settings_billing_invoice_one_time_payment_path(current_customer_id, @invoice),
+    result_url: admin_settings_billing_invoice_one_time_payment_url(current_customer_id, @invoice),
+    back_url: admin_settings_billing_invoice_path(current_customer_id, @invoice),
+    error_message: @one_time_error
+  ) %>
+<% end %>

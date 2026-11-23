@@ -1,0 +1,38 @@
+en:
+  page_shortcuts:
+    title: Page shortcuts
+    description: Map a website or public form page to a URL of your choice.
+    manage: Manage page shortcuts
+    add_heading: Add shortcut
+    edit_heading: Edit shortcut
+    form_description: Choose a customer-relative path and a published destination.
+    path: Path
+    path_placeholder: /campaign/register
+    path_hint: Enter a leading slash, such as /join or /campaign/register. Use / for the root address.
+    destination: Destination
+    destination_hint: Only published website pages and launched public pages can be opened through a shortcut.
+    choose_destination: Choose a destination
+    no_targets: No published destinations are available. Publish a website page or launch a public form page first.
+    publish_pages: Manage form pages
+    publish_website: Manage website publication
+    saved_heading: Saved shortcuts
+    availability: Availability
+    actions: Actions
+    available: Available
+    unavailable: Unavailable
+    unavailable_option: "%{destination} — unavailable"
+    missing_destination: Deleted destination
+    untitled_destination: Untitled page
+    destination_label: "%{type} — %{title}"
+    target_types:
+      website_page: Website page
+      public_page: Public page
+    remove: Remove
+    remove_hint: Removing a shortcut keeps the page.
+    edit_label: "Edit shortcut %{path}"
+    remove_label: "Remove shortcut %{path}"
+    empty_title: No shortcuts yet
+    automatic_hint: Website home and inner-page URLs are created automatically. Add shortcuts for other chosen addresses.
+    flash:
+      saved: Shortcut saved.
+      deleted: Shortcut removed.

@@ -1,0 +1,341 @@
+rspec ./spec/components/alert_component_spec.rb:101 # AlertComponent rendering renders with correct background color
+rspec ./spec/components/alert_component_spec.rb:106 # AlertComponent rendering renders with correct border color
+rspec ./spec/components/alert_component_spec.rb:44 # AlertComponent type configurations success type has green styling
+rspec ./spec/components/alert_component_spec.rb:55 # AlertComponent type configurations error type has red styling
+rspec ./spec/components/alert_component_spec.rb:66 # AlertComponent type configurations warning type has yellow styling
+rspec ./spec/components/alert_component_spec.rb:77 # AlertComponent type configurations info type has blue styling
+rspec ./spec/components/alert_component_spec.rb:88 # AlertComponent type configurations unknown type falls back to info styling
+rspec ./spec/components/concerns/component_classes_spec.rb:15 # ComponentClasses button classes defines BTN_SECONDARY with required styles
+rspec ./spec/components/concerns/component_classes_spec.rb:22 # ComponentClasses button classes defines BTN_DANGER class
+rspec ./spec/components/concerns/component_classes_spec.rb:7 # ComponentClasses button classes defines BTN_PRIMARY with required styles
+rspec ./spec/components/customer_card_component_spec.rb:104 # CustomerCardComponent rendering with blank optional fields shows dash for blank alias
+rspec ./spec/components/customer_card_component_spec.rb:111 # CustomerCardComponent rendering renders timestamps
+rspec ./spec/components/customer_card_component_spec.rb:46 # CustomerCardComponent rendering renders the customer name
+rspec ./spec/components/customer_card_component_spec.rb:51 # CustomerCardComponent rendering renders the customer ID
+rspec ./spec/components/customer_card_component_spec.rb:56 # CustomerCardComponent rendering renders the tier badge
+rspec ./spec/components/customer_card_component_spec.rb:61 # CustomerCardComponent rendering renders the role badge
+rspec ./spec/components/customer_card_component_spec.rb:66 # CustomerCardComponent rendering renders the alias
+rspec ./spec/components/customer_card_component_spec.rb:71 # CustomerCardComponent rendering renders the contact
+rspec ./spec/components/customer_card_component_spec.rb:76 # CustomerCardComponent rendering renders the phone
+rspec ./spec/components/customer_card_component_spec.rb:81 # CustomerCardComponent rendering renders the industry
+rspec ./spec/components/customer_card_component_spec.rb:86 # CustomerCardComponent rendering renders the address
+rspec ./spec/components/customer_card_component_spec.rb:91 # CustomerCardComponent rendering renders edit link
+rspec ./spec/components/customer_card_component_spec.rb:96 # CustomerCardComponent rendering renders delete button
+rspec ./spec/components/customer_form_component_spec.rb:102 # CustomerFormComponent rendering renders sectioned card layout
+rspec ./spec/components/customer_form_component_spec.rb:117 # CustomerFormComponent rendering renders name field with required indicator
+rspec ./spec/components/page_builder/toolbar_component_spec.rb:23 # PageBuilder::ToolbarComponent basic rendering renders back link to pages index
+rspec ./spec/components/platform/context_banner_component_spec.rb:60 # Platform::ContextBannerComponent when rendered has return to platform link
+rspec ./spec/components/platform/customer_switcher_component_spec.rb:20 # Platform::CustomerSwitcherComponent#render? returns true for platform owner user
+rspec ./spec/components/platform/customer_switcher_component_spec.rb:25 # Platform::CustomerSwitcherComponent#render? returns false for regular user
+rspec ./spec/components/platform/customer_switcher_component_spec.rb:30 # Platform::CustomerSwitcherComponent#render? returns false for nil user
+rspec ./spec/components/platform/customer_switcher_component_spec.rb:37 # Platform::CustomerSwitcherComponent when rendered for platform owner displays switch customer button
+rspec ./spec/components/platform/customer_switcher_component_spec.rb:43 # Platform::CustomerSwitcherComponent when rendered for platform owner has stimulus controller
+rspec ./spec/components/platform/customer_switcher_component_spec.rb:49 # Platform::CustomerSwitcherComponent when rendered for platform owner has search input
+rspec ./spec/components/platform/customer_switcher_component_spec.rb:55 # Platform::CustomerSwitcherComponent when rendered for platform owner has search endpoint configured
+rspec ./spec/components/platform/customer_switcher_component_spec.rb:63 # Platform::CustomerSwitcherComponent when not rendered for regular user does not render anything
+rspec ./spec/controllers/code_generators/element_type_io_params_controller_spec.rb:16 # CodeGenerators::ElementTypeIoParamsController POST /code_generators/element_types/:element_type/io_params returns empty pins for an unknown element_type
+rspec ./spec/controllers/code_generators/element_type_io_params_controller_spec.rb:22 # CodeGenerators::ElementTypeIoParamsController POST /code_generators/element_types/:element_type/io_params returns empty pins when properties is a bare string
+rspec ./spec/controllers/code_generators/element_type_io_params_controller_spec.rb:28 # CodeGenerators::ElementTypeIoParamsController POST /code_generators/element_types/:element_type/io_params returns 200 with unioned pins for a process element with steps
+rspec ./spec/controllers/code_generators/element_type_io_params_controller_spec.rb:47 # CodeGenerators::ElementTypeIoParamsController POST /code_generators/element_types/:element_type/io_params returns empty pins for a process element with no steps
+rspec ./spec/controllers/code_generators/element_type_io_params_controller_spec.rb:5 # CodeGenerators::ElementTypeIoParamsController POST /code_generators/element_types/:element_type/io_params returns 200 with extracted pins for a known element_type
+rspec ./spec/controllers/code_generators/io_params_controller_spec.rb:19 # CodeGenerators::IoParamsController POST #show returns empty pins with 200 for unknown action
+rspec ./spec/controllers/code_generators/io_params_controller_spec.rb:26 # CodeGenerators::IoParamsController POST #show returns empty pins with 200 for malformed config
+rspec ./spec/controllers/code_generators/io_params_controller_spec.rb:7 # CodeGenerators::IoParamsController POST #show returns inputs and outputs for a known action
+rspec ./spec/controllers/customers_controller_spec.rb:103 # CustomersController tenant-scoped actions (/:customer_id/customers) GET #new as owner assigns a new customer
+rspec ./spec/controllers/customers_controller_spec.rb:110 # CustomersController tenant-scoped actions (/:customer_id/customers) GET #new as non-owner redirects with access denied
+rspec ./spec/controllers/customers_controller_spec.rb:121 # CustomersController tenant-scoped actions (/:customer_id/customers) GET #edit as owner returns a success response
+rspec ./spec/controllers/customers_controller_spec.rb:130 # CustomersController tenant-scoped actions (/:customer_id/customers) POST #create as owner with valid params creates a new Customer
+rspec ./spec/controllers/customers_controller_spec.rb:138 # CustomersController tenant-scoped actions (/:customer_id/customers) POST #create as owner with valid params redirects to the customers list
+rspec ./spec/controllers/customers_controller_spec.rb:143 # CustomersController tenant-scoped actions (/:customer_id/customers) POST #create as owner with valid params sets a success notice
+rspec ./spec/controllers/customers_controller_spec.rb:150 # CustomersController tenant-scoped actions (/:customer_id/customers) POST #create as owner with invalid params does not create a customer
+rspec ./spec/controllers/customers_controller_spec.rb:158 # CustomersController tenant-scoped actions (/:customer_id/customers) POST #create as owner with invalid params renders the new template
+rspec ./spec/controllers/customers_controller_spec.rb:165 # CustomersController tenant-scoped actions (/:customer_id/customers) POST #create as non-owner redirects with access denied
+rspec ./spec/controllers/customers_controller_spec.rb:176 # CustomersController tenant-scoped actions (/:customer_id/customers) PATCH #update as owner with valid params updates the customer
+rspec ./spec/controllers/customers_controller_spec.rb:182 # CustomersController tenant-scoped actions (/:customer_id/customers) PATCH #update as owner with valid params redirects to the customer show page
+rspec ./spec/controllers/customers_controller_spec.rb:189 # CustomersController tenant-scoped actions (/:customer_id/customers) PATCH #update as owner with invalid params renders the edit template
+rspec ./spec/controllers/customers_controller_spec.rb:200 # CustomersController tenant-scoped actions (/:customer_id/customers) DELETE #destroy as owner soft deletes the customer
+rspec ./spec/controllers/customers_controller_spec.rb:205 # CustomersController tenant-scoped actions (/:customer_id/customers) DELETE #destroy as owner redirects to the customers list
+rspec ./spec/controllers/customers_controller_spec.rb:214 # CustomersController tenant-scoped actions (/:customer_id/customers) GET #trash as owner returns a success response
+rspec ./spec/controllers/customers_controller_spec.rb:221 # CustomersController tenant-scoped actions (/:customer_id/customers) GET #trash as non-owner redirects with access denied
+rspec ./spec/controllers/customers_controller_spec.rb:234 # CustomersController tenant-scoped actions (/:customer_id/customers) PATCH #restore as owner restores a deleted customer
+rspec ./spec/controllers/customers_controller_spec.rb:243 # CustomersController tenant-scoped actions (/:customer_id/customers) DELETE #empty_trash as owner permanently deletes all trashed customers
+rspec ./spec/controllers/customers_controller_spec.rb:31 # CustomersController GET #index (root path) without customer_id (root path) returns a success response
+rspec ./spec/controllers/customers_controller_spec.rb:36 # CustomersController GET #index (root path) without customer_id (root path) renders the select template
+rspec ./spec/controllers/customers_controller_spec.rb:41 # CustomersController GET #index (root path) without customer_id (root path) assigns customers by name
+rspec ./spec/controllers/customers_controller_spec.rb:49 # CustomersController GET #index (root path) without customer_id (root path) redirects to flowcharts when only one customer exists
+rspec ./spec/controllers/customers_controller_spec.rb:60 # CustomersController tenant-scoped actions (/:customer_id/customers) GET #index as owner returns a success response
+rspec ./spec/controllers/customers_controller_spec.rb:65 # CustomersController tenant-scoped actions (/:customer_id/customers) GET #index as owner renders the index template
+rspec ./spec/controllers/customers_controller_spec.rb:76 # CustomersController tenant-scoped actions (/:customer_id/customers) GET #show as owner returns a success response
+rspec ./spec/controllers/customers_controller_spec.rb:81 # CustomersController tenant-scoped actions (/:customer_id/customers) GET #show as owner assigns the requested customer
+rspec ./spec/controllers/customers_controller_spec.rb:88 # CustomersController tenant-scoped actions (/:customer_id/customers) GET #show as non-owner redirects with access denied
+rspec ./spec/controllers/customers_controller_spec.rb:98 # CustomersController tenant-scoped actions (/:customer_id/customers) GET #new as owner returns a success response
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:110 # Maintenance::EntitiesController GET #show returns a success response
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:115 # Maintenance::EntitiesController GET #show assigns the requested entity
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:121 # Maintenance::EntitiesController GET #show JSON format returns entity as palette item
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:144 # Maintenance::EntitiesController GET #entries returns a success response
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:149 # Maintenance::EntitiesController GET #entries assigns the entity entries
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:157 # Maintenance::EntitiesController GET #entries assigns the entity attributes schema
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:163 # Maintenance::EntitiesController GET #entries orders entries by created_at desc
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:172 # Maintenance::EntitiesController GET #entries JSON format returns entries as JSON array
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:185 # Maintenance::EntitiesController GET #new returns a success response
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:190 # Maintenance::EntitiesController GET #new assigns a new entity
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:195 # Maintenance::EntitiesController GET #new sets default element_type to custom
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:217 # Maintenance::EntitiesController GET #copy returns a success response
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:222 # Maintenance::EntitiesController GET #copy assigns a new entity with copied attributes
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:237 # Maintenance::EntitiesController GET #copy copies associations from the source entity without bridge references
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:254 # Maintenance::EntitiesController GET #copy renders the new template
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:261 # Maintenance::EntitiesController GET #edit returns a success response
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:266 # Maintenance::EntitiesController GET #edit assigns the requested entity
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:274 # Maintenance::EntitiesController POST #create with valid params creates a new Entity
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:280 # Maintenance::EntitiesController POST #create with valid params redirects to the entities list
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:285 # Maintenance::EntitiesController POST #create with valid params sets a success notice
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:290 # Maintenance::EntitiesController POST #create with valid params creates an entity with referenced_template as JSON
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:297 # Maintenance::EntitiesController POST #create with valid params creates an entity without referenced_template
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:304 # Maintenance::EntitiesController POST #create with valid params JSON format returns created status
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:309 # Maintenance::EntitiesController POST #create with valid params JSON format returns entity as palette item
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:31 # Maintenance::EntitiesController GET #index returns a success response
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:323 # Maintenance::EntitiesController POST #create with invalid params renders the new template
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:328 # Maintenance::EntitiesController POST #create with invalid params returns unprocessable_entity status
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:335 # Maintenance::EntitiesController POST #create with invalid params JSON format returns unprocessable_entity status
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:340 # Maintenance::EntitiesController POST #create with invalid params JSON format returns error messages
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:350 # Maintenance::EntitiesController PATCH #update with valid params updates the entity
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:356 # Maintenance::EntitiesController PATCH #update with valid params updates referenced_template
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:36 # Maintenance::EntitiesController GET #index assigns entities by name
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:363 # Maintenance::EntitiesController PATCH #update with valid params redirects to the entity show page
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:368 # Maintenance::EntitiesController PATCH #update with valid params sets a success notice
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:375 # Maintenance::EntitiesController PATCH #update with valid params JSON format returns success status
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:380 # Maintenance::EntitiesController PATCH #update with valid params JSON format returns entity as palette item
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:388 # Maintenance::EntitiesController PATCH #update with invalid params renders the edit template
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:393 # Maintenance::EntitiesController PATCH #update with invalid params returns unprocessable_entity status
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:400 # Maintenance::EntitiesController PATCH #update with invalid params JSON format returns unprocessable_entity status
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:405 # Maintenance::EntitiesController PATCH #update with invalid params JSON format returns error messages
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:414 # Maintenance::EntitiesController DELETE #destroy soft deletes the entity
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:420 # Maintenance::EntitiesController DELETE #destroy removes the entity from default scope
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:426 # Maintenance::EntitiesController DELETE #destroy keeps the entity in only_deleted scope
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:432 # Maintenance::EntitiesController DELETE #destroy redirects to the entities list
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:437 # Maintenance::EntitiesController DELETE #destroy sets a success notice
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:45 # Maintenance::EntitiesController GET #index with search query filters entities by name
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:469 # Maintenance::EntitiesController DELETE #destroy with associations prevents deletion when entity has associations as source
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:476 # Maintenance::EntitiesController DELETE #destroy with associations prevents deletion when entity is a target of associations
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:483 # Maintenance::EntitiesController DELETE #destroy with associations allows deletion when all associations are removed
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:494 # Maintenance::EntitiesController DELETE #destroy with associations JSON format returns unprocessable_entity when entity has associations
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:505 # Maintenance::EntitiesController DELETE #destroy JSON format returns no content
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:513 # Maintenance::EntitiesController PATCH #restore restores a deleted entity
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:519 # Maintenance::EntitiesController PATCH #restore redirects to the entities list
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:525 # Maintenance::EntitiesController PATCH #restore sets a success notice
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:533 # Maintenance::EntitiesController GET #trash returns a success response
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:538 # Maintenance::EntitiesController GET #trash shows deleted entities
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:544 # Maintenance::EntitiesController GET #trash does not show active entities
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:550 # Maintenance::EntitiesController GET #trash orders by updated_at desc
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:56 # Maintenance::EntitiesController GET #index with bridge entities excludes bridge entities from HTML response by default
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:562 # Maintenance::EntitiesController error handling handles non-existent entity
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:570 # Maintenance::EntitiesController GET #template_fields returns fields extracted from a valid template
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:580 # Maintenance::EntitiesController GET #template_fields returns extracted field attributes with correct structure
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:589 # Maintenance::EntitiesController GET #template_fields returns not_found for invalid template key
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:596 # Maintenance::EntitiesController GET #template_fields returns the full template definition
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:65 # Maintenance::EntitiesController GET #index with bridge entities includes bridge entities when show_bridge is true
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:74 # Maintenance::EntitiesController GET #index with bridge entities excludes bridge entities from JSON response by default
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:85 # Maintenance::EntitiesController GET #index with bridge entities includes bridge entities in JSON when show_bridge is true
+rspec ./spec/controllers/maintenance/entities_controller_spec.rb:98 # Maintenance::EntitiesController GET #index JSON format returns entities as palette items
+rspec ./spec/controllers/maintenance/entity_entries_controller_spec.rb:24 # EntityEntriesController DELETE #destroy destroys the entry
+rspec ./spec/controllers/maintenance/entity_entries_controller_spec.rb:31 # EntityEntriesController DELETE #destroy redirects to the entries list
+rspec ./spec/controllers/maintenance/entity_entries_controller_spec.rb:36 # EntityEntriesController DELETE #destroy sets a success notice
+rspec ./spec/controllers/maintenance/entity_entries_controller_spec.rb:42 # EntityEntriesController DELETE #destroy JSON format returns no content
+rspec ./spec/controllers/maintenance/entity_entries_controller_spec.rb:48 # EntityEntriesController DELETE #destroy only deletes entries belonging to the entity
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:100 # Maintenance::FlowchartsController GET #edit returns a success response
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:105 # Maintenance::FlowchartsController GET #edit assigns the requested flowchart
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:113 # Maintenance::FlowchartsController POST #create with valid params creates a new Flowchart
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:119 # Maintenance::FlowchartsController POST #create with valid params redirects to the edit page of the created flowchart
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:124 # Maintenance::FlowchartsController POST #create with valid params sets a success notice
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:137 # Maintenance::FlowchartsController POST #create with invalid params renders the new template
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:142 # Maintenance::FlowchartsController POST #create with invalid params returns unprocessable_entity status
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:158 # Maintenance::FlowchartsController PATCH/PUT #update with valid params updates the requested flowchart
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:166 # Maintenance::FlowchartsController PATCH/PUT #update with valid params HTML format redirects to the flowchart
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:171 # Maintenance::FlowchartsController PATCH/PUT #update with valid params HTML format sets a success notice
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:178 # Maintenance::FlowchartsController PATCH/PUT #update with valid params JSON format returns success status
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:183 # Maintenance::FlowchartsController PATCH/PUT #update with valid params JSON format returns success message
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:203 # Maintenance::FlowchartsController PATCH/PUT #update with invalid params HTML format renders the edit template
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:208 # Maintenance::FlowchartsController PATCH/PUT #update with invalid params HTML format returns unprocessable_entity status
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:215 # Maintenance::FlowchartsController PATCH/PUT #update with invalid params JSON format returns error message in response body
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:233 # Maintenance::FlowchartsController DELETE #destroy changes the flowchart status to deleted
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:239 # Maintenance::FlowchartsController DELETE #destroy removes the flowchart from default scope
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:245 # Maintenance::FlowchartsController DELETE #destroy keeps the flowchart in only_deleted scope
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:251 # Maintenance::FlowchartsController DELETE #destroy redirects to the flowcharts list
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:256 # Maintenance::FlowchartsController DELETE #destroy sets a success notice
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:282 # Maintenance::FlowchartsController PATCH #autosave with valid configuration updates the flowchart configuration
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:290 # Maintenance::FlowchartsController PATCH #autosave with valid configuration returns success status
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:295 # Maintenance::FlowchartsController PATCH #autosave with valid configuration returns success message with updated_at
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:306 # Maintenance::FlowchartsController PATCH #autosave with invalid configuration returns error status
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:311 # Maintenance::FlowchartsController PATCH #autosave with invalid configuration returns error message
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:333 # Maintenance::FlowchartsController POST #activate when flowchart is draft activates the flowchart
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:339 # Maintenance::FlowchartsController POST #activate when flowchart is draft redirects to show page with notice
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:349 # Maintenance::FlowchartsController POST #activate when flowchart is already active returns unprocessable_entity
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:354 # Maintenance::FlowchartsController POST #activate when flowchart is already active sets an alert flash
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:363 # Maintenance::FlowchartsController POST #activate when flowchart is deleted returns not found
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:407 # Maintenance::FlowchartsController POST #activate when flowchart has validation errors redirects to edit page with show_validation param
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:412 # Maintenance::FlowchartsController POST #activate when flowchart has validation errors sets alert flash with error count
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:418 # Maintenance::FlowchartsController POST #activate when flowchart has validation errors stores validation errors in flash
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:431 # Maintenance::FlowchartsController POST #deactivate when flowchart is active deactivates the flowchart to draft
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:437 # Maintenance::FlowchartsController POST #deactivate when flowchart is active redirects to show page with notice
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:447 # Maintenance::FlowchartsController POST #deactivate when flowchart is already draft returns unprocessable_entity
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:452 # Maintenance::FlowchartsController POST #deactivate when flowchart is already draft sets an alert flash
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:46 # Maintenance::FlowchartsController GET #index returns a success response
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:460 # Maintenance::FlowchartsController error handling handles non-existent flowchart
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:51 # Maintenance::FlowchartsController GET #index assigns recent flowcharts
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:59 # Maintenance::FlowchartsController GET #index returns all flowcharts without limit
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:71 # Maintenance::FlowchartsController GET #show returns a success response
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:76 # Maintenance::FlowchartsController GET #show assigns the requested flowchart
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:83 # Maintenance::FlowchartsController GET #new returns a success response
+rspec ./spec/controllers/maintenance/flowcharts_controller_spec.rb:88 # Maintenance::FlowchartsController GET #new assigns a new flowchart with defaults
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:103 # Maintenance::PagesController GET #edit assigns the requested page
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:111 # Maintenance::PagesController POST #create with valid params creates a new Page
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:117 # Maintenance::PagesController POST #create with valid params redirects to the edit page of the created page
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:122 # Maintenance::PagesController POST #create with valid params sets a success notice
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:135 # Maintenance::PagesController POST #create with invalid params renders the new template
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:140 # Maintenance::PagesController POST #create with invalid params returns unprocessable_entity status
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:154 # Maintenance::PagesController POST #create with entity auto-population pre-populates fields from entity when entity_id is provided
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:167 # Maintenance::PagesController POST #create with entity auto-population organizes fields into pages named after the entity
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:188 # Maintenance::PagesController POST #create with layout template applies template layout rules when template is selected
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:205 # Maintenance::PagesController POST #create with layout template applies template default theme when no theme is selected
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:222 # Maintenance::PagesController POST #create with layout template allows user to override template theme
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:239 # Maintenance::PagesController POST #create with layout template handles blank template without errors
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:256 # Maintenance::PagesController POST #create with layout template applies theme to blank template when user selects one
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:284 # Maintenance::PagesController PATCH/PUT #update with valid params updates the requested page
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:292 # Maintenance::PagesController PATCH/PUT #update with valid params HTML format redirects to the page
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:297 # Maintenance::PagesController PATCH/PUT #update with valid params HTML format sets a success notice
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:304 # Maintenance::PagesController PATCH/PUT #update with valid params JSON format returns success status
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:309 # Maintenance::PagesController PATCH/PUT #update with valid params JSON format returns success message
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:327 # Maintenance::PagesController PATCH/PUT #update with invalid params HTML format renders the edit template
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:332 # Maintenance::PagesController PATCH/PUT #update with invalid params HTML format returns unprocessable_entity status
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:339 # Maintenance::PagesController PATCH/PUT #update with invalid params JSON format returns error message in response body
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:357 # Maintenance::PagesController DELETE #destroy changes the page status to inactive
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:363 # Maintenance::PagesController DELETE #destroy removes the page from default scope
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:369 # Maintenance::PagesController DELETE #destroy keeps the page in only_deleted scope
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:375 # Maintenance::PagesController DELETE #destroy redirects to the pages list
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:380 # Maintenance::PagesController DELETE #destroy sets a success notice
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:417 # Maintenance::PagesController PATCH #autosave with valid configuration updates the page configuration
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:424 # Maintenance::PagesController PATCH #autosave with valid configuration returns success status
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:429 # Maintenance::PagesController PATCH #autosave with valid configuration returns success message with updated_at
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:440 # Maintenance::PagesController PATCH #autosave with invalid configuration returns error status
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:445 # Maintenance::PagesController PATCH #autosave with invalid configuration returns error message
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:464 # Maintenance::PagesController GET #preview returns a success response
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:469 # Maintenance::PagesController GET #preview renders with preview layout
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:474 # Maintenance::PagesController GET #preview assigns the page content
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:510 # Maintenance::PagesController POST #preview returns a success response
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:515 # Maintenance::PagesController POST #preview renders with preview layout
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:520 # Maintenance::PagesController POST #preview generates content from POSTed configuration
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:538 # Maintenance::PagesController GET #copy returns a success response
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:543 # Maintenance::PagesController GET #copy assigns a new page with copied attributes
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:554 # Maintenance::PagesController error handling handles non-existent page
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:56 # Maintenance::PagesController GET #index returns a success response
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:601 # Maintenance::PagesController GET #edit with flows loads entity_flows for bound entity
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:61 # Maintenance::PagesController GET #index assigns recent pages
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:612 # Maintenance::PagesController GET #edit with flows loads blueprint_flows
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:641 # Maintenance::PagesController GET #edit with flows sets entity_flows to empty array when entity has no flows
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:647 # Maintenance::PagesController GET #edit with flows sets entity_name from metadata
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:664 # Maintenance::PagesController GET #entity_flows returns flows for given entity as JSON
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:676 # Maintenance::PagesController GET #entity_flows includes blueprint flows
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:695 # Maintenance::PagesController GET #entity_flows returns empty entity_flows when entity_id is not provided
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:702 # Maintenance::PagesController GET #entity_flows returns flow details in JSON response
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:71 # Maintenance::PagesController GET #show returns a success response
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:76 # Maintenance::PagesController GET #show assigns the requested page
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:83 # Maintenance::PagesController GET #new returns a success response
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:88 # Maintenance::PagesController GET #new assigns a new page with defaults
+rspec ./spec/controllers/maintenance/pages_controller_spec.rb:98 # Maintenance::PagesController GET #edit returns a success response
+rspec ./spec/controllers/platform/customer_contexts_controller_spec.rb:113 # Platform::CustomerContextsController DELETE #clear as platform owner clears session and redirects to platform customer
+rspec ./spec/controllers/platform/customer_contexts_controller_spec.rb:120 # Platform::CustomerContextsController DELETE #clear as platform owner sets flash notice
+rspec ./spec/controllers/platform/customer_contexts_controller_spec.rb:130 # Platform::CustomerContextsController DELETE #clear as regular user returns forbidden
+rspec ./spec/controllers/platform/customer_contexts_controller_spec.rb:25 # Platform::CustomerContextsController GET #search as platform owner returns matching customers as JSON
+rspec ./spec/controllers/platform/customer_contexts_controller_spec.rb:38 # Platform::CustomerContextsController GET #search as platform owner limits results to 20
+rspec ./spec/controllers/platform/customer_contexts_controller_spec.rb:47 # Platform::CustomerContextsController GET #search as platform owner returns empty array for no matches
+rspec ./spec/controllers/platform/customer_contexts_controller_spec.rb:58 # Platform::CustomerContextsController GET #search as regular user returns forbidden
+rspec ./spec/controllers/platform/customer_contexts_controller_spec.rb:65 # Platform::CustomerContextsController GET #search as unauthenticated user redirects to login
+rspec ./spec/requests/authentication/admin/users_spec.rb:111 # Authentication::Admin::Users GET /:customer_id/admin/users/new returns success
+rspec ./spec/requests/authentication/admin/users_spec.rb:116 # Authentication::Admin::Users GET /:customer_id/admin/users/new renders new user form
+rspec ./spec/requests/authentication/admin/users_spec.rb:140 # Authentication::Admin::Users POST /:customer_id/admin/users creates a new user
+rspec ./spec/requests/authentication/admin/users_spec.rb:146 # Authentication::Admin::Users POST /:customer_id/admin/users assigns the user to the current tenant
+rspec ./spec/requests/authentication/admin/users_spec.rb:152 # Authentication::Admin::Users POST /:customer_id/admin/users redirects to users list on success
+rspec ./spec/requests/authentication/admin/users_spec.rb:157 # Authentication::Admin::Users POST /:customer_id/admin/users renders form with errors for invalid params
+rspec ./spec/requests/authentication/admin/users_spec.rb:162 # Authentication::Admin::Users POST /:customer_id/admin/users prevents duplicate emails within the same tenant
+rspec ./spec/requests/authentication/admin/users_spec.rb:176 # Authentication::Admin::Users GET /:customer_id/admin/users/:id/edit returns success
+rspec ./spec/requests/authentication/admin/users_spec.rb:181 # Authentication::Admin::Users GET /:customer_id/admin/users/:id/edit renders edit form
+rspec ./spec/requests/authentication/admin/users_spec.rb:194 # Authentication::Admin::Users PATCH /:customer_id/admin/users/:id updates user details
+rspec ./spec/requests/authentication/admin/users_spec.rb:199 # Authentication::Admin::Users PATCH /:customer_id/admin/users/:id redirects to user show on success
+rspec ./spec/requests/authentication/admin/users_spec.rb:20 # Authentication::Admin::Users authorization allows admin users
+rspec ./spec/requests/authentication/admin/users_spec.rb:204 # Authentication::Admin::Users PATCH /:customer_id/admin/users/:id updates without password when password is blank
+rspec ./spec/requests/authentication/admin/users_spec.rb:209 # Authentication::Admin::Users PATCH /:customer_id/admin/users/:id updates password when provided
+rspec ./spec/requests/authentication/admin/users_spec.rb:214 # Authentication::Admin::Users PATCH /:customer_id/admin/users/:id renders form with errors for invalid params
+rspec ./spec/requests/authentication/admin/users_spec.rb:227 # Authentication::Admin::Users PATCH /:customer_id/admin/users/:id/activate activates an inactive user
+rspec ./spec/requests/authentication/admin/users_spec.rb:232 # Authentication::Admin::Users PATCH /:customer_id/admin/users/:id/activate redirects to users list
+rspec ./spec/requests/authentication/admin/users_spec.rb:245 # Authentication::Admin::Users PATCH /:customer_id/admin/users/:id/reset_mfa resets MFA for a user with MFA enabled
+rspec ./spec/requests/authentication/admin/users_spec.rb:25 # Authentication::Admin::Users authorization allows owner users
+rspec ./spec/requests/authentication/admin/users_spec.rb:252 # Authentication::Admin::Users PATCH /:customer_id/admin/users/:id/reset_mfa resets MFA for a user with MFA configured but not enabled
+rspec ./spec/requests/authentication/admin/users_spec.rb:260 # Authentication::Admin::Users PATCH /:customer_id/admin/users/:id/reset_mfa redirects to user show with success notice
+rspec ./spec/requests/authentication/admin/users_spec.rb:266 # Authentication::Admin::Users PATCH /:customer_id/admin/users/:id/reset_mfa redirects with alert when MFA is not configured
+rspec ./spec/requests/authentication/admin/users_spec.rb:281 # Authentication::Admin::Users PATCH /:customer_id/admin/users/:id/deactivate deactivates a user
+rspec ./spec/requests/authentication/admin/users_spec.rb:286 # Authentication::Admin::Users PATCH /:customer_id/admin/users/:id/deactivate redirects to users list
+rspec ./spec/requests/authentication/admin/users_spec.rb:291 # Authentication::Admin::Users PATCH /:customer_id/admin/users/:id/deactivate prevents deactivating yourself
+rspec ./spec/requests/authentication/admin/users_spec.rb:32 # Authentication::Admin::Users authorization denies member users
+rspec ./spec/requests/authentication/admin/users_spec.rb:48 # Authentication::Admin::Users GET /:customer_id/admin/users returns success
+rspec ./spec/requests/authentication/admin/users_spec.rb:53 # Authentication::Admin::Users GET /:customer_id/admin/users lists all tenant users
+rspec ./spec/requests/authentication/admin/users_spec.rb:59 # Authentication::Admin::Users GET /:customer_id/admin/users filters by search term
+rspec ./spec/requests/authentication/admin/users_spec.rb:65 # Authentication::Admin::Users GET /:customer_id/admin/users filters by role
+rspec ./spec/requests/authentication/admin/users_spec.rb:71 # Authentication::Admin::Users GET /:customer_id/admin/users filters by status
+rspec ./spec/requests/authentication/admin/users_spec.rb:78 # Authentication::Admin::Users GET /:customer_id/admin/users does not list users from other tenants
+rspec ./spec/requests/authentication/admin/users_spec.rb:93 # Authentication::Admin::Users GET /:customer_id/admin/users/:id returns success
+rspec ./spec/requests/authentication/admin/users_spec.rb:98 # Authentication::Admin::Users GET /:customer_id/admin/users/:id shows user details
+rspec ./spec/requests/authentication/mfa_spec.rb:36 # Authentication::Mfa POST /:customer_id/auth/mfa/confirm_setup enables MFA with valid code
+rspec ./spec/requests/authentication/mfa_spec.rb:65 # Authentication::Mfa POST /:customer_id/auth/mfa/authenticate verifies valid OTP and sets session flag
+rspec ./spec/requests/authentication/mfa_spec.rb:86 # Authentication::Mfa DELETE /:customer_id/auth/mfa/disable redirects to flowcharts
+rspec ./spec/requests/authentication/registrations_spec.rb:58 # Authentication::Registrations POST /:customer_id/auth redirects to flowcharts after signup
+rspec ./spec/requests/authentication/sessions_spec.rb:24 # Authentication::Sessions GET /:customer_id/auth/sign_in redirects when auth module not enabled
+rspec ./spec/requests/authentication/sessions_spec.rb:34 # Authentication::Sessions POST /:customer_id/auth/sign_in signs in with valid credentials
+rspec ./spec/requests/constants_spec.rb:16 # Constant Options Functionality saving options saves options from JSON string in hidden field
+rspec ./spec/requests/constants_spec.rb:31 # Constant Options Functionality saving options handles empty options array
+rspec ./spec/requests/constants_spec.rb:46 # Constant Options Functionality unique options validation prevents saving duplicate options
+rspec ./spec/requests/constants_spec.rb:59 # Constant Options Functionality unique options validation allows unique options
+rspec ./spec/requests/feature_modules_completion_spec.rb:19 # Module completion round-trip clears session, sets flash, and returns redirect via Complete.call
+rspec ./spec/requests/feature_modules_completion_spec.rb:49 # Module completion round-trip falls through to module default_exit when no invocation in session (stale path)
+rspec ./spec/requests/feature_modules_spec.rb:105 # FeatureModules GET /:customer_id/feature_modules/:id (my configuration tab) displays configuration form inline
+rspec ./spec/requests/feature_modules_spec.rb:117 # FeatureModules PATCH /:customer_id/feature_modules/:id/configure updates configuration
+rspec ./spec/requests/feature_modules_spec.rb:140 # FeatureModules required modules cannot disable a required module
+rspec ./spec/requests/feature_modules_spec.rb:155 # FeatureModules PATCH /:customer_id/feature_modules/:id/toggle_required can set a module as required
+rspec ./spec/requests/feature_modules_spec.rb:16 # FeatureModules GET /:customer_id/feature_modules returns success
+rspec ./spec/requests/feature_modules_spec.rb:161 # FeatureModules PATCH /:customer_id/feature_modules/:id/toggle_required auto-enables for all existing customers when toggled on
+rspec ./spec/requests/feature_modules_spec.rb:169 # FeatureModules PATCH /:customer_id/feature_modules/:id/toggle_required can set a module as optional
+rspec ./spec/requests/feature_modules_spec.rb:175 # FeatureModules PATCH /:customer_id/feature_modules/:id/toggle_required shows the toggle on the show page
+rspec ./spec/requests/feature_modules_spec.rb:201 # FeatureModules exit landing page configuration displays the module's default_exit on show
+rspec ./spec/requests/feature_modules_spec.rb:207 # FeatureModules exit landing page configuration persists a customer-level exit override via update_configuration
+rspec ./spec/requests/feature_modules_spec.rb:21 # FeatureModules GET /:customer_id/feature_modules displays available modules
+rspec ./spec/requests/feature_modules_spec.rb:216 # FeatureModules exit landing page configuration shows an existing override back in the form after update
+rspec ./spec/requests/feature_modules_spec.rb:28 # FeatureModules GET /:customer_id/feature_modules/:id returns success
+rspec ./spec/requests/feature_modules_spec.rb:33 # FeatureModules GET /:customer_id/feature_modules/:id displays module details
+rspec ./spec/requests/feature_modules_spec.rb:38 # FeatureModules GET /:customer_id/feature_modules/:id shows View link for GET routes
+rspec ./spec/requests/feature_modules_spec.rb:43 # FeatureModules GET /:customer_id/feature_modules/:id shows dash for non-GET routes
+rspec ./spec/requests/feature_modules_spec.rb:54 # FeatureModules POST /:customer_id/feature_modules/:id/enable enables the module for the customer
+rspec ./spec/requests/feature_modules_spec.rb:62 # FeatureModules POST /:customer_id/feature_modules/:id/enable is idempotent
+rspec ./spec/requests/feature_modules_spec.rb:77 # FeatureModules POST /:customer_id/feature_modules/:id/disable suspends the module
+rspec ./spec/requests/feature_modules_spec.rb:83 # FeatureModules POST /:customer_id/feature_modules/:id/disable redirects to index
+rspec ./spec/requests/feature_modules_spec.rb:94 # FeatureModules GET /:customer_id/feature_modules/:id/configure redirects to show page with my-configuration tab
+rspec ./spec/requests/landing_spec.rb:11 # Dashboard landing renders landing with header, stats, and quick actions
+rspec ./spec/requests/platform/customer_contexts_spec.rb:102 # Platform::CustomerContexts POST /platform/customer_contexts/switch when signed in as platform owner handles invalid customer ID
+rspec ./spec/requests/platform/customer_contexts_spec.rb:109 # Platform::CustomerContexts POST /platform/customer_contexts/switch when signed in as platform owner can switch between multiple customers
+rspec ./spec/requests/platform/customer_contexts_spec.rb:124 # Platform::CustomerContexts POST /platform/customer_contexts/switch when signed in as regular owner redirects with access denied
+rspec ./spec/requests/platform/customer_contexts_spec.rb:141 # Platform::CustomerContexts DELETE /platform/customer_contexts/clear when signed in as platform owner clears platform owner context and returns to own customer
+rspec ./spec/requests/platform/customer_contexts_spec.rb:149 # Platform::CustomerContexts DELETE /platform/customer_contexts/clear when signed in as platform owner clears Current attributes
+rspec ./spec/requests/platform/customer_contexts_spec.rb:164 # Platform::CustomerContexts DELETE /platform/customer_contexts/clear when signed in as regular owner redirects with access denied
+rspec ./spec/requests/platform/customer_contexts_spec.rb:211 # Platform::CustomerContexts platform owner context detection in requests when context is explicitly cleared clears session after returning to platform
+rspec ./spec/requests/platform/customer_contexts_spec.rb:258 # Platform::CustomerContexts session persistence maintains acting_as_customer_id in session
+rspec ./spec/requests/platform/customer_contexts_spec.rb:268 # Platform::CustomerContexts session persistence clears session when returning to platform context
+rspec ./spec/requests/platform/customer_contexts_spec.rb:28 # Platform::CustomerContexts GET /platform/customer_contexts/search when signed in as platform owner returns matching customers as JSON
+rspec ./spec/requests/platform/customer_contexts_spec.rb:40 # Platform::CustomerContexts GET /platform/customer_contexts/search when signed in as platform owner returns multiple matching customers
+rspec ./spec/requests/platform/customer_contexts_spec.rb:52 # Platform::CustomerContexts GET /platform/customer_contexts/search when signed in as platform owner returns empty array when no matches
+rspec ./spec/requests/platform/customer_contexts_spec.rb:59 # Platform::CustomerContexts GET /platform/customer_contexts/search when signed in as platform owner limits results to 20 customers
+rspec ./spec/requests/platform/customer_contexts_spec.rb:72 # Platform::CustomerContexts GET /platform/customer_contexts/search when signed in as regular owner redirects with access denied
+rspec ./spec/requests/platform/customer_contexts_spec.rb:94 # Platform::CustomerContexts POST /platform/customer_contexts/switch when signed in as platform owner switches to target customer context
+rspec ./spec/requests/sms/sends_spec.rb:16 # Sms::Sends returns a JSON payload with status=sent on the happy path
+rspec ./spec/requests/sms/sends_spec.rb:30 # Sms::Sends returns 422 when vars don't match the template
+rspec ./spec/requests/sms/sends_spec.rb:40 # Sms::Sends returns 429 when rate-limited
+rspec ./spec/requests/sms/sends_spec.rb:56 # Sms::Sends requires admin or owner role
+rspec ./spec/scripts/audit_generator_ui_spec.rb:173 # scripts/audit_generator_ui.rb end-to-end run produces a populated audit artifact for all 110 generators
+rspec ./spec/scripts/audit_generator_ui_spec.rb:37 # scripts/audit_generator_ui.rb .discover_generators returns 110 in-scope generators (7 element-level + 103 step-action)

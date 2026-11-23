@@ -1,0 +1,198 @@
+zh-CN:
+  flowchart_actions:
+    set_submission_outcome:
+      label: 设置提交结果
+      description: 设置公开页面的闪讯提示与提交后的去向
+      fields:
+        preset:
+          label: 预设
+          help: 使用标准致谢文案，或自定义本地化的消息。
+          options:
+            submitted: 已提交
+            saved: 已保存
+            thank_you: 谢谢
+            custom: 自定义
+        message:
+          label: 消息
+          help: 预设为自定义时使用的本地化闪讯。
+        flash:
+          label: 闪讯样式
+          help: 提交成功后展示的横幅样式。
+          options:
+            notice: 提示
+            alert: 警告
+        target:
+          label: 去向
+          help: 留在本表单，或打开本客户另一已上线页面。
+          options:
+            form: 表单
+            page: 页面
+        page:
+          label: 页面
+          help: 提交后打开的本客户已上线页面。
+        messageVariables:
+          label: 消息变量
+          help: 写入本地化消息中具名占位符的上下文值。
+    fail_with_error:
+      label: 业务失败
+      description: 以本地化消息结束在失败轨
+      fields:
+        message:
+          label: 消息
+          help: 显示在公开页闪讯中的本地化错误。
+        field:
+          label: 字段
+          help: 可选，用于在公开页高亮的表单字段。
+          placeholder: 例如 email
+        errorField:
+          label: 表单字段
+          help: 可选，用于在公开页高亮的表单字段。
+          placeholder: 例如 email
+        errorCode:
+          label: 错误码
+          help: 写入错误详情、供后续步骤读取的机器可读代码。
+        messageVariables:
+          label: 消息变量
+          help: 写入本地化消息中具名占位符的上下文值。
+      errors:
+        invalid_identifier: "%{field} 必须是合法标识符"
+    hand_off_to_module:
+      label: 移交到模块
+      description: 提交保存后，将访客转到某个模块继续办理
+      fields:
+        moduleKey:
+          label: 模块
+          help: 接收移交的模块标识，须已开启移交并为该客户启用，例如 payment。
+          placeholder: 例如 payment
+        input:
+          label: 输入
+          help: 传给模块的输入：名称对应模块的输入字段，值为表达式。
+        exitKind:
+          label: 模块结束后
+          help: 模块办理完成后，将访客送往何处。
+          options:
+            none: 使用默认落地页
+            page: 打开页面
+            url: 打开网址
+            route: 具名路由
+        exitPage:
+          label: 结束页面
+          help: 模块结束后打开的本客户已上线页面。
+        exitUrl:
+          label: 结束网址
+          help: 模块结束后打开的 http(s) 网址。
+          placeholder: 例如 https://example.test
+        exitRoute:
+          label: 结束路由
+          help: 模块结束后打开的具名路由，例如 customer_home。
+          placeholder: 例如 customer_home
+      errors:
+        invalid_url: "%{field} 必须是 http 或 https 网址"
+    skip_journey_steps:
+      label: 跳过流程步骤
+      description: 跳过访客所在流程的后续步骤
+      fields:
+        steps:
+          label: 步骤
+          help: 要跳过的后续流程步骤标识。仅流程中允许由处理跳过的步骤会被跳过，依赖其记录的步骤也一并跳过。
+          placeholder: 例如 catering
+      errors:
+        invalid_step_key: "%{field} 须为流程步骤标识：小写字母、数字和下划线"
+    request_payment:
+      label: 请求支付
+      description: 提交完成后移交到结账流程，并创建支付订单
+      fields:
+        amount:
+          label: 金额
+          help: 订单金额（主单位）的表达式。
+        currency:
+          label: 币种
+          help: ISO 币种代码的表达式。
+        subject:
+          label: 主题
+          help: 结账页展示的订单主题表达式。
+        description:
+          label: 说明
+          help: 可选，写入订单正文的付款人备注。
+        paidRecord:
+          label: 付款对象记录
+          help: 本次支付所对应的已保存记录的表达式；留空表示本页记录。
+        paidFields:
+          label: 支付成功后设置
+          help: 支付成功后在付款对象记录上设置的字段；值按原文写入，例如某个状态选项。
+        paidAtField:
+          label: 支付时间字段
+          help: 可选，付款对象记录上接收支付时间的日期或时间字段。
+        paymentReferenceField:
+          label: 支付单号字段
+          help: 可选，付款对象记录上接收支付单号的文本字段。
+        metadata:
+          label: 元数据
+          help: 可选，写入订单的键值对；每个值为表达式。
+        expiresInMinutes:
+          label: 过期时间（分钟）
+          help: 结账订单的有效分钟数；留空表示不过期。
+        exitKind:
+          label: 结账结束后
+          help: 结账完成后，将访客送往何处。
+          options:
+            none: 使用默认落地页
+            page: 打开页面
+            url: 打开网址
+            route: 具名路由
+            record: 打开付款对象记录
+        exitPage:
+          label: 结束页面
+          help: 结账结束后打开的本客户已上线页面。
+        exitUrl:
+          label: 结束网址
+          help: 结账结束后打开的 http(s) 网址。
+          placeholder: 例如 https://example.test
+        exitRoute:
+          label: 结束路由
+          help: 结账结束后打开的具名路由，例如 customer_home。
+          placeholder: 例如 customer_home
+      errors:
+        invalid_url: "%{field} 必须是 http 或 https 网址"
+        invalid_identifier: "%{field} 必须是合法标识符"
+        not_a_field: "%{attribute} 不是 %{entity} 中支付可设置的字段"
+        invalid_currency: "%{field} 须为 3 位 ISO 4217 币种代码"
+        invalid_option: "%{value} 不是 %{attribute} 的可选项"
+    refund_payment:
+      label: 退款
+      description: 对本客户已入账的支付退款
+      fields:
+        payment:
+          label: 支付
+          help: 本客户支付记录 ID 的表达式。
+        refundMode:
+          label: 退款方式
+          help: 退还已入账的全部余额，或指定部分金额。
+          options:
+            partial: 部分退款
+            full: 全额退款
+        amount:
+          label: 金额
+          help: 退款金额（主单位）的表达式。
+        reason:
+          label: 原因
+          help: 可选，随退款记录的原因。
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取退款记录的变量名。
+  flowchart_runtime:
+    errors:
+      hand_off_to_module:
+        module_unavailable: 该模块暂不可用，无法继续办理。
+      request_payment:
+        module_disabled: 该客户未启用支付。
+        invalid_order: 未能创建支付订单。
+        invalid_paid_record: 本次支付对应的记录尚未保存。
+        invalid_paid_field: "%{field_name} 不是支付可设置的字段。"
+      refund_payment:
+        not_found: 未找到属于本客户的支付。
+        not_captured: 该支付尚未入账。
+        non_positive: 退款金额必须为正数。
+        exceeds_remainder: "退款 %{amount} 超过可退余额 %{remainder}。"
+        billing_collection: 账单收款不能通过此步骤退款。
+        failed: 退款未能完成。

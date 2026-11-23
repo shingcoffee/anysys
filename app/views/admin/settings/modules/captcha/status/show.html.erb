@@ -1,0 +1,13 @@
+<%= render Admin::Settings::PageComponent.new(
+  customer_id: @customer_id || current_customer_id,
+  title: t("settings_navigation.items.public_page_protection"),
+  breadcrumbs: [{ label: t("settings_navigation.items.public_page_protection") }],
+  description: t("settings_modules.captcha.description")
+) do %>
+  <%= render Admin::Settings::Modules::Captcha::StatusComponent.new(
+        settings:       @settings,
+        module_enabled: @module_enabled,
+        pages:          @pages || [],
+        customer_id:    @customer_id || current_customer_id
+      ) %>
+<% end %>

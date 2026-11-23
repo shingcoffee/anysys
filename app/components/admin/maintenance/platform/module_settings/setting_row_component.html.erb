@@ -1,0 +1,18 @@
+<div class="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6"
+     data-module-settings-setting-row="true">
+  <div class="min-w-0">
+    <div class="flex flex-wrap items-center gap-2">
+      <h3 class="text-sm font-medium text-text-primary"><%= label %></h3>
+      <% if state.present? %>
+        <span class="text-xs font-medium text-text-muted" data-setting-state="true"><%= state %></span>
+      <% end %>
+    </div>
+    <% if description.present? %>
+      <p id="<%= resolved_description_id %>" class="mt-1 text-sm text-text-muted"><%= description %></p>
+    <% end %>
+    <% if disabled_reason.present? %>
+      <p id="<%= reason_id %>" class="mt-1 text-xs text-warning" role="note"><%= disabled_reason %></p>
+    <% end %>
+  </div>
+  <div class="w-full shrink-0 sm:w-auto"><%= content %></div>
+</div>

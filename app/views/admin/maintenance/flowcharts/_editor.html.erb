@@ -1,0 +1,675 @@
+<% entity_attributes = @design_entity&.property_schema_json || [] %>
+<% entity_associations = @design_entity&.associations_list || [] %>
+<div class="h-full flex flex-col"
+     data-controller="flowchart-canvas"
+     data-flowchart-canvas-id-value="<%= @flowchart.id %>"
+     data-flowchart-canvas-customer-id-value="<%= @flowchart.customer_id || current_customer_id %>"
+     data-flowchart-canvas-configuration-value="<%= @flowchart.configuration %>"
+     <% if @based_on_version_id %>data-flowchart-canvas-based-on-version-id-value="<%= @based_on_version_id %>"<% end %>
+     data-flowchart-canvas-head-version-id-value="<%= @flowchart.current_line_head_version_id %>"
+     data-flowchart-canvas-head-revision-value="<%= @flowchart.current_line_head_revision %>"
+     data-flowchart-canvas-read-only-save-toast-value="<%= t("comp_misc.toolbar.read_only_save") %>"
+     data-flowchart-canvas-save-failed-http-format-value="<%= t("maint_core.flowcharts.editor.save_failed_http_format") %>"
+     data-flowchart-canvas-restore-failed-http-format-value="<%= t("maint_core.flowcharts.editor.restore_failed_http_format") %>"
+     data-flowchart-canvas-entity-attributes-value="<%= entity_attributes.to_json %>"
+     data-flowchart-canvas-flowchart-type-value="<%= @flowchart.shared? ? "shared" : "customer_specific" %>"
+     data-flowchart-canvas-auto-validate-value="<%= params[:show_validation] == 'true' %>"
+     data-flowchart-canvas-urls-value="<%= { update: admin_maintenance_flowchart_path(current_customer_id, @flowchart), versions: admin_maintenance_flowchart_versions_path(current_customer_id, @flowchart), validation: admin_maintenance_flowchart_validation_path(current_customer_id, @flowchart), traces: admin_maintenance_flowchart_traces_path(current_customer_id, @flowchart), document: admin_maintenance_flowchart_document_path(current_customer_id, @flowchart), list: admin_maintenance_flowcharts_path(current_customer_id, format: :json), implicitKeys: admin_maintenance_validation_implicit_keys_path(current_customer_id, format: :json), stepIoParams: step_io_params_admin_maintenance_flowcharts_path(current_customer_id, generator_action: "__ACTION__"), elementIoParams: element_io_params_admin_maintenance_flowcharts_path(current_customer_id, element_type: "__TYPE__"), referenceOptions: "#{admin_maintenance_flowcharts_path(current_customer_id)}/reference_options/__SOURCE__.json?exclude_id=#{@flowchart.id}" }.to_json %>"
+     data-flowchart-canvas-action-catalog-value="<%= html_escape(CodeGenerators::ActionCatalog.export(locale: I18n.locale).to_json) %>"
+     data-flowchart-canvas-element-catalog-value="<%= html_escape(CodeGenerators::ElementCatalog.export(locale: I18n.locale).to_json) %>"
+     data-flowchart-canvas-unsaved-changes-confirm-value="<%= t("maint_core.flowcharts.editor.unsaved_changes_confirm") %>"
+     data-flowchart-canvas-expand-subflow-title-value="<%= t("maint_core.flowcharts.editor.expand_subflow_title") %>"
+     data-flowchart-canvas-collapse-subflow-title-value="<%= t("maint_core.flowcharts.editor.collapse_subflow_title") %>"
+     data-flowchart-canvas-subflow-self-reference-toast-value="<%= t("maint_core.flowcharts.editor.subflow_self_reference_toast") %>"
+     data-flowchart-canvas-connection-into-start-rejected-value="<%= t("maint_core.flowcharts.editor.connection_into_start_rejected") %>"
+     data-flowchart-canvas-connection-out-of-end-rejected-value="<%= t("maint_core.flowcharts.editor.connection_out_of_end_rejected") %>"
+     data-flowchart-canvas-branch-fallback-name-format-value="<%= t("maint_core.flowcharts.editor.property_editor.branch_fallback_name_format") %>"
+
+     data-flowchart-canvas-app-locale-value="<%= I18n.locale %>"
+     data-flowchart-canvas-unnamed-element-label-value="<%= t("maint_core.flowcharts.editor.unnamed_element_fallback") %>"
+     data-flowchart-canvas-element-connections-format-value="<%= t("maint_core.flowcharts.editor.element_connections_format") %>"
+
+     data-flowchart-canvas-search-count-zero-value="<%= t("maint_core.flowcharts.editor.search_count_initial") %>"
+     data-flowchart-canvas-search-count-format-value="<%= t("maint_core.flowcharts.editor.search_count_format") %>"
+
+     data-flowchart-canvas-validation-summary-format-value="<%= t("maint_core.flowcharts.editor.validation_summary_format") %>"
+     data-flowchart-canvas-no-problems-found-label-value="<%= t("maint_core.flowcharts.editor.no_problems_found") %>"
+     data-flowchart-canvas-filter-all-label-value="<%= t("maint_core.flowcharts.editor.filter_all") %>"
+     data-flowchart-canvas-filter-errors-label-value="<%= t("maint_core.flowcharts.editor.filter_errors") %>"
+     data-flowchart-canvas-filter-warnings-label-value="<%= t("maint_core.flowcharts.editor.filter_warnings") %>"
+     data-flowchart-canvas-no-problems-match-filter-label-value="<%= t("maint_core.flowcharts.editor.no_problems_match_filter") %>"
+     data-flowchart-canvas-problem-not-tied-notice-value="<%= t("maint_core.flowcharts.editor.problem_not_tied_notice") %>"
+     data-flowchart-canvas-server-check-unavailable-msg-value="<%= t("maint_core.flowcharts.editor.server_check_unavailable") %>"
+
+     data-flowchart-canvas-validation-missing-start-msg-value="<%= t("maint_core.flowcharts.editor.validation_missing_start") %>"
+     data-flowchart-canvas-validation-duplicate-start-msg-value="<%= t("maint_core.flowcharts.editor.validation_duplicate_start") %>"
+     data-flowchart-canvas-validation-missing-end-msg-value="<%= t("maint_core.flowcharts.editor.validation_missing_end") %>"
+     data-flowchart-canvas-validation-orphan-start-format-value="<%= t("maint_core.flowcharts.editor.validation_orphan_start_format") %>"
+     data-flowchart-canvas-validation-orphan-end-format-value="<%= t("maint_core.flowcharts.editor.validation_orphan_end_format") %>"
+     data-flowchart-canvas-validation-orphan-element-format-value="<%= t("maint_core.flowcharts.editor.validation_orphan_element_format") %>"
+     data-flowchart-canvas-validation-unreachable-format-value="<%= t("maint_core.flowcharts.editor.validation_unreachable_format") %>"
+     data-flowchart-canvas-validation-duplicate-label-format-value="<%= t("maint_core.flowcharts.editor.validation_duplicate_label_format") %>"
+     data-flowchart-canvas-validation-unsupported-structural-format-value="<%= t("maint_core.flowcharts.editor.validation_unsupported_structural_format") %>"
+     data-flowchart-canvas-validation-dangling-connection-from-format-value="<%= t("maint_core.flowcharts.editor.validation_dangling_connection_from_format") %>"
+     data-flowchart-canvas-validation-dangling-connection-to-format-value="<%= t("maint_core.flowcharts.editor.validation_dangling_connection_to_format") %>"
+     data-flowchart-canvas-validation-self-connection-msg-value="<%= t("maint_core.flowcharts.editor.validation_self_connection") %>"
+     data-flowchart-canvas-validation-duplicate-connection-msg-value="<%= t("maint_core.flowcharts.editor.validation_duplicate_connection") %>"
+     data-flowchart-canvas-validation-cycle-msg-value="<%= t("maint_core.flowcharts.editor.validation_cycle") %>"
+     data-flowchart-canvas-validation-missing-input-format-value="<%= t("maint_core.flowcharts.editor.validation_missing_input_format") %>"
+     data-flowchart-canvas-validation-element-problem-format-value="<%= t("maint_core.flowcharts.config_problems.element_invalid", label: "{label}", type: "{type}", error: "{message}") %>"
+     data-flowchart-canvas-validation-empty-process-value="<%= t("maint_core.flowcharts.editor.fix_hints.add_one_step") %>"
+     data-flowchart-canvas-validation-subflow-self-reference-value="<%= t("flowchart_elements.subflow.errors.self_reference") %>"
+     data-flowchart-canvas-validation-invalid-collection-path-value="<%= t("flowchart_elements.loop.errors.invalid_identifier", field: "collection") %>"
+     data-flowchart-canvas-validation-reserved-loop-variable-value="<%= t("flowchart_elements.loop.errors.reserved_header_local", field: "{field}", name: "{name}") %>"
+     data-flowchart-canvas-validation-colliding-loop-variables-value="<%= t("flowchart_elements.loop.errors.colliding_loop_variables") %>"
+     data-flowchart-canvas-validation-condition-errors-value="<%= t("flowchart_elements.conditions.errors").keys.index_with { |code| t("flowchart_elements.conditions.errors.#{code}", index: "{index}", operator: "{operator}") }.to_json %>"
+     data-flowchart-canvas-validation-too-few-branches-value="<%= t("flowchart_elements.decision.errors.too_few_branches") %>"
+     data-flowchart-canvas-validation-duplicate-match-value-value="<%= t("flowchart_elements.decision.errors.duplicate_match_value") %>"
+     data-flowchart-canvas-validation-multiple-otherwise-value="<%= t("flowchart_elements.decision.errors.multiple_otherwise") %>"
+     data-flowchart-canvas-validation-invalid-condition-match-value="<%= t("flowchart_elements.decision.errors.invalid_condition_match") %>"
+     data-flowchart-canvas-validation-missing-yes-branch-value="<%= t("flowchart_elements.decision.errors.missing_yes_branch") %>"
+     data-flowchart-canvas-validation-empty-loop-condition-value="<%= t("flowchart_elements.conditions.errors.empty_condition") %>"
+     data-flowchart-canvas-validation-missing-collection-value="<%= t("flowchart_elements.shared.errors.required", field: t("flowchart_elements.loop.fields.collection.label")) %>"
+     data-flowchart-canvas-validation-missing-return-value-value="<%= t("flowchart_elements.shared.errors.required", field: t("flowchart_elements.end.fields.returnValue.label")) %>"
+     data-flowchart-canvas-validation-missing-flowchart-value="<%= t("flowchart_elements.shared.errors.required", field: t("flowchart_elements.subflow.fields.flowchartId.label")) %>"
+
+     data-flowchart-canvas-fix-hint-delete-extra-start-value="<%= t("maint_core.flowcharts.editor.fix_hints.delete_extra_start") %>"
+     data-flowchart-canvas-fix-hint-rename-unique-label-value="<%= t("maint_core.flowcharts.editor.fix_hints.rename_unique_label") %>"
+     data-flowchart-canvas-fix-hint-add-one-step-value="<%= t("maint_core.flowcharts.editor.fix_hints.add_one_step") %>"
+     data-flowchart-canvas-fix-hint-specify-collection-value="<%= t("maint_core.flowcharts.editor.fix_hints.specify_collection") %>"
+     data-flowchart-canvas-fix-hint-define-loop-condition-value="<%= t("maint_core.flowcharts.editor.fix_hints.define_loop_condition") %>"
+     data-flowchart-canvas-fix-hint-fix-step-config-value="<%= t("maint_core.flowcharts.editor.fix_hints.fix_step_config") %>"
+     data-flowchart-canvas-fix-hint-fix-element-config-value="<%= t("maint_core.flowcharts.editor.fix_hints.fix_element_config") %>"
+     data-flowchart-canvas-fix-hint-select-target-flowchart-value="<%= t("maint_core.flowcharts.editor.fix_hints.select_target_flowchart") %>"
+     data-flowchart-canvas-fix-hint-select-accessible-flowchart-value="<%= t("maint_core.flowcharts.editor.fix_hints.select_accessible_flowchart") %>"
+     data-flowchart-canvas-fix-hint-remove-circular-subflow-value="<%= t("maint_core.flowcharts.editor.fix_hints.remove_circular_subflow") %>"
+     data-flowchart-canvas-fix-hint-provide-return-value-value="<%= t("maint_core.flowcharts.editor.fix_hints.provide_return_value") %>"
+     data-flowchart-canvas-fix-hint-pick-input-producer-value="<%= t("maint_core.flowcharts.editor.fix_hints.pick_input_producer") %>"
+     data-flowchart-canvas-fix-hint-change-step-or-element-type-value="<%= t("maint_core.flowcharts.editor.fix_hints.change_step_or_element_type") %>"
+     data-flowchart-canvas-fix-hint-repoint-subflow-value="<%= t("maint_core.flowcharts.editor.fix_hints.repoint_subflow") %>"
+
+     data-flowchart-canvas-auto-fix-all-label-format-value="<%= t("maint_core.flowcharts.editor.auto_fix.all_format") %>"
+     data-flowchart-canvas-auto-fix-applied-format-value="<%= t("maint_core.flowcharts.editor.auto_fix.applied_format") %>"
+     data-flowchart-canvas-auto-fix-nothing-to-do-notice-value="<%= t("maint_core.flowcharts.editor.auto_fix.nothing_to_do") %>"
+     data-flowchart-canvas-auto-fix-delete-extra-start-value="<%= t("maint_core.flowcharts.editor.auto_fix.delete_extra_start") %>"
+     data-flowchart-canvas-auto-fix-rename-unique-value="<%= t("maint_core.flowcharts.editor.auto_fix.rename_unique") %>"
+     data-flowchart-canvas-auto-fix-remove-connection-value="<%= t("maint_core.flowcharts.editor.auto_fix.remove_connection") %>"
+     data-flowchart-canvas-auto-fix-add-end-value="<%= t("maint_core.flowcharts.editor.auto_fix.add_end") %>"
+     data-flowchart-canvas-auto-fix-connect-to-end-value="<%= t("maint_core.flowcharts.editor.auto_fix.connect_to_end") %>"
+     data-flowchart-canvas-auto-fix-set-return-value-format-value="<%= t("maint_core.flowcharts.editor.auto_fix.set_return_value_format") %>"
+     data-flowchart-canvas-auto-fix-clear-subflow-target-value="<%= t("maint_core.flowcharts.editor.auto_fix.clear_subflow_target") %>"
+
+     data-flowchart-canvas-versions-load-failed-label-value="<%= t("maint_core.flowcharts.editor.versions_load_failed") %>"
+     data-flowchart-canvas-network-error-format-value="<%= t("maint_core.flowcharts.editor.network_error_format") %>"
+     data-flowchart-canvas-version-count-singular-format-value="<%= t("maint_core.flowcharts.editor.version_count_singular") %>"
+     data-flowchart-canvas-version-count-plural-format-value="<%= t("maint_core.flowcharts.editor.version_count_plural") %>"
+     data-flowchart-canvas-no-versions-saved-label-value="<%= t("maint_core.flowcharts.editor.no_versions_saved") %>"
+     data-flowchart-canvas-no-description-fallback-value="<%= t("maint_core.flowcharts.editor.no_description_fallback") %>"
+     data-flowchart-canvas-restore-button-label-value="<%= t("maint_core.trash.restore") %>"
+     data-flowchart-canvas-version-label-format-value="<%= t("maint_core.flowcharts.editor.version_label_format") %>"
+     data-flowchart-canvas-restore-version-confirm-format-value="<%= t("maint_core.flowcharts.editor.restore_version_confirm_format") %>"
+     data-flowchart-canvas-clear-flowchart-confirm-value="<%= t("maint_core.flowcharts.editor.clear_flowchart_confirm") %>"
+     data-flowchart-canvas-generate-docs-failed-label-value="<%= t("maint_core.flowcharts.editor.generate_docs_failed") %>"
+
+     data-flowchart-canvas-connection-label-placeholder-value="<%= t("maint_core.flowcharts.editor.connection_label_placeholder") %>"
+     data-flowchart-canvas-edge-insert-button-label-value="<%= t("maint_core.flowcharts.editor.edge_insert_button") %>"
+     data-flowchart-canvas-edge-insert-menu-label-value="<%= t("maint_core.flowcharts.editor.edge_insert_menu") %>"
+     data-flowchart-canvas-only-one-start-allowed-toast-value="<%= t("maint_core.flowcharts.editor.only_one_start_allowed_toast") %>"
+     data-flowchart-canvas-load-config-failed-toast-value="<%= t("maint_core.flowcharts.editor.load_config_failed_toast") %>"
+     data-flowchart-canvas-element-default-labels-value="<%= html_escape(t("maint_core.flowcharts.editor.element_default_labels").to_json) %>"
+     data-flowchart-canvas-unique-label-format-value="<%= t("maint_core.flowcharts.editor.unique_label_format") %>"
+     data-flowchart-canvas-default-port-label-value="<%= t("maint_core.flowcharts.editor.default_port_label") %>"
+     data-flowchart-canvas-branch-port-label-value="<%= t("maint_core.flowcharts.editor.branch_port_label") %>"
+     data-flowchart-canvas-ctx-always-available-label-value="<%= t("maint_core.flowcharts.editor.ctx_always_available_label") %>"
+     data-flowchart-canvas-ctx-from-format-value="<%= t("maint_core.flowcharts.editor.ctx_from_format") %>"
+     data-flowchart-canvas-ctx-from-step-format-value="<%= t("maint_core.flowcharts.editor.ctx_from_step_format") %>"
+
+     data-flowchart-canvas-test-running-label-value="<%= t("maint_core.flowcharts.editor.test_running") %>"
+     data-flowchart-canvas-test-invalid-json-input-format-value="<%= t("maint_core.flowcharts.editor.test_invalid_json_input_format") %>"
+     data-flowchart-canvas-test-invalid-json-format-value="<%= t("maint_core.flowcharts.editor.test_invalid_json_format") %>"
+     data-flowchart-canvas-test-server-error-format-value="<%= t("maint_core.flowcharts.editor.test_server_error_format") %>"
+     data-flowchart-canvas-test-client-timeout-format-value="<%= t("maint_core.flowcharts.editor.test_client_timeout_format") %>"
+     data-flowchart-canvas-test-history-view-title-value="<%= t("maint_core.flowcharts.editor.test_history_view_title") %>"
+     data-flowchart-canvas-test-history-use-input-title-value="<%= t("maint_core.flowcharts.editor.test_history_use_input_title") %>"
+     data-flowchart-canvas-test-use-input-label-value="<%= t("maint_core.flowcharts.editor.test_use_input") %>"
+     data-flowchart-canvas-test-timed-out-label-value="<%= t("maint_core.flowcharts.editor.test_timed_out") %>"
+     data-flowchart-canvas-test-success-format-value="<%= t("maint_core.flowcharts.editor.test_success_format") %>"
+     data-flowchart-canvas-test-completed-fallback-value="<%= t("maint_core.flowcharts.editor.test_completed_fallback") %>"
+     data-flowchart-canvas-test-execution-failed-label-value="<%= t("maint_core.flowcharts.editor.test_execution_failed") %>"
+     data-flowchart-canvas-test-context-label-value="<%= t("maint_core.flowcharts.editor.test_context_label") %>"
+     data-flowchart-canvas-test-trace-output-label-value="<%= t("maint_core.flowcharts.editor.test_trace_output_label") %>"
+     data-flowchart-canvas-test-default-timeout-banner-value="<%= t("maint_core.flowcharts.editor.test_default_timeout_banner") %>"
+     data-flowchart-canvas-test-execution-succeeded-label-value="<%= t("maint_core.flowcharts.editor.test_execution_succeeded") %>"
+     data-flowchart-canvas-test-no-traced-steps-label-value="<%= t("maint_core.flowcharts.editor.test_no_traced_steps") %>"
+     data-flowchart-canvas-test-context-not-captured-label-value="<%= t("maint_core.flowcharts.editor.test_context_not_captured") %>"
+     data-flowchart-canvas-test-context-toggle-label-value="<%= t("maint_core.flowcharts.editor.test_context_toggle") %>"
+     data-flowchart-canvas-test-steps-label-value="<%= t("maint_core.flowcharts.editor.test_steps_label") %>"
+     data-flowchart-canvas-test-unnamed-step-fallback-value="<%= t("maint_core.flowcharts.editor.test_unnamed_step_fallback") %>"
+     data-flowchart-canvas-test-no-queries-label-value="<%= t("maint_core.flowcharts.editor.test_no_queries") %>"
+     data-flowchart-canvas-test-query-summary-singular-format-value="<%= t("maint_core.flowcharts.editor.test_query_summary_singular_format") %>"
+     data-flowchart-canvas-test-query-summary-plural-format-value="<%= t("maint_core.flowcharts.editor.test_query_summary_plural_format") %>"
+     data-flowchart-canvas-test-query-duration-format-value="<%= t("maint_core.flowcharts.editor.test_query_duration_format") %>"
+     data-flowchart-canvas-test-sql-queries-label-format-value="<%= t("maint_core.flowcharts.editor.test_sql_queries_label_format") %>"
+     data-flowchart-canvas-test-error-label-value="<%= t("maint_core.flowcharts.editor.test_error_label") %>"
+     data-flowchart-canvas-test-decision-branch-format-value="<%= t("maint_core.flowcharts.editor.test_decision_branch_format") %>"
+     data-flowchart-canvas-test-trace-truncated-format-value="<%= t("maint_core.flowcharts.editor.test_trace_truncated_format") %>">
+
+  <% if @editing_version %>
+    <div class="bg-indigo-50 border-b border-indigo-200 px-4 py-2 flex items-center gap-2">
+      <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span class="text-sm font-medium text-indigo-800">
+        <%= t("maint_core.flowcharts.editor.editing_version", version: @editing_version.version_number) %>
+      </span>
+    </div>
+  <% end %>
+
+  <% if @flowchart.shared? && !shared_resources_mode? %>
+    <div class="bg-sky-50 border-b border-sky-200 px-4 py-2 flex items-center gap-2">
+      <svg class="w-5 h-5 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span class="text-sm font-medium text-sky-800"><%= t("maint_core.flowcharts.editor.shared_override_notice") %></span>
+    </div>
+  <% else %>
+    <%= render Flowcharts::LaunchedNoticeComponent.new(flowchart: @flowchart, customer_id: current_customer_id) %>
+  <% end %>
+
+  <div data-flowchart-canvas-target="saveConflictBanner" role="alert"
+       class="hidden bg-red-50 border-b border-red-200 px-4 py-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex items-start gap-2 min-w-0">
+      <svg class="w-5 h-5 text-red-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+      <span data-flowchart-canvas-target="saveConflictMessage" class="text-sm font-medium text-red-800"><%= t("maint_core.flash.flowcharts.save_conflict") %></span>
+    </div>
+    <div class="flex shrink-0 items-center gap-2">
+      <button type="button" data-action="click->flowchart-canvas#reloadAfterConflict" class="btn btn-secondary">
+        <%= t("maint_core.flowcharts.editor.save_conflict_reload") %>
+      </button>
+      <button type="button" data-action="click->flowchart-canvas#overwriteAfterConflict" class="btn btn-primary">
+        <%= t("maint_core.flowcharts.editor.save_conflict_overwrite") %>
+      </button>
+    </div>
+  </div>
+
+  <div data-flowchart-canvas-target="previewNotice" role="status"
+       class="hidden bg-sky-50 border-b border-sky-200 px-4 py-2 flex items-start gap-2 sm:items-center">
+    <svg class="w-5 h-5 text-sky-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <span class="text-sm font-medium text-sky-800"><%= t("maint_core.flowcharts.editor.preview_subflow_notice") %></span>
+  </div>
+
+  <%= render Flowcharts::ToolbarComponent.new(flowchart: @flowchart) %>
+
+  <!-- Main content area: Left sidebar + Canvas + Right sidebar -->
+  <div class="flex-1 flex overflow-hidden relative">
+
+    <%= render Flowcharts::ElementPaletteComponent.new(flowchart: @flowchart) %>
+
+    <!-- Center Workspace: Canvas + Docked Bottom Panel -->
+    <div class="flex-1 min-w-0 flex flex-col overflow-hidden relative">
+      <!-- Main Canvas Area -->
+      <div class="flex-1 min-h-0 bg-slate-100 overflow-hidden relative" data-flowchart-canvas-target="canvasContainer">
+        <div class="absolute inset-0" data-flowchart-canvas-target="canvasWrapper">
+          <!-- SVG canvas placeholder - will be replaced by FlowchartCanvas -->
+          <div data-flowchart-canvas-target="canvas"
+               class="flowchart-canvas-container w-full h-full">
+          </div>
+
+          <!-- Canvas overlay for interactions -->
+          <div data-flowchart-canvas-target="overlay"
+               class="absolute inset-0 pointer-events-none">
+          </div>
+
+          <!-- Toast notifications -->
+          <div data-flowchart-canvas-target="toastContainer"
+               class="absolute top-4 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center gap-2 pointer-events-none">
+          </div>
+
+          <!-- Minimap -->
+          <div data-flowchart-canvas-target="minimapContainer"
+               class="absolute bottom-2 left-2 z-30 border border-slate-300 rounded-lg shadow-md bg-white overflow-hidden w-[160px] sm:w-[200px] h-[120px] sm:h-[140px]">
+          </div>
+
+          <!-- Top-center HUD stack: Search Bar + Alignment Toolbar never overlap -->
+          <div class="pointer-events-none absolute top-2 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 max-w-[calc(100%-1rem)]">
+            <!-- Search Bar -->
+            <div data-flowchart-canvas-target="searchBar"
+                 class="pointer-events-auto bg-white rounded-lg shadow-lg ring-1 ring-slate-200 px-3 py-2 hidden w-80 max-w-full">
+              <div class="flex items-center space-x-2">
+                <svg class="h-4 w-4 text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="text"
+                       data-flowchart-canvas-target="searchInput"
+                       data-action="input->flowchart-canvas#handleSearchInput keydown->flowchart-canvas#handleSearchKeydown"
+                       placeholder="<%= t("maint_core.flowcharts.editor.search_placeholder") %>"
+                       class="flex-1 text-sm border-0 focus:ring-0 focus:outline-none min-w-0 px-1 py-0.5">
+                <span data-flowchart-canvas-target="searchCount"
+                      class="text-xs text-slate-500 whitespace-nowrap"><%= t("maint_core.flowcharts.editor.search_count_initial") %></span>
+                <div class="flex items-center space-x-0.5 border-l border-slate-200 pl-2">
+                  <button type="button"
+                          data-action="click->flowchart-canvas#searchPrev"
+                          title="<%= t("maint_core.flowcharts.editor.search_prev") %>"
+                          class="p-1 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                    </svg>
+                  </button>
+                  <button type="button"
+                          data-action="click->flowchart-canvas#searchNext"
+                          title="<%= t("maint_core.flowcharts.editor.search_next") %>"
+                          class="p-1 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                </div>
+                <button type="button"
+                        data-action="click->flowchart-canvas#closeSearch"
+                        title="<%= t("maint_core.flowcharts.editor.search_close") %>"
+                        class="p-1 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-600">
+                  <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Alignment Toolbar (shown when 2+ elements selected) -->
+            <div data-flowchart-canvas-target="alignmentToolbar"
+                 class="pointer-events-auto bg-white border border-slate-200 rounded-lg shadow-lg px-2 py-1 flex items-center space-x-1 hidden">
+              <button type="button" data-action="click->flowchart-canvas#alignLeft" title="<%= t("maint_core.flowcharts.editor.align_left") %>"
+                      class="p-1.5 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M4 4v16M8 8h10M8 16h6"/></svg>
+              </button>
+              <button type="button" data-action="click->flowchart-canvas#alignCenterH" title="<%= t("maint_core.flowcharts.editor.align_center_h") %>"
+                      class="p-1.5 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M12 4v16M7 8h10M9 16h6"/></svg>
+              </button>
+              <button type="button" data-action="click->flowchart-canvas#alignRight" title="<%= t("maint_core.flowcharts.editor.align_right") %>"
+                      class="p-1.5 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M20 4v16M6 8h10M10 16h6"/></svg>
+              </button>
+              <div class="w-px h-5 bg-slate-300"></div>
+              <button type="button" data-action="click->flowchart-canvas#alignTop" title="<%= t("maint_core.flowcharts.editor.align_top") %>"
+                      class="p-1.5 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M4 4h16M8 8v10M16 8v6"/></svg>
+              </button>
+              <button type="button" data-action="click->flowchart-canvas#alignCenterV" title="<%= t("maint_core.flowcharts.editor.align_center_v") %>"
+                      class="p-1.5 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M4 12h16M8 7v10M16 9v6"/></svg>
+              </button>
+              <button type="button" data-action="click->flowchart-canvas#alignBottom" title="<%= t("maint_core.flowcharts.editor.align_bottom") %>"
+                      class="p-1.5 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M4 20h16M8 6v10M16 10v6"/></svg>
+              </button>
+              <div class="w-px h-5 bg-slate-300 hidden" data-flowchart-canvas-target="distributeSeparator"></div>
+              <button type="button" data-action="click->flowchart-canvas#distributeH" title="<%= t("maint_core.flowcharts.editor.distribute_h") %>"
+                      data-flowchart-canvas-target="distributeHBtn" class="p-1.5 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900 hidden">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M4 4v16M20 4v16M9 12h6"/></svg>
+              </button>
+              <button type="button" data-action="click->flowchart-canvas#distributeV" title="<%= t("maint_core.flowcharts.editor.distribute_v") %>"
+                      data-flowchart-canvas-target="distributeVBtn" class="p-1.5 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900 hidden">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M4 4h16M4 20h16M12 9v6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabbed Bottom Panel (docked below canvas so minimap never overlaps tabs or content) -->
+      <div data-flowchart-canvas-target="bottomPanel"
+           class="bg-white border-t border-slate-200 shadow-sm z-20 flex-shrink-0 max-h-[42%] flex flex-col hidden">
+        <div class="flex flex-col flex-1 min-h-0">
+
+          <!-- Tab Bar -->
+          <div class="flex items-center border-b border-slate-100 bg-slate-50 flex-shrink-0 overflow-x-auto">
+            <button type="button"
+                    data-action="click->flowchart-canvas#switchBottomTab"
+                    data-tab="problems"
+                    data-flowchart-canvas-target="bottomTab"
+                    class="px-3 py-2 text-xs font-medium whitespace-nowrap border-b-2 border-indigo-500 text-indigo-600">
+              <%= t("maint_core.flowcharts.editor.tab_problems") %>
+            </button>
+            <button type="button"
+                    data-action="click->flowchart-canvas#switchBottomTab"
+                    data-tab="test"
+                    data-flowchart-canvas-target="bottomTab"
+                    class="px-3 py-2 text-xs font-medium whitespace-nowrap border-b-2 border-transparent text-slate-500 hover:text-slate-700">
+              <%= t("maint_core.flowcharts.editor.tab_test_runner") %>
+            </button>
+            <button type="button"
+                    data-action="click->flowchart-canvas#switchBottomTab"
+                    data-tab="history"
+                    data-flowchart-canvas-target="bottomTab"
+                    class="px-3 py-2 text-xs font-medium whitespace-nowrap border-b-2 border-transparent text-slate-500 hover:text-slate-700">
+              <%= t("maint_core.flowcharts.editor.tab_history") %>
+              <span data-flowchart-canvas-target="versionCount" class="ml-1 text-slate-400 font-normal text-[10px]"></span>
+            </button>
+            <button type="button"
+                    data-action="click->flowchart-canvas#switchBottomTab"
+                    data-tab="elements"
+                    data-flowchart-canvas-target="bottomTab"
+                    class="px-3 py-2 text-xs font-medium whitespace-nowrap border-b-2 border-transparent text-slate-500 hover:text-slate-700">
+              <%= t("maint_core.flowcharts.editor.tab_elements") %>
+              <span data-flowchart-canvas-target="elementsCount" class="ml-1 text-slate-400 font-normal text-[10px]"></span>
+            </button>
+            <div class="flex-1"></div>
+            <button type="button"
+                    data-action="click->flowchart-canvas#closeBottomPanel"
+                    class="p-1.5 mr-1 text-slate-400 hover:text-slate-600 rounded hover:bg-slate-100 shrink-0">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Tab Contents -->
+          <div class="flex-1 overflow-y-auto min-h-0">
+
+            <!-- Problems Tab -->
+            <div data-tab-content="problems">
+              <div data-flowchart-canvas-target="validationList" class="divide-y divide-slate-100"></div>
+            </div>
+
+            <!-- Test Runner Tab -->
+            <div data-tab-content="test" class="hidden">
+              <div class="flex items-center justify-between px-4 py-2 border-b border-slate-50">
+                <span data-flowchart-canvas-target="testStatus" class="hidden items-center px-2 py-0.5 rounded-full text-xs font-medium"></span>
+                <div class="flex items-center gap-2 ml-auto">
+                  <button type="button"
+                          data-action="click->flowchart-canvas#clearTraceOverlay"
+                          class="text-xs text-slate-500 hover:text-slate-700 px-2 py-1 rounded hover:bg-slate-100">
+                    <%= t("maint_core.flowcharts.editor.clear_overlay") %>
+                  </button>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                <!-- Input Section -->
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <label class="text-xs font-medium text-slate-600 uppercase tracking-wider"><%= t("maint_core.flowcharts.editor.input_json") %></label>
+                    <button type="button"
+                            data-flowchart-canvas-target="testRunButton"
+                            data-action="click->flowchart-canvas#runTest"
+                            class="btn btn-success text-xs">
+                      <svg class="-ml-0.5 mr-1.5 h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                      </svg>
+                      <%= t("maint_core.flowcharts.editor.run") %>
+                    </button>
+                  </div>
+                  <textarea data-flowchart-canvas-target="testInput"
+                            data-action="input->flowchart-canvas#validateTestInput"
+                            class="w-full h-32 text-xs font-mono border border-slate-300 rounded-md p-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-y"
+                            placeholder='{ "key": "value" }'>{}</textarea>
+                  <p data-flowchart-canvas-target="testInputError" class="hidden text-xs text-red-600 mt-1"></p>
+                </div>
+                <!-- Output Section -->
+                <div>
+                  <label class="text-xs font-medium text-slate-600 uppercase tracking-wider mb-2 block"><%= t("maint_core.flowcharts.editor.output") %></label>
+                  <div data-flowchart-canvas-target="testHistory" class="flex flex-wrap items-center gap-1 px-1 pb-1 empty:hidden"></div>
+                  <div data-flowchart-canvas-target="testOutput"
+                       class="w-full h-32 text-xs font-mono border border-slate-200 rounded-md p-2 bg-slate-50 overflow-auto">
+                    <span class="text-slate-400"><%= t("maint_core.flowcharts.editor.run_test_hint") %></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- History Tab -->
+            <div data-tab-content="history" class="hidden">
+              <div data-flowchart-canvas-target="versionList">
+                <div class="px-4 py-3 text-sm text-slate-500 text-center"><%= t("maint_core.flowcharts.editor.loading_versions") %></div>
+              </div>
+            </div>
+
+            <!-- Elements Tab -->
+            <div data-tab-content="elements" class="hidden">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 sticky top-0">
+                  <tr>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-slate-500 uppercase"><%= t("common.labels.type") %></th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-slate-500 uppercase"><%= t("maint_core.flowcharts.editor.col_label") %></th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-slate-500 uppercase"><%= t("maint_core.flowcharts.editor.col_connections") %></th>
+                  </tr>
+                </thead>
+                <tbody data-flowchart-canvas-target="elementsList" class="divide-y divide-slate-100">
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Sidebar - Property Editor (hidden by default, overlays canvas) -->
+    <div class="absolute right-0 top-0 bottom-0 z-30 bg-white border-l border-slate-200 shadow-lg transform transition-transform duration-300 ease-in-out hidden w-full sm:w-[420px] sm:max-w-[90vw]"
+         data-controller="property-editor panel-resize"
+         data-panel-resize-min-width-value="360"
+         data-panel-resize-max-width-value="520"
+         data-panel-resize-default-width-value="420"
+         data-property-editor-target="sidebar"
+         data-flowchart-canvas-target="propertySidebar"
+
+         data-property-editor-connection-properties-title-value="<%= t("maint_core.flowcharts.editor.property_editor.connection_properties_title") %>"
+         data-property-editor-connection-label-placeholder-value="<%= t("maint_core.flowcharts.editor.property_editor.connection_label_placeholder") %>"
+
+         data-property-editor-tab-general-label-value="<%= t("maint_core.flowcharts.editor.property_editor.tab_general_label") %>"
+         data-property-editor-tab-steps-label-value="<%= t("maint_core.flowcharts.editor.property_editor.tab_steps_label") %>"
+         data-property-editor-tab-branches-label-value="<%= t("maint_core.flowcharts.editor.property_editor.tab_branches_label") %>"
+         data-property-editor-tab-io-label-value="<%= t("maint_core.flowcharts.editor.property_editor.tab_io_label") %>"
+         data-property-editor-tab-advanced-label-value="<%= t("maint_core.flowcharts.editor.property_editor.tab_advanced_label") %>"
+
+         data-property-editor-save-changes-label-value="<%= t("maint_core.flowcharts.editor.property_editor.save_changes_label") %>"
+         data-property-editor-add-branch-label-value="<%= t("maint_core.flowcharts.editor.property_editor.add_branch_label") %>"
+         data-property-editor-branches-empty-state-format-value="<%= t("maint_core.flowcharts.editor.property_editor.branches_empty_state_format") %>"
+
+         data-property-editor-could-not-load-entities-label-value="<%= t("maint_core.flowcharts.editor.property_editor.could_not_load_entities") %>"
+
+         data-property-editor-step-config-set-count-format-value="<%= t("maint_core.flowcharts.editor.property_editor.step_config_set_count_format") %>"
+
+         data-property-editor-saved-label-value="<%= t("maint_core.flowcharts.editor.property_editor.save_success_label") %>"
+         data-property-editor-error-label-value="<%= t("maint_core.flowcharts.editor.property_editor.save_error_label") %>"
+         data-property-editor-save-button-label-value="<%= t("maint_core.flowcharts.editor.property_editor.save_button_label") %>"
+
+
+         data-property-editor-soft-type-hint-title-value="<%= t("maint_core.flowcharts.editor.property_editor.soft_type_hint_title") %>"
+
+         data-property-editor-branch-operator-labels-value="<%= html_escape(t("maint_core.flowcharts.editor.property_editor.branch_operator_labels").to_json) %>"
+         data-property-editor-condition-field-type-label-value="<%= t("maint_core.flowcharts.editor.property_editor.condition_field_type_label") %>"
+         data-property-editor-condition-count-type-label-value="<%= t("maint_core.flowcharts.editor.property_editor.condition_count_type_label") %>"
+         data-property-editor-entity-label-value="<%= t("maint_core.flowcharts.editor.property_editor.entity_label") %>"
+         data-property-editor-select-entity-placeholder-value="<%= t("maint_core.flowcharts.editor.property_editor.select_entity_placeholder") %>"
+         data-property-editor-where-optional-label-value="<%= t("maint_core.flowcharts.editor.property_editor.where_optional_label") %>"
+         data-property-editor-add-filter-label-value="<%= t("maint_core.flowcharts.editor.property_editor.add_filter_label") %>"
+         data-property-editor-count-operator-label-value="<%= t("maint_core.flowcharts.editor.property_editor.count_operator_label") %>"
+         data-property-editor-count-value-label-value="<%= t("maint_core.flowcharts.editor.property_editor.count_value_label") %>"
+         data-property-editor-other-group-label-value="<%= t("maint_core.flowcharts.editor.property_editor.other_group_label") %>"
+
+         data-property-editor-select-field-placeholder-value="<%= t("maint_core.flowcharts.editor.property_editor.select_field_placeholder") %>"
+         data-property-editor-enter-manually-label-value="<%= t("maint_core.flowcharts.editor.property_editor.enter_manually_label") %>"
+         data-property-editor-remove-filter-title-value="<%= t("maint_core.flowcharts.editor.property_editor.remove_filter_title") %>"
+         data-property-editor-switch-to-dropdown-title-value="<%= t("maint_core.flowcharts.editor.property_editor.switch_to_dropdown_title") %>"
+         data-property-editor-schema-unavailable-label-value="<%= t("maint_core.flowcharts.editor.property_editor.schema_unavailable_label") %>"
+
+         data-property-editor-column-name-placeholder-value="<%= t("maint_core.flowcharts.editor.property_editor.column_name_placeholder") %>"
+         data-property-editor-value-placeholder-value="<%= t("maint_core.flowcharts.editor.property_editor.value_placeholder") %>"
+
+         data-property-editor-match-value-label-value="<%= t("maint_core.flowcharts.editor.property_editor.match_value_label") %>"
+         data-property-editor-match-value-placeholder-value="<%= t("maint_core.flowcharts.editor.property_editor.match_value_placeholder") %>"
+         data-property-editor-branch-name-label-value="<%= t("maint_core.flowcharts.editor.property_editor.branch_name_label") %>"
+         data-property-editor-branch-name-placeholder-value="<%= t("maint_core.flowcharts.editor.property_editor.branch_name_placeholder") %>"
+         data-property-editor-cancel-label-value="<%= t("maint_core.flowcharts.editor.property_editor.cancel_label") %>"
+         data-property-editor-remove-branch-item-title-value="<%= t("maint_core.flowcharts.editor.property_editor.remove_branch_item_title") %>"
+         data-property-editor-otherwise-label-value="<%= t("maint_core.flowcharts.editor.property_editor.otherwise_label") %>"
+         data-property-editor-yes-match-label-value="<%= t("maint_core.flowcharts.editor.property_editor.yes_match_label") %>"
+         data-property-editor-no-match-label-value="<%= t("maint_core.flowcharts.editor.property_editor.no_match_label") %>"
+         data-property-editor-route-by-cleared-notice-value="<%= t("maint_core.flowcharts.editor.property_editor.route_by_cleared_notice") %>"
+         data-property-editor-undo-label-value="<%= t("maint_core.flowcharts.editor.property_editor.undo_label") %>"
+
+
+         data-property-editor-element-io-inputs-label-value="<%= t("maint_core.flowcharts.editor.property_editor.element_io_inputs_label") %>"
+         data-property-editor-element-io-outputs-label-value="<%= t("maint_core.flowcharts.editor.property_editor.element_io_outputs_label") %>"
+         data-property-editor-element-io-no-inputs-label-value="<%= t("maint_core.flowcharts.editor.property_editor.element_io_no_inputs_label") %>"
+         data-property-editor-element-io-no-outputs-label-value="<%= t("maint_core.flowcharts.editor.property_editor.element_io_no_outputs_label") %>"
+         data-property-editor-element-io-renamed-title-value="<%= t("maint_core.flowcharts.editor.property_editor.element_io_renamed_title") %>"
+         data-property-editor-element-io-renamed-badge-label-value="<%= t("maint_core.flowcharts.editor.property_editor.element_io_renamed_badge_label") %>"
+         data-property-editor-element-io-config-source-title-value="<%= t("maint_core.flowcharts.editor.property_editor.element_io_config_source_title") %>"
+         data-property-editor-element-io-config-source-label-value="<%= t("maint_core.flowcharts.editor.property_editor.element_io_config_source_label") %>"
+         data-property-editor-element-io-auto-source-title-value="<%= t("maint_core.flowcharts.editor.property_editor.element_io_auto_source_title") %>"
+         data-property-editor-element-io-auto-source-label-value="<%= t("maint_core.flowcharts.editor.property_editor.element_io_auto_source_label") %>"
+         data-property-editor-element-io-no-producer-label-value="<%= t("maint_core.flowcharts.editor.property_editor.element_io_no_producer_label") %>"
+         data-property-editor-element-io-producer-aria-label-format-value="<%= t("maint_core.flowcharts.editor.property_editor.element_io_producer_aria_label_format") %>"
+
+         data-property-editor-branch-fallback-name-format-value="<%= t("maint_core.flowcharts.editor.property_editor.branch_fallback_name_format") %>"
+
+         data-property-editor-derive-start-fallback-value="<%= t("maint_core.flowcharts.editor.property_editor.derive_start_fallback") %>"
+         data-property-editor-derive-return-with-value-format-value="<%= t("maint_core.flowcharts.editor.property_editor.derive_return_with_value_format") %>"
+         data-property-editor-derive-return-value-fallback-value="<%= t("maint_core.flowcharts.editor.property_editor.derive_return_value_fallback") %>"
+         data-property-editor-derive-end-fallback-value="<%= t("maint_core.flowcharts.editor.property_editor.derive_end_fallback") %>"
+         data-property-editor-derive-for-each-with-collection-format-value="<%= t("maint_core.flowcharts.editor.property_editor.derive_for_each_with_collection_format") %>"
+         data-property-editor-derive-for-each-fallback-value="<%= t("maint_core.flowcharts.editor.property_editor.derive_for_each_fallback") %>"
+         data-property-editor-derive-run-once-first-with-expr-format-value="<%= t("maint_core.flowcharts.editor.property_editor.derive_run_once_first_with_expr_format") %>"
+         data-property-editor-derive-run-once-first-fallback-value="<%= t("maint_core.flowcharts.editor.property_editor.derive_run_once_first_fallback") %>"
+         data-property-editor-derive-while-with-expr-format-value="<%= t("maint_core.flowcharts.editor.property_editor.derive_while_with_expr_format") %>"
+         data-property-editor-derive-while-fallback-value="<%= t("maint_core.flowcharts.editor.property_editor.derive_while_fallback") %>"
+         data-property-editor-derive-subflow-fallback-value="<%= t("maint_core.flowcharts.editor.property_editor.derive_subflow_fallback") %>"
+
+         data-property-editor-step-drag-to-reorder-title-value="<%= t("maint_core.flowcharts.editor.property_editor.step_drag_to_reorder_title") %>"
+         data-property-editor-step-change-button-label-value="<%= t("maint_core.flowcharts.editor.property_editor.step_change_button_label") %>"
+         data-property-editor-step-change-action-title-value="<%= t("maint_core.flowcharts.editor.property_editor.step_change_action_title") %>"
+         data-property-editor-step-remove-button-label-value="<%= t("maint_core.flowcharts.editor.property_editor.step_remove_button_label") %>"
+         data-property-editor-step-remove-button-title-value="<%= t("maint_core.flowcharts.editor.property_editor.step_remove_button_title") %>"
+         data-property-editor-step-error-badge-label-value="<%= t("maint_core.flowcharts.editor.property_editor.step_error_badge_label") %>"
+         data-property-editor-step-params-prefix-label-value="<%= t("maint_core.flowcharts.editor.property_editor.step_params_prefix_label") %>"
+         data-property-editor-step-more-options-label-value="<%= t("maint_core.flowcharts.editor.property_editor.step_more_options_label") %>"
+
+         data-property-editor-insert-variable-title-value="<%= t("maint_core.flowcharts.editor.property_editor.insert_variable_title") %>"
+         data-property-editor-join-and-label-value="<%= t("maint_core.flowcharts.editor.property_editor.join_and") %>"
+         data-property-editor-join-or-label-value="<%= t("maint_core.flowcharts.editor.property_editor.join_or") %>"
+         data-property-editor-no-variables-available-value="<%= t("maint_core.pages.editor.context_autocomplete.no_variables_available") %>"
+         data-property-editor-used-in-this-element-label-value="<%= t("maint_core.pages.editor.context_autocomplete.used_in_this_element") %>"
+         data-property-editor-no-matching-variables-label-value="<%= t("maint_core.pages.editor.context_autocomplete.no_matching_variables") %>"
+         data-property-editor-select-column-placeholder-value="<%= t("maint_core.flowcharts.editor.property_editor.select_column_placeholder") %>"
+         data-property-editor-kv-key-placeholder-value="<%= t("maint_core.flowcharts.editor.property_editor.kv_key_placeholder") %>"
+         data-property-editor-kv-value-placeholder-value="<%= t("maint_core.flowcharts.editor.property_editor.kv_value_placeholder") %>"
+         data-property-editor-kv-remove-row-title-value="<%= t("maint_core.flowcharts.editor.property_editor.kv_remove_row_title") %>"
+         data-property-editor-add-label-value="<%= t("maint_core.flowcharts.editor.property_editor.add_label") %>"
+         data-property-editor-step-picker-search-placeholder-value="<%= t("maint_core.flowcharts.editor.property_editor.step_picker_search_placeholder") %>"
+         data-property-editor-step-picker-no-match-label-value="<%= t("maint_core.flowcharts.editor.property_editor.step_picker_no_match_label") %>"
+         data-property-editor-step-picker-already-used-label-value="<%= t("maint_core.flowcharts.editor.property_editor.step_picker_already_used_label") %>"
+         data-property-editor-step-picker-all-categories-label-value="<%= t("maint_core.flowcharts.editor.filter_all") %>"
+         data-property-editor-step-picker-categories-label-value="<%= t("maint_core.flowcharts.editor.property_editor.step_picker_categories_label") %>"
+         data-property-editor-step-picker-recent-label-value="<%= t("maint_core.flowcharts.editor.property_editor.step_picker_recent_label") %>"
+         data-property-editor-step-retry-not-idempotent-hint-value="<%= t("maint_core.flowcharts.editor.property_editor.step_retry_not_idempotent_hint") %>"
+         data-property-editor-step-timeout-gives-up-format-value="<%= t("maint_core.flowcharts.editor.property_editor.step_timeout_gives_up_format") %>"
+         data-property-editor-none-option-label-value="<%= t("maint_core.flowcharts.editor.property_editor.none_option_label") %>"
+         data-property-editor-add-row-label-value="<%= t("maint_core.flowcharts.editor.property_editor.add_row_label") %>"
+         data-property-editor-remove-row-title-value="<%= t("maint_core.flowcharts.editor.property_editor.remove_row_title") %>"
+         data-property-editor-search-placeholder-value="<%= t("maint_core.flowcharts.editor.property_editor.search_placeholder") %>"
+         data-property-editor-locale-en-label-value="<%= t("maint_core.flowcharts.editor.property_editor.locale_en_label") %>"
+         data-property-editor-locale-zh-cn-label-value="<%= t("maint_core.flowcharts.editor.property_editor.locale_zh_cn_label") %>"
+         data-property-editor-reference-loading-label-value="<%= t("maint_core.flowcharts.editor.property_editor.reference_loading_label") %>"
+         data-property-editor-reference-empty-label-value="<%= t("maint_core.flowcharts.editor.property_editor.reference_empty_label") %>"
+         data-property-editor-reference-error-label-value="<%= t("maint_core.flowcharts.editor.property_editor.reference_error_label") %>"
+         data-property-editor-reference-placeholder-value="<%= t("maint_core.flowcharts.editor.property_editor.reference_placeholder") %>"
+         data-property-editor-default-placeholder-format-value="<%= t("maint_core.flowcharts.editor.property_editor.default_placeholder_format") %>">
+
+      <!-- Drag handle for resizing (left edge, desktop/tablet only) -->
+      <div class="absolute left-0 top-0 bottom-0 w-1.5 cursor-col-resize group z-50 hidden sm:flex items-center justify-center"
+           data-action="mousedown->panel-resize#startResize">
+        <div class="w-0.5 h-8 rounded-full bg-slate-300 group-hover:bg-indigo-400 group-hover:h-12 transition-all duration-200"></div>
+      </div>
+
+      <!-- Modal Content Container (for positioning step modal) -->
+      <div class="relative h-full flex flex-col" data-property-editor-target="modalContent">
+
+        <!-- Property Editor Header — element-type tinted band -->
+        <div class="flex-shrink-0" data-property-editor-target="headerWrapper">
+          <div class="px-3 pt-2.5 pb-1.5 flex items-start justify-between">
+            <div class="flex items-center gap-2 min-w-0">
+              <!-- Type icon circle -->
+              <div data-property-editor-target="typeIndicator"
+                   class="w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 ring-1 ring-black/5"
+                   style="background-color: #f0fdf4;">
+                <svg data-property-editor-target="typeIcon" class="w-3.5 h-3.5" style="color: #10b981;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 3l14 9-14 9V3z" />
+                </svg>
+              </div>
+              <div class="min-w-0">
+                <h3 class="text-sm font-semibold text-slate-900 truncate leading-tight" data-property-editor-target="title">
+                  <%= t("maint_core.flowcharts.editor.element_properties") %>
+                </h3>
+              </div>
+            </div>
+            <button type="button"
+                    data-action="click->property-editor#close"
+                    class="mt-0.5 p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-md transition-colors">
+              <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Tab Bar — pill/segment style -->
+          <div class="px-3 pb-1.5" data-property-editor-target="tabBar">
+            <div class="flex gap-1 p-1 bg-slate-100 rounded-lg">
+              <!-- Tabs rendered dynamically by TabManager -->
+            </div>
+          </div>
+
+          <!-- Subtle divider -->
+          <div class="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        </div>
+
+        <!-- Property Editor Form -->
+        <form data-property-editor-target="form"
+              data-action="submit->property-editor#save"
+              class="flex-1 flex flex-col min-h-0">
+
+          <!-- Tab Pane: General -->
+          <div class="flex-1 overflow-y-auto px-3 py-2" data-property-editor-target="tabPaneGeneral">
+            <div data-property-editor-target="formFieldsGeneral" class="space-y-2"></div>
+          </div>
+
+          <!-- Tab Pane: Steps/Branches -->
+          <div class="flex-1 overflow-y-auto px-3 py-2 hidden" data-property-editor-target="tabPaneSteps">
+            <div data-property-editor-target="formFieldsSteps" class="space-y-2"></div>
+          </div>
+
+          <!-- Tab Pane: I/O -->
+          <div class="flex-1 overflow-y-auto px-3 py-2 hidden" data-property-editor-target="tabPaneIo">
+            <div data-property-editor-target="formFieldsIo" class="space-y-2"></div>
+          </div>
+
+          <!-- Tab Pane: Advanced -->
+          <div class="flex-1 overflow-y-auto px-3 py-2 hidden" data-property-editor-target="tabPaneAdvanced">
+            <div data-property-editor-target="formFieldsAdvanced" class="space-y-2"></div>
+          </div>
+
+          <!-- Pinned Footer -->
+          <div class="flex items-center justify-end gap-2 px-3 py-2 border-t border-slate-100 bg-slate-50/50 flex-shrink-0">
+            <button type="button"
+                    data-action="click->property-editor#close"
+                    data-property-editor-target="cancelButton"
+                    class="btn btn-secondary text-xs">
+              <%= t("common.actions.cancel") %>
+            </button>
+            <button type="submit"
+                    data-property-editor-target="saveButton"
+                    class="btn btn-primary text-xs">
+              <%= t("common.actions.save") %>
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

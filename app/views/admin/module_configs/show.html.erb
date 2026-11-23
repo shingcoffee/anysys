@@ -1,0 +1,5 @@
+<%= render Admin::Settings::ModuleConfigComponent.new(
+  customer_id: current_customer_id, feature_module: @feature_module,
+  assignment: @customer_feature_module, entry_key: @entry_key,
+  default_exit: @default_exit, exit_override: @exit_override
+) %>

@@ -1,0 +1,94 @@
+<div class="flex flex-col gap-6" data-layouts-gallery="true">
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+    <div class="min-w-0">
+      <h2 id="website-platform-layouts-heading" class="text-heading"><%= t("website.platform.layouts.heading") %></h2>
+      <p class="mt-2 text-base font-normal leading-normal text-text-secondary"><%= t("website.platform.layouts.description") %></p>
+    </div>
+    <div class="shrink-0 sm:pt-0.5">
+      <%= render ButtonComponent.new(
+            variant: :primary,
+            size: :sm,
+            href: new_path,
+            tag: :a
+          ) do %>
+        <%= t("website.platform.layouts.new") %>
+      <% end %>
+    </div>
+  </div>
+
+  <% if show_filters? %>
+    <%= render Websites::Admin::CatalogFilterComponent.new(
+          label: t("website.platform.catalog.filter.family"),
+          all_path: all_filter_path,
+          items: filter_items,
+          current: current_family,
+          all_count: all_count
+        ) %>
+  <% end %>
+
+  <% if filtered_layouts.empty? %>
+    <%= render Admin::Maintenance::Platform::ModuleSettings::EmptySectionComponent.new(
+          title: t("website.platform.catalog.empty.layouts_title"),
+          description: t("website.platform.catalog.empty.layouts_description"),
+          action_path: current_family.blank? ? new_path : nil,
+          action_label: current_family.blank? ? t("website.platform.layouts.new") : nil
+        ) %>
+  <% else %>
+    <div class="flex flex-col <%= show_group_headings? ? 'gap-8' : 'gap-4' %>">
+      <% grouped_layouts.each do |family, layouts| %>
+        <section class="flex flex-col gap-4" data-layout-family="<%= family %>">
+          <% if show_group_headings? %>
+            <div class="flex items-center gap-3">
+              <h3 class="text-sm font-semibold tracking-tight text-text-secondary"><%= family_label(family) %></h3>
+              <span class="text-xs font-medium tabular-nums text-text-secondary"><%= t("website.platform.catalog.filter.count", count: layouts.size) %></span>
+              <span class="h-px min-w-4 flex-1 bg-border-subtle" aria-hidden="true"></span>
+            </div>
+          <% end %>
+          <div class="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" role="list">
+            <% layouts.each_with_index do |layout, index| %>
+              <% theme = preview_theme_for(layout) %>
+              <% types = section_types(layout) %>
+              <%= render Websites::Admin::CatalogCardComponent.new(
+                    key: layout.key,
+                    kind: :layout,
+                    edit_path: edit_path(layout),
+                    preview_path: preview_path(layout),
+                    lazy: index > 5,
+                    family: family
+                  ) do |card| %>
+                <% card.with_thumbnail do %>
+                  <%= render Websites::Admin::CatalogThumbnailComponent.new(
+                        sections: thumbnail_sections(layout),
+                        theme: theme
+                      ) %>
+                <% end %>
+                <div class="flex items-start justify-between gap-2">
+                  <h3 class="min-w-0 truncate text-md font-semibold leading-snug tracking-tight text-text-primary"><%= layout.display_name %></h3>
+                  <%= render Websites::Admin::CatalogThemeDotsComponent.new(theme: theme) %>
+                </div>
+                <p class="mt-2 line-clamp-2 min-h-9 text-sm font-normal leading-snug text-text-secondary"><%= layout.display_description %></p>
+                <div class="mt-auto pt-3">
+                  <div class="flex h-6 flex-nowrap items-center gap-1.5 overflow-hidden [&>*]:shrink-0">
+                    <%= render BadgeComponent.new(variant: :default, size: :sm) do %>
+                      <%= t("website.platform.catalog.chips.sections", count: types.size) %>
+                    <% end %>
+                    <% visible_section_types(layout).each do |type| %>
+                      <%= render BadgeComponent.new(variant: :default, size: :sm) do %>
+                        <%= section_type_label(type) %>
+                      <% end %>
+                    <% end %>
+                    <% if extra_section_count(layout).positive? %>
+                      <%= render BadgeComponent.new(variant: :default, size: :sm) do %>
+                        <%= t("website.platform.catalog.chips.more", count: extra_section_count(layout)) %>
+                      <% end %>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </section>
+      <% end %>
+    </div>
+  <% end %>
+</div>

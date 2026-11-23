@@ -1,0 +1,7 @@
+<%= render Emails::ReportsComponent.new(
+      report: @report,
+      since: @since,
+      until_date: @until_date,
+      csv_path: url_for(format: :csv, since: params[:since], until: params[:until]),
+      url: url_for
+    ) %>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<% marketing_presentation = Websites::HomeSite::Presentation.for(website: @website, page: @page) %>
+<html lang="<%= I18n.locale %>" class="<%= marketing_presentation ? 'bg-white font-sans' : "#{@theme&.html_class} overflow-x-clip" %>" style="<%= (marketing_presentation ? Websites::Theme.new : websites_layout_theme).root_style %>">
+  <head>
+    <title><%= content_for(:title).presence || websites_document_title.presence || @page_document_title.presence || t("website.admin.pages.index.title") %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <% desc = @meta_description.presence || websites_meta_description %>
+    <% if desc.present? %>
+      <meta name="description" content="<%= desc %>">
+    <% end %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
+    <link href="<%= marketing_presentation ? websites_font_stylesheet(Websites::Theme.new, sections: []) : websites_font_stylesheet %>" rel="stylesheet">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="<%= marketing_presentation ? 'min-h-screen flex flex-col bg-white text-[16px] text-slate-950 font-sans antialiased' : "#{websites_layout_theme.body_class.presence || @theme&.body_class.presence || 'min-h-screen antialiased bg-white text-neutral-950'} overflow-x-clip" %>">
+    <% if @preview && !websites_embed? %>
+      <div class="px-4 py-2 text-xs tracking-wide bg-amber-100 text-amber-950 border-b border-amber-200 flex items-center justify-between gap-3">
+        <span><%= t("website.admin.preview.banner") %></span>
+        <% if @edit_url.present? %>
+          <a href="<%= @edit_url %>" class="font-semibold underline underline-offset-2"><%= t("website.admin.preview.edit") %></a>
+        <% end %>
+      </div>
+    <% end %>
+    <%= yield %>
+  </body>
+</html>

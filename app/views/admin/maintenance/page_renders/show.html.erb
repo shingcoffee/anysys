@@ -1,0 +1,26 @@
+<%# Rendered view of a built page for the admin audience (dashboard layout). %>
+<% content_for :title, @page.name %>
+<%= render BreadcrumbsComponent.new(crumbs: [
+  { label: t("maint_core.nav.maintenance"), path: admin_maintenance_path(current_customer_id) },
+  { label: t("maint_core.nav.pages"), path: admin_maintenance_pages_path(current_customer_id) },
+  { label: @page.name, path: admin_maintenance_page_path(current_customer_id, @page) },
+  { label: t("maint_core.nav.rendered_view"), path: nil }
+]) %>
+
+<div class="card overflow-x-auto">
+  <div class="card-header">
+    <h2 class="section-header"><%= @page.name %></h2>
+    <% if @page.description.present? %>
+      <p class="mt-1 text-body-sm"><%= @page.description %></p>
+    <% end %>
+  </div>
+  <div class="p-6">
+    <% if @content.present? %>
+      <%= render inline: @content %>
+    <% else %>
+      <p class="text-body-sm text-text-muted"><%= t("maint_core.page_renders.show.no_content") %></p>
+    <% end %>
+  </div>
+</div>
+
+<%= render Admin::Entities::QuickAddDialogComponent.new %>

@@ -1,0 +1,43 @@
+<% if dark_tone? %>
+  <section class="relative isolate flex min-h-[36rem] flex-col overflow-hidden bg-neutral-950 text-white sm:min-h-[44rem] md:min-h-[88vh]">
+    <div class="absolute inset-0 -z-10">
+      <%= render_media(props["image_url"], alt: "", css_class: "absolute inset-0 size-full object-cover", appearance: placeholder_appearance, eager: true) %>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/65 to-black/25"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent"></div>
+    </div>
+    <div class="<%= inner_measure_class %> mt-auto w-full pb-16 pt-40 md:pb-24">
+      <div class="flex max-w-5xl flex-col items-start gap-6 md:gap-8">
+        <% if present_text?(prop("kicker")) %>
+          <p <%= el_attrs("kicker", class: kicker_class) %>><%= prop("kicker") %></p>
+        <% end %>
+        <% if present_text?(prop("headline")) %>
+          <h1 <%= el_attrs("headline", class: headline_class) %>><%= prop("headline") %></h1>
+        <% end %>
+        <% if present_text?(prop("subhead")) %>
+          <p <%= el_attrs("subhead", class: subhead_class) %>><%= prop("subhead") %></p>
+        <% end %>
+        <div class="pt-2"><%= buttons %></div>
+      </div>
+    </div>
+  </section>
+<% else %>
+  <section class="relative overflow-hidden pt-20 md:pt-32 <%= theme.density == "compact" ? "pb-16 md:pb-20" : "pb-20 md:pb-28" %>">
+    <div class="<%= inner_measure_class %> flex flex-col items-center gap-6 text-center md:gap-8">
+      <% if present_text?(prop("kicker")) %>
+        <p <%= el_attrs("kicker", class: kicker_class) %>><%= prop("kicker") %></p>
+      <% end %>
+      <% if present_text?(prop("headline")) %>
+        <h1 <%= el_attrs("headline", class: "mx-auto max-w-5xl #{headline_class}") %>><%= prop("headline") %></h1>
+      <% end %>
+      <% if present_text?(prop("subhead")) %>
+        <p <%= el_attrs("subhead", class: subhead_class) %>><%= prop("subhead") %></p>
+      <% end %>
+      <div class="flex w-full justify-center pt-2"><%= buttons(align: :center) %></div>
+    </div>
+    <div class="<%= inner_measure_class %> mt-14 md:mt-20">
+      <div class="relative aspect-[4/3] w-full sm:aspect-[16/9] md:aspect-[21/9] <%= image_frame_class %>">
+        <%= render_media(props["image_url"], alt: prop("headline"), css_class: "absolute inset-0 size-full object-cover", appearance: placeholder_appearance, eager: true) %>
+      </div>
+    </div>
+  </section>
+<% end %>

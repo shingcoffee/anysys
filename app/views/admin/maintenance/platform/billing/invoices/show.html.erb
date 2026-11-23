@@ -1,0 +1,19 @@
+<%= render Billing::Admin::PlatformPageComponent.new(
+  customer_id: current_customer_id,
+  section: :invoices,
+  title: @invoice.number.presence || t("maint_platform.billing.invoices.show.title_fallback"),
+  description: t("maint_platform.billing.invoices.show.description"),
+  crumbs: [{ label: @invoice.number.presence || t("maint_platform.billing.invoices.show.draft") }],
+  section_path: admin_maintenance_platform_billing_invoices_path(current_customer_id, **(@filters || {}).symbolize_keys.slice(:q, :status, :tenant_id))
+) do %>
+  <div class="max-w-4xl">
+    <%= render Billing::Admin::InvoiceDetailComponent.new(
+      invoice:     @invoice,
+      customer_id: current_customer_id,
+      platform:    true,
+      collection:  @collection,
+      form:        @contract,
+      settlement:  @settlement
+    ) %>
+  </div>
+<% end %>

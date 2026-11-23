@@ -1,0 +1,15 @@
+<% turbo_refreshes_with method: :morph, scroll: :preserve %>
+<%= render Admin::Maintenance::Platform::ModuleSettings::ShellComponent.new(
+      feature_module: @feature_module,
+      customer_id: current_customer_id,
+      current: @pane
+    ) do %>
+  <%= render Admin::Maintenance::Platform::ModuleSettings::ShowComponent.new(
+        feature_module: @feature_module,
+        module_models: @module_models,
+        customer_id: current_customer_id,
+        customer_signup_enabled: @customer_signup_enabled,
+        selected_model: @selected_model,
+        pane: @pane
+      ) %>
+<% end %>

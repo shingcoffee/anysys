@@ -1,0 +1,44 @@
+<nav aria-label="<%= reader_text(searching? ? "search_results" : "contents") %>" class="flex min-w-0 flex-col gap-5">
+  <% if searching? %>
+    <p class="px-2.5 text-xs font-semibold text-text-tertiary"><%= reader_text("search_results") %></p>
+  <% end %>
+
+  <% if page.groups.empty? %>
+    <div class="min-w-0 rounded-lg border border-border-subtle bg-canvas-elevated px-3 py-4 text-sm text-text-secondary [overflow-wrap:anywhere]">
+      <p class="text-sm"><%= reader_text("search_empty") %></p>
+      <% if searching? %>
+        <%= link_to reader_text("search_clear"), page.search_path,
+                    class: "mt-2 inline-flex min-h-11 items-center rounded-md font-medium text-accent-text underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                    data: link_data %>
+      <% end %>
+    </div>
+  <% else %>
+    <% page.groups.each do |group| %>
+      <section aria-labelledby="<%= group_heading_id(group) %>" class="min-w-0">
+        <h3 id="<%= group_heading_id(group) %>" class="px-2.5 pb-1.5 text-xs font-semibold text-text-primary [overflow-wrap:anywhere]">
+          <span class="min-w-0"><%= reader_text("groups.#{group.key}") %></span>
+        </h3>
+        <ul class="ml-2.5 flex min-w-0 flex-col gap-0.5 border-l border-border-subtle pl-1.5">
+          <% group.entries.each do |entry| %>
+            <% label = navigation_label(entry) %>
+            <% show_result_title = customer? && searching? && label != entry.title %>
+            <li class="relative min-w-0">
+              <%= link_to entry.path,
+                          class: nav_link_class(current_entry?(entry)),
+                          aria: { current: (current_entry?(entry) ? "page" : nil), describedby: (customer? ? title_id(entry) : nil) },
+                          data: link_data(current_entry?(entry)) do %>
+                <span class="min-w-0"><%= label %></span>
+                <% if show_result_title %>
+                  <span id="<%= title_id(entry) %>" class="min-w-0 text-sm font-normal text-text-secondary"><%= entry.title %></span>
+                <% end %>
+              <% end %>
+              <% if customer? && !show_result_title %>
+                <span id="<%= title_id(entry) %>" class="<%= visually_hidden_class %>"><%= entry.title %></span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </section>
+    <% end %>
+  <% end %>
+</nav>

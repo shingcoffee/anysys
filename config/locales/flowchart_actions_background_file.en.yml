@@ -1,0 +1,348 @@
+---
+en:
+  flowchart_actions:
+    enqueue_job:
+      label: Run background job
+      description: Queue a background job now, at a time, after a delay, or on a recurring schedule.
+      fields:
+        jobClass:
+          label: Job Class
+          help: Active Job class to run.
+          placeholder: e.g., ProcessOrderJob
+        when:
+          label: When
+          help: When the job should run.
+          options:
+            now: now
+            at: at
+            after: after
+            recurring: recurring
+        jobArgs:
+          label: Job Arguments
+          help: Ruby expression for the job arguments.
+          placeholder: e.g., ctx[:order].id, ctx[:user].id
+        queueName:
+          label: Queue Name
+          help: Active Job queue to enqueue onto.
+          options:
+            default: default
+            low: low
+            high: high
+            mailers: mailers
+        priority:
+          label: Priority
+          help: Job priority from 0 to 1000.
+          placeholder: Job priority
+        runAt:
+          label: Run At
+          help: "Time or duration expression for when: at."
+          placeholder: e.g., 1.hour.from_now
+        waitSeconds:
+          label: Wait Seconds
+          help: "Delay in seconds for when: after."
+          placeholder: e.g., 3600
+        cronExpression:
+          label: Cron Expression
+          help: Cron expression used when recurring by cron.
+          placeholder: e.g., 0 9 * * *
+        timezone:
+          label: Timezone
+          help: Timezone for the cron expression.
+          placeholder: e.g., UTC, America/New_York
+        intervalSeconds:
+          label: Interval Seconds
+          help: Seconds between recurring enqueues.
+          placeholder: e.g., 3600
+        recurrenceLimit:
+          label: Recurrence Limit
+          help: How many recurring jobs to enqueue (1–100).
+          placeholder: e.g., 1
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+      errors:
+        invalid_cron: cronExpression is not a valid cron expression
+        invalid_timezone: timezone is not a known time zone
+        horizon_too_far: "recurrenceLimit × intervalSeconds must stay within %{max_days} days"
+    generate_file:
+      label: Generate File
+      description: Generate PDF/CSV/Excel/JSON/XML/TXT
+      fields:
+        sourceVariable:
+          label: Source
+          help: Context path this step reads.
+          placeholder: e.g., records
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        fileType:
+          label: File Type
+          help: Format of the generated file.
+          options:
+            csv: csv
+            xlsx: xlsx
+            pdf: pdf
+            json: json
+            xml: xml
+            txt: txt
+        outputDestination:
+          label: Output Destination
+          help: Write the file into a context variable or Active Storage.
+          options:
+            ctx_var: Context Variable
+            active_storage: ActiveStorage
+        columns:
+          label: Columns
+          help: Column header mapped to a row field.
+        sheetName:
+          label: Sheet Name
+          help: Worksheet name for XLSX.
+          placeholder: e.g., Sheet1
+        autoFilter:
+          label: Auto Filter
+          help: Enable the XLSX auto filter.
+        pageSize:
+          label: Page Size
+          help: PDF page size.
+          options:
+            letter: letter
+            a4: a4
+            legal: legal
+        pretty:
+          label: Pretty
+          help: Pretty-print JSON.
+        rootElement:
+          label: Root Element
+          help: Root tag for XML.
+          placeholder: e.g., root
+        lineEnding:
+          label: Line Ending
+          help: Line ending for TXT.
+          options:
+            lf: lf
+            crlf: crlf
+        filenameTemplate:
+          label: Filename
+          help: Filename used when attaching the file.
+          placeholder: e.g., export.csv
+        encoding:
+          label: Encoding
+          help: CSV encoding.
+          options:
+            utf_8: utf-8
+            utf_16: utf-16
+            ascii: ascii
+            iso_8859_1: iso-8859-1
+        delimiter:
+          label: Delimiter
+          help: CSV column separator.
+          placeholder: e.g., ,
+        headerRow:
+          label: Header Row
+          help: Write a CSV header row.
+        quoteStrings:
+          label: Force Quote Strings
+          help: Quote every CSV field.
+        includeBom:
+          label: Include UTF-8 BOM
+          help: Prefix the CSV with a UTF-8 BOM.
+        nestedSeparator:
+          label: Nested Separator
+          help: Separator for nested CSV field paths.
+          placeholder: e.g., .
+    upload_file:
+      label: Upload File
+      description: Upload a file to Active Storage
+      fields:
+        service:
+          label: Service
+          help: Storage service that receives the file.
+          options:
+            active_storage: Active Storage
+        attachmentName:
+          label: Attachment Name
+          help: Active Storage attachment name on the record.
+          placeholder: e.g., avatar
+        sourceVariable:
+          label: Source
+          help: Context path this step reads.
+          placeholder: e.g., file
+        modelVariable:
+          label: Record
+          help: Record that receives the attachment.
+        filenameVariable:
+          label: Filename Variable
+          help: Context path of the upload filename.
+          placeholder: e.g., uploaded_filename
+        contentTypeVariable:
+          label: Content Type Variable
+          help: Context path of the MIME type.
+          placeholder: e.g., uploaded_content_type
+        maxSizeBytes:
+          label: Max Size (bytes)
+          help: Reject files larger than this many bytes.
+          placeholder: e.g., 10485760
+        allowedTypes:
+          label: Allowed MIME Types
+          help: MIME types the upload may have.
+        fileField:
+          label: File field
+          help: File or Image field of the record that receives the file.
+          placeholder: e.g., contract
+        filename:
+          label: Filename
+          help: Optional filename that replaces the source's. Blank keeps it.
+          placeholder: e.g., invoice-{{ order.number }}.pdf
+        saveRecord:
+          label: Save record
+          help: Save the record now so the file is stored and checked. Off leaves it for a later save step.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+      errors:
+        not_file_attribute: "%{attribute} is not a File or Image field of %{entity}"
+    download_file:
+      label: Download File
+      description: Download file from remote source
+      fields:
+        url:
+          label: URL
+          help: Static URL to download.
+          placeholder: https://example.com/file.csv
+        urlVariable:
+          label: URL Variable
+          help: Context path that holds the download URL.
+          placeholder: e.g., download_url
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        destination:
+          label: Destination
+          help: Where to store the downloaded bytes.
+          options:
+            ctx_var: Context Variable
+            temp_file: Temp File
+            active_storage: ActiveStorage
+        maxSizeBytes:
+          label: Max Size (bytes)
+          help: Reject a response larger than this many bytes.
+          placeholder: e.g., 10485760
+        followRedirects:
+          label: Follow Redirects
+          help: Follow HTTP redirects.
+        maxRedirects:
+          label: Max Redirects
+          help: Maximum number of redirects to follow.
+        headers:
+          label: Headers
+          help: Extra request headers.
+        allowedContentTypes:
+          label: Allowed Content Types
+          help: Reject the download when the response Content-Type is not in this list. Empty allows any type.
+        validateChecksum:
+          label: Validate Checksum
+          help: "Optional sha256: or md5: digest of the body."
+          placeholder: "e.g., sha256:abc…"
+        retryOnTransportError:
+          label: Retry on transport error
+          help: Retry only when the request is idempotent.
+        retryAttempts:
+          label: Retry attempts
+          help: Extra transport attempts (1–2).
+        connectTimeout:
+          label: Connect timeout
+          help: Seconds to wait for a connection (1–5).
+        readTimeout:
+          label: Read timeout
+          help: Seconds to wait for a response (1–9).
+        circuitBreaker:
+          label: Circuit breaker
+          help: Fail fast when the remote is unhealthy.
+        breakerName:
+          label: Breaker name
+          help: Cache key suffix for this breaker.
+        failureThreshold:
+          label: Failure threshold
+          help: Failures before the breaker opens (1–20).
+        resetTimeoutSeconds:
+          label: Reset timeout
+          help: Seconds before a half-open retry (10–3600).
+      errors:
+        invalid_checksum: "validateChecksum must be sha256: or md5: plus a hex digest"
+    compress_files:
+      label: Compress Files
+      description: Compress files into archive
+      fields:
+        entries:
+          label: Entries
+          help: Archive name mapped to a context variable.
+          placeholder: e.g., data.txt -> file_data
+        literalEntries:
+          label: Literal Entries
+          help: Archive name mapped to literal file content.
+        format:
+          label: Format
+          help: Archive format.
+          options:
+            zip: zip
+            tar: tar
+            gz: gz
+            tar_gz: tar.gz
+        compressionLevel:
+          label: Compression Level
+          help: Compression level from 0 to 9.
+          placeholder: 0 (none) - 9 (max)
+        includeHidden:
+          label: Include Hidden
+          help: Include names that start with a dot.
+        filenameTemplate:
+          label: Filename
+          help: ZIP filename written on the file payload.
+          placeholder: e.g., orders.zip
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+    decompress_files:
+      label: Decompress Files
+      description: Extract files from archive
+      fields:
+        sourceVariable:
+          label: Source
+          help: Context path this step reads.
+          placeholder: e.g., archive
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        format:
+          label: Format
+          help: Archive format, or auto to detect.
+          options:
+            auto: auto (detect)
+            zip: zip
+            tar: tar
+            gz: gz
+            tar_gz: tar_gz
+        filter:
+          label: Filter (fnmatch)
+          help: Optional fnmatch pattern of names to keep.
+          placeholder: e.g., *.txt
+        maxEntries:
+          label: Max Entries
+          help: Maximum archive entries to extract (hard cap is the platform archive limit).
+        maxTotalBytes:
+          label: Max Total Bytes
+          help: Maximum expanded bytes across extracted entries.
+  flowchart_runtime:
+    errors:
+      enqueue_job:
+        failed: "Could not enqueue the job (%{reason})."
+      generate_file:
+        failed: "Could not generate the file (%{reason})."
+      upload_file:
+        failed: "Could not upload the file (%{reason})."
+      download_file:
+        failed: "Could not download the file (%{reason})."
+      compress_files:
+        failed: "Could not compress the files (%{reason})."
+      decompress_files:
+        failed: "Could not decompress the files (%{reason})."

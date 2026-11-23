@@ -1,0 +1,14 @@
+<%= render Mailers::ShellComponent.new(
+      preheader: t("billing_mailer.subscription_cancelled.preheader"),
+      brand:     t("billing_mailer.shell.brand"),
+      heading:   t("billing_mailer.subscription_cancelled.heading"),
+      title:     t("billing_mailer.subscription_cancelled.title"),
+      body:      t("billing_mailer.subscription_cancelled.intro"),
+      facts: [
+        { label: t("billing_mailer.subscription_cancelled.label_plan"), value: @plan.name },
+        { label: t("billing_mailer.subscription_cancelled.label_cancelled_at"), value: format_mail_datetime(@subscription.cancelled_at) },
+        { label: t("billing_mailer.subscription_cancelled.label_service_ends"), value: format_mail_date(@subscription.ended_at) }
+      ],
+      note:      t("billing_mailer.subscription_cancelled.outro"),
+      footer:    t("billing_mailer.shell.footer")
+    ) %>

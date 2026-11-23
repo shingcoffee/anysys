@@ -1,0 +1,40 @@
+<div data-controller="slide-over"
+     data-slide-over-frame-id-value="<%= Admin::Pages::PublishingPanelComponent::FRAME_ID %>">
+  <div data-slide-over-target="backdrop"
+       data-action="click->slide-over#close"
+       class="fixed inset-0 z-30 bg-black/40"
+       aria-hidden="true"></div>
+
+  <aside data-slide-over-target="panel"
+         class="fixed inset-y-0 right-0 z-40 flex h-full w-full max-w-lg flex-col overflow-y-auto border-l border-border-subtle bg-canvas-elevated shadow-lg"
+         role="dialog"
+         aria-modal="true"
+         aria-label="<%= title %>">
+    <header class="sticky top-0 z-10 flex items-start justify-between gap-3 border-b border-border-subtle bg-canvas-elevated px-5 py-4">
+      <div class="min-w-0">
+        <h2 class="text-base font-semibold text-text-primary truncate"><%= title %></h2>
+        <p class="mt-0.5 text-caption text-text-muted"><%= t("admin_misc.pages.publishing_panel.subtitle") %></p>
+      </div>
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <%= link_to t("maint_core.pages.preview"),
+                    preview_path,
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                    class: "text-sm font-medium text-accent hover:underline" %>
+        <%= link_to t("admin_misc.pages.publishing_panel.close"),
+                    close_path,
+                    class: "text-sm font-medium text-text-secondary hover:text-text-primary transition-base",
+                    data: { action: "slide-over#close" } %>
+      </div>
+    </header>
+
+    <div class="flex-1 px-5 py-5">
+      <%= render ::Pages::DistributionCardComponent.new(
+        page: page,
+        customer_id: customer_id,
+        return_to: return_to,
+        turbo_frame: Admin::Pages::PublishingPanelComponent::FRAME_ID
+      ) %>
+    </div>
+  </aside>
+</div>

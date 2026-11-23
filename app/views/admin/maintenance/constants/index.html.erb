@@ -1,0 +1,34 @@
+<%# app/views/admin/maintenance/constants/index.html.erb %>
+<%= render AdminPageComponent.new(
+  breadcrumbs: definition_resource_breadcrumbs(:constants),
+  title: t("maint_core.nav.constants"),
+  description: t("maint_core.constants.index.description"),
+  actions: [
+    { label: t("maint_core.constants.index.new_constant"), path: new_admin_maintenance_constant_path(current_customer_id), variant: :primary, icon: :plus }
+  ]
+) do %>
+  <%= render AdminTableComponent.new(
+  rows:        @rows,
+  columns:     @columns,
+  pagination:  @pagination,
+  params:      params.permit(:q, :sort, :dir, :page).to_h.symbolize_keys,
+  search:      { param: :q, placeholder: t("maint_core.constants.index.search_placeholder") },
+  row_path:    ->(c) { admin_maintenance_constant_path(current_customer_id, c) },
+  row_actions: ->(c) {
+    actions = []
+    if c.customer_owned? || shared_resources_mode? || c.shared?
+      actions << { label: t("common.actions.edit"), path: edit_admin_maintenance_constant_path(current_customer_id, c) }
+    end
+    if can_copy_definition?(c)
+      actions << { label: t("common.actions.copy"), path: admin_maintenance_constant_copy_path(current_customer_id, c) }
+    end
+    actions
+  },
+  empty_state: {
+    title: t("maint_core.constants.index.empty_title"),
+    description: t("maint_core.constants.index.empty_description"),
+    action_path: new_admin_maintenance_constant_path(current_customer_id),
+    action_text: t("maint_core.constants.index.empty_action")
+  }
+  ) %>
+<% end %>

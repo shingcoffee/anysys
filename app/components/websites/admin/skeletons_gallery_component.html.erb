@@ -1,0 +1,91 @@
+<div class="flex flex-col gap-6" data-skeletons-gallery="true">
+  <div>
+    <h2 id="website-platform-skeletons-heading" class="text-heading"><%= t("website.platform.skeletons.heading") %></h2>
+    <p class="mt-2 text-base font-normal leading-normal text-text-secondary"><%= t("website.platform.skeletons.description") %></p>
+  </div>
+
+  <% if show_filters? %>
+    <%= render Websites::Admin::CatalogFilterComponent.new(
+          label: t("website.platform.catalog.filter.category"),
+          all_path: all_filter_path,
+          items: filter_items,
+          current: current_category,
+          all_count: all_count
+        ) %>
+  <% end %>
+
+  <% if filtered_entries.empty? %>
+    <%= render Admin::Maintenance::Platform::ModuleSettings::EmptySectionComponent.new(
+          title: t("website.platform.catalog.empty.skeletons_title"),
+          description: t("website.platform.catalog.empty.skeletons_description")
+        ) %>
+  <% else %>
+    <div class="flex flex-col <%= show_group_headings? ? 'gap-8' : 'gap-4' %>">
+      <% grouped_entries.each do |category, items| %>
+        <section class="flex flex-col gap-4" data-skeleton-category="<%= category %>">
+          <% if show_group_headings? %>
+            <div class="flex items-center gap-3">
+              <h3 class="text-sm font-semibold tracking-tight text-text-secondary"><%= category_label(category) %></h3>
+              <span class="text-xs font-medium tabular-nums text-text-secondary"><%= t("website.platform.catalog.filter.count", count: items.size) %></span>
+              <span class="h-px min-w-4 flex-1 bg-border-subtle" aria-hidden="true"></span>
+            </div>
+          <% end %>
+          <div class="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" role="list">
+            <% items.each_with_index do |entry, index| %>
+              <% theme = preview_theme_for(entry[:key]) %>
+              <%= render Websites::Admin::CatalogCardComponent.new(
+                    key: entry[:key],
+                    kind: :skeleton,
+                    edit_path: edit_path(entry[:key]),
+                    preview_path: preview_path(entry[:key]),
+                    lazy: index > 5,
+                    category: entry[:category]
+                  ) do |card| %>
+                <% card.with_thumbnail do %>
+                  <%= render Websites::Admin::CatalogThumbnailComponent.new(
+                        sections: thumbnail_sections(entry),
+                        theme: theme,
+                        page_component_class: page_component_class
+                      ) %>
+                <% end %>
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex min-w-0 items-center gap-2">
+                    <h3 class="min-w-0 truncate text-md font-semibold leading-snug tracking-tight text-text-primary"><%= skeleton_name(entry[:key]) %></h3>
+                    <% if default?(entry) %>
+                      <%= render BadgeComponent.new(variant: :primary, size: :sm) do %>
+                        <%= t("website.platform.skeletons.default_badge") %>
+                      <% end %>
+                    <% end %>
+                  </div>
+                  <%= render Websites::Admin::CatalogThemeDotsComponent.new(theme: theme) %>
+                </div>
+                <p class="mt-2 line-clamp-2 min-h-9 text-sm font-normal leading-snug text-text-secondary"><%= skeleton_description(entry[:key]) %></p>
+                <p class="mt-1 min-h-4 truncate text-xs italic leading-4 text-text-secondary"><%= inspired_by_credit(entry[:key]) %></p>
+                <div class="mt-auto pt-3">
+                  <div class="flex h-6 flex-nowrap items-center gap-1.5 overflow-hidden [&>*]:shrink-0">
+                    <%= render BadgeComponent.new(variant: :default, size: :sm) do %>
+                      <%= t("website.platform.catalog.chips.pages", count: entry[:pages].size) %>
+                    <% end %>
+                    <%= render BadgeComponent.new(variant: :info, size: :sm) do %>
+                      <%= category_label(entry[:category]) %>
+                    <% end %>
+                    <% visible_page_roles(entry).each do |role| %>
+                      <%= render BadgeComponent.new(variant: :default, size: :sm) do %>
+                        <%= page_role_label(role) %>
+                      <% end %>
+                    <% end %>
+                    <% if extra_page_count(entry).positive? %>
+                      <%= render BadgeComponent.new(variant: :default, size: :sm) do %>
+                        <%= t("website.platform.catalog.chips.more", count: extra_page_count(entry)) %>
+                      <% end %>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        </section>
+      <% end %>
+    </div>
+  <% end %>
+</div>

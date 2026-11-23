@@ -1,0 +1,38 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: module_card.key,
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: module_card.name },
+        { label: t("admin_modules.index.howto.title") }
+      ],
+      title: t("admin_modules.index.howto.page_title", name: module_card.name),
+      description: t("admin_modules.index.howto.page_description", name: module_card.name)
+    ) do %>
+  <div class="mx-auto w-full max-w-4xl">
+    <section class="overflow-hidden rounded-xl border border-border-subtle bg-surface shadow-xs" aria-label="<%= t('admin_modules.index.howto.title') %>">
+      <ol class="divide-y divide-border-subtle">
+        <% steps.each_with_index do |step, index| %>
+          <% related_link = step_link(index) %>
+          <li class="flex flex-col gap-3 px-5 py-5 sm:flex-row sm:items-center sm:gap-5 sm:px-7 sm:py-6">
+            <div class="flex min-w-0 flex-1 items-start gap-4">
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-accent-subtle text-sm font-semibold text-accent" aria-hidden="true"><%= index + 1 %></span>
+              <p class="min-w-0 pt-1.5 text-sm leading-relaxed text-text-primary"><%= step %></p>
+            </div>
+            <% if related_link %>
+              <div class="flex flex-wrap gap-2 pl-[3.25rem] sm:shrink-0 sm:justify-end sm:pl-0">
+                <%= render ButtonComponent.new(variant: :secondary, size: :sm, tag: :a, href: related_link.href,
+                                               target: "_blank", rel: "noopener noreferrer", class: "min-h-11") do %>
+                  <%= related_link.label %>
+                  <span class="sr-only"><%= t("admin_modules.index.howto.new_tab_hint") %></span>
+                  <svg class="ml-1 size-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5H19.5V10.5m0-6L10.5 13.5M19.5 13.5v5.25a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V5.25a.75.75 0 01.75-.75H10.5" />
+                  </svg>
+                <% end %>
+              </div>
+            <% end %>
+          </li>
+        <% end %>
+      </ol>
+    </section>
+  </div>
+<% end %>

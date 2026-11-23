@@ -1,0 +1,134 @@
+<div class="flex min-w-0 flex-col gap-6 text-body">
+  <% if has_subscription? %>
+    <div class="card overflow-hidden">
+      <div class="space-y-5 p-5 sm:p-6">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div class="min-w-0 space-y-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <h2 class="text-heading break-words"><%= snapshot_name(subscription) %></h2>
+              <%= render BadgeComponent.new(variant: status_variant, size: :md) do %><%= status_label %><% end %>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-title tabular-nums"><%= formatted_amount %></p>
+          <p class="mt-0.5 text-body-sm text-text-secondary"><%= interval_label %></p>
+        </div>
+
+        <%= render Billing::Admin::DetailListComponent.new do |list| %>
+          <% if platform %>
+            <% list.with_row(label: t("common.labels.customer")) do %>
+              <span class="tabular-nums"><%= subscription.customer_id %></span>
+              <% if customer_name %><span class="mt-0.5 block text-caption"><%= customer_name %></span><% end %>
+            <% end %>
+          <% end %>
+          <% list.with_row(label: t("comp_billing.subscription_summary.subscription_number"), mono: true) { "##{subscription.id}" } %>
+          <% list.with_row(label: t("comp_billing.subscription_summary.period")) do %>
+            <span class="tabular-nums"><%= period_label %></span>
+          <% end %>
+          <% list.with_row(label: t(date_key)) do %>
+            <span class="tabular-nums"><%= next_renewal_label %></span>
+          <% end %>
+          <% if entitlements %>
+            <% list.with_row(label: t("comp_billing.subscription_summary.entitlement")) { t("settings_billing.subscription.entitlement_sources.#{fact(entitlements, :source)}") } %>
+          <% end %>
+        <% end %>
+
+        <% if cancelling_scheduled? %>
+          <%= render AlertComponent.new(message: t("comp_billing.subscription_summary.cancel_alert"), type: :warning) %>
+        <% end %>
+      </div>
+    </div>
+
+    <% if pending_plan_change %>
+      <% target = pending_target %>
+      <section class="rounded-lg border border-accent-muted bg-accent-subtle/50 p-4" aria-labelledby="operator-plan-change-heading" role="status">
+        <div class="flex gap-3">
+          <span class="mt-0.5 text-accent-text"><%= render Billing::Admin::IconComponent.new(name: :clock) %></span>
+          <div class="min-w-0 flex-1 space-y-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <h3 id="operator-plan-change-heading" class="text-body font-semibold"><%= t("settings_billing.subscription.pending_change", plan: fact(target, :name)) %></h3>
+              <%= render BadgeComponent.new(variant: :primary, size: :sm) do %><%= t("comp_billing.plan_change.statuses.#{fact(pending_plan_change, :status)}") %><% end %>
+            </div>
+            <p class="text-body-sm text-text-primary tabular-nums"><%= billing_amount(fact(target, :amount_cents), fact(target, :currency)) %> <%= t("comp_billing.plan_form.intervals.#{fact(target, :interval)}") %></p>
+            <p class="text-body-sm text-text-secondary"><%= fact(pending_plan_change, :status).to_s == "awaiting_payment" ? t("settings_billing.subscription.effective_on_collection") : t("settings_billing.subscription.effective_on", date: billing_time(fact(pending_plan_change, :applied_at) || fact(pending_plan_change, :effective_at))) %></p>
+          </div>
+        </div>
+      </section>
+    <% end %>
+
+    <% if coupon_benefit %>
+      <%= render ::Admin::Settings::SectionComponent.new(title: t("comp_billing.subscription_summary.coupon")) do %>
+        <%= render Billing::Admin::CouponBenefitComponent.new(benefit: coupon_benefit, currency: subscription.currency) %>
+      <% end %>
+    <% end %>
+
+    <% if show_actions %>
+      <%= render ::Admin::Settings::SectionComponent.new(title: t("comp_billing.subscription_summary.manage")) do %>
+        <div class="divide-y divide-border-subtle">
+          <% if show_change_plan_button? %>
+            <div class="flex flex-col gap-3 py-1 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between">
+              <p class="min-w-0 text-text-primary"><%= t("comp_billing.subscription_summary.change_plan") %></p>
+              <%= link_to t("comp_billing.subscription_summary.change_plan"),
+                  helpers.admin_settings_billing_subscription_path(customer_id),
+                  class: "btn btn-secondary btn-sm shrink-0 w-full sm:w-auto" %>
+            </div>
+          <% end %>
+          <% if show_cancel_button? %>
+            <div class="flex flex-col gap-3 py-1 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between">
+              <p class="min-w-0 text-text-primary"><%= t("comp_billing.subscription_summary.cancel_subscription") %></p>
+              <%= button_to t("comp_billing.subscription_summary.cancel_subscription"),
+                  helpers.admin_settings_billing_cancellation_path(customer_id),
+                  method: :post,
+                  params: { cancellation: { immediately: false } },
+                  data: { turbo_confirm: t("comp_billing.subscription_summary.cancel_confirm") },
+                  class: "btn btn-danger btn-sm shrink-0 w-full sm:w-auto", form_class: "shrink-0" %>
+            </div>
+          <% end %>
+          <% if show_resume_button? %>
+            <div class="flex flex-col gap-3 py-1 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between">
+              <p class="min-w-0 text-text-primary"><%= t("comp_billing.subscription_summary.resume_subscription") %></p>
+              <%= button_to t("comp_billing.subscription_summary.resume_subscription"),
+                  helpers.admin_settings_billing_cancellation_path(customer_id),
+                  method: :delete,
+                  data: { turbo_confirm: t("comp_billing.subscription_summary.resume_confirm") },
+                  class: "btn btn-primary btn-sm shrink-0 w-full sm:w-auto", form_class: "shrink-0" %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if show_immediate_cancel? %>
+      <section class="card overflow-hidden border-danger/30">
+        <div class="border-b border-danger/20 px-4 py-3 sm:px-6">
+          <h3 class="section-header text-danger"><%= t("comp_billing.operator.danger_zone") %></h3>
+        </div>
+        <div class="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div class="min-w-0 max-w-2xl space-y-1">
+            <p class="font-medium text-text-primary"><%= t("comp_billing.operator.cancel_immediately") %></p>
+            <p class="text-body-sm text-text-secondary"><%= t("comp_billing.operator.cancel_consequence") %></p>
+          </div>
+          <%= button_to t("comp_billing.operator.cancel_immediately"),
+              helpers.admin_maintenance_platform_billing_subscription_cancellation_path(customer_id, subscription),
+              method: :post,
+              data: { turbo_confirm: t("comp_billing.operator.cancel_immediately_confirm") },
+              class: "btn btn-danger btn-sm shrink-0 w-full sm:w-auto", form_class: "shrink-0" %>
+        </div>
+      </section>
+    <% end %>
+
+  <% else %>
+    <div class="card overflow-hidden">
+      <%= render Billing::Admin::EmptyStateComponent.new(icon: :credit_card, title: t("comp_billing.subscription_summary.no_subscription")) do |empty| %>
+        <% if show_subscribe_button? %>
+          <% empty.with_action do %>
+            <%= link_to t("comp_billing.subscription_summary.choose_plan"),
+                helpers.admin_settings_billing_subscription_path(customer_id),
+                class: "btn btn-primary btn-sm" %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

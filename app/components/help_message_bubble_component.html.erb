@@ -1,0 +1,18 @@
+<article class="<%= article_classes %>" data-side="<%= mine? ? "mine" : "theirs" %>">
+  <div class="flex items-baseline gap-2 px-0.5 <%= mine? ? 'flex-row-reverse' : '' %>">
+    <p class="text-xs font-medium text-text-secondary"><%= author_label %></p>
+    <time class="text-caption tabular-nums" datetime="<%= message.created_at.iso8601 %>"><%= timestamp_label %></time>
+  </div>
+  <div class="<%= bubble_classes %>">
+    <p class="whitespace-pre-wrap break-words"><%= message.body %></p>
+    <% if message.images.attached? %>
+      <div class="mt-2.5 flex flex-wrap gap-2">
+        <% message.images.each do |image| %>
+          <%= link_to url_for(image), target: "_blank", rel: "noopener noreferrer", class: image_frame_classes do %>
+            <%= image_tag url_for(image), alt: t("maint_platform.support_tickets.show.images"), class: "max-h-40 object-contain" %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</article>

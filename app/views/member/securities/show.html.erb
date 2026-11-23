@@ -1,0 +1,123 @@
+<% content_for :title, t("member.securities.show.title") %>
+<% content_for :member_nav, "security" %>
+<% chrome = member_chrome %>
+
+<%= render Member::PageLayoutComponent.new do |c| %>
+  <% c.with_primary do %>
+    <%= render Member::PageHeaderComponent.new(
+          title:    t("member.common.security"),
+          subtitle: t("member.securities.show.header_subtitle")
+        ) %>
+
+    <div class="space-y-5">
+      <%= render Member::PageSectionComponent.new(title: t("member.securities.show.password"),
+            description: t("member.securities.show.password_desc_html")) do %>
+        <div class="flex justify-end">
+          <%= link_to t("member.securities.show.change_password"),
+                edit_user_registration_path,
+                class: chrome.primary_button_class %>
+        </div>
+      <% end %>
+
+      <%= render Member::PageSectionComponent.new(title: t("member.securities.show.two_factor")) do %>
+        <div class="flex flex-wrap items-start justify-between gap-6">
+          <div class="flex min-w-0 items-start gap-4">
+            <span class="<%= chrome.well_shape_class %> <%= @mfa_enabled ? chrome.success_well_class : chrome.warning_well_class %>">
+              <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                <% if @mfa_enabled %>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3zM9 12l2 2 4-4"/>
+                <% else %>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/>
+                <% end %>
+              </svg>
+            </span>
+            <p class="pt-2 <%= chrome.body_copy_class %>">
+              <% if @mfa_enabled %>
+                <%= t("member.securities.show.mfa_on_html") %>
+              <% else %>
+                <%= t("member.securities.show.mfa_off") %>
+              <% end %>
+            </p>
+          </div>
+
+          <% if @mfa_enabled %>
+            <details class="ml-auto w-full sm:w-auto">
+              <summary class="<%= chrome.danger_quiet_class %> cursor-pointer list-none"><%= t("member.securities.show.disable_mfa") %></summary>
+              <%= form_tag member_security_mfa_path(current_user.customer_id),
+                           method: :delete, class: "mt-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-end" do %>
+                <div class="min-w-0 flex-1 sm:max-w-xs">
+                  <label for="code" class="<%= chrome.form_label_class %>"><%= t("member.common.verification_code") %></label>
+                  <input type="text" name="code" id="code"
+                         autocomplete="one-time-code" inputmode="numeric"
+                         pattern="[0-9]*" maxlength="6"
+                         class="<%= chrome.input_class %> text-center font-mono tracking-widest">
+                </div>
+                <button type="submit" class="<%= chrome.danger_quiet_class %>"><%= t("member.securities.show.confirm_disable") %></button>
+              <% end %>
+            </details>
+          <% else %>
+            <%= link_to t("member.securities.show.setup_mfa"),
+                  setup_member_security_mfa_path(current_user.customer_id),
+                  data: { turbo_prefetch: false },
+                  class: chrome.primary_button_class %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <%= render Member::PageSectionComponent.new(title: t("member.securities.show.last_signin")) do %>
+        <% if @last_signin[:at] %>
+          <%= render Member::DetailGridComponent.new(
+                record: @last_signin,
+                rows: [
+                  { label: t("member.securities.show.field_when"),    value: ->(s) { s[:at] }, format: :datetime },
+                  { label: t("member.securities.show.field_from_ip"), value: ->(s) { s[:ip] || t("member.securities.show.unknown_ip") }, format: :mono }
+                ]
+              ) %>
+        <% else %>
+          <p class="<%= chrome.body_copy_class %>"><%= t("member.securities.show.no_history") %></p>
+        <% end %>
+      <% end %>
+
+      <%= render Member::PageSectionComponent.new(title: t("member.securities.show.trusted_devices"),
+            description: t("member.securities.show.trusted_devices_desc")) do %>
+        <% if @trusted_devices.empty? %>
+          <p class="<%= chrome.body_copy_class %>"><%= t("member.securities.show.trusted_devices_empty") %></p>
+        <% else %>
+          <ul class="<%= chrome.table_divide_class %>">
+            <% @trusted_devices.each do |device| %>
+              <li class="<%= chrome.list_row_class %> first:pt-0 last:pb-0">
+                <div class="min-w-0">
+                  <p class="truncate text-site-sm"><%= device.user_agent.presence || t("member.securities.show.device_unknown") %></p>
+                  <p class="text-site-xs <%= chrome.muted_class %>">
+                    <span class="font-mono"><%= device.ip.presence || t("common.labels.em_dash") %></span>
+                    <span class="mx-1">·</span>
+                    <%= t("member.securities.show.device_last_used", time: device.last_used_at.present? ? l(device.last_used_at, format: :long) : t("common.labels.em_dash")) %>
+                  </p>
+                </div>
+                <%= button_to t("member.securities.show.revoke_device"),
+                      member_trusted_device_path(current_user.customer_id, device),
+                      method: :delete,
+                      data: { turbo_confirm: t("member.securities.show.revoke_device_confirm") },
+                      class: "#{chrome.danger_link_class} shrink-0" %>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% c.with_aside do %>
+    <%= render Member::PageSectionComponent.new(title: t("member.securities.show.account_safety")) do %>
+      <ul class="list-disc space-y-2 pl-5 <%= chrome.body_copy_class %>">
+        <li><%= t("member.securities.show.safety_unique_pw") %></li>
+        <li><%= t("member.securities.show.safety_turn_on_html") %></li>
+        <li><%= t("member.securities.show.safety_sign_out") %></li>
+      </ul>
+    <% end %>
+
+    <%= render Member::PageSectionComponent.new(title: t("member.securities.show.need_profile")) do %>
+      <%= link_to t("member.securities.show.go_to_profile"), "/#{current_user.customer_id}/member/profile", class: chrome.text_link_class %>
+    <% end %>
+  <% end %>
+<% end %>

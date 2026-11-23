@@ -1,0 +1,36 @@
+<% if input_only %>
+  <div class="space-y-2">
+    <% options.each_with_index do |option, index| %>
+      <% option_id = index.zero? ? field_id : "#{field_id}_#{index}" %>
+      <label for="<%= option_id %>" class="flex min-h-11 min-w-0 items-center gap-3 rounded-md px-2 text-sm text-text-primary">
+        <%= tag.input(**input_attributes.merge(type: "radio", id: option_id, value: option["value"], checked: value.to_s == option["value"].to_s)) %>
+        <span class="min-w-0 break-words [overflow-wrap:anywhere]"><%= option["label"] %></span>
+      </label>
+    <% end %>
+  </div>
+<% else %>
+<div class="<%= wrapper_classes %>">
+  <label class="<%= label_classes %>">
+    <%= label %>
+    <%= required_indicator %>
+  </label>
+
+  <div class="<%= container_classes %>">
+    <% options.each do |option| %>
+      <label class="<%= radio_option_wrapper_classes %>">
+        <input type="radio"
+               name="<%= field_name %>"
+               value="<%= option['value'] %>"
+               <%= 'checked' if value == option['value'] %>
+               <%= 'required' if required && option == options.first %>
+               class="<%= radio_input_classes %>">
+        <span class="text-sm text-gray-700 group-hover:text-gray-900 transition-colors"><%= option['label'] %></span>
+      </label>
+    <% end %>
+  </div>
+
+  <% if html_attributes[:help_text].present? %>
+    <p class="mt-1 text-sm text-gray-500"><%= html_attributes[:help_text] %></p>
+  <% end %>
+</div>
+<% end %>

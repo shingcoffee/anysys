@@ -1,0 +1,126 @@
+<%= form_with model: coupon, url: form_url, method: form_method,
+              scope: :billing_coupon,
+              class: "space-y-6 max-w-4xl",
+              data: {
+                controller: "billing-coupon-form",
+                billing_coupon_form_discount_type_value: stimulus_discount_type,
+                billing_coupon_form_duration_value: stimulus_duration
+              } do |f| %>
+  <%= render Billing::Admin::FormErrorsComponent.new(errors: form_errors, scope: form_scope, label_prefix: "comp_billing.coupon_form.fields") %>
+
+  <%= render ::Admin::Settings::SectionComponent.new(
+        title: coupon.persisted? ? t("comp_billing.coupon_form.edit_title") : t("comp_billing.coupon_form.new_title"),
+        description: t("comp_billing.coupon_form.coupon_section_hint")) do %>
+    <div class="grid gap-4 md:grid-cols-2">
+      <div>
+        <%= f.label :code, t("comp_billing.coupon_form.fields.code"), class: "form-label" %>
+        <%= f.text_field :code, value: form_value(:code), **field_options(:code), placeholder: t("comp_billing.coupon_form.code_placeholder"), class: "mt-1 input-field font-mono",
+              disabled: coupon.persisted? %>
+        <%= field_error(:code) %>
+        <% if coupon.persisted? %>
+          <p class="mt-1.5 text-caption"><%= t("comp_billing.coupon_form.code_immutable") %></p>
+        <% end %>
+      </div>
+
+      <div>
+        <%= f.label :name, t("comp_billing.coupon_form.fields.name"), class: "form-label" %>
+        <%= f.text_field :name, value: form_value(:name), placeholder: t("comp_billing.coupon_form.name_placeholder"), class: "mt-1 input-field", **field_options(:name) %>
+        <%= field_error(:name) %>
+      </div>
+
+      <div class="md:col-span-2">
+        <label class="flex cursor-pointer items-start gap-3 rounded-lg border border-border-subtle p-4 transition-colors hover:bg-surface-hover has-[:checked]:border-accent-muted has-[:checked]:bg-accent-subtle">
+          <%= f.check_box :active, checked: ActiveModel::Type::Boolean.new.cast(form_value(:active)), class: "mt-0.5 h-4 w-4 rounded border-border-subtle text-accent focus:ring-accent", **field_options(:active) %>
+          <span class="min-w-0">
+            <span class="block text-body font-medium text-text-primary"><%= t("common.status.active") %></span>
+            <span class="mt-0.5 block text-caption"><%= t("comp_billing.coupon_form.active_hint") %></span>
+          </span>
+        </label>
+        <%= field_error(:active) %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= render ::Admin::Settings::SectionComponent.new(
+        title: t("comp_billing.coupon_form.discount_section"),
+        description: t("comp_billing.coupon_form.discount_section_hint")) do %>
+    <div class="grid gap-4 md:grid-cols-2">
+      <div>
+        <%= f.label :discount_type, t("comp_billing.coupon_form.discount_type_label"), class: "form-label" %>
+        <%= f.select :discount_type, discount_type_options, { selected: form_value(:discount_type) },
+              class: "mt-1 input-field",
+              data: { action: "change->billing-coupon-form#discountTypeChanged" },
+              **field_options(:discount_type) %>
+        <%= field_error(:discount_type) %>
+      </div>
+
+      <div data-billing-coupon-form-target="percentField">
+        <%= f.label :percent_off, t("comp_billing.coupon_form.percent_off_label"), class: "form-label" %>
+        <div class="relative mt-1">
+          <%= f.text_field :percent_off, value: form_value(:percent_off), inputmode: "numeric", class: "input-field pr-10 tabular-nums", **field_options(:percent_off) %>
+          <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-body-sm text-text-muted"><%= t("comp_billing.coupon_form.percent_suffix") %></span>
+        </div>
+        <%= field_error(:percent_off) %>
+      </div>
+
+      <div data-billing-coupon-form-target="fixedField">
+        <%= f.label :amount_off_cents, t("comp_billing.coupon_form.amount_off_label"), class: "form-label" %>
+        <%= f.text_field :amount_off_cents, value: form_value(:amount_off_cents), inputmode: "numeric", class: "mt-1 input-field tabular-nums", **field_options(:amount_off_cents) %>
+        <%= field_error(:amount_off_cents) %>
+        <p class="mt-1.5 text-caption"><%= t("comp_billing.coupon_form.amount_off_hint") %></p>
+      </div>
+
+      <div data-billing-coupon-form-target="fixedField">
+        <%= f.label :currency, t("comp_billing.coupon_form.fields.currency"), class: "form-label" %>
+        <%= f.text_field :currency, value: form_value(:currency), class: "mt-1 input-field font-mono", **field_options(:currency) %>
+        <%= field_error(:currency) %>
+        <p class="mt-1.5 text-caption"><%= t("comp_billing.coupon_form.currency_hint") %></p>
+      </div>
+    </div>
+  <% end %>
+
+  <%= render ::Admin::Settings::SectionComponent.new(
+        title: t("comp_billing.coupon_form.duration_section"),
+        description: t("comp_billing.coupon_form.duration_section_hint")) do %>
+    <div class="grid gap-4 md:grid-cols-2">
+      <div>
+        <%= f.label :duration, t("comp_billing.coupon_form.fields.duration"), class: "form-label" %>
+        <%= f.select :duration, duration_options, { selected: form_value(:duration) },
+              class: "mt-1 input-field",
+              data: { action: "change->billing-coupon-form#durationChanged" },
+              **field_options(:duration) %>
+        <%= field_error(:duration) %>
+        <p class="mt-1.5 text-caption"><%= t("comp_billing.coupon_form.invoice_duration_hint") %></p>
+      </div>
+
+      <div data-billing-coupon-form-target="cyclesField">
+        <%= f.label :duration_in_cycles, t("comp_billing.coupon_form.duration_in_cycles_label"), class: "form-label" %>
+        <%= f.text_field :duration_in_cycles, value: form_value(:duration_in_cycles), inputmode: "numeric", class: "mt-1 input-field tabular-nums", **field_options(:duration_in_cycles) %>
+        <%= field_error(:duration_in_cycles) %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= render ::Admin::Settings::SectionComponent.new(
+        title: t("comp_billing.coupon_form.limits_section"),
+        description: t("comp_billing.coupon_form.limits_section_hint")) do |section| %>
+    <div class="grid gap-4 md:grid-cols-2">
+      <div>
+        <%= f.label :max_redemptions, t("comp_billing.coupon_form.max_redemptions_label"), class: "form-label" %>
+        <%= f.text_field :max_redemptions, value: form_value(:max_redemptions), inputmode: "numeric", placeholder: t("comp_billing.coupon_form.max_redemptions_placeholder"), class: "mt-1 input-field tabular-nums", **field_options(:max_redemptions) %>
+        <%= field_error(:max_redemptions) %>
+      </div>
+
+      <div>
+        <%= f.label :redeem_by, t("comp_billing.coupon_form.expires_at_label"), class: "form-label" %>
+        <%= f.text_field :redeem_by, value: form_value(:redeem_by), class: "mt-1 input-field", **field_options(:redeem_by) %>
+        <%= field_error(:redeem_by) %>
+        <p class="mt-1.5 text-caption"><%= t("comp_billing.coupon_form.time_zone_hint", zone: Time.zone.name) %></p>
+      </div>
+    </div>
+    <% section.with_footer do %>
+      <%= link_to t("common.actions.cancel"), index_path, class: "btn btn-secondary w-full sm:w-auto" %>
+      <%= f.submit(coupon.persisted? ? t("comp_billing.coupon_form.update_coupon") : t("comp_billing.coupon_form.create_coupon"), class: "btn btn-primary w-full sm:w-auto") %>
+    <% end %>
+  <% end %>
+<% end %>

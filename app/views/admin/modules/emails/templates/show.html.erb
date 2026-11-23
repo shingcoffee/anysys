@@ -1,0 +1,101 @@
+<%# app/views/admin/modules/emails/templates/show.html.erb %>
+<%
+  actions = [
+    { label: t("common.actions.edit"),
+      path: edit_admin_modules_emails_template_path(current_customer_id, @template),
+      variant: :primary, icon: :edit },
+    { label: t("admin_modules.emails.templates.actions.preview"),
+      path: preview_admin_modules_emails_template_path(current_customer_id, @template),
+      variant: :secondary },
+    { label: t("common.actions.duplicate"),
+      path: duplicate_admin_modules_emails_template_path(current_customer_id, @template),
+      variant: :secondary,
+      data: { turbo_method: :post } },
+    *template_status_actions,
+    { label: t("common.actions.delete"),
+      path: admin_modules_emails_template_path(current_customer_id, @template),
+      variant: :danger, icon: :trash,
+      data: { turbo_method: :delete, turbo_confirm: t("admin_modules.emails.templates.edit.delete_confirm") } }
+  ]
+%>
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "email",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.email.entries.content"), path: admin_modules_emails_templates_path(current_customer_id) },
+        { label: t("feature_modules.email.tabs.templates"), path: admin_modules_emails_templates_path(current_customer_id) },
+        { label: @template.name }
+      ],
+      title: @template.name,
+      description: @preview[:subject],
+      actions: actions
+    ) do %>
+  <div class="flex flex-col gap-6">
+    <div class="flex items-center gap-2 flex-wrap">
+      <%= render BadgeComponent.new(variant: @template.active? ? :success : :default, size: :sm) do %>
+        <%= t("common.status.#{@template.status}") %>
+      <% end %>
+      <%= render BadgeComponent.new(variant: @template.editor_type == "code" ? :purple : :primary, size: :sm) do %>
+        <%= t("admin_modules.emails.templates.form.editor_types.#{@template.editor_type}") %>
+      <% end %>
+    </div>
+
+    <%# —— Details —— %>
+    <dl class="card divide-y divide-border-subtle">
+      <div class="px-4 py-3 grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-4">
+        <dt class="form-label"><%= t("common.labels.subject") %></dt>
+        <dd class="text-body text-text-primary sm:col-span-2"><%= @preview[:subject] %></dd>
+      </div>
+      <div class="px-4 py-3 grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-4">
+        <dt class="form-label"><%= t("admin_modules.emails.templates.show.versions") %></dt>
+        <dd class="text-body text-text-primary sm:col-span-2 tabular-nums">
+          <%= link_to @version_count,
+                admin_modules_emails_template_versions_path(current_customer_id, @template),
+                class: "link underline underline-offset-2" %>
+        </dd>
+      </div>
+      <div class="px-4 py-3 grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-4">
+        <dt class="form-label"><%= t("common.labels.updated_at") %></dt>
+        <dd class="text-body text-text-primary sm:col-span-2 tabular-nums">
+          <time datetime="<%= @template.updated_at.iso8601 %>"><%= @template.updated_at.to_fs(:long) %></time>
+        </dd>
+      </div>
+      <div class="px-4 py-3 grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-4">
+        <dt class="form-label"><%= t("common.labels.created_at") %></dt>
+        <dd class="text-body text-text-primary sm:col-span-2 tabular-nums">
+          <time datetime="<%= @template.created_at.iso8601 %>"><%= @template.created_at.to_fs(:long) %></time>
+        </dd>
+      </div>
+    </dl>
+
+    <%# —— Rendered body —— sandboxed so authored email HTML cannot restyle
+        or script the admin page around it. %>
+    <section class="card overflow-hidden">
+      <header class="px-4 py-3 border-b border-border-subtle">
+        <h2 class="section-header text-base mb-0"><%= t("admin_modules.emails.templates.show.body_label") %></h2>
+        <p class="mt-1 text-caption text-sm"><%= t("admin_modules.emails.templates.show.body_hint") %></p>
+      </header>
+      <div class="p-4 bg-canvas-elevated">
+        <%= render Emails::PreviewFrameComponent.new(
+              srcdoc: @preview[:body_srcdoc],
+              title: t("admin_modules.emails.templates.show.body_label"),
+              empty_message: t("admin_modules.emails.templates.show.body_empty")
+            ) %>
+      </div>
+    </section>
+
+    <%# —— Plain-text fallback —— %>
+    <section class="card overflow-hidden">
+      <header class="px-4 py-3 border-b border-border-subtle">
+        <h2 class="section-header text-base mb-0"><%= t("admin_modules.emails.templates.show.plain_text_label") %></h2>
+      </header>
+      <div class="p-4">
+        <% if @preview[:body_text].present? %>
+          <pre class="text-mono text-xs whitespace-pre-wrap text-text-secondary"><%= @preview[:body_text] %></pre>
+        <% else %>
+          <p class="text-caption text-sm"><%= t("admin_modules.emails.templates.show.plain_text_empty") %></p>
+        <% end %>
+      </div>
+    </section>
+  </div>
+<% end %>

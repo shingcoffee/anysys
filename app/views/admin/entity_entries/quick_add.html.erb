@@ -1,0 +1,13 @@
+<%# The entity's create page inside a "+ Add New" dialog, or a link row's page inside a record page's dialog; its reference dropdowns open the next level. %>
+<turbo-frame id="<%= Admin::Entities::QuickAddDialogComponent.frame_id(quick_add_depth) %>">
+  <% if @content.present? %>
+    <%= render AlertComponent.new(message: flash[:alert], type: :error) %>
+    <%= render inline: @content %>
+    <%= render Admin::Entities::QuickAddDialogComponent.new(depth: page_quick_add_depth) %>
+  <% else %>
+    <%= render EmptyStateComponent.new(
+      title: t("admin_misc.entities.entry_page.missing_title"),
+      description: t("admin_misc.entities.entry_page.missing_description", name: @entity.display_label)
+    ) %>
+  <% end %>
+</turbo-frame>

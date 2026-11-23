@@ -1,0 +1,53 @@
+<div class="flex h-full min-h-0 w-full flex-col">
+  <div class="flex h-12 shrink-0 items-center justify-center border-b border-border-subtle">
+    <button type="button"
+            data-sidebar-collapsible-toggle
+            data-sidebar-rail-label="<%= t("chrome.sidebar.expand") %>"
+            data-sidebar-rail-shortcut="<%= t("chrome.sidebar.shortcut") %>"
+            data-action="click->sidebar-collapsible#expand"
+            aria-controls="app-sidebar"
+            aria-expanded="false"
+            aria-keyshortcuts="Meta+B Control+B"
+            aria-label="<%= t("chrome.sidebar.expand") %>"
+            class="icon-button focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+      <%= render SidebarToggleIconComponent.new(expanded: false) %>
+    </button>
+  </div>
+
+  <% if search? %>
+    <div class="flex shrink-0 justify-center border-b border-border-subtle py-2">
+      <button type="button"
+              data-action="click->sidebar-collapsible#expandSearch"
+              data-sidebar-rail-label="<%= search_label %>"
+              aria-label="<%= search_label %>"
+              class="<%= icon_classes(false) %>">
+        <svg class="size-[18px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </button>
+    </div>
+  <% end %>
+
+  <nav class="flex min-h-0 flex-1 flex-col items-center gap-1 overflow-y-auto px-1.5 py-2 scrollbar-none" aria-label="<%= section_label %>">
+    <% entries.each do |entry| %>
+      <% if entry.kind == :separator %>
+        <div class="my-1 h-px w-6 shrink-0 bg-border-subtle"></div>
+      <% elsif entry.kind == :group %>
+        <button type="button"
+                data-action="click->sidebar-collapsible#expandGroup"
+                data-sidebar-rail-label="<%= entry.node.label %>"
+                aria-label="<%= entry.node.label %>"
+                class="<%= icon_classes(entry.active) %>">
+          <%= glyph_for(entry.node) %>
+        </button>
+      <% else %>
+        <%= link_to entry.node.path,
+              data: { sidebar_rail_label: entry.node.label },
+              aria: { label: entry.node.label, current: (entry.active ? "page" : nil) },
+              class: icon_classes(entry.active) do %>
+          <%= glyph_for(entry.node) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </nav>
+</div>

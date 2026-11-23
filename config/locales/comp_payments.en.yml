@@ -1,0 +1,313 @@
+en:
+  activemodel:
+    errors:
+      models:
+        "payments/contracts/vault_card":
+          attributes:
+            provider:
+              tokenized_cards_unsupported: does not support saved cards
+  comp_payments:
+    gateways:
+      stripe:
+        name: "Stripe"
+      alipay:
+        name: "Alipay"
+    flash:
+      no_active_request: "No active payment request."
+      refunded: "Refund submitted."
+      refund_processing: "The refund is still processing."
+      refund_failed: "The refund could not be processed. Please try again or contact support."
+      refund_not_captured: "This payment has not been captured and cannot be refunded."
+      refund_amount_not_positive: "The refund amount must be greater than zero."
+      refund_exceeds_remainder: "The refund amount %{amount} exceeds the refundable balance of %{remainder}."
+      refund_billing_collection: "Invoice collections are refunded from Billing, not from Payments."
+      subscription_cancel_unavailable: "The payment provider is not configured, so this subscription could not be cancelled."
+      webhook_redriven: "Webhook event re-queued for processing."
+      webhook_redrive_not_retryable: "Only received or failed webhook events can be redriven."
+      already_settled: "This order has already been paid."
+      already_expired: "This order has expired."
+      provider_switch_blocked: "Another payment attempt for this order is still open."
+      charge_failed: "The payment could not be started. Please try again or choose another method."
+      missing_ref: "missing ref"
+      order_not_found: "order not found"
+      no_account_row: "No account row found for %{provider}/%{mode}."
+      gateway_not_eligible: "provider '%{provider}' is not an eligible (enabled + configured) gateway"
+    shared:
+      order_prefix: "Order #"
+      waiting: "Waiting for payment…"
+      default_badge: "Default"
+      stripe_unavailable: "We couldn't load the secure payment form. Please refresh the page and try again."
+
+    checkout:
+      no_methods: "No payment methods are available for this store."
+
+    handoff_entry:
+      title: "Add a note"
+      subtitle: "Add an optional note to your payment before you continue."
+      continue: "Continue to payment"
+      fields:
+        body:
+          label: "Note (optional)"
+          placeholder: "Add a note for this payment"
+
+    h5_redirect:
+      redirecting: "Redirecting to your payment app…"
+      tap_to_continue: "Tap to continue"
+
+    jsapi:
+      completing: "Completing payment…"
+
+    qr:
+      title: "Scan to pay"
+      instruction: "Use %{provider} to scan the code below"
+
+    result:
+      success_title: "Payment successful"
+      pending_title: "Payment pending"
+      failure_title: "Payment not completed"
+      status_prefix: "Status: "
+      return: "Return"
+      statuses:
+        pending: "Pending"
+        succeeded: "Succeeded"
+        failed: "Failed"
+        closed: "Closed"
+        created: "Created"
+
+    paypal:
+      sdk_error: "Could not load the PayPal SDK. Please refresh and try again."
+      cancelled: "Payment cancelled. You can try again."
+      error: "Something went wrong with PayPal. Please try again."
+
+    stripe:
+      unexpected_error: "An unexpected error occurred. Please try again."
+      setup_intent_failed: "Failed to create SetupIntent ({status})"
+      missing_client_secret: "Server did not return a client_secret"
+      missing_payment_method: "SetupIntent did not return a payment_method id"
+      server_error: "Server error {status}"
+      processing: "Processing…"
+
+    widget_checkout:
+      save_card: "Save this card for future payments"
+      pay: "Pay"
+      pay_aria: "Pay %{amount} %{currency}"
+      secured_by: "Secured by %{vendor}. Your payment details are processed securely."
+
+    credential_fields:
+      keep_hint: "Leave blank to keep the existing encrypted value."
+
+    gateway_card:
+      mode_label: "Mode:"
+      not_configured: "Not yet configured"
+      modes:
+        sandbox: "Sandbox"
+        production: "Production"
+      configure: "Configure →"
+      configure_aria: "Configure %{name}"
+      set_default: "Set as default"
+      flows:
+        qr: "QR Code"
+        h5: "H5 / Mobile Web"
+        jsapi: "In-App (JSAPI)"
+        card: "Card"
+      capabilities:
+        one_time: "One-time"
+        recurring: "Recurring"
+        tokenized_cards: "Saved cards"
+        refunds: "Refunds"
+        reconciliation: "Reconciliation"
+        webhooks: "Webhooks"
+
+    gateway_config:
+      credentials_heading: "Credentials"
+      merchant_id_placeholder: "Your merchant identifier"
+      notify_url_label: "Notify URL override"
+      notify_url_placeholder: "Leave blank to use auto-generated webhook URL"
+      default_currency_label: "Default currency"
+      test_connection: "Test connection"
+      save_changes: "Save changes"
+
+    gateway_gallery:
+      empty_title: "No payment gateways available"
+      empty_hint: "Contact the platform owner to enable gateways."
+
+    reconciliation:
+      title: "Reconciliation"
+      empty: "No bills downloaded yet"
+      download: "Download"
+      headers:
+        date: "Date"
+        provider: "Provider"
+        bill_type: "Bill type"
+        rows: "Rows"
+        amount: "Amount"
+        discrepancies: "Discrepancies"
+      statuses:
+        downloading: "Downloading"
+        parsed: "Parsed"
+        reconciled: "Reconciled"
+        discrepant: "Discrepant"
+        failed: "Failed"
+      bill_types:
+        all: "All"
+        success: "Success"
+        refund: "Refund"
+
+    refund:
+      title_prefix: "Refund Payment #"
+      order: "Order"
+      provider: "Provider"
+      original_amount: "Original amount"
+      amount_label: "Amount"
+      maximum_prefix: "Maximum: "
+      reason: "Reason"
+      submit: "Issue Refund"
+
+    status_badge:
+      aria_status: "Gateway status: %{label}"
+      states:
+        active: "Active"
+        needs_setup: "Needs setup"
+        disabled: "Disabled"
+
+    webhook_events:
+      title: "Webhook Events"
+      table_title: "Recent events"
+      table_subtitle: "Inbound notifications from payment gateways."
+      empty: "No webhook events recorded yet"
+      empty_description: "Inbound gateway notifications will appear here."
+      redrive: "Redrive"
+      merchant_unknown: "—"
+      headers:
+        provider: "Provider"
+        event_type: "Event type"
+        merchant: "Merchant"
+        created_at: "Received"
+        processed_at: "Processed"
+      statuses:
+        received: "Received"
+        processed: "Processed"
+        failed: "Failed"
+
+    dispute_table:
+      title: "Disputes & Chargebacks"
+      empty: "No disputes"
+      headers:
+        provider: "Provider"
+        dispute_id: "Dispute ID"
+        reason: "Reason"
+        amount: "Amount"
+        opened_at: "Opened"
+      statuses:
+        open: "Open"
+        under_review: "Under review"
+        won: "Won"
+        lost: "Lost (charged back)"
+        closed: "Closed"
+      reasons:
+        bank_cannot_process: "Bank cannot process"
+        check_returned: "Check returned"
+        credit_not_processed: "Credit not processed"
+        customer_initiated: "Customer initiated"
+        debit_not_authorized: "Debit not authorized"
+        duplicate: "Duplicate"
+        fraudulent: "Fraudulent"
+        general: "General"
+        incorrect_account_details: "Incorrect account details"
+        insufficient_funds: "Insufficient funds"
+        product_not_received: "Product not received"
+        product_unacceptable: "Product unacceptable"
+        subscription_canceled: "Subscription canceled"
+        unrecognized: "Unrecognized"
+        MERCHANDISE_OR_SERVICE_NOT_RECEIVED: "Merchandise or service not received"
+        MERCHANDISE_OR_SERVICE_NOT_AS_DESCRIBED: "Merchandise or service not as described"
+        UNAUTHORISED: "Unauthorised"
+        CREDIT_NOT_PROCESSED: "Credit not processed"
+        DUPLICATE_TRANSACTION: "Duplicate transaction"
+        INCORRECT_AMOUNT: "Incorrect amount"
+        PAYMENT_BY_OTHER_MEANS: "Payment by other means"
+        CANCELED_RECURRING_BILLING: "Canceled recurring billing"
+        PROBLEM_WITH_REMITTANCE: "Problem with remittance"
+        OTHER: "Other"
+
+    test_connection:
+      testing: "Testing connection…"
+      verified: "Connection verified"
+      last_verified_prefix: "Last verified: "
+      failed: "Connection failed"
+      default_error_message: "Connection test failed."
+      network_error_message: "Request failed — check your network connection."
+      ping_assumed_ok: "Connection assumed OK (no ping endpoint available)."
+      ping_success: "Connected to %{label} successfully."
+      ping_api_error: "%{label} API error."
+      ping_network_error: "Network error."
+      unknown_gateway: "Unknown payment gateway."
+
+    transaction_table:
+      title: "Transactions"
+      empty: "No transactions yet"
+      refund: "Refund"
+      disputed: "Disputed"
+      chargeback: "Chargeback"
+      headers:
+        order: "Order"
+        provider: "Provider"
+        amount: "Amount"
+      statuses:
+        created: "Created"
+        pending: "Pending"
+        succeeded: "Succeeded"
+        failed: "Failed"
+        closed: "Closed"
+
+    member:
+      payment_methods:
+        saved_cards_aria: "Saved cards"
+        default_aria: "Default payment method"
+        expires_prefix: "Expires "
+        remove_confirm: "Remove this card?"
+        no_cards: "No saved cards"
+        no_cards_hint: "Add a card below to enable faster checkout and recurring payments."
+        add_card_aria: "Add a new card"
+        add_card_title: "Add card"
+        save_card: "Save card"
+        not_configured: "Card payments are not configured for this account. Please contact support."
+      subscriptions:
+        table_aria: "Your subscriptions"
+        status_aria: "Status: %{status}"
+        cancel_confirm: "Cancel this subscription? This cannot be undone."
+        complete_verification: "Complete verification"
+        verify_error: "We couldn't verify your payment. Please try again."
+        empty_title: "No subscriptions"
+        empty_hint: "You have no active recurring plans. Subscriptions you enroll in will appear here."
+        headers:
+          plan: "Plan"
+          amount: "Amount"
+          cycle: "Cycle"
+          card: "Card"
+          next_charge: "Next charge"
+        cycles:
+          daily: "Daily"
+          weekly: "Weekly"
+          monthly: "Monthly"
+          yearly: "Yearly"
+        statuses:
+          pending_sign: "Pending sign"
+          active: "Active"
+          paused: "Paused"
+          cancelled: "Cancelled"
+          expired: "Expired"
+
+    payment_method:
+      brands:
+        amex: "Amex"
+        cartes_bancaires: "Cartes Bancaires"
+        diners: "Diners"
+        discover: "Discover"
+        eftpos_au: "Eftpos Au"
+        jcb: "Jcb"
+        link: "Link"
+        mastercard: "Mastercard"
+        unionpay: "Unionpay"
+        unknown: "Unknown"
+        visa: "Visa"

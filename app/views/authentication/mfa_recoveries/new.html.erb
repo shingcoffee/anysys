@@ -1,0 +1,28 @@
+<%= render Member::AuthShellComponent.new(
+      customer: current_customer,
+      title:    t("auth.mfa_recoveries.new.shell_title"),
+      subtitle: t("auth.mfa_recoveries.new.shell_subtitle")
+    ) do %>
+
+  <div class="mb-8">
+    <h2 class="text-subtitle mb-1"><%= t("auth.mfa_recoveries.new.heading") %></h2>
+    <p class="text-body-sm"><%= t("auth.mfa_recoveries.new.subheading") %></p>
+  </div>
+
+  <%= form_tag mfa_recovery_path(current_customer_id), method: :post, class: "space-y-5" do %>
+    <div>
+      <label for="email" class="form-label form-label-required"><%= t("auth.common.email") %></label>
+      <input type="email" name="email" id="email" autofocus autocomplete="email"
+             placeholder="<%= t("auth.sessions.email_placeholder") %>"
+             class="input-member">
+    </div>
+
+    <button type="submit" class="btn-member w-full justify-center"><%= t("auth.common.send_reset_link") %></button>
+  <% end %>
+
+  <p class="mt-6 text-center text-sm text-text-tertiary">
+    <%= t("auth.common.remembered_it") %>
+    <%= link_to t("auth.common.back_to_sign_in"), new_user_session_path,
+          class: "font-medium text-member-accent-text hover:underline" %>
+  </p>
+<% end %>

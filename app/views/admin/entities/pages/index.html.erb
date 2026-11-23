@@ -1,0 +1,22 @@
+<%= render Admin::Entities::BrowseComponent.new(
+      entity: @entity, customer_id: current_customer.id, tab: :pages,
+      entry_count: @entry_count, form_count: @form_count
+    ) do %>
+  <%= render Admin::Pages::OpsTableComponent.new(
+        rows:        @rows,
+        pagination:  @pagination,
+        params:      page_list_params,
+        customer_id: current_customer.id,
+        base_path:   admin_entity_pages_path(current_customer.id, @entity),
+        show_entity: false,
+        search:      { param: :q, placeholder: t("admin_misc.domains.pages.search_placeholder") },
+        filters:     @filters,
+        statuses:    @form_statuses,
+        empty_state: {
+          title:       t("admin_misc.entities.pages.empty_title"),
+          description: t("admin_misc.entities.pages.empty_description", name: @entity.display_label)
+        }
+      ) %>
+
+  <turbo-frame id="<%= Admin::Pages::PublishingPanelComponent::FRAME_ID %>"></turbo-frame>
+<% end %>

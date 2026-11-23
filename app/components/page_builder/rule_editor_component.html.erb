@@ -1,0 +1,262 @@
+<%# app/components/page_builder/rule_editor_component.html.erb %>
+<%# Rule Editor — rendered into <template data-page-builder-target="ruleEditorTemplate"> and cloned by rules_manager.js %>
+<%# The modal chrome (header/close) is provided by ConfigModalComponent; this renders only the editor body content. %>
+<div data-controller="rule-builder"
+     data-rule-builder-fields-value="<%= fields_json %>"
+     data-rule-builder-action-fields-value="<%= action_fields_json %>"
+     data-rule-builder-pages-value="<%= pages_json %>"
+     data-rule-builder-select-placeholder-value="<%= t("comp_page_builder.condition_row.select_placeholder") %>"
+     data-rule-builder-select-page-option-value="<%= t("comp_page_builder.rule_editor.select_page") %>"
+     data-rule-builder-select-field-option-value="<%= t("comp_page_builder.rule_editor.select_field") %>"
+     data-rule-builder-sample-placeholder-value="<%= t("comp_page_builder.rule_editor.sample_value_placeholder") %>"
+     data-rule-builder-min-placeholder-value="<%= t("comp_page_builder.condition_row.min") %>"
+     data-rule-builder-max-placeholder-value="<%= t("comp_page_builder.condition_row.max") %>"
+     data-rule-builder-value-placeholder-value="<%= t("comp_page_builder.condition_row.value") %>"
+     data-rule-builder-all-and-label-value="<%= t("comp_page_builder.rule_editor.all_and") %>"
+     data-rule-builder-any-or-label-value="<%= t("comp_page_builder.rule_editor.any_or") %>"
+     data-rule-builder-add-condition-label-value="<%= t("comp_page_builder.rule_editor.add_condition") %>"
+     data-rule-builder-empty-group-hint-value="<%= t("comp_page_builder.rule_editor.empty_group_html") %>"
+     data-rule-builder-test-fires-label-value="<%= t("comp_page_builder.rule_editor.test_fires") %>"
+     data-rule-builder-test-skipped-label-value="<%= t("comp_page_builder.rule_editor.test_skipped") %>"
+     data-rule-builder-operator-labels-value="<%= html_escape(t("comp_page_builder.operators").to_json) %>"
+     data-rule-builder-action-type-labels-value="<%= html_escape(t("comp_page_builder.rule_editor.action_types").to_json) %>"
+     data-rule-id="<%= rule_id %>">
+
+  <%# Back bar + live summary %>
+  <div class="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
+    <button type="button"
+            class="p-1.5 -ml-1 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+            data-action="click->page-builder#closeRuleEditor"
+            aria-label="<%= t("comp_page_builder.rule_editor.back_aria") %>">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+    <div class="flex-1 min-w-0" data-rule-builder-target="liveSummary">
+      <span class="text-xs text-gray-400 italic truncate block"><%= t("comp_page_builder.rule_editor.summary_placeholder") %></span>
+    </div>
+  </div>
+
+  <%# Rule Name %>
+  <div class="px-4 py-4 border-b border-gray-100">
+    <label class="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5" for="rule_name"><%= t("comp_page_builder.rule_editor.rule_name") %></label>
+    <input type="text"
+           id="rule_name"
+           name="rule_name"
+           class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400 placeholder-gray-400"
+           placeholder="<%= t("comp_page_builder.rule_editor.rule_name_placeholder") %>"
+           value="<%= rule_name %>"
+           data-rule-builder-target="ruleName">
+  </div>
+
+  <%# WHEN Section %>
+  <div class="px-4 py-4 border-b border-gray-100">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide"><%= t("comp_page_builder.rule_editor.when") %></span>
+      <%# Top-level AND/OR logic — styled select kept for JS compatibility %>
+      <select data-rule-builder-target="conditionsLogic"
+              class="appearance-none px-3 py-1 text-xs font-medium border border-gray-200 rounded-lg bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-700 cursor-pointer">
+        <option value="all" <%= "selected" if conditions["logic"] == "all" %>><%= t("comp_page_builder.rule_editor.all_and") %></option>
+        <option value="any" <%= "selected" if conditions["logic"] == "any" %>><%= t("comp_page_builder.rule_editor.any_or") %></option>
+      </select>
+    </div>
+
+    <%# Condition groups %>
+    <div data-rule-builder-target="conditionGroups" class="space-y-3">
+      <% condition_groups.each_with_index do |group, group_index| %>
+        <%# Inter-group OR badge %>
+        <% if group_index > 0 %>
+          <div class="relative flex items-center my-2 px-4">
+            <div class="flex-1 border-t border-gray-200"></div>
+            <span class="mx-2 flex-shrink-0 px-2.5 py-0.5 text-xs font-semibold rounded-full
+                         <%= conditions["logic"] == "any" ? "bg-amber-100 text-amber-700" : "bg-indigo-100 text-indigo-700" %>">
+              <%= conditions["logic"] == "any" ? t("comp_page_builder.rule_editor.or_badge") : t("comp_page_builder.rule_editor.and_badge") %>
+            </span>
+            <div class="flex-1 border-t border-gray-200"></div>
+          </div>
+        <% end %>
+
+        <div class="relative border border-gray-200 rounded-lg bg-gray-50/60"
+             data-condition-group="<%= group_index %>">
+
+          <%# Group header %>
+          <div class="px-3 py-2 flex items-center justify-between">
+            <span class="text-xs font-medium text-gray-400">
+              <%= condition_groups.length == 1 ? t("comp_page_builder.rule_editor.conditions_label") : t("comp_page_builder.rule_editor.group", number: group_index + 1) %>
+            </span>
+            <div class="flex items-center gap-2">
+              <%# Group AND/OR logic — styled select kept for JS compatibility %>
+              <select class="appearance-none px-2 py-0.5 text-[10px] font-medium border border-gray-200 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-700 cursor-pointer h-6"
+                      data-group-logic="<%= group_index %>">
+                <option value="all" <%= "selected" if group["logic"] == "all" %>><%= t("comp_page_builder.rule_editor.all_and") %></option>
+                <option value="any" <%= "selected" if group["logic"] == "any" %>><%= t("comp_page_builder.rule_editor.any_or") %></option>
+              </select>
+              <button type="button"
+                      class="p-1 text-gray-400 hover:text-red-500 rounded transition-colors"
+                      data-action="click->rule-builder#removeConditionGroup"
+                      data-group-index="<%= group_index %>"
+                      aria-label="<%= t("comp_page_builder.rule_editor.remove_group_aria") %>">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <%# Condition items with AND/OR connector badges between rows %>
+          <div class="px-3 pb-3 space-y-0" data-condition-items="<%= group_index %>">
+            <% (group["items"] || []).each_with_index do |item, item_index| %>
+              <%# Intra-group AND/OR badge between rows %>
+              <% if item_index > 0 %>
+                <div class="relative flex items-center my-1 mx-3">
+                  <div class="flex-1 border-t border-gray-200"></div>
+                  <span class="mx-2 flex-shrink-0 px-2 py-0.5 text-[10px] font-semibold rounded-full
+                               <%= group["logic"] == "any" ? "bg-amber-100 text-amber-600" : "bg-indigo-100 text-indigo-600" %>">
+                    <%= group["logic"] == "any" ? t("comp_page_builder.rule_editor.or_badge") : t("comp_page_builder.rule_editor.and_badge") %>
+                  </span>
+                  <div class="flex-1 border-t border-gray-200"></div>
+                </div>
+              <% end %>
+              <%= render PageBuilder::ConditionRowComponent.new(
+                item: item,
+                fields: fields,
+                group_index: group_index,
+                item_index: item_index
+              ) %>
+            <% end %>
+            <% if (group["items"] || []).empty? %>
+              <div class="text-xs text-gray-400 text-center py-1"><%= t("comp_page_builder.rule_editor.empty_group_html") %></div>
+            <% end %>
+          </div>
+
+          <%# Add condition button %>
+          <button type="button"
+                  class="mx-3 mb-2 w-[calc(100%-1.5rem)] px-2 py-1.5 text-xs text-gray-500 border border-dashed border-gray-300 rounded-md hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50/60 transition-colors"
+                  data-action="click->rule-builder#addConditionItem"
+                  data-group-index="<%= group_index %>">
+            <%= t("comp_page_builder.rule_editor.add_condition") %>
+          </button>
+        </div>
+      <% end %>
+
+      <% if condition_groups.empty? %>
+        <div class="text-sm text-gray-500 text-center py-2"><%= t("comp_page_builder.rule_editor.no_conditions") %></div>
+      <% end %>
+    </div>
+
+    <%# Add Condition Group button %>
+    <button type="button"
+            class="mt-3 w-full px-3 py-2 text-xs text-gray-500 border border-dashed border-gray-300 rounded-lg hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50/60 transition-colors"
+            data-action="click->rule-builder#addConditionGroup">
+      <%= t("comp_page_builder.rule_editor.add_condition_group") %>
+    </button>
+  </div>
+
+  <%# THEN Section %>
+  <div class="px-4 py-4 border-b border-gray-100">
+    <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"><%= t("comp_page_builder.rule_editor.then") %></span>
+    <div data-rule-builder-target="ruleActions" class="space-y-2">
+      <% actions.each_with_index do |action, action_index| %>
+        <div class="flex flex-wrap items-center gap-x-1.5 gap-y-2 p-2.5 bg-gray-50 rounded-lg border border-gray-100"
+             data-action-item="<%= action_index %>">
+          <select class="appearance-none px-2 py-1 text-xs bg-white border border-gray-200 rounded-md text-gray-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+                  data-action-type="<%= action_index %>"
+                  data-action="change->rule-builder#onActionTypeChange">
+            <% action_types.each do |at| %>
+              <option value="<%= at[:value] %>"
+                      data-target="<%= at[:target] %>"
+                      data-has-value="<%= at[:has_value] || false %>"
+                      <%= "selected" if action["type"] == at[:value] %>>
+                <%= at[:label] %>
+              </option>
+            <% end %>
+          </select>
+          <select class="appearance-none flex-1 min-w-[120px] px-2 py-1 text-xs bg-indigo-50 border border-indigo-200 rounded-md text-indigo-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+                  data-action-target="<%= action_index %>">
+            <% target_is_page = %w[show_page hide_page skip_to_page].include?(action["type"]) %>
+            <% if target_is_page %>
+              <option value=""><%= t("comp_page_builder.rule_editor.select_page") %></option>
+              <% pages.each do |p| %>
+                <option value="<%= p["id"] %>" <%= "selected" if action["target_id"] == p["id"] %>><%= p["name"] || p["id"] %></option>
+              <% end %>
+            <% else %>
+              <option value=""><%= t("comp_page_builder.rule_editor.select_field") %></option>
+              <% fields.each do |f| %>
+                <option value="<%= f["id"] %>" <%= "selected" if action["target_id"] == f["id"] %>><%= f["label"] || f["id"] %></option>
+              <% end %>
+            <% end %>
+          </select>
+          <% action_def = ACTION_TYPES.find { |at| at[:value] == action["type"] } %>
+          <% if action_def&.dig(:has_value) %>
+            <input type="text"
+                   class="w-24 px-2 py-1 text-xs border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                   placeholder="<%= t("comp_page_builder.rule_editor.value") %>"
+                   value="<%= action["value"] || "" %>"
+                   data-action-value="<%= action_index %>">
+          <% end %>
+          <span data-rule-builder-target="actionResult" class="text-[10px] text-gray-400"></span>
+          <button type="button"
+                  class="p-1 text-gray-300 hover:text-red-500 rounded transition-colors"
+                  data-action="click->rule-builder#removeAction"
+                  data-action-index="<%= action_index %>"
+                  aria-label="<%= t("comp_page_builder.rule_editor.remove_action_aria") %>">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      <% end %>
+      <% if actions.empty? %>
+        <div class="text-sm text-gray-500 text-center py-2"><%= t("comp_page_builder.rule_editor.no_actions") %></div>
+      <% end %>
+    </div>
+    <button type="button"
+            class="mt-2 w-full px-3 py-2 text-xs text-gray-500 border border-dashed border-gray-300 rounded-lg hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50/60 transition-colors"
+            data-action="click->rule-builder#addAction">
+      <%= t("comp_page_builder.rule_editor.add_action") %>
+    </button>
+  </div>
+
+  <%# Test Mode %>
+  <div class="px-4 py-4 border-b border-gray-100">
+    <label class="flex items-center gap-2 cursor-pointer">
+      <input type="checkbox"
+             class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+             data-rule-builder-target="testToggle"
+             data-action="change->rule-builder#toggleTest">
+      <span class="text-xs font-medium text-gray-600"><%= t("comp_page_builder.rule_editor.test_mode") %></span>
+    </label>
+    <div data-rule-builder-target="testPanel" class="hidden mt-3 space-y-3 bg-amber-50/60 rounded-lg p-3 border border-amber-100">
+      <p class="text-xs text-gray-500"><%= t("comp_page_builder.rule_editor.test_hint") %></p>
+      <div data-rule-builder-target="sampleInputs" class="space-y-2"></div>
+    </div>
+  </div>
+
+  <%# Data templates for JavaScript to clone condition rows and action rows %>
+  <template data-operators-template>
+    <% operators.each do |op| %>
+      <option value="<%= op[:value] %>"><%= op[:label] %></option>
+    <% end %>
+  </template>
+
+  <template data-action-types-template>
+    <% action_types.each do |at| %>
+      <option value="<%= at[:value] %>" data-target="<%= at[:target] %>" data-has-value="<%= at[:has_value] || false %>"><%= at[:label] %></option>
+    <% end %>
+  </template>
+
+  <%# Footer: Cancel + Save Rule %>
+  <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-white sticky bottom-0 flex-shrink-0">
+    <button type="button"
+            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg transition-colors"
+            data-action="click->page-builder#closeRuleEditor">
+      <%= t("common.actions.cancel") %>
+    </button>
+    <button type="button"
+            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1"
+            data-action="click->page-builder#saveRule">
+      <%= t("comp_page_builder.rule_editor.save_rule") %>
+    </button>
+  </div>
+
+</div>

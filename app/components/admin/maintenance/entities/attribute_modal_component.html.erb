@@ -1,0 +1,616 @@
+<%# Add / Edit Attribute Modal — tabbed Field / Rules / Access layout %>
+<div data-entity-form-target="modal"
+     data-entity-form-person-entity-ids-value="<%= person_entity_ids_json %>"
+     class="hidden fixed inset-0 z-[60]"
+     aria-labelledby="modal-title"
+     role="dialog"
+     aria-modal="true"
+     data-action="keydown.esc->entity-form#closeModal">
+
+  <div class="fixed inset-0 bg-text-primary/60 transition-opacity"
+       data-action="click->entity-form#closeModal"></div>
+
+  <div class="flex min-h-full items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="relative bg-surface w-full sm:max-w-3xl lg:max-w-4xl sm:rounded-xl shadow-float
+                flex flex-col h-[100dvh] sm:h-[90vh] overflow-hidden animate-scale-in rounded-t-xl sm:rounded-xl"
+         data-attr-modal-panel>
+
+      <div class="flex-none px-5 py-4 border-b border-border-subtle flex items-start justify-between gap-3">
+        <div class="min-w-0 flex flex-col gap-1.5">
+          <h3 class="text-lg font-semibold leading-none text-text-primary truncate"
+              id="modal-title"
+              data-entity-form-target="modalTitle"><%= t("comp_admin.attribute_modal.add_attribute") %></h3>
+          <p class="text-sm text-text-muted"><%= t("comp_admin.attribute_modal.subtitle") %></p>
+        </div>
+        <button type="button"
+                data-action="click->entity-form#closeModal"
+                class="icon-button shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                aria-label="<%= t("comp_admin.attribute_modal.close_modal") %>">
+          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex-1 min-h-0 flex flex-col md:flex-row"
+           data-controller="tabs"
+           data-tabs-active-value="definition"
+           data-tabs-active-class="bg-accent-subtle text-accent-text"
+           data-tabs-inactive-class="text-text-muted hover:bg-surface-active">
+
+        <nav class="flex-none md:w-48 overflow-x-auto md:overflow-y-auto border-b md:border-b-0 md:border-r border-border-subtle p-2 md:p-3"
+             aria-label="<%= t("comp_admin.attribute_modal.tabs_nav_label") %>">
+          <div class="flex md:flex-col gap-1" role="tablist">
+            <button type="button"
+                    role="tab"
+                    id="attr-modal-tab-definition"
+                    aria-controls="attr-modal-panel-definition"
+                    aria-selected="true"
+                    data-tabs-target="tab"
+                    data-tabs-id="definition"
+                    data-action="click->tabs#select"
+                    class="shrink-0 md:w-full text-left rounded-md px-3 py-2 text-sm font-medium bg-accent-subtle text-accent-text">
+              <%= t("comp_admin.attribute_modal.tab_definition") %>
+            </button>
+            <button type="button"
+                    role="tab"
+                    id="attr-modal-tab-validation"
+                    aria-controls="attr-modal-panel-validation"
+                    aria-selected="false"
+                    data-tabs-target="tab"
+                    data-tabs-id="validation"
+                    data-action="click->tabs#select"
+                    class="shrink-0 md:w-full text-left rounded-md px-3 py-2 text-sm font-medium text-text-muted hover:bg-surface-active">
+              <%= t("comp_admin.attribute_modal.tab_validation") %>
+            </button>
+            <button type="button"
+                    role="tab"
+                    id="attr-modal-tab-access"
+                    aria-controls="attr-modal-panel-access"
+                    aria-selected="false"
+                    data-tabs-target="tab"
+                    data-tabs-id="access"
+                    data-action="click->tabs#select"
+                    class="shrink-0 md:w-full text-left rounded-md px-3 py-2 text-sm font-medium text-text-muted hover:bg-surface-active">
+              <%= t("comp_admin.attribute_modal.tab_access") %>
+            </button>
+          </div>
+        </nav>
+
+        <div class="flex-1 min-h-0 overflow-y-auto p-5">
+
+          <%# ── Field ─────────────────────────────────────────────────────── %>
+          <div data-tabs-target="panel"
+               data-tabs-id="definition"
+               id="attr-modal-panel-definition"
+               role="tabpanel"
+               aria-labelledby="attr-modal-tab-definition"
+               class="flex flex-col gap-4">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1.5">
+                <label class="form-label-required text-xs" for="attr-modal-name"><%= t("common.labels.name") %></label>
+                <input type="text"
+                       id="attr-modal-name"
+                       data-entity-form-target="modalName"
+                       data-action="input->entity-form#updateAttributeNameSlug"
+                       autocomplete="off"
+                       placeholder="<%= t("comp_admin.attribute_modal.name_placeholder") %>"
+                       class="input-field text-sm py-1.5">
+              </div>
+              <div class="flex flex-col gap-1.5">
+                <label class="form-label-required text-xs" for="attr-modal-display-label"><%= t("comp_admin.attribute_modal.display_label") %></label>
+                <input type="text"
+                       id="attr-modal-display-label"
+                       data-entity-form-target="modalDisplayLabel"
+                       data-action="input->entity-form#markDisplayLabelEdited"
+                       autocomplete="off"
+                       placeholder="<%= t("comp_admin.attribute_modal.display_label_placeholder") %>"
+                       class="input-field text-sm py-1.5">
+              </div>
+            </div>
+            <input type="hidden" data-entity-form-target="modalNameSlug">
+
+            <section data-entity-form-target="valueSourceSection" class="hidden">
+              <div class="flex flex-col gap-3">
+                <div class="flex flex-col gap-1.5">
+                  <span class="form-label text-xs"><%= t("comp_admin.attribute_modal.computed_mode") %></span>
+                  <div class="inline-flex w-full sm:w-auto gap-0.5 p-0.5 bg-canvas-elevated border border-border-subtle rounded-lg"
+                       role="group"
+                       aria-label="<%= t("comp_admin.attribute_modal.computed_mode") %>">
+                    <button type="button"
+                            data-action="click->entity-form#selectInputMode"
+                            data-entity-form-target="modeInputBtn"
+                            class="flex-1 sm:flex-none min-w-[5.5rem] px-3 py-1.5 text-sm font-medium rounded-md transition-base
+                                   text-accent-text bg-accent-subtle border border-accent shadow-sm">
+                      <%= t("comp_admin.attribute_modal.computed_input") %>
+                    </button>
+                    <button type="button"
+                            data-action="click->entity-form#selectComputedMode"
+                            data-entity-form-target="modeComputedBtn"
+                            class="flex-1 sm:flex-none min-w-[5.5rem] px-3 py-1.5 text-sm font-medium rounded-md transition-base
+                                   text-text-muted bg-transparent border border-transparent hover:bg-surface-active">
+                      <%= t("comp_admin.attribute_modal.computed_option") %>
+                    </button>
+                  </div>
+                </div>
+
+                <section data-entity-form-target="computedSection" class="hidden">
+                <div class="flex flex-col gap-4 rounded-lg border border-border-subtle bg-canvas-elevated p-4">
+                  <h4 class="text-sm font-semibold text-text-primary"><%= t("comp_admin.attribute_modal.computed_section") %></h4>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1.5">
+                      <label class="form-label-required text-xs" for="attr-modal-computed-relation"><%= t("maint_core.entities.computed.relation") %></label>
+                      <select id="attr-modal-computed-relation"
+                              data-entity-form-target="computedRelation"
+                              data-action="change->entity-form#computedRelationChanged"
+                              class="input-field text-sm py-1.5">
+                      </select>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                      <label class="form-label-required text-xs" for="attr-modal-computed-attribute"><%= t("maint_core.entities.computed.attribute") %></label>
+                      <select id="attr-modal-computed-attribute"
+                              data-entity-form-target="computedAttribute"
+                              class="input-field text-sm py-1.5">
+                      </select>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                      <label class="form-label-required text-xs" for="attr-modal-computed-function"><%= t("maint_core.entities.computed.function") %></label>
+                      <select id="attr-modal-computed-function"
+                              data-entity-form-target="computedFunction"
+                              data-action="change->entity-form#computedFunctionChanged"
+                              class="input-field text-sm py-1.5">
+                        <option value="avg"><%= t("maint_core.entities.computed.avg") %></option>
+                        <option value="sum"><%= t("maint_core.entities.computed.sum") %></option>
+                        <option value="count"><%= t("maint_core.entities.computed.count") %></option>
+                        <option value="min"><%= t("maint_core.entities.computed.min") %></option>
+                        <option value="max"><%= t("maint_core.entities.computed.max") %></option>
+                      </select>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                      <label class="form-label text-xs" for="attr-modal-computed-precision"><%= t("maint_core.entities.computed.precision") %></label>
+                      <input type="number"
+                             id="attr-modal-computed-precision"
+                             data-entity-form-target="computedPrecision"
+                             value="2"
+                             min="0"
+                             max="6"
+                             class="input-field text-sm py-1.5">
+                    </div>
+                  </div>
+                  <div class="rounded-lg border border-border-subtle bg-surface p-3 flex flex-col gap-3">
+                    <div class="flex flex-col gap-0.5">
+                      <h5 class="text-xs font-semibold text-text-muted"><%= t("maint_core.entities.computed.filter") %></h5>
+                      <p class="text-caption text-text-muted"><%= t("maint_core.entities.computed.filter_hint") %></p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div class="flex flex-col gap-1.5">
+                        <label class="form-label text-xs" for="attr-modal-computed-filter-attribute"><%= t("maint_core.entities.computed.filter_attribute") %></label>
+                        <select id="attr-modal-computed-filter-attribute"
+                                data-entity-form-target="computedFilterAttribute"
+                                data-action="change->entity-form#computedFilterChanged"
+                                class="input-field text-sm py-1.5">
+                        </select>
+                      </div>
+                      <div class="flex flex-col gap-1.5">
+                        <label class="form-label text-xs" for="attr-modal-computed-filter-op"><%= t("maint_core.entities.computed.filter_operator") %></label>
+                        <select id="attr-modal-computed-filter-op"
+                                data-entity-form-target="computedFilterOp"
+                                disabled
+                                class="input-field text-sm py-1.5 disabled:bg-surface-active disabled:text-text-muted disabled:cursor-not-allowed">
+                          <option value=""><%= t("comp_admin.attribute_modal.computed_filter_op_placeholder") %></option>
+                          <option value="=">=</option>
+                          <option value="!=">!=</option>
+                          <option value=">">&gt;</option>
+                          <option value=">=">&gt;=</option>
+                          <option value="<">&lt;</option>
+                          <option value="<=">&lt;=</option>
+                        </select>
+                      </div>
+                      <div class="flex flex-col gap-1.5">
+                        <label class="form-label text-xs" for="attr-modal-computed-filter-value"><%= t("maint_core.entities.computed.filter_value") %></label>
+                        <input type="text"
+                               id="attr-modal-computed-filter-value"
+                               data-entity-form-target="computedFilterValue"
+                               disabled
+                               class="input-field text-sm py-1.5 disabled:bg-surface-active disabled:text-text-muted disabled:cursor-not-allowed">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              </div>
+            </section>
+
+            <div data-entity-form-target="htmlTypeField" class="flex flex-col gap-3">
+              <div class="flex flex-col gap-1.5">
+                <label class="form-label-required text-xs" for="attr-modal-html-type"><%= t("comp_admin.attribute_modal.html_type") %></label>
+                <select id="attr-modal-html-type"
+                        data-entity-form-target="modalHtmlType"
+                        data-action="change->entity-form#htmlTypeChanged"
+                        class="input-field text-sm py-1.5">
+                  <% HtmlTypeOptions.grouped_html_types.each do |category, types| %>
+                    <optgroup label="<%= category %>">
+                      <% types.each do |label, value| %>
+                        <option value="<%= value %>"><%= label %></option>
+                      <% end %>
+                    </optgroup>
+                  <% end %>
+                </select>
+              </div>
+
+              <div data-entity-form-target="optionsSection"
+                   class="hidden rounded-lg border border-border-subtle bg-canvas-elevated p-3">
+
+                <div data-entity-form-target="selectionConfig" data-config-type="selection" class="hidden">
+                  <div class="flex flex-col gap-3">
+                    <div class="flex flex-col gap-0.5">
+                      <h5 class="text-xs font-semibold text-text-primary"><%= t("comp_admin.attribute_modal.selection_options") %></h5>
+                      <p class="text-caption text-text-muted"><%= t("comp_admin.attribute_modal.selection_options_hint") %></p>
+                    </div>
+
+                    <div class="inline-flex w-full sm:w-auto gap-0.5 p-0.5 bg-surface border border-border-subtle rounded-md"
+                         role="group"
+                         aria-label="<%= t("comp_admin.attribute_modal.options_source") %>">
+                      <button type="button"
+                              data-action="click->entity-form#selectManualOptions"
+                              data-entity-form-target="manualOptionsBtn"
+                              class="flex-1 sm:flex-none px-2.5 py-1 text-xs font-medium rounded-sm transition-base
+                                     text-accent-text bg-accent-subtle border border-accent shadow-sm">
+                        <%= t("comp_admin.attribute_modal.manual_entry") %>
+                      </button>
+                      <button type="button"
+                              data-action="click->entity-form#selectConstantOptions"
+                              data-entity-form-target="constantOptionsBtn"
+                              class="flex-1 sm:flex-none px-2.5 py-1 text-xs font-medium rounded-sm transition-base
+                                     text-text-muted bg-transparent border border-transparent hover:bg-surface-active">
+                        <%= t("comp_admin.attribute_modal.use_constant") %>
+                      </button>
+                      <button type="button"
+                              data-action="click->entity-form#selectEntityRecordsOptions"
+                              data-entity-form-target="entityRecordsOptionsBtn"
+                              class="flex-1 sm:flex-none px-2.5 py-1 text-xs font-medium rounded-sm transition-base
+                                     text-text-muted bg-transparent border border-transparent hover:bg-surface-active">
+                        <%= t("comp_admin.attribute_modal.use_entity_records") %>
+                      </button>
+                    </div>
+
+                    <div data-entity-form-target="manualOptionsSection" class="flex flex-col gap-1.5">
+                      <div class="hidden sm:grid grid-cols-[4.5rem_minmax(0,1fr)_minmax(0,1fr)_auto] gap-1.5 px-2">
+                        <span class="text-caption font-medium text-text-muted text-center"><%= t("comp_admin.attribute_modal.option_default_label") %></span>
+                        <span class="text-caption font-medium text-text-muted text-center"><%= t("comp_admin.attribute_modal.config_label_header") %></span>
+                        <span class="text-caption font-medium text-text-muted text-center"><%= t("comp_admin.attribute_modal.config_value_header") %></span>
+                        <span class="sr-only"><%= t("comp_admin.attribute_modal.remove_option_title") %></span>
+                      </div>
+                      <div data-entity-form-target="optionsContainer" class="flex flex-col gap-1.5"></div>
+                      <button type="button"
+                              data-action="click->entity-form#addOption"
+                              class="btn btn-secondary btn-sm self-start text-xs py-1 px-2 h-auto">
+                        <svg class="size-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                        </svg>
+                        <%= t("comp_admin.attribute_modal.add_option") %>
+                      </button>
+                    </div>
+
+                    <div data-entity-form-target="constantOptionsSection" class="hidden">
+                      <div class="flex flex-col gap-1.5">
+                        <select data-entity-form-target="constantSelect"
+                                data-action="change->entity-form#constantChanged"
+                                class="input-field text-sm py-1.5"
+                                aria-label="<%= t("comp_admin.attribute_modal.select_a_constant") %>">
+                          <option value=""><%= t("comp_admin.attribute_modal.select_a_constant") %></option>
+                        </select>
+                        <div data-entity-form-target="constantPreview"
+                             class="hidden rounded-md border border-border-subtle bg-surface p-2">
+                          <div class="flex flex-col gap-1.5">
+                            <div class="flex items-center justify-between gap-2">
+                              <span class="text-caption text-text-muted"><%= t("comp_admin.attribute_modal.options_preview") %></span>
+                              <span data-entity-form-target="constantOptionsCount" class="badge badge-accent text-xs"><%= t("comp_admin.attribute_modal.options_count") %></span>
+                            </div>
+                            <div data-entity-form-target="constantPreviewList" class="flex flex-wrap gap-1 min-h-[1.25rem]"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div data-entity-form-target="entityRecordsOptionsSection" class="hidden">
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <label class="flex flex-col gap-1">
+                          <span class="text-caption font-medium text-text-muted"><%= t("maint_core.entities.assoc.target_entity") %></span>
+                          <select data-entity-form-target="referenceEntitySelect"
+                                  data-action="change->entity-form#referenceEntityChanged"
+                                  class="input-field text-sm py-1.5">
+                            <option value=""><%= t("common.labels.em_dash") %></option>
+                          </select>
+                        </label>
+                        <label class="flex flex-col gap-1">
+                          <span class="text-caption font-medium text-text-muted"><%= t("comp_admin.attribute_modal.display_field") %></span>
+                          <select data-entity-form-target="referenceLabelFieldSelect" class="input-field text-sm py-1.5">
+                            <option value=""><%= t("common.labels.em_dash") %></option>
+                          </select>
+                        </label>
+                      </div>
+                      <p class="mt-1.5 text-caption text-text-muted"><%= t("comp_admin.attribute_modal.entity_records_hint") %></p>
+                      <% if show_owner_toggle? %>
+                        <div data-entity-form-target="ownerSection" class="hidden mt-3">
+                          <div class="flex items-start justify-between gap-3 rounded-lg border border-border-subtle bg-surface p-3">
+                            <div class="min-w-0 flex flex-col gap-0.5">
+                              <label for="attr-modal-owner" class="text-sm font-medium text-text-primary"><%= t("comp_admin.attribute_modal.owner_label") %></label>
+                              <p class="text-caption text-text-muted"><%= t("comp_admin.attribute_modal.owner_help") %></p>
+                            </div>
+                            <label class="relative inline-flex min-h-11 shrink-0 items-center cursor-pointer">
+                              <input type="checkbox"
+                                     id="attr-modal-owner"
+                                     data-entity-form-target="modalOwner"
+                                     class="<%= visually_hidden_class %> peer">
+                              <span aria-hidden="true"
+                                    class="relative h-6 w-11 rounded-full bg-surface-active transition-colors peer-checked:bg-accent peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2 after:absolute after:left-0.5 after:top-0.5 after:size-5 after:rounded-full after:bg-white after:transition-transform after:content-[''] peer-checked:after:translate-x-5"></span>
+                            </label>
+                          </div>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+
+                <div data-entity-form-target="fileConfig" data-config-type="file" class="hidden">
+                  <div class="flex flex-col gap-3">
+                    <h5 class="text-xs font-semibold text-text-primary"><%= t("comp_admin.attribute_modal.file_upload_settings") %></h5>
+                    <div class="flex flex-col gap-1.5">
+                      <label class="form-label text-xs mb-0" for="attr-modal-config-accept"><%= t("comp_admin.attribute_modal.accepted_file_types") %></label>
+                      <input type="text"
+                             id="attr-modal-config-accept"
+                             data-entity-form-target="configAccept"
+                             placeholder="<%= t("comp_admin.attribute_modal.accepted_file_types_placeholder") %>"
+                             class="input-field text-sm py-1.5">
+                    </div>
+                    <label class="flex items-center gap-2 cursor-pointer text-sm text-text-primary">
+                      <input type="checkbox"
+                             data-entity-form-target="configMultiple"
+                             class="size-4 text-accent border-border-subtle rounded focus:ring-accent">
+                      <span><%= t("comp_admin.attribute_modal.allow_multiple_files") %></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="form-label text-xs" for="attr-modal-description"><%= t("common.labels.description") %></label>
+              <textarea id="attr-modal-description"
+                        data-entity-form-target="modalDescription"
+                        rows="2"
+                        class="input-field text-sm py-1.5 resize-none"
+                        placeholder="<%= t("common.labels.optional") %>"></textarea>
+            </div>
+          </div>
+
+          <%# ── Rules ─────────────────────────────────────────────────────── %>
+          <div data-tabs-target="panel"
+               data-tabs-id="validation"
+               id="attr-modal-panel-validation"
+               role="tabpanel"
+               aria-labelledby="attr-modal-tab-validation"
+               class="flex flex-col gap-4">
+
+            <section data-entity-form-target="validatorsSection" class="flex flex-col gap-3">
+              <div class="flex flex-col gap-0.5">
+                <h4 class="text-sm font-semibold text-text-primary"><%= t("comp_admin.attribute_modal.validators") %></h4>
+                <p class="text-caption text-text-muted"><%= t("comp_admin.attribute_modal.validators_hint") %></p>
+              </div>
+
+              <div data-entity-form-target="validatorsContainer"
+                   class="flex flex-wrap gap-1.5 min-h-[2.5rem] p-2 rounded-lg border border-border-subtle bg-canvas-elevated">
+              </div>
+
+              <div class="rounded-lg border border-border-subtle bg-surface p-3 flex flex-col gap-3">
+                <div class="flex flex-col sm:flex-row gap-2">
+                  <select id="attr-modal-validator-select"
+                          data-entity-form-target="modalValidatorSelect"
+                          data-action="change->entity-form#validatorSelectChanged"
+                          class="input-field text-sm py-1.5 flex-1"
+                          aria-label="<%= t("comp_admin.attribute_modal.validators") %>">
+                    <optgroup label="<%= t("comp_admin.attribute_modal.validator_groups.presence") %>">
+                      <option value="presence" data-validator-key="presence" selected><%= t("comp_admin.attribute_modal.validator_options.presence") %></option>
+                      <option value="acceptance" data-validator-key="acceptance"><%= t("comp_admin.attribute_modal.validator_options.acceptance") %></option>
+                    </optgroup>
+                    <optgroup label="<%= t("comp_admin.attribute_modal.validator_groups.comparison") %>">
+                      <option value="greater_than_or_equal_to" data-validator-key="greater_than_or_equal_to"><%= t("comp_admin.attribute_modal.validator_options.greater_than_or_equal_to_html") %></option>
+                      <option value="less_than_or_equal_to" data-validator-key="less_than_or_equal_to"><%= t("comp_admin.attribute_modal.validator_options.less_than_or_equal_to_html") %></option>
+                      <option value="equal_to" data-validator-key="equal_to"><%= t("comp_admin.attribute_modal.validator_options.equal_to") %></option>
+                      <option value="not_equal_to" data-validator-key="not_equal_to"><%= t("comp_admin.attribute_modal.validator_options.not_equal_to") %></option>
+                      <option value="greater_than" data-validator-key="greater_than"><%= t("comp_admin.attribute_modal.validator_options.greater_than_html") %></option>
+                      <option value="less_than" data-validator-key="less_than"><%= t("comp_admin.attribute_modal.validator_options.less_than_html") %></option>
+                    </optgroup>
+                    <optgroup label="<%= t("comp_admin.attribute_modal.validator_groups.format") %>">
+                      <option value="format_email" data-validator-key="format_email"><%= t("comp_admin.attribute_modal.validator_options.format_email") %></option>
+                      <option value="format_url" data-validator-key="format_url"><%= t("comp_admin.attribute_modal.validator_options.format_url") %></option>
+                      <option value="format_phone" data-validator-key="format_phone"><%= t("comp_admin.attribute_modal.validator_options.format_phone") %></option>
+                      <option value="format_custom" data-validator-key="format_custom"><%= t("comp_admin.attribute_modal.validator_options.format_custom") %></option>
+                    </optgroup>
+                    <optgroup label="<%= t("comp_admin.attribute_modal.validator_groups.length") %>">
+                      <option value="length_minimum" data-validator-key="length_minimum"><%= t("comp_admin.attribute_modal.validator_options.length_minimum") %></option>
+                      <option value="length_maximum" data-validator-key="length_maximum"><%= t("comp_admin.attribute_modal.validator_options.length_maximum") %></option>
+                      <option value="length_in_range" data-validator-key="length_in_range"><%= t("comp_admin.attribute_modal.validator_options.length_in_range") %></option>
+                    </optgroup>
+                    <optgroup label="<%= t("comp_admin.attribute_modal.validator_groups.numeric") %>">
+                      <option value="numericality" data-validator-key="numericality"><%= t("comp_admin.attribute_modal.validator_options.numericality") %></option>
+                      <option value="numericality_integer" data-validator-key="numericality_integer"><%= t("comp_admin.attribute_modal.validator_options.numericality_integer") %></option>
+                    </optgroup>
+                    <optgroup label="<%= t("comp_admin.attribute_modal.validator_groups.inclusion") %>">
+                      <option value="inclusion" data-validator-key="inclusion"><%= t("comp_admin.attribute_modal.validator_options.inclusion") %></option>
+                      <option value="exclusion" data-validator-key="exclusion"><%= t("comp_admin.attribute_modal.validator_options.exclusion") %></option>
+                    </optgroup>
+                  </select>
+                  <button type="button"
+                          data-action="click->entity-form#addValidator"
+                          class="btn btn-secondary btn-sm flex-none w-full sm:w-auto"
+                          title="<%= t("comp_admin.attribute_modal.add_validator") %>">
+                    <%= t("comp_admin.attribute_modal.add_validator") %>
+                  </button>
+                </div>
+
+                <div data-entity-form-target="validatorConfigSection"
+                     class="hidden rounded-lg border border-border-subtle bg-canvas-elevated overflow-hidden">
+                  <div class="p-3 flex flex-col gap-3">
+                    <div data-entity-form-target="validatorSingleValueConfig" class="hidden">
+                      <div class="flex flex-col gap-1.5">
+                        <label class="form-label text-xs mb-0" for="attr-modal-validator-value">
+                          <span data-entity-form-target="validatorConfigLabel"><%= t("comp_admin.attribute_modal.validator_configuration") %></span>
+                        </label>
+                        <input type="number"
+                               id="attr-modal-validator-value"
+                               data-entity-form-target="validatorConfigValue"
+                               data-action="keydown->entity-form#handleValidatorConfigKeydown"
+                               placeholder="<%= t("comp_admin.attribute_modal.enter_value") %>"
+                               class="input-field text-sm py-1.5">
+                      </div>
+                    </div>
+
+                    <div data-entity-form-target="validatorRangeConfig" class="hidden">
+                      <div class="flex flex-col gap-1.5">
+                        <label class="form-label text-xs mb-0"><%= t("comp_admin.attribute_modal.length_range") %></label>
+                        <div class="grid grid-cols-2 gap-3">
+                          <input type="number"
+                                 data-entity-form-target="validatorConfigMinValue"
+                                 data-action="keydown->entity-form#handleValidatorConfigKeydown"
+                                 placeholder="<%= t("comp_admin.attribute_modal.min") %>"
+                                 min="0"
+                                 aria-label="<%= t("comp_admin.attribute_modal.min") %>"
+                                 class="input-field text-sm py-1.5">
+                          <input type="number"
+                                 data-entity-form-target="validatorConfigMaxValue"
+                                 data-action="keydown->entity-form#handleValidatorConfigKeydown"
+                                 placeholder="<%= t("comp_admin.attribute_modal.max") %>"
+                                 min="0"
+                                 aria-label="<%= t("comp_admin.attribute_modal.max") %>"
+                                 class="input-field text-sm py-1.5">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div data-entity-form-target="validatorPatternConfig" class="hidden">
+                      <div class="flex flex-col gap-1.5">
+                        <label class="form-label text-xs mb-0" for="attr-modal-validator-pattern"><%= t("comp_admin.attribute_modal.custom_regex_pattern") %></label>
+                        <input type="text"
+                               id="attr-modal-validator-pattern"
+                               data-entity-form-target="validatorConfigPattern"
+                               data-action="keydown->entity-form#handleValidatorConfigKeydown"
+                               placeholder="^[a-zA-Z0-9]+$"
+                               class="input-field text-sm py-1.5 font-mono">
+                      </div>
+                    </div>
+
+                    <div data-entity-form-target="validatorListConfig" class="hidden">
+                      <div class="flex flex-col gap-1.5">
+                        <label class="form-label text-xs mb-0" for="attr-modal-validator-list">
+                          <span data-entity-form-target="validatorListLabel"><%= t("comp_admin.attribute_modal.allowed_values") %></span>
+                        </label>
+                        <textarea id="attr-modal-validator-list"
+                                  data-entity-form-target="validatorConfigList"
+                                  data-action="keydown->entity-form#handleValidatorConfigKeydown"
+                                  rows="3"
+                                  placeholder="<%= t("comp_admin.attribute_modal.one_value_per_line") %>"
+                                  class="input-field text-sm py-1.5 resize-none"></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="flex justify-end gap-2 px-3 py-2 bg-surface border-t border-border-subtle">
+                    <button type="button"
+                            data-action="click->entity-form#cancelValidatorConfig"
+                            class="btn btn-secondary btn-sm">
+                      <%= t("common.actions.cancel") %>
+                    </button>
+                    <button type="button"
+                            data-action="click->entity-form#addValidatorWithConfig"
+                            class="btn btn-primary btn-sm">
+                      <%= t("comp_admin.attribute_modal.add_validator") %>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <%# ── Access ────────────────────────────────────────────────────── %>
+          <div data-tabs-target="panel"
+               data-tabs-id="access"
+               id="attr-modal-panel-access"
+               role="tabpanel"
+               aria-labelledby="attr-modal-tab-access"
+               class="flex flex-col gap-4">
+
+            <section class="flex flex-col gap-3">
+              <div class="flex flex-col gap-0.5">
+                <h4 class="text-sm font-semibold text-text-primary"><%= t("comp_admin.attribute_modal.visibility") %></h4>
+                <p class="text-caption text-text-muted"><%= t("comp_admin.attribute_modal.visibility_hint") %></p>
+                <p class="text-caption text-text-muted"><%= t("comp_admin.attribute_modal.editable_hint") %></p>
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <div class="hidden sm:grid grid-cols-[1fr_auto_auto_auto] gap-3 px-1">
+                  <span class="text-caption font-medium text-text-muted"><%= t("comp_admin.attribute_modal.audience") %></span>
+                  <span class="text-caption font-medium text-text-muted text-center min-w-[5.5rem]"><%= t("comp_admin.attribute_modal.visible") %></span>
+                  <span class="text-caption font-medium text-text-muted text-center min-w-[5.5rem]"><%= t("comp_admin.attribute_modal.editable") %></span>
+                  <span class="text-caption font-medium text-text-muted text-center min-w-[8rem]"><%= t("comp_admin.attribute_modal.apply_validators") %></span>
+                </div>
+
+                <% audience_rows.each do |row| %>
+                  <div class="rounded-lg border border-border-subtle px-4 py-3
+                              grid grid-cols-1 sm:grid-cols-[1fr_auto_auto_auto] gap-3 sm:items-center">
+                    <span class="text-sm font-medium text-text-primary"><%= row[:label] %></span>
+                    <label class="inline-flex items-center gap-2 sm:justify-center min-w-0 sm:min-w-[5.5rem] cursor-pointer text-sm text-text-primary">
+                      <input type="checkbox" checked
+                             id="attr-modal-vis-<%= row[:key] %>"
+                             data-entity-form-target="<%= row[:visibility_target] %>"
+                             data-action="change->entity-form#visibilityAudienceChanged"
+                             class="size-4 text-accent border-border-subtle rounded focus:ring-accent"
+                             aria-label="<%= t("comp_admin.attribute_modal.visible_for", audience: row[:label]) %>">
+                      <span class="sm:sr-only"><%= t("comp_admin.attribute_modal.visible") %></span>
+                    </label>
+                    <label class="inline-flex items-center gap-2 sm:justify-center min-w-0 sm:min-w-[5.5rem] cursor-pointer text-sm text-text-primary">
+                      <input type="checkbox" checked
+                             id="attr-modal-edit-<%= row[:key] %>"
+                             data-entity-form-target="<%= row[:editable_target] %>"
+                             data-action="change->entity-form#visibilityAudienceChanged"
+                             class="size-4 text-accent border-border-subtle rounded focus:ring-accent"
+                             aria-label="<%= t("comp_admin.attribute_modal.editable_for", audience: row[:label]) %>">
+                      <span class="sm:sr-only"><%= t("comp_admin.attribute_modal.editable") %></span>
+                    </label>
+                    <label class="inline-flex items-center gap-2 sm:justify-center min-w-0 sm:min-w-[8rem] cursor-pointer text-sm text-text-primary">
+                      <input type="checkbox" checked
+                             id="attr-modal-val-<%= row[:key] %>"
+                             data-entity-form-target="<%= row[:apply_target] %>"
+                             class="size-4 text-accent border-border-subtle rounded focus:ring-accent"
+                             aria-label="<%= t("comp_admin.attribute_modal.apply_validators_for", audience: row[:label]) %>">
+                      <span class="sm:sr-only"><%= t("comp_admin.attribute_modal.apply_validators") %></span>
+                    </label>
+                  </div>
+                <% end %>
+              </div>
+            </section>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="flex-none px-5 py-3 bg-canvas-elevated rounded-b-xl border-t border-border-subtle
+                  flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2">
+        <button type="button"
+                data-action="click->entity-form#closeModal"
+                class="btn btn-secondary text-sm w-full sm:w-auto">
+          <%= t("common.actions.cancel") %>
+        </button>
+        <button type="button"
+                data-action="click->entity-form#addAttributeFromModal"
+                data-entity-form-target="modalSubmitBtn"
+                class="btn btn-primary text-sm w-full sm:w-auto">
+          <%= t("comp_admin.attribute_modal.add_attribute") %>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

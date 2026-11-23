@@ -1,0 +1,384 @@
+<div class="flex min-w-0 flex-col gap-8 text-body"<% if show_one_time_payment? %> data-controller="modal-dialog" data-modal-dialog-open-value="<%= one_time_dialog_open? %>"<% end %>>
+  <% if form && form_errors.any? %>
+    <div role="alert"><%= render AlertComponent.new(message: form_errors.full_messages.to_sentence, type: :error, auto_dismiss: false) %></div>
+  <% end %>
+
+  <% if recovery.present? %>
+    <section class="flex flex-col gap-3 rounded-xl border border-warning/30 bg-warning-subtle px-4 py-3.5 sm:px-5 lg:flex-row lg:items-center lg:justify-between lg:gap-6" aria-labelledby="billing-recovery-heading">
+      <div class="flex min-w-0 items-start gap-3">
+        <%= render Billing::Admin::IconComponent.new(name: :alert, class_name: "mt-0.5 size-5 shrink-0 text-warning") %>
+        <div class="min-w-0">
+          <h2 id="billing-recovery-heading" class="text-body-sm font-semibold text-text-primary"><%= t("settings_billing.subscription.recovery_heading") %></h2>
+          <p class="mt-0.5 text-body-sm text-text-secondary"><%= t(fact(recovery, :reason_key).presence || "settings_billing.subscription.recovery_hint") %></p>
+          <% if fact(recovery, :grace_deadline) %><p class="mt-0.5 text-body-sm text-text-tertiary"><%= t("settings_billing.subscription.grace_until", date: billing_date(fact(recovery, :grace_deadline))) %></p><% end %>
+        </div>
+      </div>
+      <div class="flex shrink-0 flex-wrap gap-2 pl-8 lg:pl-0">
+        <% if show_one_time_payment? %>
+          <button type="button" data-action="modal-dialog#open" aria-haspopup="dialog" aria-controls="one-time-payment-dialog" class="btn btn-primary btn-sm"><%= t("settings_billing.one_time_payment.cta") %></button>
+        <% end %>
+        <% Array(fact(recovery, :invoices)).each do |invoice| %>
+          <%= link_to t("comp_billing.invoice_detail.invoice_number", number: invoice.number), helpers.admin_settings_billing_invoice_path(customer_id, invoice), class: "btn #{show_one_time_payment? ? 'btn-secondary' : 'btn-primary'} btn-sm" %>
+        <% end %>
+        <% unless show_one_time_payment? %>
+          <%= link_to t("settings_navigation.items.billing_payment_methods"), helpers.admin_settings_billing_payment_methods_path(customer_id), class: "btn btn-ghost btn-sm" %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
+  <section id="current-subscription" class="card min-w-0 overflow-hidden" aria-labelledby="current-subscription-heading">
+    <% if has_subscription? %>
+      <div class="flex flex-col gap-4 px-5 py-5 sm:flex-row sm:items-start sm:justify-between sm:gap-6 sm:px-6">
+        <div class="min-w-0">
+          <p id="current-subscription-heading" class="text-body-sm text-text-secondary"><%= t("comp_billing.plan_comparison.current_subscription") %></p>
+          <div class="mt-1 flex flex-wrap items-center gap-2">
+            <h2 class="text-heading break-words"><%= snapshot_name(current_subscription) %></h2>
+            <%= render BadgeComponent.new(variant: status_variant, size: :sm) do %><%= status_label %><% end %>
+            <% if cancelling? %>
+              <%= render BadgeComponent.new(variant: :warning, size: :sm) do %><%= t("comp_billing.plan_comparison.cancelling_badge") %><% end %>
+            <% end %>
+          </div>
+          <% if state_note_key && recovery.blank? %><p class="mt-1.5 max-w-xl text-body-sm text-text-secondary"><%= t(state_note_key) %></p><% end %>
+        </div>
+        <% if (show_one_time_payment? && recovery.blank?) || plans.any? %>
+          <div class="flex shrink-0 flex-wrap gap-2" data-subscription-actions>
+            <% if show_one_time_payment? && recovery.blank? %>
+              <button type="button" data-action="modal-dialog#open" aria-haspopup="dialog" aria-controls="one-time-payment-dialog" class="btn btn-primary btn-sm"><%= t("settings_billing.one_time_payment.cta") %></button>
+            <% end %>
+            <% if plans.any? %>
+              <%= link_to t("settings_billing.subscription.change_plan"), "#compare-plans", class: "btn btn-secondary btn-sm" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <dl class="grid divide-y divide-border-subtle border-t border-border-subtle sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        <div class="min-w-0 px-5 py-4 sm:px-6">
+          <dt class="text-body-sm text-text-secondary"><%= t("settings_billing.subscription.price") %></dt>
+          <dd class="mt-1 flex flex-wrap items-baseline gap-x-1.5 gap-y-1">
+            <span class="font-medium text-text-primary tabular-nums"><%= subscription_price %></span>
+            <span class="text-body-sm text-text-tertiary"><%= interval_label(current_subscription) %></span>
+            <% if coupon_summary? %>
+              <span class="inline-flex items-center gap-1 rounded-md bg-accent-subtle px-1.5 py-0.5 font-mono text-caption font-medium text-accent-text" title="<%= t("settings_billing.subscription.overview.active_coupon") %>">
+                <%= render Billing::Admin::IconComponent.new(name: :tag, class_name: "size-3.5") %><%= active_coupon_code %>
+              </span>
+            <% end %>
+          </dd>
+        </div>
+        <div class="min-w-0 px-5 py-4 sm:px-6">
+          <dt class="text-body-sm text-text-secondary"><%= t(subscription_date_key) %></dt>
+          <dd class="mt-1 font-medium text-text-primary tabular-nums"><%= subscription_date %></dd>
+        </div>
+        <div class="min-w-0 px-5 py-4 sm:px-6">
+          <dt class="flex items-baseline justify-between gap-3 text-body-sm text-text-secondary">
+            <span><%= t("settings_billing.subscription.overview.payment_method") %></span>
+            <%= link_to t("settings_billing.subscription.overview.manage_short"), helpers.admin_settings_billing_payment_methods_path(customer_id), class: "link text-body-sm" %>
+          </dt>
+          <% if default_payment_method %>
+            <dd class="mt-1 min-w-0 font-medium text-text-primary">
+              <span class="block truncate"><%= default_method_provider %></span>
+              <% if default_payment_method.display_label.present? %><span class="block truncate text-body-sm font-normal text-text-tertiary"><%= default_payment_method.display_label %></span><% end %>
+            </dd>
+          <% else %>
+            <dd class="mt-1 text-body-sm text-text-tertiary"><%= t("settings_billing.subscription.overview.no_payment_method") %></dd>
+          <% end %>
+        </div>
+      </dl>
+    <% else %>
+      <div class="flex flex-col gap-5 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <div class="min-w-0">
+          <p id="current-subscription-heading" class="text-body-sm text-text-secondary"><%= t("comp_billing.plan_comparison.current_subscription") %></p>
+          <h2 class="mt-1 text-heading"><%= t("settings_billing.subscription.none_title") %></h2>
+          <p class="mt-1 max-w-xl text-body-sm text-text-secondary"><%= t("settings_billing.subscription.none") %></p>
+        </div>
+        <% if plans.any? %>
+          <%= link_to "#compare-plans", class: "btn btn-primary btn-sm shrink-0 self-start sm:self-center" do %>
+            <%= t("settings_billing.subscription.browse_plans") %>
+            <%= render Billing::Admin::IconComponent.new(name: :arrow_right, class_name: "size-4") %>
+          <% end %>
+        <% end %>
+      </div>
+      <% if latest_subscription %>
+        <div class="border-t border-border-subtle px-5 py-4 sm:px-6">
+          <h3 class="text-body-sm text-text-secondary"><%= t("settings_billing.subscription.latest_ended") %></h3>
+          <p class="mt-1 font-medium text-text-primary"><%= snapshot_name(latest_subscription) %> <span class="font-normal text-text-tertiary tabular-nums">· <%= billing_amount(latest_subscription.amount_cents, latest_subscription.currency) %> <%= interval_label(latest_subscription) %></span></p>
+          <p class="text-body-sm text-text-secondary"><%= t("settings_billing.subscription.ended_on", date: billing_date(latest_subscription.ended_at)) %></p>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if pending_plan_change %>
+      <% target = fact(pending_plan_change, :target_snapshot) %>
+      <section class="flex flex-col gap-3 border-t border-border-subtle px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6" aria-labelledby="pending-change-heading" role="status">
+        <div class="flex min-w-0 items-start gap-3">
+          <%= render Billing::Admin::IconComponent.new(name: :clock, class_name: "mt-0.5 size-5 shrink-0 text-accent-text") %>
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-2">
+              <h3 id="pending-change-heading" class="text-body-sm font-semibold text-text-primary"><%= t("settings_billing.subscription.pending_change", plan: fact(target, :name)) %></h3>
+              <%= render BadgeComponent.new(variant: :primary, size: :sm) do %><%= t("comp_billing.plan_change.statuses.#{fact(pending_plan_change, :status)}") %><% end %>
+            </div>
+            <p class="mt-0.5 text-body-sm text-text-secondary tabular-nums">
+              <%= billing_amount(fact(target, :amount_cents), fact(target, :currency)) %> <%= t("comp_billing.plan_form.intervals.#{fact(target, :interval)}") %> ·
+              <% if fact(pending_plan_change, :status).to_s == "scheduled" %>
+                <%= t("settings_billing.subscription.effective_on", date: billing_date(fact(pending_plan_change, :effective_at))) %>
+              <% elsif fact(pending_plan_change, :status).to_s == "applied" %>
+                <%= t("settings_billing.subscription.effective_on", date: billing_date(fact(pending_plan_change, :applied_at))) %>
+              <% else %>
+                <%= t("settings_billing.subscription.effective_on_collection") %>
+              <% end %>
+            </p>
+            <% if outstanding_change? %><p class="mt-1 text-caption"><%= t("settings_billing.subscription.cancel_change_hint") %></p><% end %>
+          </div>
+        </div>
+        <% if fact(pending_plan_change, :proration_invoice) || outstanding_change? %>
+          <div class="flex shrink-0 flex-wrap items-center gap-2 pl-8 sm:pl-0">
+            <% if fact(pending_plan_change, :proration_invoice) %>
+              <%= link_to t("common.actions.view"), helpers.admin_settings_billing_invoice_path(customer_id, fact(pending_plan_change, :proration_invoice)), class: "btn btn-secondary btn-sm" %>
+            <% end %>
+            <% if outstanding_change? %>
+              <%= button_to t("settings_billing.subscription.cancel_change"), helpers.admin_settings_billing_subscription_plan_change_path(customer_id), method: :delete, class: "btn btn-ghost btn-sm" %>
+            <% end %>
+          </div>
+        <% end %>
+      </section>
+    <% end %>
+  </section>
+
+  <% if entitlements %>
+    <% meters = usage_meters %>
+    <section class="card min-w-0 overflow-hidden" aria-labelledby="billing-usage-heading">
+      <header class="flex flex-col gap-1 px-5 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 sm:px-6 <%= 'border-b border-border-subtle' if meters.any? %>">
+        <h2 id="billing-usage-heading" class="section-header"><%= t("settings_billing.subscription.usage_title") %></h2>
+        <p class="text-body-sm text-text-secondary sm:text-right">
+          <%= t("settings_billing.subscription.entitlement_sources.#{fact(entitlements, :source)}") %>
+          <% if fact(entitlements, :expires_at) %><span class="block text-text-tertiary"><%= t("settings_billing.subscription.access_until", date: billing_date(fact(entitlements, :expires_at))) %></span><% end %>
+        </p>
+      </header>
+      <% if meters.any? %>
+        <dl class="grid gap-x-8 gap-y-5 px-5 py-5 sm:grid-cols-3 sm:px-6">
+          <% meters.each do |meter| %>
+            <div class="min-w-0">
+              <div class="flex items-baseline justify-between gap-3">
+                <dt class="min-w-0 truncate text-body-sm text-text-secondary"><%= meter[:label] %></dt>
+                <dd class="shrink-0 text-body-sm font-medium tabular-nums <%= meter[:state] == :over ? 'text-danger' : 'text-text-primary' %>"><%= meter[:value] %></dd>
+              </div>
+              <% if meter[:percent] %>
+                <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-active" aria-hidden="true">
+                  <div class="h-full rounded-full <%= METER_BAR_CLASSES.fetch(meter[:state]) %>" style="width: <%= meter[:percent] %>%"></div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </dl>
+      <% end %>
+    </section>
+  <% end %>
+
+  <section id="compare-plans" class="flex min-w-0 scroll-mt-28 flex-col gap-5" aria-labelledby="compare-plans-heading" <% if interval_toggle? %>data-controller="billing-plan-catalog" data-billing-plan-catalog-interval-value="<%= default_interval %>"<% end %>>
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div class="min-w-0">
+        <h2 id="compare-plans-heading" class="section-header"><%= t("comp_billing.plan_comparison.compare_plans") %></h2>
+        <p class="mt-1 max-w-2xl text-body-sm text-text-secondary"><%= t("settings_billing.subscription.plans_hint") %></p>
+      </div>
+      <% if plans.any? && interval_toggle? %>
+        <div class="inline-flex w-fit shrink-0 rounded-lg bg-surface-active p-1" role="radiogroup" aria-label="<%= t('settings_billing.subscription.intervals.aria_label') %>">
+          <button type="button" role="radio" aria-checked="<%= default_interval == 'monthly' %>" data-billing-plan-catalog-target="button" data-action="billing-plan-catalog#selectInterval keydown->billing-plan-catalog#keydown" data-billing-plan-catalog-interval-param="monthly" class="<%= interval_button_class('monthly') %>"><%= t("settings_billing.subscription.intervals.monthly") %></button>
+          <button type="button" role="radio" aria-checked="<%= default_interval == 'yearly' %>" data-billing-plan-catalog-target="button" data-action="billing-plan-catalog#selectInterval keydown->billing-plan-catalog#keydown" data-billing-plan-catalog-interval-param="yearly" class="<%= interval_button_class('yearly') %>"><%= t("settings_billing.subscription.intervals.yearly") %></button>
+        </div>
+      <% end %>
+    </div>
+
+    <% if plan_review && review_plan %>
+      <section id="plan-review" class="card scroll-mt-28 overflow-hidden ring-1 ring-accent-muted" aria-labelledby="plan-review-heading">
+        <div class="flex flex-col gap-4 p-5 sm:p-6">
+          <% unless review_allowed? %>
+            <div role="alert"><%= render AlertComponent.new(message: t(fact(plan_review, :reason_key).presence || "settings_billing.subscription.change_blocked"), type: :warning, auto_dismiss: false) %></div>
+          <% end %>
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 id="plan-review-heading" class="text-subheading font-semibold"><%= t("settings_billing.subscription.change_review_title", plan: review_plan.name) %></h3>
+            <p class="text-text-secondary tabular-nums"><span class="font-semibold text-text-primary"><%= formatted_price(review_plan) %></span> <%= interval_label(review_plan) %></p>
+          </div>
+          <% if review_allowed? %>
+            <div class="flex flex-col gap-2 rounded-lg border border-border-subtle px-4 py-3">
+              <% if fact(plan_review, :kind).to_s == "immediate" %>
+                <% if fact(plan_review, :subtotal_cents).present? %>
+                  <div class="flex justify-between gap-4 text-body-sm">
+                    <span class="text-text-secondary"><%= t("settings_billing.subscription.review_breakdown.subtotal") %></span>
+                    <span class="tabular-nums text-text-primary"><%= billing_amount(fact(plan_review, :subtotal_cents), fact(plan_review, :currency)) %></span>
+                  </div>
+                  <% if fact(plan_review, :tax_cents).to_i.positive? %>
+                    <div class="flex justify-between gap-4 text-body-sm">
+                      <span class="text-text-secondary"><%= t("settings_billing.subscription.review_breakdown.tax") %></span>
+                      <span class="tabular-nums text-text-primary"><%= billing_amount(fact(plan_review, :tax_cents), fact(plan_review, :currency)) %></span>
+                    </div>
+                  <% end %>
+                <% end %>
+                <p class="<%= 'border-t border-border-subtle pt-2 ' if fact(plan_review, :subtotal_cents).present? %>font-semibold text-text-primary tabular-nums"><%= t("settings_billing.subscription.charge_now", amount: billing_amount(fact(plan_review, :total_cents), fact(plan_review, :currency))) %></p>
+                <p class="text-body-sm text-text-secondary"><%= t("settings_billing.subscription.effective_on_collection") %></p>
+              <% elsif subscription_live? %>
+                <p class="font-semibold text-text-primary"><%= t("settings_billing.subscription.effective_on", date: billing_date(fact(plan_review, :effective_at))) %></p>
+              <% else %>
+                <p class="text-text-primary"><%= t("settings_billing.subscription.enrollment_hint") %></p>
+              <% end %>
+              <% if fact(plan_review, :calculated_at) %><p class="text-caption"><%= t("settings_billing.subscription.proration_estimate_hint", time: billing_time(fact(plan_review, :calculated_at))) %></p><% end %>
+              <% unless subscription_live? %><p class="text-caption"><%= t("settings_billing.subscription.trial_policy_hint") %></p><% end %>
+            </div>
+            <%= form_with url: helpers.admin_settings_billing_subscription_path(customer_id), method: :patch, scope: :billing_subscription, class: "flex flex-col gap-4", data: review_confirm_data do |f| %>
+              <%= f.hidden_field :plan_code, value: review_plan.code %>
+              <%= f.hidden_field :request_key, value: request_key %>
+              <% unless subscription_live? %>
+                <div class="max-w-md">
+                  <%= f.label :coupon_code, t("comp_billing.plan_comparison.coupon_code_label"), class: "form-label" %>
+                  <%= f.text_field :coupon_code, value: coupon_code_value, class: "input-field", **field_options(:coupon_code) %>
+                  <%= field_error(:coupon_code) %>
+                </div>
+              <% end %>
+              <div class="flex flex-col-reverse gap-2 border-t border-border-subtle pt-4 sm:flex-row sm:items-center sm:justify-end">
+                <%= link_to t("common.actions.back"), helpers.admin_settings_billing_subscription_path(customer_id), class: "btn btn-ghost" %>
+                <%= f.submit t(subscription_live? ? "comp_billing.plan_comparison.switch" : "comp_billing.plan_comparison.subscribe"), class: "btn btn-primary" %>
+              </div>
+            <% end %>
+          <% else %>
+            <%= link_to t("common.actions.back"), helpers.admin_settings_billing_subscription_path(customer_id), class: "btn btn-secondary btn-sm w-fit" %>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+
+    <% unless catalog_currency? %><%= render AlertComponent.new(message: t("settings_billing.subscription.currency_unavailable", currency: currency.presence || t("common.labels.em_dash")), type: :warning, auto_dismiss: false) %><% end %>
+
+    <% if changes_blocked? %>
+      <p class="flex items-start gap-2.5 rounded-lg border border-border-subtle bg-canvas-elevated px-4 py-3 text-body-sm text-text-secondary" data-plan-changes-blocked>
+        <%= render Billing::Admin::IconComponent.new(name: :info, class_name: "mt-0.5 size-4 text-text-muted") %>
+        <span><%= t("settings_billing.subscription.change_blocked") %></span>
+      </p>
+    <% end %>
+
+    <% if plans.empty? %>
+      <div class="card flex flex-col items-center gap-3 px-6 py-12 text-center">
+        <span class="flex size-11 items-center justify-center rounded-full bg-surface-active text-text-muted"><%= render Billing::Admin::IconComponent.new(name: :sparkles, class_name: "size-5") %></span>
+        <p class="text-body-sm text-text-secondary"><%= t("comp_billing.plan_comparison.no_plans") %></p>
+      </div>
+    <% else %>
+      <ul class="grid gap-4 md:grid-cols-2 xl:grid-cols-3" role="list" aria-label="<%= t('comp_billing.plan_comparison.compare_plans') %>">
+        <% plans.each do |plan| %>
+          <% current = current_plan?(plan) %>
+          <li class="relative flex min-w-0 flex-col rounded-xl border bg-surface p-5 sm:p-6 <%= current ? 'border-accent ring-1 ring-accent' : 'border-border-subtle' %>" data-plan-code="<%= plan.code %>" data-billing-plan-catalog-target="card" data-interval="<%= plan.interval %>" data-free="<%= catalog_free?(plan) %>">
+            <div class="flex items-start justify-between gap-2">
+              <h3 class="min-w-0 font-semibold text-text-primary break-words"><%= plan.name %></h3>
+              <% if current %>
+                <%= render BadgeComponent.new(variant: :primary, size: :sm) do %><%= t("comp_billing.plan_comparison.current_badge") %><% end %>
+              <% elsif trial_offer?(plan) %>
+                <%= render BadgeComponent.new(variant: :info, size: :sm) do %><%= plan_trial(plan) %><% end %>
+              <% end %>
+            </div>
+            <% if plan.description.present? %><p class="mt-1 text-body-sm text-text-secondary break-words"><%= plan.description %></p><% end %>
+            <div class="mt-4">
+              <p class="flex flex-wrap items-baseline gap-x-1.5">
+                <span class="<%= visually_hidden_class %>"><%= t("settings_billing.subscription.billed_price") %></span>
+                <span class="text-subtitle tabular-nums"><%= plan_price(plan) %></span>
+                <span class="text-body-sm text-text-tertiary"><%= interval_label(plan) %></span>
+              </p>
+              <% if yearly?(plan) %>
+                <p class="mt-1 text-caption tabular-nums"><%= t("settings_billing.subscription.monthly_equivalent") %> · <%= monthly_equivalent(plan) %> <%= t("comp_billing.plan_comparison.interval_month") %></p>
+              <% end %>
+            </div>
+            <% if enabled_items.any? %>
+              <dl class="mt-5 flex flex-col gap-2 border-t border-border-subtle pt-5 text-body-sm">
+                <% enabled_items.each do |item| %>
+                  <div class="flex items-center justify-between gap-3">
+                    <dt class="min-w-0 break-words text-text-secondary"><%= item.label %></dt>
+                    <dd class="text-right tabular-nums <%= unlimited?(plan, item) ? 'text-text-tertiary' : 'font-medium text-text-primary' %>"><%= limit_display(plan, item) %></dd>
+                  </div>
+                <% end %>
+              </dl>
+            <% end %>
+            <div class="mt-auto pt-6">
+              <% if current %>
+                <button type="button" disabled class="btn btn-secondary w-full"><%= render Billing::Admin::IconComponent.new(name: :check, class_name: "size-4") %><%= t("comp_billing.plan_comparison.current_plan_btn") %></button>
+              <% elsif !subscription_live? && catalog_currency? && plan_review.nil? %>
+                <%= render Billing::Admin::EnrollmentDialogComponent.new(plan: plan, catalog: self) %>
+              <% elsif selectable?(plan) %>
+                <%= link_to t("settings_billing.subscription.review_change"), review_path(plan), class: "btn btn-secondary w-full" %>
+              <% else %>
+                <button type="button" disabled class="btn btn-secondary w-full"><%= t("settings_billing.subscription.review_change") %></button>
+              <% end %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+      <% unless subscription_live? || plan_review || !enrollment_error_unmatched? %><%= field_error(:coupon_code) %><% end %>
+      <p class="text-caption"><%= t("settings_billing.subscription.prices_note", currency: currency) %></p>
+    <% end %>
+  </section>
+
+  <% if coupon_card? || manage_card? %>
+    <section class="card min-w-0 overflow-hidden" aria-labelledby="subscription-settings-heading">
+      <header class="border-b border-border-subtle px-5 py-4 sm:px-6">
+        <h2 id="subscription-settings-heading" class="section-header"><%= t("settings_billing.subscription.settings_title") %></h2>
+      </header>
+      <div class="divide-y divide-border-subtle">
+        <% if coupon_card? %>
+          <div id="subscription-coupon" class="flex scroll-mt-28 flex-col gap-4 px-5 py-5 sm:px-6 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
+            <div class="min-w-0 lg:max-w-xs">
+              <h3 class="text-body-sm font-semibold text-text-primary"><%= t("settings_billing.subscription.coupon_row_title") %></h3>
+              <p class="mt-1 text-body-sm text-text-secondary"><%= t("settings_billing.subscription.coupon_row_hint") %></p>
+            </div>
+            <div class="min-w-0 lg:w-full lg:max-w-md">
+              <% if coupon_benefit %>
+                <%= render Billing::Admin::CouponBenefitComponent.new(benefit: coupon_benefit, currency: currency) %>
+              <% elsif current_subscription.coupon.present? %>
+                <div class="flex flex-col gap-2">
+                  <span class="inline-flex w-fit items-center gap-1.5 rounded-md bg-accent-subtle px-2.5 py-1 font-mono text-body-sm font-medium text-accent-text"><%= render Billing::Admin::IconComponent.new(name: :tag, class_name: "size-4") %><%= current_subscription.coupon.code %></span>
+                  <p class="text-body-sm text-text-secondary"><%= t("comp_billing.subscription_coupon.locked_hint") %></p>
+                </div>
+              <% else %>
+                <%= form_with url: helpers.admin_settings_billing_coupon_redemption_path(customer_id), method: :post, scope: :coupon_redemption do |f| %>
+                  <%= f.label :coupon_code, t("comp_billing.plan_comparison.coupon_code_label"), class: visually_hidden_class %>
+                  <div class="flex gap-2">
+                    <div class="relative min-w-0 flex-1">
+                      <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-text-muted"><%= render Billing::Admin::IconComponent.new(name: :tag, class_name: "size-4") %></span>
+                      <%= f.text_field :coupon_code, value: coupon_code_value, placeholder: t("comp_billing.plan_comparison.coupon_code_placeholder"), class: "input-field pl-9", **field_options(:coupon_code) %>
+                    </div>
+                    <%= f.submit t("comp_billing.plan_comparison.apply"), class: "btn btn-secondary shrink-0" %>
+                  </div>
+                  <%= field_error(:coupon_code) %>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <% if manage_card? %>
+          <div id="manage-subscription" class="flex scroll-mt-28 flex-col gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <% if can_resume? %>
+              <div class="min-w-0">
+                <h3 class="text-body-sm font-semibold text-text-primary"><%= t("comp_billing.plan_comparison.cancels_at_period_end") %></h3>
+                <p class="mt-1 text-body-sm text-text-secondary"><%= t("settings_billing.subscription.resume_row_hint", date: billing_date(current_subscription.current_period_end)) %></p>
+              </div>
+              <%= button_to t("settings_billing.subscription.keep_subscription"), helpers.admin_settings_billing_cancellation_path(customer_id), method: :delete,
+                            data: { turbo_confirm: t("comp_billing.plan_comparison.resume_confirm") }, class: "btn btn-primary btn-sm", form_class: "shrink-0" %>
+            <% elsif can_cancel? %>
+              <div class="min-w-0">
+                <h3 class="text-body-sm font-semibold text-text-primary"><%= t("settings_billing.subscription.cancel_row_title") %></h3>
+                <p class="mt-1 max-w-xl text-body-sm text-text-secondary"><%= t("settings_billing.subscription.cancel_hint") %></p>
+              </div>
+              <%= button_to t("comp_billing.plan_comparison.cancel_subscription"), helpers.admin_settings_billing_cancellation_path(customer_id), method: :post,
+                            params: { cancellation: { immediately: false } }, data: { turbo_confirm: t("settings_billing.subscription.cancel_at_date", date: billing_date(current_subscription.current_period_end)) },
+                            class: "btn btn-secondary btn-sm text-danger hover:bg-danger-subtle hover:text-danger", form_class: "shrink-0" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
+  <% if show_one_time_payment? %>
+    <%= render Billing::Admin::OneTimePaymentDialogComponent.new(
+      one_time_payment: one_time_payment, customer_id: customer_id,
+      post_url: subscription_one_time_payment_path, open: one_time_dialog_open?,
+      error_message: one_time_error
+    ) %>
+  <% end %>
+</div>

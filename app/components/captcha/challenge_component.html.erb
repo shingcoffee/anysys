@@ -1,0 +1,23 @@
+<div class="min-h-screen flex items-center justify-center px-4 py-12">
+  <div class="card w-full max-w-md overflow-hidden">
+    <div class="card-header">
+      <h1 class="section-header"><%= t("captcha.challenge.title") %></h1>
+      <p class="mt-0.5 text-caption"><%= t("captcha.challenge.subtitle") %></p>
+    </div>
+    <div class="px-6 py-6 space-y-4">
+      <% if flash[:alert].present? %>
+        <%= render AlertComponent.new(message: flash[:alert], type: :error) %>
+      <% end %>
+      <% unless @configured %>
+        <%= render AlertComponent.new(message: t("captcha.challenge.unavailable"), type: :warning) %>
+      <% end %>
+      <%= form_with url: form_url, method: :post, local: true, class: "space-y-4" do %>
+        <input type="hidden" name="return_to" value="<%= @return_to %>">
+        <%= render Captcha::WidgetComponent.new %>
+        <%= render ButtonComponent.new(type: :submit, variant: :primary) do %>
+          <%= t("captcha.challenge.continue") %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

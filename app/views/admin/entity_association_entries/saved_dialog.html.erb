@@ -1,0 +1,8 @@
+<%# Read by the entity-quick-add-dialog controller; its opener then reloads the entry page. %>
+<turbo-frame id="<%= Admin::Entities::QuickAddDialogComponent.frame_id(dialog_depth) %>">
+  <p role="status"
+     class="py-16 text-center text-body-sm text-text-muted"
+     data-entity-quick-add-dialog-target="created"
+     data-entry-id="<%= @entry.id %>"
+     data-entry-label=""><%= @notice %></p>
+</turbo-frame>

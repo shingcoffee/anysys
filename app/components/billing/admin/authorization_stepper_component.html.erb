@@ -1,0 +1,16 @@
+<nav aria-label="<%= t("settings_billing.payment_methods.steps.aria_label") %>">
+  <ol class="card flex flex-col gap-1 p-1.5 sm:flex-row sm:items-center sm:justify-between sm:gap-1">
+    <% steps.each_with_index do |step, index| %>
+      <li class="flex min-w-0 items-center gap-3 rounded-lg border px-3 py-2 <%= 'sm:flex-1' unless index == steps.length - 1 %> <%= highlighted?(step) ? 'border-accent/40 bg-accent-subtle/30 ring-1 ring-accent' : 'border-transparent' %>">
+        <span class="flex size-8 shrink-0 items-center justify-center rounded-full text-body-sm font-semibold <%= marker_class(step[:state]) %>">
+          <% if step[:state] == :complete %>
+            <%= render Billing::Admin::IconComponent.new(name: :check, class_name: "size-4") %>
+          <% else %>
+            <span class="tabular-nums"><%= step[:index] %></span>
+          <% end %>
+        </span>
+        <p class="min-w-0 font-medium text-text-primary"><%= step[:label] %></p>
+      </li>
+    <% end %>
+  </ol>
+</nav>

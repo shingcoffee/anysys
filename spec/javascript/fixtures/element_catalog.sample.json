@@ -1,0 +1,676 @@
+{
+  "locale": "en",
+  "types": {
+    "start": {
+      "type": "start",
+      "label": "Start",
+      "defaultLabel": "Start",
+      "tabs": [
+        "general",
+        "io"
+      ],
+      "fields": []
+    },
+    "end": {
+      "type": "end",
+      "label": "End",
+      "defaultLabel": "End",
+      "tabs": [
+        "general",
+        "io"
+      ],
+      "fields": [
+        {
+          "label": "Response Type",
+          "help": "Whether this flowchart returns a value.",
+          "placeholder": null,
+          "default": "none",
+          "required": true,
+          "group": "main",
+          "options": [
+            {
+              "value": "none",
+              "label": "Nothing"
+            },
+            {
+              "value": "value",
+              "label": "Return a value"
+            }
+          ],
+          "min": null,
+          "max": null,
+          "visibleWhen": null,
+          "requiredWhen": null,
+          "variablePicker": false,
+          "source": null,
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "responseType",
+          "role": "enum",
+          "control": "select"
+        },
+        {
+          "label": "Return Value",
+          "help": "The value this flowchart returns. Use a context path such as ctx.result.",
+          "placeholder": "ctx.result",
+          "default": null,
+          "required": false,
+          "group": "main",
+          "options": [],
+          "min": null,
+          "max": null,
+          "visibleWhen": {
+            "responseType": "value"
+          },
+          "requiredWhen": {
+            "responseType": "value"
+          },
+          "variablePicker": false,
+          "source": null,
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "returnValue",
+          "role": "expression",
+          "control": "code"
+        }
+      ]
+    },
+    "process": {
+      "type": "process",
+      "label": "Process",
+      "defaultLabel": "Process",
+      "tabs": [
+        "general",
+        "steps",
+        "io"
+      ],
+      "fields": []
+    },
+    "decision": {
+      "type": "decision",
+      "label": "Decision",
+      "defaultLabel": "Decision",
+      "tabs": [
+        "general",
+        "branches",
+        "io"
+      ],
+      "fields": [
+        {
+          "label": "Route by",
+          "help": "Choose whether branches match a subject value or a Yes / No condition.",
+          "placeholder": null,
+          "default": "condition",
+          "required": true,
+          "group": "main",
+          "options": [
+            {
+              "value": "value",
+              "label": "Value"
+            },
+            {
+              "value": "condition",
+              "label": "Yes / No"
+            }
+          ],
+          "min": null,
+          "max": null,
+          "visibleWhen": null,
+          "requiredWhen": null,
+          "variablePicker": false,
+          "source": null,
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "routeBy",
+          "role": "enum",
+          "control": "select"
+        },
+        {
+          "label": "Subject",
+          "help": "Ruby expression whose value is compared to each branch match value.",
+          "placeholder": "ctx[:status]",
+          "default": null,
+          "required": true,
+          "group": "main",
+          "options": [],
+          "min": null,
+          "max": null,
+          "visibleWhen": {
+            "routeBy": "value"
+          },
+          "requiredWhen": null,
+          "variablePicker": false,
+          "source": null,
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "subject",
+          "role": "expression",
+          "control": "code"
+        },
+        {
+          "label": "Condition",
+          "help": "Rows joined by AND or OR. The result selects the Yes or No branch.",
+          "placeholder": null,
+          "default": null,
+          "required": true,
+          "group": "main",
+          "options": [],
+          "min": null,
+          "max": null,
+          "visibleWhen": {
+            "routeBy": "condition"
+          },
+          "requiredWhen": null,
+          "variablePicker": false,
+          "source": null,
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "condition",
+          "role": "conditions",
+          "control": "conditions"
+        }
+      ]
+    },
+    "loop": {
+      "type": "loop",
+      "label": "Loop",
+      "defaultLabel": "Loop",
+      "tabs": [
+        "general",
+        "io",
+        "advanced"
+      ],
+      "fields": [
+        {
+          "label": "Loop type",
+          "help": "Repeat while a condition is true, or walk each item in a list.",
+          "placeholder": null,
+          "default": "while",
+          "required": true,
+          "group": "main",
+          "options": [
+            {
+              "value": "while",
+              "label": "Repeat while"
+            },
+            {
+              "value": "for_each",
+              "label": "For each item"
+            }
+          ],
+          "min": null,
+          "max": null,
+          "visibleWhen": null,
+          "requiredWhen": null,
+          "variablePicker": false,
+          "source": null,
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "loopType",
+          "role": "enum",
+          "control": "select"
+        },
+        {
+          "label": "Run once before checking",
+          "help": "Run the body once before the first condition check.",
+          "placeholder": null,
+          "default": false,
+          "required": false,
+          "group": "main",
+          "options": [],
+          "min": null,
+          "max": null,
+          "visibleWhen": {
+            "loopType": "while"
+          },
+          "requiredWhen": null,
+          "variablePicker": false,
+          "source": null,
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "runOnceFirst",
+          "role": "flag",
+          "control": "toggle"
+        },
+        {
+          "label": "Condition",
+          "help": "The loop continues while this is true.",
+          "placeholder": null,
+          "default": null,
+          "required": true,
+          "group": "main",
+          "options": [],
+          "min": null,
+          "max": null,
+          "visibleWhen": {
+            "loopType": "while"
+          },
+          "requiredWhen": null,
+          "variablePicker": false,
+          "source": null,
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "condition",
+          "role": "conditions",
+          "control": "conditions"
+        },
+        {
+          "label": "Collection",
+          "help": "Context path of the list to walk.",
+          "placeholder": "items",
+          "default": null,
+          "required": true,
+          "group": "main",
+          "options": [],
+          "min": null,
+          "max": null,
+          "visibleWhen": {
+            "loopType": "for_each"
+          },
+          "requiredWhen": null,
+          "variablePicker": true,
+          "source": null,
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "collection",
+          "role": "input",
+          "control": "text"
+        },
+        {
+          "label": "Item name",
+          "help": "Context name bound to the current item.",
+          "placeholder": "item",
+          "default": "item",
+          "required": false,
+          "group": "main",
+          "options": [],
+          "min": null,
+          "max": null,
+          "visibleWhen": {
+            "loopType": "for_each"
+          },
+          "requiredWhen": null,
+          "variablePicker": false,
+          "source": null,
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "itemVariable",
+          "role": "literal",
+          "control": "text"
+        },
+        {
+          "label": "Max iterations",
+          "help": "The run fails if the loop is still going after this many passes (1–10,000).",
+          "placeholder": "100",
+          "default": 100,
+          "required": false,
+          "group": "main",
+          "options": [],
+          "min": 1,
+          "max": 10000,
+          "visibleWhen": null,
+          "requiredWhen": null,
+          "variablePicker": false,
+          "source": null,
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "maxIterations",
+          "role": "integer",
+          "control": "number"
+        },
+        {
+          "label": "Stop early when",
+          "help": "Leave the loop successfully when this becomes true.",
+          "placeholder": null,
+          "default": null,
+          "required": false,
+          "group": "advanced",
+          "options": [],
+          "min": null,
+          "max": null,
+          "visibleWhen": null,
+          "requiredWhen": null,
+          "variablePicker": false,
+          "source": null,
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "stopWhen",
+          "role": "conditions",
+          "control": "conditions"
+        },
+        {
+          "label": "Skip item when",
+          "help": "Skip the current item and continue with the next one.",
+          "placeholder": null,
+          "default": null,
+          "required": false,
+          "group": "advanced",
+          "options": [],
+          "min": null,
+          "max": null,
+          "visibleWhen": {
+            "loopType": "for_each"
+          },
+          "requiredWhen": null,
+          "variablePicker": false,
+          "source": null,
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "skipWhen",
+          "role": "conditions",
+          "control": "conditions"
+        },
+        {
+          "label": "Index name",
+          "help": "Context name bound to the current item index, starting at 0.",
+          "placeholder": "index",
+          "default": "index",
+          "required": false,
+          "group": "advanced",
+          "options": [],
+          "min": null,
+          "max": null,
+          "visibleWhen": {
+            "loopType": "for_each"
+          },
+          "requiredWhen": null,
+          "variablePicker": false,
+          "source": null,
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "indexVariable",
+          "role": "literal",
+          "control": "text"
+        },
+        {
+          "label": "Collect items into",
+          "help": "Context name that receives the items that were processed.",
+          "placeholder": "results",
+          "default": null,
+          "required": false,
+          "group": "advanced",
+          "options": [],
+          "min": null,
+          "max": null,
+          "visibleWhen": {
+            "loopType": "for_each"
+          },
+          "requiredWhen": null,
+          "variablePicker": false,
+          "source": null,
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "collectInto",
+          "role": "output",
+          "control": "text"
+        }
+      ]
+    },
+    "subflow": {
+      "type": "subflow",
+      "label": "Subflow",
+      "defaultLabel": "Subflow",
+      "tabs": [
+        "general",
+        "io"
+      ],
+      "fields": [
+        {
+          "label": "Flowchart",
+          "help": "Launched flowchart to run. The flowchart being edited is not listed.",
+          "placeholder": null,
+          "default": null,
+          "required": true,
+          "group": "main",
+          "options": [],
+          "min": null,
+          "max": null,
+          "visibleWhen": null,
+          "requiredWhen": null,
+          "variablePicker": false,
+          "source": "flowcharts",
+          "itemRole": null,
+          "keyRole": null,
+          "valueRole": null,
+          "multiline": false,
+          "maxLength": null,
+          "name": "flowchartId",
+          "role": "reference",
+          "control": "reference_picker"
+        },
+        {
+          "label": "Inputs",
+          "help": "Name a value the subflow reads, and where it comes from here. Leave empty when the names already match.",
+          "placeholder": null,
+          "default": [],
+          "required": false,
+          "group": "main",
+          "options": [],
+          "min": null,
+          "max": null,
+          "visibleWhen": null,
+          "requiredWhen": null,
+          "variablePicker": false,
+          "source": null,
+          "itemRole": null,
+          "keyRole": "output",
+          "valueRole": "expression",
+          "multiline": false,
+          "maxLength": null,
+          "name": "inputVariables",
+          "role": "mapping",
+          "control": "mapping"
+        }
+      ]
+    }
+  },
+  "connection": {
+    "fields": [
+      {
+        "label": "Label",
+        "help": "Name shown on the connection.",
+        "placeholder": null,
+        "default": null,
+        "required": false,
+        "group": "main",
+        "options": [],
+        "min": null,
+        "max": null,
+        "visibleWhen": null,
+        "requiredWhen": null,
+        "variablePicker": false,
+        "source": null,
+        "itemRole": null,
+        "keyRole": null,
+        "valueRole": null,
+        "multiline": false,
+        "maxLength": null,
+        "name": "label",
+        "role": "literal",
+        "control": "text"
+      },
+      {
+        "label": "Notes",
+        "help": "Optional notes for this connection.",
+        "placeholder": null,
+        "default": null,
+        "required": false,
+        "group": "main",
+        "options": [],
+        "min": null,
+        "max": null,
+        "visibleWhen": null,
+        "requiredWhen": null,
+        "variablePicker": false,
+        "source": null,
+        "itemRole": null,
+        "keyRole": null,
+        "valueRole": null,
+        "multiline": true,
+        "maxLength": null,
+        "name": "description",
+        "role": "literal",
+        "control": "textarea"
+      }
+    ]
+  },
+  "operators": [
+    {
+      "value": "==",
+      "label": "equals",
+      "unary": false,
+      "count": true
+    },
+    {
+      "value": "!=",
+      "label": "does not equal",
+      "unary": false,
+      "count": true
+    },
+    {
+      "value": ">",
+      "label": "is greater than",
+      "unary": false,
+      "count": true
+    },
+    {
+      "value": ">=",
+      "label": "is at least",
+      "unary": false,
+      "count": true
+    },
+    {
+      "value": "<",
+      "label": "is less than",
+      "unary": false,
+      "count": true
+    },
+    {
+      "value": "<=",
+      "label": "is at most",
+      "unary": false,
+      "count": true
+    },
+    {
+      "value": "contains",
+      "label": "contains",
+      "unary": false,
+      "count": false
+    },
+    {
+      "value": "starts_with",
+      "label": "starts with",
+      "unary": false,
+      "count": false
+    },
+    {
+      "value": "ends_with",
+      "label": "ends with",
+      "unary": false,
+      "count": false
+    },
+    {
+      "value": "matches_regex",
+      "label": "matches pattern",
+      "unary": false,
+      "count": false
+    },
+    {
+      "value": "in_range",
+      "label": "is in range",
+      "unary": false,
+      "count": false
+    },
+    {
+      "value": "is_type",
+      "label": "is of type",
+      "unary": false,
+      "count": false
+    },
+    {
+      "value": "is_true",
+      "label": "is true",
+      "unary": true,
+      "count": false
+    },
+    {
+      "value": "is_false",
+      "label": "is false",
+      "unary": true,
+      "count": false
+    },
+    {
+      "value": "is_empty",
+      "label": "is empty",
+      "unary": true,
+      "count": false
+    },
+    {
+      "value": "is_not_empty",
+      "label": "is not empty",
+      "unary": true,
+      "count": false
+    },
+    {
+      "value": "is_nil",
+      "label": "is not set",
+      "unary": true,
+      "count": false
+    }
+  ],
+  "chrome": {
+    "label": {
+      "label": "Label"
+    },
+    "notes": {
+      "key": "description",
+      "label": "Notes"
+    }
+  },
+  "digest": "69fa25e22b37ba1bcf57aecc39ba60e8dda4c538c470dd8367f28eb7b6500f8b"
+}

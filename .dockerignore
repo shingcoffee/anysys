@@ -1,0 +1,81 @@
+# See https://docs.docker.com/engine/reference/builder/#dockerignore-file
+
+# VCS and editor / agent tooling (never needed at runtime).
+/.git/
+/.gitignore
+/.cursor/
+/.cursorignore
+/.superpowers/
+/.ruby-lsp/
+/.idea/
+/.vscode/
+/.kamal/
+/.devcontainer/
+/.github/
+/.worktrees/
+
+# Bundler / Node / env / secrets.
+/.bundle
+/vendor/bundle
+/node_modules/
+/package.json
+/package-lock.json
+/.env*
+/config/master.key
+/config/credentials/*.key
+
+# Logs, tmp, coverage, local SQLite and uploads.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/tmp/pids/*
+!/tmp/pids/.keep
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/.keep
+/coverage/
+/test-results/
+/spec/reports/
+
+# Host-built assets; the image precompiles its own.
+/app/assets/builds/*
+!/app/assets/builds/.keep
+/public/assets
+
+# Tests, JS harness, design notes. Keep doc/reference and doc/customer
+# (served in-app). Drop planning/audit trees.
+/spec/
+/docs/
+/doc/plans/
+/doc/route-audit-findings.md
+/config/javascript/
+/scripts/
+/script/
+
+# CI / local-only config. Runtime keeps bin/docker-entrypoint, rails, rake,
+# jobs, and thrust.
+/.rspec
+/.rubocop.yml
+/Procfile.dev
+/AGENTS.md
+/README.md
+/config/ci.rb
+/config/bundler-audit.yml
+/bin/brakeman
+/bin/bundler-audit
+/bin/ci
+/bin/dev
+/bin/importmap
+/bin/kamal
+/bin/rubocop
+/bin/setup
+
+# Image/build files themselves are not needed inside the image.
+/.dockerignore
+/Dockerfile*
+/compose.yaml
+/compose.yml
+/docker-compose.yml
+/config/deploy*.yml

@@ -1,0 +1,5 @@
+<%= render Authentication::MailerShellComponent.new(
+      scope:      :customer_signup,
+      email:      @email,
+      action_url: customer_registration_confirm_url(token: @token)
+    ) %>

@@ -1,0 +1,20 @@
+<section class="flex flex-col gap-3 rounded-xl border border-border-subtle bg-surface px-4 py-4 shadow-xs sm:flex-row sm:items-center sm:justify-between sm:px-5"
+         data-studio-status-strip="true"
+         aria-label="<%= t("website.admin.pages.index.title") %>">
+  <div class="flex min-w-0 flex-col gap-1.5">
+    <div class="flex flex-wrap items-center gap-2">
+      <%= render BadgeComponent.new(variant: published? ? :success : :warning, size: :sm) do %>
+        <%= status_label %>
+      <% end %>
+      <p class="text-sm text-text-secondary"><%= page_count_label %></p>
+    </div>
+    <p class="flex min-w-0 flex-wrap items-center gap-2 text-sm text-text-tertiary">
+      <span class="font-medium text-text-secondary"><%= t("website.admin.pages.index.public_url") %></span>
+      <% if published? %>
+        <%= link_to public_path, public_path, class: "truncate rounded-md bg-canvas px-2 py-0.5 font-mono text-sm text-accent-text hover:underline", target: "_blank", rel: "noopener" %>
+      <% else %>
+        <span class="truncate rounded-md bg-canvas px-2 py-0.5 font-mono text-sm text-text-tertiary"><%= public_path %></span>
+      <% end %>
+    </p>
+  </div>
+</section>

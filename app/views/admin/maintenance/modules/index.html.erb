@@ -1,0 +1,17 @@
+<%# app/views/admin/maintenance/modules/index.html.erb %>
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("maint_core.nav.maintenance"), path: admin_maintenance_path(current_customer.id) },
+    { label: t("maint_core.nav.modules") }
+  ],
+  title: t("maint_core.modules.index.title"),
+  description: t("maint_core.modules.index.description")
+) do %>
+  <%= render Admin::Maintenance::ModuleCatalogComponent.new(
+        customer_id: current_customer_id,
+        modules: @available_modules,
+        enabled_ids: @enabled_module_ids,
+        open_links: @open_links,
+        owner_assignments: @assignments_by_module_id
+      ) %>
+<% end %>

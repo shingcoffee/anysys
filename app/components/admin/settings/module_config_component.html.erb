@@ -1,0 +1,79 @@
+<%= render Admin::Settings::PageComponent.new(customer_id: customer_id, title: title, description: description, breadcrumbs: [{ label: title }]) do %>
+  <div class="flex w-full max-w-3xl flex-col gap-6">
+    <%= render Admin::Settings::SectionComponent.new(flush: true) do %>
+      <%= render Admin::Settings::SettingRowComponent.new(label: t("common.labels.status")) do %>
+        <%= render BadgeComponent.new(variant: :default, size: :sm) do %><%= status_label %><% end %>
+      <% end %>
+
+      <% if active? && owner_managed_schema.any? %>
+        <div class="border-t border-border-subtle">
+          <% owner_managed_schema.each_with_index do |(key, definition), index| %>
+            <%= render Admin::Settings::SettingRowComponent.new(label: field_label(key, index), description: t("settings_modules.configuration.owner_managed_hint")) do %>
+              <span class="text-sm font-medium text-text-primary"><%= field_value(key, definition) %></span>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <% if active? && editable_schema.any? %>
+        <%= form_with url: form_url, method: :patch, local: true, class: "border-t border-border-subtle" do %>
+          <div class="divide-y divide-border-subtle">
+            <% editable_schema.each_with_index do |(key, definition), index| %>
+              <% value = field_value(key, definition) %>
+              <% hint_id = "configuration_#{key}_hint" %>
+              <%= render Admin::Settings::SettingRowComponent.new(label: field_label(key, index), description: field_hint(key), description_id: hint_id, label_for: "configuration_#{key}") do %>
+                <% input_options = { id: "configuration_#{key}", class: "input-field w-full sm:w-56", required: definition["required"], aria: { describedby: hint_id } } %>
+                <% case definition["type"] %>
+                <% when "boolean" %>
+                  <%= select_tag "configuration[#{key}]", options_for_select([[t("common.labels.no"), "false"], [t("common.labels.yes"), "true"]], value.to_s), **input_options %>
+                <% when "number" %>
+                  <%= number_field_tag "configuration[#{key}]", value, **input_options %>
+                <% when "select" %>
+                  <% options = Array(definition["options"]).each_with_index.map { |option, i| [option_label(key, option, i), option] } %>
+                  <%= select_tag "configuration[#{key}]", options_for_select(options, value), include_blank: t("admin_misc.module_config.select_prompt"), **input_options %>
+                <% when "password" %>
+                  <%= password_field_tag "configuration[#{key}]", value, autocomplete: "new-password", **input_options %>
+                <% else %>
+                  <%= text_field_tag "configuration[#{key}]", value, **input_options %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+          <div class="flex justify-end border-t border-border-subtle bg-canvas-elevated px-4 py-3 sm:px-6">
+            <%= submit_tag t("comp_payments.gateway_config.save_changes"), class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      <% elsif active? && schema.empty? && !return_url_available? %>
+        <p class="border-t border-border-subtle px-4 py-4 text-sm text-text-muted sm:px-6"><%= t("admin_misc.module_config.no_settings") %></p>
+      <% elsif !active? %>
+        <div class="border-t border-border-subtle px-4 py-4 sm:px-6">
+          <p class="mb-4 text-sm text-text-muted"><%= t("admin_misc.module_config.not_enabled_message") %></p>
+          <%= link_to t("admin_misc.module_config.go_to_modules"), helpers.admin_maintenance_modules_path(customer_id), class: "btn btn-secondary" %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if return_url_available? %>
+      <%= render Admin::Settings::SectionComponent.new(
+             title: t("settings_modules.configuration.after_finishing"),
+             description: return_description,
+             flush: true
+          ) do %>
+        <%= form_with url: form_url, method: :patch, local: true, class: "w-full" do %>
+          <%= hidden_field_tag "configuration[exit_landing_page][kind]", "url" %>
+          <%= render Admin::Settings::SettingRowComponent.new(
+                label: t("settings_modules.configuration.return_url"),
+                 description: return_hint,
+                description_id: "return-url-hint",
+                label_for: "configuration_exit_landing_page_url"
+              ) do %>
+            <%= url_field_tag "configuration[exit_landing_page][url]", exit_override&.dig("url"), id: "configuration_exit_landing_page_url", class: "input-field w-full sm:w-72", aria: { describedby: "return-url-hint" } %>
+          <% end %>
+          <div class="flex justify-end border-t border-border-subtle bg-canvas-elevated px-4 py-3 sm:px-6">
+            <%= submit_tag t("settings_modules.configuration.save_return"), class: "btn btn-secondary" %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

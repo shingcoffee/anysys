@@ -1,0 +1,53 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: definition_resource_breadcrumbs(:flowcharts),
+  title: t("maint_core.flowcharts.index.title"),
+  description: t("maint_core.flowcharts.index.description"),
+  actions: [
+    { label: t("maint_core.nav.trash"), path: trash_admin_maintenance_flowcharts_path(current_customer_id), variant: :ghost, icon: :trash },
+    { label: t("maint_core.flowcharts.index.new_flowchart"), path: new_admin_maintenance_flowchart_path(current_customer_id), variant: :primary, icon: :plus }
+  ]
+) do %>
+  <%= tag.div(data: {
+        controller: "versions",
+        "versions-customer-id-value": current_customer_id,
+        "versions-resource-value": "flowcharts"
+      }.merge(versions_i18n_data)) do %>
+    <%= render AdminTableComponent.new(
+    rows:        @rows,
+    columns:     @columns,
+    pagination:  @pagination,
+    params:      params.permit(:q, :sort, :dir, :page).to_h.symbolize_keys,
+    search:      { param: :q, placeholder: t("maint_core.flowcharts.index.search_placeholder") },
+    base_path:   admin_maintenance_flowcharts_path(current_customer_id),
+    row_path:    ->(f) { admin_maintenance_flowchart_path(current_customer_id, f) },
+    row_actions: ->(f) {
+      actions = [
+        { label: t("maint_core.nav.versions"), path: "#",
+          data: { turbo: "false", action: "versions#open",
+                  "versions-id-param": f.id,
+                  "versions-name-param": f.name } }
+      ]
+      if f.customer_owned? || shared_resources_mode? || f.shared?
+        actions << { label: t("common.actions.edit"), path: edit_admin_maintenance_flowchart_path(current_customer_id, f) }
+      end
+      if can_copy_definition?(f)
+        actions << { label: t("common.actions.copy"), path: admin_maintenance_flowchart_copy_path(current_customer_id, f) }
+      end
+      if can_destroy_definition?(f)
+        actions << { label: t("common.actions.delete"), path: admin_maintenance_flowchart_path(current_customer_id, f),
+                     method: :delete,
+                     data: { turbo_confirm: t("maint_core.flowcharts.index.delete_confirm", name: f.name) } }
+      end
+      actions
+    },
+    empty_state: {
+      title: t("maint_core.flowcharts.index.empty_title"),
+      description: t("maint_core.flowcharts.index.empty_description"),
+      action_path: new_admin_maintenance_flowchart_path(current_customer_id),
+      action_text: t("maint_core.flowcharts.index.empty_action")
+    }
+    ) %>
+
+    <%= render VersionsModalComponent.new %>
+  <% end %>
+<% end %>

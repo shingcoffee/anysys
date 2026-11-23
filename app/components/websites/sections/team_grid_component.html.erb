@@ -1,0 +1,25 @@
+<section class="<%= padding_class %>">
+  <div class="<%= inner_measure_class %> flex flex-col <%= gap_class %>">
+    <%= header(kicker: prop("kicker"), heading: prop("heading")) %>
+    <div class="grid grid-cols-2 gap-x-5 gap-y-10 md:gap-x-8 lg:grid-cols-4">
+      <% people.each do |person| %>
+        <article <%= item_attrs("people", class: "group flex min-w-0 flex-col gap-4") %>>
+          <div class="relative aspect-[4/5] w-full overflow-hidden rounded-2xl <%= theme.image_frame_class %>">
+            <%= render_media(person["image_url"], alt: person["name"].to_s, css_class: "absolute inset-0 size-full object-cover grayscale-[35%] transition duration-500 group-hover:grayscale-0") %>
+          </div>
+          <div class="flex min-w-0 flex-col gap-1">
+            <% if present_text?(person["name"]) %>
+              <h3 <%= el_attrs("people.name", class: "break-words text-site-base leading-snug md:text-site-lg #{headline_font_class}") %>><%= person["name"] %></h3>
+            <% end %>
+            <% if present_text?(person["role"]) %>
+              <p <%= el_attrs("people.role", class: "text-site-sm #{theme.kicker_class}") %>><%= person["role"] %></p>
+            <% end %>
+            <% if present_text?(person["bio"]) %>
+              <p <%= el_attrs("people.bio", class: "mt-1 text-pretty text-site-md leading-relaxed #{muted_class}") %>><%= person["bio"] %></p>
+            <% end %>
+          </div>
+        </article>
+      <% end %>
+    </div>
+  </div>
+</section>

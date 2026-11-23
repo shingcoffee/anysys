@@ -1,0 +1,354 @@
+"zh-CN":
+  admin_settings:
+    errors:
+      validations:
+        subject_required_for_type: "%{subject_type}必须填写"
+        subject_forbidden_for_type: "%{subject_type}不能填写"
+        role_customer_mismatch: "角色必须与用户属于同一客户"
+        role_owner_reserved: "owner 角色仅限平台所有者账号使用"
+        invalid_surface: "不是该客户的有效界面"
+        visible_keys_max: "最多包含 %{count} 项"
+        provider_not_available: "不是可用的支付渠道"
+        plan_not_active: "必须对应启用中的套餐"
+        plan_interval_mismatch: "必须与当前套餐使用相同的计费周期"
+        dunning_schedule_positive: "必须为大于零的催收间隔天数"
+        coupon_not_found: "未找到"
+        coupon_not_redeemable: "不可兑换"
+        coupon_currency: "不适用于该币种"
+        billing_request_key: "须为有效的计费请求 UUID"
+        change_requires_active_subscription: "须有有效或试用中的订阅"
+        default_plan_must_be_free: "须处于启用状态、两种币种均免费且不含试用"
+        default_plan_required: "须保留有效的免费默认套餐"
+        free_limits_required: "须为每项受管资源设置有限的非负额度"
+        countable_item_invalid: "须包含名称、整数排序，且周期为总量或每月"
+        catalog_terms_immutable: "不可更改已受理的价格或周期条款；请新建套餐选项"
+        dunning_schedule_order: "须为严格递增、不重复的正整数天数，或留空"
+        coupon_fixed_currency: "固定金额优惠须指定 USD 或 CNY"
+        code_immutable: "创建后不可更改"
+        limit_invalid: "支持的资源额度须为空、-1 或非负整数"
+        currency_not_supported: "须为支持的计费币种"
+        row_action_invalid: "行操作须填写操作标识和目标字段。"
+
+    breadcrumbs:
+      settings:          "设置"
+      billing:           "计费"
+      invoices:          "发票"
+      payment_methods:   "支付方式"
+      subscription_plan: "订阅套餐"
+      authentication:    "身份验证"
+      member:            "会员"
+      roles:             "角色"
+      grants:            "授权"
+      draft:             "草稿"
+      email:             "邮件"
+      template_tokens: "模板变量"
+      captcha:           "验证码"
+      website:           "网站"
+
+    index:
+      title:                   "设置"
+      subtitle:                "为您的组织配置模块和偏好设置"
+
+    catalog:
+      groups:
+        members: "管理会员门户及会员可见内容。"
+        billing: "查看订阅方案、付款方式及账单。"
+      empty_title: "暂无设置"
+      empty_description: "为本组织启用模块后，相关设置将显示在此处。"
+      cards:
+        overview: "浏览本组织的全部设置。"
+        member: "选择会员可见的内容及其显示标签。"
+        subscription: "比较套餐并更改订阅。"
+        payment_methods: "添加、设为默认或移除收款方式。"
+        invoices: "查看并下载本组织的发票。"
+      modules:
+        fallback: "为本组织配置%{name}。"
+        authentication: "注册、密码重置、角色与用户分配。"
+        payment: "商户账户与默认支付网关。"
+        email: "每日发送上限与模板变量。"
+        sms: "出站短信的每日发送上限。"
+        captcha: "本组织需要验证码的页面。"
+        ai_assistant: "AI 助手的租户默认设置。"
+        website: "站点信息、主题与公开介绍网站。"
+
+    members:
+      title:         "会员界面"
+      subtitle_html: "选择会员可见的内容及其显示标签。"
+
+    member:
+      sources:
+        builtin:
+          name: "内置"
+          description: "始终显示的会员页面。"
+        modules:
+          description: "由功能模块提供的只读界面。"
+        entities:
+          description: "根据自定义实体结构自动生成的界面。"
+        pages:
+          name: "页面"
+          description: "会员可打开的已上线页面。"
+
+    flash:
+      default_gateways:
+        updated:          "默认支付网关已更新"
+      merchant_accounts:
+        auto_provisioned: "支付网关账户已自动创建，请在下方卡片中配置。"
+        updated:          "支付网关已更新"
+        not_platform_available: "该支付网关尚未在平台开放。"
+      role_grants:
+        updated:          "授权已更新"
+        update_failed:    "授权更新失败"
+      user_role_assignments:
+        assigned:         "角色已分配"
+        assign_failed:    "角色分配失败"
+        removed:          "角色已移除"
+      roles:
+        created:          "角色创建成功"
+        updated:          "角色更新成功"
+        destroyed:        "角色删除成功"
+        destroy_failed:   "角色删除失败"
+      email_template_tokens:
+        created:          "模板变量已创建"
+        updated:          "模板变量已更新"
+        destroyed:        "模板变量已删除"
+        destroy_failed:   "模板变量删除失败"
+      sign_up:
+        enabled:          "自助注册已启用"
+        disabled:         "自助注册已停用"
+      forget_password:
+        enabled:          "忘记密码已启用"
+        disabled:         "忘记密码已停用"
+      member_sources:
+        saved:            "已保存"
+      member_surfaces:
+        saved:            "界面已保存"
+      members:
+        saved:            "会员界面设置已保存"
+      billing:
+        no_active_subscription: "未找到有效订阅。"
+        command_invalid: "当前计费状态不允许此操作。"
+        invalid_filters: "部分计费筛选条件无效，请检查更正后的条件。"
+        collection:
+          succeeded: "账单已付款。"
+          pending: "账单付款处理中，请先查看状态，再决定是否重试。"
+          requires_action: "请完成现有账单付款的验证。"
+          pending_manual: "账单待人工结算，未通过网关扣款。"
+          retry_scheduled: "付款失败，已按账单保存的规则安排重试。"
+          exhausted: "自动付款重试已用尽。请查看账单了解恢复选项。"
+          skipped: "当前账单状态下未发起收款。"
+          blocked: "请先解决账单的付款或授权问题，再发起收款。"
+        reasons:
+          validation_failed: "请检查计费表单字段。"
+          billing_request_key: "计费请求标识无效。开始新请求前请重新加载页面。"
+          pending_change_exists: "请先处理或取消现有套餐变更，再选择其他套餐。"
+          request_key_used: "此请求键已用于现有请求，无法发起新请求。"
+          plan_not_active: "此套餐目前不接受新申请。"
+          currency_not_supported: "当前保存的计费币种不支持套餐变更。"
+          change_requires_active_subscription: "请先恢复当前订阅，再申请套餐变更。"
+          cancellation_scheduled: "请先撤销订阅取消，再申请套餐变更。"
+          renewal_due: "请先支付续订账单，再切换套餐。"
+          resume_blocked: "仅可撤销已安排的取消；付款恢复请通过账单处理。"
+          plan_change_not_found: "没有可取消的待完成套餐变更。"
+          collection_in_flight: "请先处理进行中的付款，再更改此计费记录。"
+          in_flight: "付款已在处理中，请先查看状态，再决定是否重试。"
+          concurrent_collection: "已有一笔收款正在处理中。"
+          request_expired: "此付款请求已过期。如有未结清款项，请联系平台管理员。"
+          provider_unavailable: "此服务商在当前计费币种和凭据模式下不可用。"
+          no_payment_method: "请授权一种支持账单币种的付款方式。"
+          method_inactive: "所选付款方式未激活。"
+          mandate_inactive: "关联的扣款授权未生效。"
+          mandate_incomplete: "服务商授权尚未核实，暂时无法收款。"
+          currency_mismatch: "付款方式或优惠券不支持当前计费币种。"
+          account_mismatch: "关联服务商账户无法用于此计费记录。"
+          tenant_mismatch: "此计费记录不属于当前客户。"
+          reauthorization_required: "请重新授权一种支持此账单金额和计费周期的付款方式。"
+          authorization_failed: "无法完成账单付款授权，请重试。"
+          authorization_unknown: "授权正在等待服务商确认。"
+          authorization_unavailable: "暂时无法核实服务商授权，请稍后重试。"
+          authorization_revoked: "服务商已撤销此授权。"
+          authorization_action_invalid: "服务商未返回可用的授权操作。"
+          method_removed: "此付款方式已移除，无法重新启用。"
+          invalid_return_url: "无法验证授权返回地址。"
+          admin_required: "账单付款授权须由客户管理员操作。"
+          owner_required: "此结算操作仅限平台所有者执行。"
+          settlement_reference_required: "记录人工付款前，请填写结算参考号。"
+          invoice_not_issued: "请先开具账单，再记录结算。"
+          invoice_not_payable: "此账单当前状态不允许结算。"
+          payment_mismatch: "付款与账单保存的标识、金额或币种不一致。"
+          invalid_settlement_source: "结算来源无效。"
+          invalid_collection_authorization: "请选择有效的收款方式，并说明授权理由。"
+          not_zero_invoice: "仅总额为零的账单可免付款结清。"
+          default_plan_required: "归档此套餐前，须保留一个有效且额度有限的免费默认套餐。"
+          fallback_configuration_invalid: "免费套餐额度暂不可用，请联系平台管理员。"
+          already_applied: "此订阅已兑换优惠券。"
+          not_redeemable: "此优惠券目前不可兑换。"
+          subscription_ended: "此订阅已结束，使用付费服务须重新订阅。"
+          settlement_after_expiry: "已记录请求过期后的付款，需平台复核。"
+          duplicate_capture: "发现重复收款，需平台核对。"
+          void_capture: "已作废账单收到付款，需平台处理。"
+          stale_intent: "已记录付款，但其计费请求需平台复核。"
+          stale_initial: "首期付款与已受理的订阅周期不再一致。"
+          stale_plan_change: "套餐变更付款与当前订阅周期不再一致。"
+          stale_renewal: "续订付款与当前订阅周期边界不再一致。"
+          settlement_identity_mismatch: "结算标识需平台复核。"
+          plan_change_ended: "关联的套餐变更已结束，付款需平台复核。"
+          cancellation_boundary: "取消生效时收到的付款需平台复核。"
+          unknown_invoice_purpose: "账单用途需平台复核。"
+          not_submitted: "收款在提交服务商前已被阻止。"
+          one_time_charge_failed: "单次付款未能完成，请选择支付服务商重试。"
+          payment_not_found: "未找到此账单对应的单次付款记录。"
+      cancellations:
+        scheduled:        "订阅已安排取消。"
+        resumed:          "订阅已恢复。"
+        unchanged: "订阅的取消安排未变更。"
+      coupon_redemptions:
+        not_found:        "未找到优惠券代码。"
+        not_redeemable:   "该优惠券不可兑换。"
+        currency_mismatch: "该优惠券不适用于当前计费币种。"
+        already_applied:  "该订阅已绑定优惠券。"
+        once_elapsed:     "一次性优惠券仅可在首张账单开具前使用。"
+        applied:          "优惠券“%{code}”应用成功。"
+      payment_methods:
+        revocation_pending: "付款方式已在本地移除，服务商侧清理尚待完成。"
+        authorized:       "付款方式授权成功。"
+        pending_authorization: "付款方式已保存，完成服务商授权后方可扣款。"
+        removed:          "付款方式已移除。"
+        default_updated:  "默认付款方式已更新。"
+        provider_unavailable: "支付渠道“%{provider}”不可用于账单扣款。"
+      subscriptions:
+        plan_change_scheduled: "套餐变更已安排于 %{date} 生效。"
+        plan_change_pending: "套餐变更待账单结清后生效。"
+        plan_change_cancelled: "待完成的套餐变更已取消。"
+        pending_change_exists: "请先处理或取消现有套餐变更，再选择其他套餐。"
+        subscription_pending: "订阅申请待首期账单付款，结清前适用免费套餐的有限额度。"
+        unchanged: "订阅未变更。"
+        subscribed:       "已订阅 %{name}。"
+        plan_changed:     "套餐已更改为 %{name}。"
+        plan_change_not_collected: "差价账单未能收款，套餐未更改。"
+
+    billing:
+      invoices:
+        show:
+          title:         "发票 %{number}"
+          description:   "发票详情与明细。"
+          back_link:     "全部发票"
+          download_link: "下载 / 打印"
+        download:
+          title:       "发票 %{number}"
+          description: "可打印的发票视图。"
+          number_line: "发票 #%{number}"
+          total_line:  "合计：%{amount}"
+      subscriptions:
+        title:       "订阅套餐"
+        description: "比较各套餐内容，可随时按需切换。"
+
+    authentication:
+      forget_password:
+        title:         "忘记密码"
+        description:   "允许用户通过请求密码重置邮件来找回账户。用户必须点击邮件中的链接才能设置新密码。"
+        status_header: "状态"
+        enable_label:  "启用忘记密码"
+        caption_html:  "停用后，请求表单、邮件链接重置端点，以及登录页面上的“忘记密码？”链接都会显示“密码重置当前已停用”页面。"
+      sign_up:
+        title:         "注册"
+        description:   "允许访客自助注册会员账户。新账户必须先点击邮件中的链接确认邮箱后才能登录。"
+        status_header: "状态"
+        enable_label:  "启用自助注册"
+        caption_html:  "停用后，注册表单、待确认邮件中的确认链接，以及重新发送确认面板都会显示“注册当前已停用”页面。"
+      roles:
+        index:
+          title:             "角色"
+          description:       "为该租户定义基于角色的访问权限。"
+          new_action:        "新建角色"
+          search_placeholder: "搜索角色…"
+          action_grants:     "授权"
+          delete_confirm:    '删除角色“%{name}”？'
+          empty_title:       "暂无角色"
+          empty_description: "为该租户创建第一个自定义角色。"
+          empty_action:      "创建第一个角色"
+        new:
+          title:         "新建角色"
+          subtitle_html: "定义自定义角色，创建后即可分配授权。"
+        edit:
+          title:         "编辑角色"
+          subtitle_html: "更新角色的名称和描述，键不可更改。"
+        show:
+          manage_grants:          "管理授权"
+          details_header:         "详情"
+          key_label:              "键"
+          system_badge:           "系统（已锁定）"
+          custom_badge:           "自定义"
+          usage_header:           "使用情况"
+          users_assigned_label:   "已分配用户"
+          grants_configured_label: "已配置授权"
+        grants:
+          heading:          "授权 — %{name}"
+          default_subtitle: "切换此角色可执行的资源和操作。"
+          back_to_role:     "返回角色"
+      user_role_assignments:
+        title:             "用户角色分配"
+        description:       "为每个用户分配一个或多个角色。系统角色已标注。"
+        empty_title:       "暂无用户"
+        empty_description: "请先在「用户」页面添加用户，再分配角色。"
+
+    emails:
+      template_tokens:
+        index:
+          title:             "模板变量"
+          description:       "平台变量为所有租户共享。可添加绑定到实体属性的自定义变量。"
+          new_action:        "新建变量"
+          platform_heading:  "平台变量"
+          platform_hint:     "只读。可在模板编辑器中插入。"
+          custom_heading:    "自定义变量"
+          custom_hint:       "将每个变量绑定到客户实体的属性。存在用户关联时即可解析收件人取值。"
+          empty_title:       "暂无自定义变量"
+          empty_description: "创建一个映射到实体属性的变量。"
+          empty_action:      "创建变量"
+          delete_confirm:    "删除变量“%{name}”？"
+          columns:
+            label:     "标签"
+            source:    "来源"
+            entity:    "实体"
+            attribute: "属性"
+        new:
+          title:       "新建模板变量"
+          description: "选择一个实体属性，并为其设置在插入选择器中显示的标签。"
+        edit:
+          title:       "编辑模板变量"
+          description: "更新标签或实体属性绑定。"
+        form:
+          label:              "标签"
+          label_placeholder:  "例如：会员等级"
+          entity:             "实体"
+          entity_blank:       "选择实体"
+          attribute:          "属性"
+          attribute_blank:    "选择属性"
+          attribute_hint:     "仅允许所选实体定义中的属性。"
+          create_submit:      "创建变量"
+          update_submit:      "更新变量"
+
+    access_points:
+      groups:
+        admin_routes: "管理路由"
+        modules: "模块"
+        platform: "平台"
+        pages: "页面（全部）"
+        entities: "实体（全部）"
+        pages_instances: "指定页面"
+        entities_instances: "指定实体"
+      route_groups:
+        admin: "管理"
+        maintenance: "维护"
+        platform: "平台"
+        settings: "设置"
+        misc: "其他"
+        settings_module: "%{name}设置"
+      pages_all: "全部页面"
+      pages_all_description: "授权覆盖该客户下的所有页面记录。"
+      entities_all: "全部实体"
+      entities_all_description: "授权覆盖该客户下的所有实体记录。"
+      platform:
+        customers: "平台：客户"
+        module_settings: "平台：模块设置"
+        industry_templates: "平台：行业模板"
+        code_generators: "平台：代码生成器"

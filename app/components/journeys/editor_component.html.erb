@@ -1,0 +1,135 @@
+<%= render AdminPageComponent.new(breadcrumbs: breadcrumbs, title: title, description: t("journeys.admin.description"),
+                                  actions: actions, badges: badges) do %>
+  <%= form_with model: journey, scope: :journey, url: form_url, method: form_method, id: FORM_ID, local: true,
+                data: { turbo: false }, html: { class: "min-w-0" } do |form| %>
+    <% if errors.any? %>
+      <div role="alert" class="mb-6">
+        <%= render AlertComponent.new(message: safe_join(errors.map { |message| tag.span(message, class: "block") }), type: :error) %>
+      </div>
+    <% end %>
+
+    <div class="grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-3 lg:items-start">
+      <div class="space-y-6 lg:sticky lg:top-6 lg:col-start-3 lg:row-start-1">
+        <section aria-labelledby="journey-details-title" class="card min-w-0 p-5 sm:p-6"<% if slugify? %> data-controller="template-slugify"<% end %>>
+          <header class="mb-5">
+            <h2 id="journey-details-title" class="section-header"><%= t("journeys.admin.sections.details") %></h2>
+            <p class="mt-1 text-sm text-text-muted"><%= t("journeys.admin.sections.details_hint") %></p>
+          </header>
+
+          <div class="space-y-4">
+            <div>
+              <%= form.label :name, t("journeys.admin.fields.name"), for: "journey-name", class: "form-label form-label-required" %>
+              <%= form.text_field :name, id: "journey-name", required: true, maxlength: 120, class: "input-field min-h-10 w-full",
+                                  **(slugify? ? { data: { template_slugify_target: "name", action: "input->template-slugify#suggest" } } : {}) %>
+            </div>
+            <div>
+              <%= form.label :key, t("journeys.admin.fields.key"), for: "journey-key", class: "form-label form-label-required" %>
+              <%= form.text_field :key, id: "journey-key", required: true, maxlength: 63, autocomplete: "off", spellcheck: false,
+                                  aria: { describedby: "journey-key-hint" }, class: "input-field min-h-10 w-full font-mono",
+                                  **(slugify? ? { data: { template_slugify_target: "key" } } : {}) %>
+              <p id="journey-key-hint" class="mt-1.5 text-xs text-text-muted"><%= t("journeys.admin.hints.key") %></p>
+            </div>
+            <div>
+              <%= form.label :description, t("journeys.admin.fields.description"), for: "journey-description", class: "form-label" %>
+              <%= form.text_area :description, id: "journey-description", rows: 3, class: "input-field w-full resize-y" %>
+            </div>
+            <div>
+              <%= form.label :entity_domain_id, t("journeys.admin.fields.domain"), for: "journey-domain", class: "form-label form-label-required" %>
+              <%= form.select :entity_domain_id, domain_options, { prompt: t("maint_core.entities.form.domain_prompt") },
+                              required: true, id: "journey-domain", class: "input-field min-h-10 w-full" %>
+            </div>
+            <fieldset aria-describedby="journey-audiences-hint">
+              <legend class="form-label form-label-required"><%= t("journeys.admin.fields.audiences") %></legend>
+              <%= hidden_field_tag "journey[visible_audiences][]", "", id: nil %>
+              <div class="divide-y divide-border-subtle overflow-hidden rounded-lg border border-border-subtle">
+                <% audience_options.each do |label, audience| %>
+                  <label class="flex min-h-10 cursor-pointer items-center gap-3 px-3 py-2 text-sm text-text-primary transition-base hover:bg-surface-hover">
+                    <%= check_box_tag "journey[visible_audiences][]", audience, journey.visible_to?(audience), id: nil,
+                                      class: "size-4 shrink-0 rounded border-border accent-accent" %>
+                    <%= label %>
+                  </label>
+                <% end %>
+              </div>
+              <p id="journey-audiences-hint" class="mt-1.5 text-xs text-text-muted"><%= t("journeys.admin.hints.audiences") %></p>
+            </fieldset>
+
+            <% if (url = start_url) %>
+              <div class="border-t border-border-subtle pt-4" data-role="journey-start-link">
+                <p class="form-label"><%= t("journeys.admin.start_link") %></p>
+                <%= link_to url, url, target: "_blank", rel: "noopener", class: "link block break-all font-mono text-xs" %>
+              </div>
+            <% elsif record_start_note? %>
+              <div class="border-t border-border-subtle pt-4" data-role="journey-start-link">
+                <p class="form-label"><%= t("journeys.admin.start_link") %></p>
+                <p class="text-xs text-text-muted"><%= t("journeys.admin.start.no_link") %></p>
+              </div>
+            <% end %>
+          </div>
+        </section>
+
+        <%= render Journeys::ReadinessComponent.new(issues: readiness_issues) %>
+      </div>
+
+      <section aria-labelledby="journey-steps-title" class="card min-w-0 p-5 sm:p-6 lg:col-span-2 lg:col-start-1 lg:row-start-1"
+               data-controller="journey-builder"
+               data-journey-builder-step-name-value="<%= step_name_template %>"
+               data-journey-builder-record-name-value="<%= record_name_template %>"
+               data-journey-builder-none-value="<%= t("journeys.admin.step_fill_none") %>"
+               data-journey-builder-skipped-by-value="<%= skipped_by_template %>"
+               data-journey-builder-skipped-none-value="<%= t("journeys.admin.step_conditional_none") %>"
+               data-journey-builder-separator-value="<%= t("journeys.admin.effects.separators.list") %>"
+               data-journey-builder-pages-value="<%= pages_payload.to_json %>"
+               data-journey-builder-choices-value="<%= choices_payload.to_json %>">
+        <header class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div class="min-w-0">
+            <h2 id="journey-steps-title" class="section-header"><%= t("journeys.admin.steps") %></h2>
+            <p class="mt-1 max-w-prose text-sm text-text-muted"><%= t("journeys.admin.sections.steps_flow_hint") %></p>
+          </div>
+          <p class="shrink-0 text-sm text-text-muted">
+            <%= t("journeys.admin.missing_page") %>
+            <%= link_to t("journeys.admin.create_page"), new_page_path, target: "_blank", rel: "noopener", class: "link font-medium" %>
+          </p>
+        </header>
+
+        <%= render Journeys::StartStepComponent.new(kind: start_kind, entity_id: start_entity_id, key: start_key,
+                                                    record_types: catalog.record_types, condition: start_condition,
+                                                    choices: catalog.choices) %>
+
+        <ol class="[counter-reset:journey-step]" data-journey-builder-target="list">
+          <% page_steps.each_with_index do |step, index| %>
+            <%= render Journeys::StepRowComponent.new(step: step, index: index, catalog: catalog, lead: lead_row?(index),
+                                                      earlier_rows: earlier_rows_for(index), submitted: submitted_step(index)) %>
+          <% end %>
+        </ol>
+        <template data-journey-builder-target="template">
+          <%= render Journeys::StepRowComponent.new(step: nil, index: nil, catalog: catalog, earlier_rows: []) %>
+        </template>
+        <template data-journey-builder-target="inputTemplate">
+          <label class="block min-w-0">
+            <span class="form-label" data-step-input-label></span>
+            <select class="input-field min-h-10 w-full" data-step-input></select>
+          </label>
+        </template>
+
+        <div class="flex gap-3 pb-4 sm:gap-4">
+          <div class="flex w-8 shrink-0 justify-center" aria-hidden="true"><span class="w-px bg-border-subtle"></span></div>
+          <button type="button" data-action="journey-builder#add"
+                  class="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg border border-dashed border-border px-4 text-sm font-medium text-text-secondary transition-base hover:border-accent hover:bg-accent-subtle hover:text-accent">
+            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="<%= AdminPageComponent::ICONS[:plus] %>" /></svg>
+            <%= t("journeys.admin.add_step") %>
+          </button>
+        </div>
+
+        <%= render Journeys::FinishStepComponent.new(step: finish_step, catalog: catalog, earlier_rows: page_row_sources,
+                                                     submitted: submitted_finish) %>
+      </section>
+    </div>
+
+    <div class="sticky bottom-4 z-10 mt-6 flex items-center justify-end gap-2 rounded-xl border border-border-subtle bg-surface/95 p-3 shadow-sm backdrop-blur">
+      <%= link_to t("common.actions.cancel"), index_path, class: "btn btn-ghost min-h-10 flex-1 justify-center sm:flex-none" %>
+      <%= render ButtonComponent.new(type: "submit", class: "min-h-10 flex-1 justify-center sm:flex-none") do %>
+        <%= t("journeys.admin.save") %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

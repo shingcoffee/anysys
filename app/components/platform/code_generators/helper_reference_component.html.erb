@@ -1,0 +1,29 @@
+<div class="space-y-5 p-4">
+  <section>
+    <h2 class="section-header mb-2"><%= t("comp_platform.code_generators.reference.helpers_title") %></h2>
+    <dl class="space-y-2.5">
+      <% HELPERS.each do |key, signature| %>
+        <div>
+          <dt><code class="break-all rounded bg-surface-active px-1.5 py-0.5 font-mono text-[11px] text-text-primary"><%= signature %></code></dt>
+          <dd class="mt-1 text-xs text-text-secondary"><%= t("comp_platform.code_generators.reference.helpers.#{key}") %></dd>
+        </div>
+      <% end %>
+    </dl>
+  </section>
+
+  <section>
+    <h2 class="section-header mb-2"><%= t("comp_platform.code_generators.reference.roles_title") %></h2>
+    <div class="flex flex-wrap gap-1">
+      <% roles.each do |role| %>
+        <code class="rounded bg-accent-subtle px-1.5 py-0.5 font-mono text-[11px] text-accent-text"><%= role %></code>
+      <% end %>
+    </div>
+  </section>
+
+  <p class="rounded-lg border border-border-subtle bg-canvas-elevated p-2.5 text-caption">
+    <strong><%= t("comp_platform.code_generators.form.tip_label") %></strong>
+    <%= t("comp_platform.code_generators.form.io_derived_before_html") %>
+    <code class="rounded bg-surface-active px-1 font-mono">ctx[:key]</code>
+    <%= t("comp_platform.code_generators.form.io_derived_after") %>
+  </p>
+</div>

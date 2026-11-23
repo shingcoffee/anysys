@@ -1,0 +1,97 @@
+<div data-shell="member" class="flex min-w-0 flex-1 flex-col">
+  <div class="contents"
+       data-controller="website-nav"
+       data-action="turbo:before-cache@window->website-nav#close"
+       data-website-nav-open-label-value="<%= t("member.shell.open_navigation") %>"
+       data-website-nav-close-label-value="<%= t("member.shell.close_navigation") %>">
+    <header class="sticky top-0 z-30 <%= chrome.theme.nav_class %>">
+      <div class="<%= chrome.inner_measure_class %> flex <%= chrome.bar_height_class %> items-center justify-between gap-4">
+        <div class="flex min-w-0 shrink-0 items-center">
+          <%= link_to home_path,
+                class: "max-w-xs truncate rounded-md text-base leading-snug sm:text-site-lg #{chrome.headline_font_class} focus-visible:outline-none focus-visible:ring-2 #{chrome.focus_ring_class}" do %>
+            <%= customer.name %>
+          <% end %>
+        </div>
+
+        <nav class="hidden min-w-0 flex-1 items-center justify-center gap-1 overflow-x-auto lg:flex" aria-label="<%= t("member.sidebar.primary_label") %>">
+          <% nav_items.each do |item| %>
+            <%= link_to item.path_for(customer),
+                  class: chrome.nav_link_class(current: current?(item)),
+                  aria: { current: (current?(item) ? "page" : nil) } do %>
+              <span class="min-w-0 truncate"><%= item.label %></span>
+            <% end %>
+          <% end %>
+        </nav>
+
+        <div class="flex shrink-0 items-center justify-end gap-1 sm:gap-2">
+          <%= render Websites::LanguageSwitcherComponent.new(theme: chrome.theme) %>
+          <%= render Member::UserMenuComponent.new(customer: customer, user: user) %>
+          <button type="button"
+                  class="<%= chrome.nav_button_class %> lg:hidden"
+                  data-website-nav-target="trigger"
+                  data-action="click->website-nav#toggle"
+                  aria-expanded="false"
+                  aria-controls="member-nav-panel"
+                  aria-label="<%= t("member.shell.open_navigation") %>">
+            <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="fixed inset-0 z-40 hidden bg-black/40 lg:hidden"
+         data-website-nav-target="backdrop"
+         data-action="click->website-nav#close"
+         aria-hidden="true"></div>
+
+    <div id="member-nav-panel"
+         class="fixed inset-y-0 right-0 z-40 hidden h-dvh w-[min(20rem,88vw)] flex flex-col border-l <%= chrome.hairline_class %> <%= chrome.sheet_panel_class %> shadow-xl lg:hidden"
+         data-website-nav-target="panel"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="member-nav-title">
+      <div class="flex <%= chrome.bar_height_class %> shrink-0 items-center justify-between gap-4 border-b <%= chrome.hairline_class %> px-5">
+        <p id="member-nav-title" class="min-w-0 truncate text-site-xl leading-none <%= chrome.headline_font_class %>"><%= customer.name %></p>
+        <button type="button" class="<%= chrome.nav_button_class %>" data-action="click->website-nav#close">
+          <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+          <span class="sr-only"><%= t("member.shell.close_navigation") %></span>
+        </button>
+      </div>
+      <nav class="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-3" aria-label="<%= t("member.sidebar.nav_label") %>">
+        <% nav_items.each do |item| %>
+          <%= link_to item.path_for(customer),
+                class: chrome.sheet_link_class(current: current?(item)),
+                aria: { current: (current?(item) ? "page" : nil) },
+                data: { action: "click->website-nav#close" } do %>
+            <span class="min-w-0 truncate"><%= item.label %></span>
+          <% end %>
+        <% end %>
+      </nav>
+    </div>
+  </div>
+
+  <% if helpers.flash.any? %>
+    <div class="<%= container_classes %> pt-6">
+      <% helpers.flash.each do |type, message| %>
+        <div class="mb-3 <%= type.to_s == "alert" ? chrome.alert_class : chrome.notice_class %>"
+             role="alert" data-controller="flash" data-flash-auto-dismiss-value="true">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <main class="flex-1 <%= container_classes %> py-12 md:py-20">
+    <%= content %>
+  </main>
+
+  <footer class="<%= chrome.theme.footer_class %>">
+    <div class="<%= chrome.inner_measure_class %> py-7 text-site-sm <%= chrome.muted_class %>">
+      <span>&copy; <%= Time.current.year %> <%= customer.name %></span>
+    </div>
+  </footer>
+</div>

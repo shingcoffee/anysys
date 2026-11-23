@@ -1,0 +1,21 @@
+en:
+  code_generator_rejection_errors:
+    unsafe_expression: "%{field} must be a single safe expression"
+    active_record_class: "Cannot invoke an ActiveRecord class"
+    forbidden_method: "Method %{method} is not allowed"
+  flowchart_actions:
+    enqueue_job:
+      errors:
+        invalid_wait_until: "waitUntil must be a supported time expression or ctx reference."
+    circuit_breaker:
+      errors:
+        invalid_result_var: "resultVar must be a valid identifier."
+    rate_limiter:
+      errors:
+        invalid_result_var: "resultVar must be a valid identifier."
+    retry_with_backoff:
+      errors:
+        invalid_result_var: "resultVar must be a valid identifier."
+    idempotency_check:
+      errors:
+        explicit_key_required: "explicitKey is required for the explicit key strategy."

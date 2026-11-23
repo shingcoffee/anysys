@@ -1,0 +1,16 @@
+<% amount = Billing::CurrencyResolver.format(@invoice.total_cents, @invoice.currency) %>
+<%= render Mailers::ShellComponent.new(
+      preheader: t("billing_mailer.payment_succeeded.preheader", number: @invoice.number),
+      brand:     t("billing_mailer.shell.brand"),
+      heading:   t("billing_mailer.payment_succeeded.heading"),
+      title:     t("billing_mailer.payment_succeeded.title"),
+      body:      t("billing_mailer.payment_succeeded.intro"),
+      highlight: amount,
+      highlight_caption: t("billing_mailer.payment_succeeded.label_amount_paid"),
+      facts: [
+        { label: t("billing_mailer.payment_succeeded.label_invoice_number"), value: @invoice.number },
+        { label: t("billing_mailer.payment_succeeded.label_paid_at"), value: format_mail_datetime(@invoice.paid_at) }
+      ],
+      note:      t("billing_mailer.payment_succeeded.outro"),
+      footer:    t("billing_mailer.shell.footer")
+    ) %>

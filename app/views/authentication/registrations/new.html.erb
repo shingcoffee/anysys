@@ -1,0 +1,58 @@
+<%= render Member::AuthShellComponent.new(
+      customer: current_customer,
+      title:    t("auth.registrations.new.shell_title"),
+      subtitle: t("auth.registrations.new.shell_subtitle")
+    ) do %>
+
+  <div class="mb-8">
+    <h2 class="text-subtitle mb-1"><%= t("auth.registrations.new.heading") %></h2>
+    <p class="text-body-sm"><%= t("auth.registrations.new.have_account") %>
+      <%= link_to t("auth.common.sign_in"), new_user_session_path,
+            class: "font-medium text-member-accent-text hover:underline" %>.</p>
+  </div>
+
+  <%= form_for(resource, as: resource_name,
+        url: tenant_user_registration_path(customer_id: current_customer_id),
+        html: { class: "space-y-5" }) do |f| %>
+
+    <% if resource.errors.any? %>
+      <div class="rounded-lg bg-danger-subtle border border-danger/20 p-3">
+        <ul class="text-sm text-danger list-disc pl-5 space-y-1">
+          <% resource.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <%= f.label :first_name, class: "form-label form-label-required" %>
+        <%= f.text_field :first_name, autocomplete: "given-name", class: "input-member" %>
+      </div>
+      <div>
+        <%= f.label :last_name, class: "form-label form-label-required" %>
+        <%= f.text_field :last_name, autocomplete: "family-name", class: "input-member" %>
+      </div>
+    </div>
+
+    <div>
+      <%= f.label :email, class: "form-label form-label-required" %>
+      <%= f.email_field :email, autocomplete: "email", placeholder: t("auth.sessions.email_placeholder"), class: "input-member" %>
+    </div>
+
+    <div>
+      <%= f.label :password, class: "form-label form-label-required" %>
+      <%= f.password_field :password, autocomplete: "new-password",
+            placeholder: t("auth.common.min_chars_placeholder", count: @minimum_password_length || 8),
+            class: "input-member" %>
+    </div>
+
+    <div>
+      <%= f.label :password_confirmation, t("auth.common.confirm_password"), class: "form-label form-label-required" %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input-member" %>
+    </div>
+
+    <%= f.submit t("auth.registrations.new.submit"), class: "btn-member w-full justify-center" %>
+  <% end %>
+<% end %>

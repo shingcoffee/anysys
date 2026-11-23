@@ -1,0 +1,105 @@
+zh-CN:
+  feature_modules:
+    errors:
+      module_not_enabled: "您的账户尚未启用 %{module_name} 模块。"
+      handoff_disabled: "%{module_name} 模块不能作为交接目标。"
+      input_contract_violation: "无法启动 %{module_name}：%{details}"
+      output_contract_violation: "%{module_name} 模块返回了无效结果，请联系技术支持。"
+      cross_tenant_violation: "此操作不被允许。"
+      unresolvable_exit_target: "无法解析所配置的退出落地页。"
+      no_entry_path: "%{module_key} 未声明入口路径"
+      unknown_mapping_source: "未知来源：%{source}"
+    handoff:
+      no_active_request: "当前没有进行中的请求。"
+    handoff_entry:
+      title: "补充信息"
+      subtitle: "请填写以下信息后继续。"
+      continue: "继续"
+    payment:
+      name: "支付"
+      entries:
+        transactions: "交易"
+        reconciliations: "对账"
+        disputes: "争议"
+      settings:
+        merchant_accounts: "商户账户"
+      titles:
+        transactions: "交易"
+      member:
+        label: "支付"
+        title: "支付"
+        subtitle: "与您账户关联的支付历史。"
+        detail_title: "支付 %{out_trade_no}"
+        created: "创建于 %{date}"
+        refunds: "退款"
+        columns:
+          date: "日期"
+          vendor: "渠道"
+          amount: "金额"
+          status: "状态"
+          flow: "支付方式"
+          paid_at: "支付时间"
+          psp_txn_id: "PSP 交易号"
+        empty:
+          headline: "暂无支付记录"
+          body: "您的支付记录将显示在这里。"
+    authentication:
+      name: "用户认证"
+      entries:
+        users: "用户"
+        events: "安全日志"
+      settings:
+        sign_up: "注册"
+        forget_password: "忘记密码"
+        roles: "角色"
+        user_role_assignments: "用户角色分配"
+    captcha:
+      name: "验证码"
+      settings:
+        status: "验证码"
+    ai_assistant:
+      name: "AI 助手"
+      settings:
+        status: "AI 助手"
+    email:
+      name: "邮件"
+      entries:
+        overview: "概览"
+        audience: "受众"
+        send_activities: "发送活动"
+        content: "内容"
+        analytics: "分析"
+        settings: "设置"
+      tabs:
+        dashboard: "仪表盘"
+        lists: "列表"
+        templates: "模板"
+        send_activities: "发送活动"
+        reports: "报告"
+        deliverability: "送达质量"
+        engagement: "互动"
+        overview: "概览"
+        health: "健康状况"
+        suppressions: "拦截名单"
+      settings:
+        daily_cap: "每日发送上限"
+        template_tokens: "模板变量"
+      titles:
+        templates: "邮件模板"
+        send_activities: "发送活动"
+        lists: "列表"
+    sms:
+      name: "短信"
+      entries:
+        messages: "短信"
+        opt_outs: "退订名单"
+      settings:
+        daily_cap: "每日上限"
+      titles:
+        messages: "短信消息"
+    website:
+      name: "网站"
+      entries:
+        pages: "页面"
+      settings:
+        site: "网站"

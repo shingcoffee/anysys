@@ -1,0 +1,5 @@
+zh-CN:
+  auth:
+    errors:
+      credentials_changed: "处理请求期间，账号安全信息已变更。请刷新页面后重试。"
+      role_removal_failed: "无法移除角色。"

@@ -1,0 +1,13 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "sms",
+      title: t("sms_campaign_ui.entity_sync.title"),
+      description: t("sms_campaign_ui.entity_sync.description"),
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.email.entries.audience"), path: admin_modules_sms_contacts_path(current_customer_id) },
+        { label: t("sms_campaign_http.navigation.contacts"), path: admin_modules_sms_contacts_path(current_customer_id) },
+        { label: t("sms_campaign_ui.contacts.sync") }
+      ]
+    ) do %>
+  <%= render Sms::Admin::EntitySyncComponent.new(form_values: @form_values, entities: @entities, source_fields: @source_fields, sync_result: @sync_result, errors: @errors) %>
+<% end %>

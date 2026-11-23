@@ -1,0 +1,12 @@
+# Project-specific Devise overrides.
+# Standard Devise translations are provided by the devise-i18n gem for en and
+# zh-CN; this file only holds custom keys that the gem does not provide.
+en:
+  devise:
+    failure:
+      deactivated: "Your account has been deactivated. Please contact an administrator."
+    mailer:
+      confirmation_instructions:
+        subject: "Confirm your Anysys email"
+      reset_password_instructions:
+        subject: "Reset your Anysys password"

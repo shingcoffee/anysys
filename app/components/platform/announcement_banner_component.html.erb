@@ -1,0 +1,47 @@
+<div id="<%= stack_dom_id %>" class="flex w-full flex-col" aria-live="polite">
+  <% announcements.each do |announcement| %>
+    <% chrome = chrome_for(announcement) %>
+    <div id="<%= dom_id_for(announcement) %>"
+         role="<%= chrome.fetch(:role) %>"
+         data-controller="text-expand"
+         data-action="click->text-expand#toggle keydown.enter->text-expand#toggle keydown.space->text-expand#toggle"
+         class="flex w-full flex-col gap-2 border-b border-border-subtle px-4 py-2.5 sm:flex-row sm:items-start sm:gap-4 <%= chrome.fetch(:strip_class) %>">
+      <div class="flex min-w-0 flex-1 items-start gap-3">
+        <span class="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-surface/80 <%= chrome.fetch(:icon_class) %>" aria-hidden="true">
+          <svg class="size-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="<%= chrome.fetch(:icon_path) %>" clip-rule="evenodd" />
+          </svg>
+        </span>
+        <div class="min-w-0 flex flex-col gap-0.5">
+          <p data-text-expand-target="clamped"
+             data-limit="<%= TITLE_LIMIT %>"
+             class="text-sm font-semibold text-text-primary break-words"><%= announcement.title %></p>
+          <p data-text-expand-target="clamped"
+             data-limit="<%= BODY_LIMIT %>"
+             class="text-sm text-text-secondary break-words whitespace-pre-wrap"><%= body_for(announcement) %></p>
+        </div>
+      </div>
+
+      <div class="flex shrink-0 items-center gap-2 self-end sm:self-auto">
+        <% if announcement.link_url.present? %>
+          <%= link_to t("comp_platform.announcement_banner.learn_more"),
+                announcement.link_url,
+                target: "_blank",
+                rel: "noopener noreferrer",
+                class: "whitespace-nowrap rounded-md px-2 py-1 text-sm font-medium text-accent-text hover:bg-surface/80 hover:underline underline-offset-2" %>
+        <% end %>
+
+        <%= button_to dismiss_path,
+              method: :post,
+              params: { platform_announcement_id: announcement.id },
+              form_class: "contents",
+              class: "icon-button",
+              aria: { label: t("comp_platform.announcement_banner.dismiss_titled", title: announcement.title) } do %>
+          <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

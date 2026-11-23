@@ -1,0 +1,241 @@
+zh-CN:
+  flowchart_actions:
+    set_record_fields:
+      label: 设置记录字段
+      description: 向已加载的记录写入属性，但不保存。
+      fields:
+        modelVariable:
+          label: 记录
+          help: 要更新的记录所在的上下文路径。
+        assignments:
+          label: 赋值
+          help: 绑定实体属性及其对应的 Ruby 表达式。
+        writeMode:
+          label: 写入方式
+          help: 覆盖已有值，或仅填写当前为空的字段。
+          options:
+            overwrite: 覆盖
+            only_blank: 仅填空
+        skipNilValues:
+          label: 跳过空值
+          help: 赋值为 nil 时不改写该字段。
+    load_current_user:
+      label: 加载当前用户
+      description: 将本客户下已登录用户加载为只读哈希。
+      fields:
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        required:
+          label: 必须登录
+          help: 若本客户下没有已登录用户则失败。
+    related_record:
+      label: 关联记录
+      description: 通过关联查找、创建或更新一条记录。
+      fields:
+        association:
+          label: 关联
+          help: 要跟随的绑定实体关联。
+        operation:
+          label: 操作
+          help: 查找已有关联记录、新建一条，或更新一条。
+          options:
+            find: 查找
+            create: 创建
+            update: 更新
+            list: 列表
+            count: 计数
+        modelVariable:
+          label: 记录
+          help: 源记录所在的上下文路径。
+        conditions:
+          label: 条件
+          help: 查找关联记录时的额外筛选。
+        assignments:
+          label: 赋值
+          help: 目标实体属性及其对应的 Ruby 表达式。
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        onNotFound:
+          label: 未找到时
+          help: 无匹配关联行时返回空，或使步骤失败。
+          options:
+            "nil": 返回空
+            fail: 失败
+        limit:
+          label: 上限
+          help: 最多返回的关联行数（1–1000）。
+        orderBy:
+          label: 排序字段
+          help: 用于排序关联行的属性或列。
+        orderDirection:
+          label: 排序方向
+          help: 按升序或降序排列关联行。
+          options:
+            asc: 升序
+            desc: 降序
+      errors:
+        unsafe_column: "%{column} 不是安全的列名"
+    referenced_record:
+      label: 引用记录
+      description: 加载或更新引用字段所指向的记录，例如明细行所属的主记录。
+      fields:
+        modelVariable:
+          label: 记录
+          help: 包含该引用字段的记录所在的上下文路径。
+        field:
+          label: 引用字段
+          help: 该记录上的引用字段，例如 product。
+        operation:
+          label: 操作
+          help: 加载被引用的记录，或更新后保存。
+          options:
+            find: 查找
+            update: 更新
+        assignments:
+          label: 赋值
+          help: 被引用实体的属性及其对应的 Ruby 表达式。
+        onNotFound:
+          label: 未找到时
+          help: 字段为空或记录已不存在时，返回 nil 或使该步骤失败。
+          options:
+            "nil": 返回 nil
+            fail: 失败
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+      errors:
+        not_a_reference: "%{attribute} 不是 %{entity} 的引用字段"
+    child_records:
+      label: 下级记录
+      description: 查找、列出、统计或创建另一实体中引用字段指向某条已加载记录的记录，例如订单的明细行。
+      fields:
+        entity:
+          label: 下级实体
+          help: 其记录指向该记录的实体，例如订单明细。
+        field:
+          label: 引用字段
+          help: 下级实体上指向该记录的引用字段；只有一个时可留空。
+        modelVariable:
+          label: 记录
+          help: 下级记录所指向的记录所在的上下文路径。
+        operation:
+          label: 操作
+          help: 列出、查找或统计下级记录，或新建一条指向该记录的记录。
+          options:
+            list: 列表
+            find: 查找
+            count: 计数
+            create: 创建
+        conditions:
+          label: 条件
+          help: 对下级记录的额外筛选。
+        assignments:
+          label: 赋值
+          help: 下级实体属性及其对应的 Ruby 表达式。
+        onNotFound:
+          label: 未找到时
+          help: 无匹配的下级记录时返回 nil 或使该步骤失败。
+          options:
+            "nil": 返回 nil
+            fail: 失败
+        limit:
+          label: 上限
+          help: 最多返回的下级记录数（1–1000）。
+        orderBy:
+          label: 排序字段
+          help: 用于排序下级记录的属性或列。
+        orderDirection:
+          label: 排序方向
+          help: 按升序或降序排列下级记录。
+          options:
+            asc: 升序
+            desc: 降序
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+      errors:
+        unknown_entity: "不存在名为 %{entity} 的实体"
+        not_a_reference: "%{attribute} 不是 %{entity} 的引用字段"
+        not_pointing_at: "%{entity} 没有指向 %{target} 的引用字段，或有多个但未指定"
+        unsafe_column: "%{column} 不是安全的列名"
+    adjust_number:
+      label: 调整数值
+      description: 增加或减少记录上的数值字段并保存，例如从剩余名额中扣除已预订的数量。
+      fields:
+        modelVariable:
+          label: 记录
+          help: 要修改的记录所在的上下文路径。
+        field:
+          label: 数值字段
+          help: 要修改的数值字段，例如 stock。
+        direction:
+          label: 调整方式
+          help: 从该数值中扣减，或在其上增加。
+          options:
+            subtract: 扣减
+            add: 增加
+        amount:
+          label: 数量
+          help: 要扣减或增加的数量的 Ruby 表达式，例如订购数量。
+        minimum:
+          label: 最小允许值
+          help: 允许的最小值的 Ruby 表达式，例如 0。低于该值时拒绝本次提交。
+        maximum:
+          label: 最大允许值
+          help: 允许的最大值的 Ruby 表达式。高于该值时拒绝本次提交。
+        message:
+          label: 拒绝提示
+          help: 调整被拒绝时显示。命名占位符 available 表示仍可调整的数量。
+        errorField:
+          label: 表单字段
+          help: 显示拒绝提示的表单字段，例如 quantity。
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+    read_setting:
+      label: 读取常量
+      description: 读取常量的选项，或某个值的标签；优先使用本客户的覆盖项。
+      fields:
+        constant:
+          label: 常量
+          help: 本步骤读取的常量。
+        returns:
+          label: 返回内容
+          help: 返回选项列表，或某个值对应的标签。
+          options:
+            options: 选项
+            label: 标签
+        value:
+          label: 值
+          help: 用于查找标签的选项值表达式。
+        defaultValue:
+          label: 默认值
+          help: 选项值不在列表中时返回的表达式。
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+  flowchart_runtime:
+    errors:
+      load_current_user:
+        not_signed_in: 请先登录后再继续。
+      related_record:
+        not_found: 未找到关联记录。
+        failed: 无法加载关联记录（%{reason}）。
+      referenced_record:
+        not_found: 未找到被引用的记录。
+        failed: 无法加载被引用的记录（%{reason}）。
+      child_records:
+        not_found: 未找到匹配的下级记录。
+        failed: 无法加载下级记录（%{reason}）。
+      adjust_number:
+        below_minimum: 仅剩 %{available}。
+        above_maximum: 最多还能增加 %{available}。
+        failed: 无法修改数值（%{reason}）。
+        busy: 该记录正在更新，请稍后重试。
+      read_setting:
+        failed: 无法读取常量（%{reason}）。
+      set_record_fields:
+        missing_record: 未加载要更新的记录。
+        failed: 无法写入记录字段（%{reason}）。

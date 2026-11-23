@@ -1,0 +1,11 @@
+<div class="<%= wrapper_classes %>">
+  <% if show_title && title.present? %>
+    <h1 class="text-2xl font-bold text-gray-900 mb-2 tracking-tight leading-tight"><%= title %></h1>
+  <% end %>
+
+  <% if show_description && description.present? %>
+    <p class="text-sm text-gray-500 mb-6 leading-relaxed"><%= description %></p>
+  <% end %>
+
+  <%= content %>
+</div>

@@ -1,0 +1,7 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: definition_resource_breadcrumbs(:entities, t("common.actions.new")),
+  title: t("maint_core.entities.new.title"),
+  description: t("maint_core.entities.new.subtitle")
+) do %>
+  <%= render "admin/maintenance/entities/form" %>
+<% end %>

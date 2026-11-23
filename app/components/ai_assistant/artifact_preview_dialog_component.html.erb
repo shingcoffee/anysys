@@ -1,0 +1,99 @@
+<dialog class="m-auto h-[100dvh] w-full max-w-none overflow-hidden bg-canvas p-0 text-text-primary shadow-float backdrop:bg-text-primary/60 backdrop:backdrop-blur-sm sm:h-[90dvh] sm:w-[94vw] sm:max-w-7xl sm:rounded-2xl"
+        aria-modal="true"
+        aria-labelledby="<%= title_id %>"
+        data-artifact-preview-target="dialog"
+        data-action="click->artifact-preview#backdrop cancel->artifact-preview#cancel">
+  <div class="flex h-full min-h-0 flex-col">
+    <header class="flex shrink-0 items-center gap-3 border-b border-border-subtle bg-surface px-4 py-3 sm:px-5">
+      <div class="min-w-0 flex-1">
+        <h2 id="<%= title_id %>" class="truncate text-sm font-semibold tracking-tight text-text-primary sm:text-base">
+          <%= t("ai_assistant.assistant.artifact.dialog_title", name: name) %>
+        </h2>
+        <p class="mt-0.5 truncate text-caption text-text-muted"><%= subtitle %></p>
+      </div>
+      <div class="flex shrink-0 items-center gap-1.5">
+        <%= render ButtonComponent.new(
+              variant: :ghost,
+              size: :sm,
+              class: "size-9 !p-0",
+              "aria-label": t("ai_assistant.assistant.artifact.close_preview"),
+              data: { action: "artifact-preview#close" },
+              autofocus: true
+            ) do %>
+          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          <span class="sr-only"><%= t("ai_assistant.assistant.artifact.close_preview") %></span>
+        <% end %>
+      </div>
+    </header>
+
+    <div class="relative min-h-0 flex-1 bg-canvas">
+      <div class="absolute inset-0 z-10 flex items-center justify-center bg-canvas"
+           data-artifact-preview-target="loading"
+           role="status">
+        <div class="flex flex-col items-center gap-3 text-center">
+          <span class="size-8 animate-spin rounded-full border-2 border-border-strong border-t-accent" aria-hidden="true"></span>
+          <p class="text-body-sm text-text-muted"><%= t("ai_assistant.assistant.artifact.preview_loading") %></p>
+        </div>
+      </div>
+
+      <div class="absolute inset-0 z-20 hidden items-center justify-center bg-canvas px-6 text-center"
+           data-artifact-preview-target="failure"
+           role="alert">
+        <div class="flex max-w-sm flex-col items-center gap-3">
+          <p class="text-body-sm text-text-muted"><%= t("ai_assistant.assistant.artifact.preview_unavailable") %></p>
+          <%= render ButtonComponent.new(
+                variant: :secondary,
+                size: :sm,
+                data: { action: "artifact-preview#retry" }
+              ) do %>
+            <%= t("ai_assistant.assistant.artifact.retry") %>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Scripts and forms stay sandboxed off, but pointer/keyboard access is
+          required so the whole page can actually be scrolled and read. %>
+      <iframe title="<%= t("ai_assistant.assistant.artifact.dialog_title", name: name) %>"
+              class="h-full w-full border-0 bg-surface opacity-0"
+              sandbox="allow-same-origin"
+              data-artifact-preview-target="frame"
+              data-artifact-preview-src="<%= frame_url %>"
+              data-action="load->artifact-preview#loaded error->artifact-preview#failed"></iframe>
+    </div>
+
+    <footer class="flex shrink-0 flex-col-reverse gap-2 border-t border-border-subtle bg-surface px-4 py-3 sm:flex-row sm:items-center sm:justify-end sm:px-5">
+      <%= render ButtonComponent.new(
+            variant: :ghost,
+            size: :sm,
+            tag: :a,
+            href: preview_url,
+            target: "_blank",
+            rel: "noopener noreferrer",
+            class: "gap-1.5"
+          ) do %>
+        <%= t("ai_assistant.assistant.artifact.open_preview") %>
+        <svg class="size-3.5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+        </svg>
+        <span class="sr-only"> (<%= t("ai_assistant.assistant.artifact.opens_new_tab") %>)</span>
+      <% end %>
+      <%= render ButtonComponent.new(
+            variant: :primary,
+            size: :sm,
+            tag: :a,
+            href: details_url,
+            target: "_blank",
+            rel: "noopener noreferrer",
+            class: "gap-1.5"
+          ) do %>
+        <%= details_label %>
+        <svg class="size-3.5 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+        </svg>
+        <span class="sr-only"> (<%= t("ai_assistant.assistant.artifact.opens_new_tab") %>)</span>
+      <% end %>
+    </footer>
+  </div>
+</dialog>

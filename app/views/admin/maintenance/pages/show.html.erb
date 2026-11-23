@@ -1,0 +1,63 @@
+<%
+  show_actions = [
+    {
+      label: t("maint_core.pages.preview"),
+      path: admin_maintenance_page_preview_path(current_customer_id, @page),
+      variant: :secondary,
+      target: "_blank",
+      rel: "noopener noreferrer"
+    },
+    {
+      label: t("common.actions.edit"),
+      path: edit_admin_maintenance_page_path(current_customer_id, @page),
+      variant: :primary,
+      icon: :edit
+    }
+  ]
+  if (reset = definition_override_reset_action(@page))
+    show_actions << reset
+  end
+  if can_destroy_definition?(@page)
+    show_actions << {
+      label: t("common.actions.delete"),
+      path: admin_maintenance_page_path(current_customer_id, @page),
+      variant: :danger,
+      icon: :trash,
+      data: { turbo_method: :delete, turbo_confirm: t("maint_core.pages.show.delete_confirm") }
+    }
+  end
+%>
+<%= render AdminPageComponent.new(
+  breadcrumbs: definition_resource_breadcrumbs(:pages, @page.name),
+  title: @page.name,
+  description: @page.description.presence,
+  actions: show_actions
+) do %>
+  <div class="flex flex-wrap items-center gap-2 mb-6" data-controller="tooltip">
+    <%= render BadgeComponent.new(variant: @page.launched? ? :success : :default, size: :sm) do %>
+      <%= @page.launched? ? t("maint_core.pages.show.launched") : t("maint_core.pages.show.not_launched") %>
+    <% end %>
+    <%= render Admin::Pages::FormHealthBadgeComponent.new(status: @form_status) %>
+  </div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+  <div class="lg:col-span-2">
+    <%= render Pages::DistributionCardComponent.new(
+          page: @page,
+          customer_id: current_customer_id,
+          publishing_editable: publishing_editable?(@page)
+        ) %>
+  </div>
+
+  <div class="flex flex-col gap-6">
+    <%= render PageInfoCardComponent.new(page: @page, customer_id: current_customer_id) %>
+    <% if FlowchartVisibility.allowed?(current_user) %>
+      <%= render Pages::ProcessingCardComponent.new(
+            page: @page,
+            customer_id: current_customer_id,
+            editable: publishing_editable?(@page)
+          ) %>
+    <% end %>
+  </div>
+</div>
+<% end %>

@@ -1,0 +1,162 @@
+en:
+  comp_misc:
+    page_processing:
+      header: "Processing"
+      description: "Every submission of this page runs this flowchart. It validates, saves, and decides what happens next."
+      current: "Flowchart"
+      default_badge: "Default"
+      none: "No flowchart is bound, so this page can't accept submissions."
+      select_label: "Bind a flowchart"
+      select_hint: "Lists the flowcharts this page can use. A launched page can only bind a launched flowchart that fits its entity."
+      draft_option: "%{name} (draft)"
+    distribution:
+      header_title_html: "Publishing & access"
+      audience_section: "Who can open"
+      audience: "Audience"
+      visible: "Visible"
+      open: "Open"
+      saving: "Saving…"
+      not_launched: "Not launched"
+      not_visible: "Not visible to %{audience}"
+      last_audience: "A form needs at least one audience."
+      action_key_label: "Action key"
+      action_key_help: "Start with a letter. Use only lowercase letters, numbers and underscores."
+      action_key_placeholder: "enroll"
+      action_url: "Action URL"
+      audience_url: "URL"
+      siblings_heading: "Other pages in this action"
+      siblings_empty: "No other pages share this action yet."
+      labels:
+        admin: "Admin"
+        member: "Member"
+        public: "Public"
+      hints:
+        admin: "Signed-in admins and owners of this organization."
+        member: "Signed-in members of this organization."
+        public: "Anyone, including people who aren't signed in."
+
+    publishing:
+      public_url: "Public URL"
+      launch_to_generate: "Launch this page to generate a public URL."
+
+    flowchart_lifecycle:
+      header_title: "Publishing"
+      draft_hint: "Launch this flowchart to make it available for pages and modules that reference it."
+      launched_hint: "This flowchart is live. Take it offline before editing — referencing pages may break until you re-launch."
+      launched_edit_hint: "This flowchart is live. Edits are saved as a draft version and go live when you launch it."
+      pending_hint: "Live pages run v%{live}. Draft v%{draft} has saved changes that aren't live yet."
+
+    list:
+      no_records: "No records found"
+      range: "%{from}-%{to} of %{total}"
+      showing: "Showing %{range}"
+
+    block_list:
+      empty_title: "No blocked users."
+      empty_body: "Users who opt out of bulk email will appear here."
+      count:
+        one: "%{count} blocked user"
+        other: "%{count} blocked users"
+      unblock_selected: "Unblock selected"
+      select_all: "Select all"
+      email: "Email"
+      blocked_at: "Blocked at"
+      blocked_prefix: "Blocked:"
+      unblock: "Unblock"
+
+    segment_builder:
+      rules_json_aria: "Segment rules JSON"
+      group: "Group"
+      add_condition: "+ Add condition"
+      add_group: "+ Add group"
+      field_aria: "Field"
+      operator_aria: "Operator"
+      value: "Value"
+      remove: "Remove"
+      remove_condition_aria: "Remove condition"
+      remove_group: "Remove group"
+      and: "AND"
+      or: "OR"
+      operators:
+        equals: "Equals"
+        not_equals: "Not equals"
+        contains: "Contains"
+        not_contains: "Not contains"
+        is_blank: "Is blank"
+        is_present: "Is present"
+        greater_than: "Greater than"
+        less_than: "Less than"
+        after: "After"
+        before: "Before"
+
+    entity_info:
+      header: "Entity Information"
+      kind: "Kind"
+      bridge: "Bridge"
+      standard: "Standard"
+      extends: "Extends"
+      extends_model: "Extends %{model}"
+      name_slug: "Name Slug"
+      referenced_template: "Referenced Template"
+      last_updated: "Last Updated"
+
+    entity_access:
+      header_title: "Entries"
+      open_entries: "Open entries"
+      hint: "Browse and manage records stored for this entity."
+      entries_count:
+        one: "%{count} entry"
+        other: "%{count} entries"
+
+    element_palette:
+      search_placeholder: "Search..."
+      elements: "Elements"
+      flows: "Flows"
+      loading: "Loading..."
+      start_disabled_title: "Only one Start element allowed per flowchart"
+      no_other_flows: "No other flows"
+      no_customer_context: "No customer context"
+      load_failed: "Failed to load flowcharts"
+      no_flowcharts_available: "No flowcharts available"
+      subflow_name_prefix: "Sub-flow: "
+
+    toolbar:
+      view_details: "View flowchart details"
+      zoom_out: "Zoom Out"
+      zoom_in: "Zoom In"
+      fit_to_content: "Fit to view"
+      validate: "Validate"
+      test_runner: "Test Runner"
+      more_actions: "More actions"
+      tidy_layout: "Tidy layout"
+      connection_routing: "Connection Routing"
+      generate_docs: "Generate Docs"
+      export_svg: "Export as SVG"
+      export_png: "Export as PNG"
+      clear_canvas: "Clear Canvas"
+      undo: "Undo (Ctrl+Z)"
+      redo: "Redo (Ctrl+Y)"
+      read_only_save: "Cannot save a launched flowchart. Take it offline first."
+      saved: "Flowchart saved successfully"
+      save_failed: "Failed to save flowchart"
+      error_separator: ", "
+
+    inline_condition:
+      value_placeholder: "value"
+      operators:
+        is_empty: "empty"
+        is_not_empty: "!empty"
+        contains: "contains"
+
+    flowchart_elements:
+      start: "Start"
+      process: "Process"
+      decision: "Decision"
+      loop: "Loop"
+      end: "End"
+
+    code_editor:
+      validating: "Validating..."
+      all_checks_passed: "All checks passed"
+      validation_failed: "Validation failed"
+      request_failed_format: "Request failed: {message}"

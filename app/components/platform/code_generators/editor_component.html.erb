@@ -1,0 +1,71 @@
+<%= form_with url: form_url, method: :patch,
+      class: "flex h-full min-h-0 flex-col bg-canvas",
+      data: {
+        controller: "code-editor",
+        code_editor_validate_url_value: validation_url,
+        code_editor_validating_label_value: t("comp_misc.code_editor.validating"),
+        code_editor_all_checks_passed_label_value: t("comp_misc.code_editor.all_checks_passed"),
+        code_editor_validation_failed_label_value: t("comp_misc.code_editor.validation_failed"),
+        code_editor_request_failed_format_value: t("comp_misc.code_editor.request_failed_format")
+      } do %>
+  <header class="z-30 flex-shrink-0 border-b border-border-subtle bg-surface">
+    <div class="flex flex-wrap items-center gap-2 px-4 py-2 sm:min-h-12 sm:flex-nowrap">
+      <%= link_to form_url,
+            class: "flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-surface-active hover:text-text-primary",
+            title: t("comp_platform.code_generators.editor.back_to_generator"),
+            aria: { label: t("comp_platform.code_generators.editor.back_to_generator") } do %>
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+      <% end %>
+      <div class="h-4 w-px shrink-0 bg-border-subtle"></div>
+      <div class="flex min-w-0 flex-1 items-center gap-1.5">
+        <h1 class="shrink-0 text-sm font-semibold text-text-primary"><%= t("comp_platform.code_generators.edit_generator") %></h1>
+        <span class="text-text-muted">/</span>
+        <span class="truncate font-mono text-sm text-text-secondary"><%= generator_name %></span>
+        <% if version.present? %>
+          <%= render BadgeComponent.new(size: :sm, title: t("comp_platform.code_generators.form.auto_increments")) do %><%= t("comp_platform.code_generators.version_badge", version: version) %><% end %>
+        <% end %>
+      </div>
+      <span class="hidden text-caption md:inline"><%= t("comp_platform.code_generators.editor.save_shortcut") %></span>
+      <div class="flex items-center gap-1.5">
+        <%= render ButtonComponent.new(variant: :secondary, size: :sm, type: "button", data: { action: "code-editor#validate" }) do %>
+          <%= t("comp_platform.code_generators.editor.validate") %>
+        <% end %>
+        <%= render ButtonComponent.new(tag: :a, variant: :ghost, size: :sm, href: form_url) do %>
+          <%= t("common.actions.cancel") %>
+        <% end %>
+        <%= render ButtonComponent.new(variant: :primary, size: :sm, type: "submit") do %>
+          <%= t("comp_platform.code_generators.form.save_changes") %>
+        <% end %>
+      </div>
+    </div>
+  </header>
+
+  <div data-code-editor-target="validationResult" class="hidden" aria-live="polite"></div>
+  <% if errors.any? %>
+    <div class="flex-shrink-0 border-b border-border-subtle px-4 py-3">
+      <%= render AlertComponent.new(message: errors.join(". "), type: :error) %>
+    </div>
+  <% end %>
+
+  <div class="flex min-h-0 flex-1 flex-col lg:flex-row">
+    <section class="flex min-h-[60vh] min-w-0 flex-1 flex-col lg:min-h-0">
+      <div class="flex items-center gap-2 border-b border-slate-800 bg-slate-900 px-4 py-2 font-mono text-xs text-slate-400">
+        <span class="truncate" title="<%= class_declaration %>"><%= class_declaration %></span>
+      </div>
+      <div class="min-h-0 flex-1">
+        <%= render Platform::CodeGenerators::SourceEditorComponent.new(
+              name: "methods_body",
+              value: methods_body,
+              label: t("comp_platform.code_generators.editor.source_label", name: generator_name),
+              fill: true
+            ) %>
+      </div>
+    </section>
+    <aside class="border-t border-border-subtle bg-surface lg:w-80 lg:shrink-0 lg:overflow-y-auto lg:border-l lg:border-t-0 xl:w-96"
+           aria-label="<%= t("comp_platform.code_generators.reference.title") %>">
+      <%= render Platform::CodeGenerators::HelperReferenceComponent.new %>
+    </aside>
+  </div>
+<% end %>

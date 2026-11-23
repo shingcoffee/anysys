@@ -1,0 +1,19 @@
+<div class="flex w-full max-w-3xl flex-col gap-6">
+  <%= render Admin::Settings::SectionComponent.new(flush: true) do %>
+    <%= form_with url: form_url, method: :patch, local: true, class: "w-full" do %>
+      <%= render Admin::Settings::SettingRowComponent.new(
+            label: t("settings_people.#{policy}.label"),
+            description: t("settings_people.#{policy}.consequences"),
+            label_for: "setting_enabled"
+          ) do %>
+        <select name="setting[enabled]" id="setting_enabled" class="input-field w-full sm:w-56">
+          <option value="false" <%= 'selected' unless enabled %>><%= t("common.status.disabled") %></option>
+          <option value="true" <%= 'selected' if enabled %>><%= t("common.status.enabled") %></option>
+        </select>
+      <% end %>
+      <div class="flex justify-end border-t border-border-subtle bg-canvas-elevated px-4 py-3 sm:px-6">
+        <button type="submit" class="btn btn-primary"><%= t("common.actions.save") %></button>
+      </div>
+    <% end %>
+  <% end %>
+</div>

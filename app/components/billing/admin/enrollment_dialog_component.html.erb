@@ -1,0 +1,53 @@
+<div data-controller="modal-dialog" data-modal-dialog-open-value="<%= open? %>">
+  <button type="button" data-action="modal-dialog#open" aria-haspopup="dialog" aria-controls="<%= dialog_id %>" class="btn btn-primary w-full"><%= t("settings_billing.subscription.review_subscription") %></button>
+  <%= render ModalDialogComponent.new(
+    id: dialog_id,
+    title: t("settings_billing.subscription.enrollment_dialog.title", plan: plan.name),
+    description: "#{catalog.plan_price(plan)} #{catalog.interval_label(plan)}"
+  ) do %>
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-3 rounded-xl border border-border-subtle bg-canvas-elevated p-4">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <div class="min-w-0">
+            <h3 class="font-semibold text-text-primary"><%= plan.name %></h3>
+            <% if plan.description.present? %><p class="mt-1 text-body-sm text-text-secondary break-words"><%= plan.description %></p><% end %>
+          </div>
+          <% if catalog.trial_offer?(plan) %>
+            <%= render BadgeComponent.new(variant: :info, size: :sm) do %><%= catalog.plan_trial(plan) %><% end %>
+          <% end %>
+        </div>
+        <% if catalog.enabled_items.any? %>
+          <div class="border-t border-border-subtle pt-3">
+            <h4 class="text-caption"><%= t("settings_billing.subscription.enrollment_dialog.included_limits") %></h4>
+            <dl class="mt-2 flex flex-col gap-2 text-body-sm">
+              <% catalog.enabled_items.each do |item| %>
+                <div class="flex items-center justify-between gap-3">
+                  <dt class="flex min-w-0 items-center gap-2 text-text-secondary">
+                    <span class="text-success"><%= render Billing::Admin::IconComponent.new(name: :check, class_name: "size-4") %></span>
+                    <span class="break-words"><%= item.label %></span>
+                  </dt>
+                  <dd class="text-right tabular-nums <%= catalog.unlimited?(plan, item) ? 'text-text-secondary' : 'font-medium text-text-primary' %>"><%= catalog.limit_display(plan, item) %></dd>
+                </div>
+              <% end %>
+            </dl>
+          </div>
+        <% end %>
+      </div>
+
+      <%= form_with url: helpers.admin_settings_billing_subscription_path(catalog.customer_id), method: :patch, scope: :billing_subscription, class: "flex flex-col gap-4" do |f| %>
+        <%= f.hidden_field :plan_code, value: plan.code %>
+        <%= f.hidden_field :request_key, value: catalog.request_key %>
+        <div>
+          <%= f.label :coupon_code, t("comp_billing.plan_comparison.coupon_code_label"), for: coupon_field_id, class: "form-label" %>
+          <%= f.text_field :coupon_code, value: catalog.coupon_code_value, id: coupon_field_id, placeholder: t("comp_billing.plan_comparison.coupon_code_placeholder"), class: "input-field", **catalog.field_options(:coupon_code) %>
+          <%= catalog.field_error(:coupon_code) %>
+        </div>
+        <p class="text-caption"><%= t("settings_billing.subscription.enrollment_hint") %></p>
+        <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <button type="button" data-action="modal-dialog#close" class="btn btn-ghost"><%= t("common.actions.cancel") %></button>
+          <%= f.submit t("comp_billing.plan_comparison.subscribe"), class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

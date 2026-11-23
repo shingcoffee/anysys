@@ -1,0 +1,25 @@
+<section id="<%= section_id %>" aria-labelledby="<%= section_id %>-heading" tabindex="-1" class="card relative min-w-0 scroll-mt-6 overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+  <% if (profile = header_profile) %>
+    <%= render ButtonComponent.new(variant: :secondary, size: :sm, tag: :a, href: entry_path(profile),
+          class: "absolute right-4 top-3 z-10 min-h-9 gap-1.5 sm:right-6 sm:top-3.5 sm:min-h-8",
+          aria: { label: entry_label(profile) }, data: { domain_entry_link: profile.entity.id }) do %>
+      <span class="hidden sm:inline"><%= t("admin_modules.users.show.profiles.view_entry") %></span>
+      <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    <% end %>
+  <% end %>
+  <%= tag.details class: "group/section", open: open? do %>
+    <%= render Admin::Modules::Authentication::UserCardHeaderComponent.new(
+          heading_id: "#{section_id}-heading", title: title, level: :h3,
+          icon_path: icon_path, tile_class: tile_class, description: description, collapsible: true,
+          action_space: header_profile.present?
+        ) %>
+    <div class="divide-y divide-border-subtle border-t border-border-subtle">
+      <% section.profiles.each do |profile| %>
+        <%= render Admin::Modules::Authentication::UserProfileCardComponent.new(
+              profile: profile, user: user, customer_id: customer_id, id_prefix: section_id,
+              identity: section.profiles.many? || profile.entry.blank?
+            ) %>
+      <% end %>
+    </div>
+  <% end %>
+</section>

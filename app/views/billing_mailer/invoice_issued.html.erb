@@ -1,0 +1,18 @@
+<% amount = Billing::CurrencyResolver.format(@invoice.total_cents, @invoice.currency) %>
+<%= render Mailers::ShellComponent.new(
+      preheader: t("billing_mailer.invoice_issued.preheader", number: @invoice.number),
+      brand:     t("billing_mailer.shell.brand"),
+      heading:   t("billing_mailer.invoice_issued.heading"),
+      title:     t("billing_mailer.invoice_issued.title"),
+      body:      t("billing_mailer.invoice_issued.intro"),
+      highlight: amount,
+      highlight_caption: t("billing_mailer.invoice_issued.label_amount_due"),
+      facts: [
+        { label: t("billing_mailer.invoice_issued.label_invoice_number"), value: @invoice.number },
+        { label: t("billing_mailer.invoice_issued.label_plan"), value: @plan.name },
+        { label: t("billing_mailer.invoice_issued.label_period"), value: format_mail_period(@invoice.period_start, @invoice.period_end) },
+        { label: t("billing_mailer.invoice_issued.label_due_date"), value: format_mail_date(@invoice.due_at) }
+      ],
+      note:      t("billing_mailer.invoice_issued.outro"),
+      footer:    t("billing_mailer.shell.footer")
+    ) %>

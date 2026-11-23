@@ -1,0 +1,17 @@
+<% if variant == "linked" %>
+  <fieldset class="mt-4 mb-2">
+    <legend class="w-full pl-4 border-l-2 text-xs font-semibold tracking-widest uppercase <%= color_palette(@theme)[:border_accent] %> <%= color_palette(@theme)[:text] %>">
+      <%= title %>
+    </legend>
+    <% if description.present? %>
+      <p class="mt-1 text-sm <%= neutral(:muted_text) %>"><%= description %></p>
+    <% end %>
+  </fieldset>
+<% else %>
+  <fieldset class="<%= section_fieldset_classes %>">
+    <legend class="<%= section_legend_classes %>"><%= title %></legend>
+    <% if description.present? %>
+      <p class="mt-1 text-sm <%= neutral(:muted_text) %>"><%= description %></p>
+    <% end %>
+  </fieldset>
+<% end %>

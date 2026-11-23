@@ -1,0 +1,76 @@
+en:
+  operations:
+    violations:
+      entity:
+        name_reserved: "The name %{name} is reserved because it uses the assoc_ prefix."
+        already_exists: "An entity named %{name} already exists."
+        name_in_trash: "An entity named %{name} is in the trash. Restore or permanently delete it before reusing the name."
+        duplicate_in_request: "The name %{name} is used more than once in this request."
+        not_found: "No editable entity named %{name} was found."
+        not_editable: "The entity %{name} cannot be changed through this operation."
+        person_not_first: "%{name} extends the user model, so it is the primary entity and must be listed first."
+        owner_multiple: "The entity %{name} marks more than one attribute as the owner. Keep one."
+        lifecycle_not_choice: "The attribute %{slug} can carry a lifecycle only as a select or radio input with static options."
+        lifecycle_unknown_state: "The lifecycle of %{slug} names %{state}, which is not one of its option values."
+        lifecycle_initial_missing: "The lifecycle of %{slug} needs exactly one option marked default, where a new record starts."
+        lifecycle_duplicate_transition: "The lifecycle of %{slug} lists the change from %{from} to %{to} more than once. List it once with every audience in by."
+        lifecycle_self_transition: "The lifecycle of %{slug} has a change from %{state} to itself. Remove it."
+      attribute:
+        duplicate_name: "The attribute name %{name} is used more than once."
+        duplicate_slug: "The attribute slug %{slug} is used more than once."
+        reserved_slug: "The attribute slug %{slug} is reserved."
+        reserved_by_base_model: "The attribute slug %{slug} is already a field of %{model}. Drop it or give it a different slug."
+        reserved_by_record: "The attribute slug %{slug} is reserved by the record itself. Give it a different slug, such as %{suggestion}."
+        not_found: "No attribute with slug %{slug} was found."
+        unknown_group: "The group %{group} does not exist on this entity."
+        in_use: "The attribute %{slug} is still referenced by a formula or an aggregate."
+        display_field_in_use: "The attribute %{slug} is the display field of %{fields}. Keep it as a text, search, email, tel, url, number or date field, or change the display field there first."
+        display_field_hidden: "The attribute %{slug} must stay visible to %{audience} because the launched form %{form} lists it."
+        owner_invalid: "The attribute %{slug} can mark the record's owner only when it references a person entity."
+      rule:
+        not_allowed: "The rule %{type} is not allowed on html_type %{html_type}. Allowed: %{allowed}."
+        invalid_range: "The range min %{min} must be less than or equal to max %{max}."
+        invalid_pattern: "The pattern %{pattern} is not a valid regular expression."
+      options:
+        not_applicable: "Choice options are not used with html_type %{html_type}."
+        duplicate_values: "The choice value %{value} is listed more than once."
+        constant_not_found: "No constant named %{name} was found."
+        entity_not_found: "No entity named %{name} was found for the choice list."
+        field_not_found: "The field %{field} was not found on entity %{entity}."
+        label_field_not_labelable: "The field %{field} on entity %{entity} can't label a choice. Use a text, search, email, tel, url, number or date field."
+      file:
+        not_applicable: "File settings are not used with html_type %{html_type}."
+      formula:
+        not_applicable: "A formula is not used when kind is %{kind}."
+        unknown_reference: "The formula references unknown attribute %{name}."
+      aggregate:
+        not_applicable: "An aggregate is not used when kind is %{kind}."
+        association_missing: "There is no association to %{entity} for this aggregate."
+        source_required: "The aggregate function %{function} requires source_attribute."
+        source_not_found: "No bridge attribute with slug %{slug} was found for this aggregate."
+        source_not_numeric: "The aggregate source %{slug} must be a numeric control."
+        filter_attribute_not_found: "No bridge attribute with slug %{slug} was found for the aggregate filter."
+      group:
+        duplicate_key: "The group key %{key} is used more than once."
+        duplicate_name: "The group name %{name} is used more than once."
+        not_found: "No group with key %{key} was found."
+        order_mismatch: "reorder_groups order must list every existing group key exactly once (%{expected})."
+      association:
+        target_not_found: "No entity named %{name} was found for this association."
+        self_reference: "An entity cannot associate to itself (%{name})."
+        duplicate: "An association to %{name} is already defined."
+        not_found: "No association to %{name} was found."
+        display_field_not_found: "The display field %{field} was not found on entity %{entity}."
+        display_field_not_labelable: "The display field %{field} on entity %{entity} must be a text, search, email, tel, url, number or date field."
+        bridge_slug_conflict: "The bridge attribute slug %{slug} conflicts with another field on the bridge."
+        person_not_primary: "%{entity} links to %{name}, the primary person entity. Declare this association on %{name} instead."
+      settings:
+        unknown_default_key: "The default value key %{key} does not match an attribute slug."
+      extends:
+        not_allowed: "This tenant cannot extend %{name}."
+        person_not_unique: "%{name} cannot extend the user model because %{primary} already does. Only one person entity is allowed per request."
+      change:
+        position_target_not_found: "No existing item named %{target} was found for this position."
+      entity_domain:
+        already_exists: "A domain named %{name} already exists."
+        not_found: "No domain named %{name} was found."

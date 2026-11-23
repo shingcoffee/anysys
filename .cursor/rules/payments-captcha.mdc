@@ -1,0 +1,27 @@
+---
+description: Single-file payment gateway, captcha, and email provider extension rules
+globs: app/services/payments/**,app/services/captcha/**,app/services/email/providers/**,app/javascript/controllers/payments_*,app/javascript/controllers/captcha_*
+alwaysApply: false
+---
+
+# Payment, Captcha & Email Extension
+
+## New payment gateway
+
+Only add `app/services/payments/gateways/<vendor>.rb` extending `Payments::Gateways::Base`.
+Declare `key`, `display_name`, `credential_fields`, `supported_flows`, webhook extract + API surface, then `register!`.
+Credentials live in encrypted JSON blob — no typed columns / no per-vendor migrations.
+
+## New captcha vendor
+
+Only add `app/services/captcha/providers/<vendor>.rb` extending `Captcha::Providers::Base`.
+Declare `key`, `display_name`, `config_fields`, `configured?`, `verify`, optional `widget`, then `register!`.
+Config in JSON blob — no typed columns / no per-vendor migrations.
+
+## New email vendor
+
+Only add `app/services/email/providers/<vendor>.rb` extending `Email::Providers::Base`.
+Declare `key`, `default_display_name`, `config_fields`, `configured?`, `delivery_mechanism`, optional `uses_webhook_secret?`, `deliver`, and for `:webhook` vendors `verify_webhook!` + `parse_events`, then `register!`.
+Config in JSON blob (SMTP typed columns are the historical exception) — no per-vendor migrations.
+
+See `AGENTS.md` and skills `new-payment-gateway` / `new-captcha-provider`.

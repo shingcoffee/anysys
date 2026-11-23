@@ -1,0 +1,12 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "sms",
+      title: t("sms_campaign_ui.report.title"),
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("sms_campaign_http.navigation.campaigns"), path: admin_modules_sms_campaigns_path(current_customer_id) },
+        { label: @campaign.name, path: admin_modules_sms_campaign_path(current_customer_id, @campaign) },
+        { label: t("sms_campaign_ui.report.title") }
+      ]
+    ) do %>
+  <%= render Sms::Admin::CampaignReportComponent.new(campaign: @campaign, report: @report, records: @records, columns: @columns, pagination: @pagination, filters: @filters) %>
+<% end %>

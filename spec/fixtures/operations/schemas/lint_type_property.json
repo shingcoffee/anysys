@@ -1,0 +1,30 @@
+{
+  "title": "Lint type property",
+  "description": "A contract whose object has a property named type.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["rules"],
+  "properties": {
+    "rules": {
+      "type": "array",
+      "description": "Rules to apply.",
+      "items": {
+        "type": "object",
+        "description": "One rule.",
+        "additionalProperties": false,
+        "required": ["type"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Which rule.",
+            "enum": ["presence"],
+            "x-enum-descriptions": { "presence": "A value is required." }
+          }
+        }
+      }
+    }
+  },
+  "examples": [
+    { "rules": [{ "type": "presence" }] }
+  ]
+}

@@ -1,0 +1,90 @@
+<% if groups.empty? %>
+  <%= render EmptyStateComponent.new(title: t("journeys.admin.generation.empty_title"),
+                                     description: t("journeys.admin.generation.empty_description"),
+                                     icon_path: Journeys::ListComponent::ICON) %>
+<% else %>
+  <div class="space-y-10">
+    <% groups.each do |domain, candidates| %>
+      <section aria-labelledby="journey-domain-<%= domain.id %>" data-role="generation-domain">
+        <h2 id="journey-domain-<%= domain.id %>" class="mb-4 flex items-center gap-2 text-sm font-semibold text-text-primary">
+          <span class="size-2 rounded-full <%= domain_dot(domain) %>" aria-hidden="true"></span>
+          <%= domain.name %>
+          <span class="font-normal tabular-nums text-text-muted"><%= candidates.size %></span>
+        </h2>
+
+        <div class="space-y-6">
+          <% kind_groups(candidates).each do |kind, list| %>
+            <section aria-labelledby="<%= kind_heading_id(domain, kind) %>" data-role="generation-kind" data-kind="<%= kind %>">
+              <header class="mb-3">
+                <h3 id="<%= kind_heading_id(domain, kind) %>" class="text-xs font-semibold uppercase tracking-wide text-text-secondary"><%= kind_title(kind) %></h3>
+                <p class="mt-0.5 max-w-prose text-sm text-text-muted"><%= kind_hint(kind) %></p>
+              </header>
+
+              <ul class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+                <% list.each do |candidate| %>
+                  <% existing = generated(domain, candidate) %>
+                  <li class="card flex min-w-0 flex-col gap-4 p-4 sm:p-5" data-role="generation-candidate" data-candidate="<%= candidate.key %>">
+                    <div class="min-w-0">
+                      <div class="flex flex-wrap items-center gap-1.5">
+                        <%= render BadgeComponent.new(variant: audience_variant(candidate), size: :sm) do %><%= audience_label(candidate) %><% end %>
+                        <% if existing %>
+                          <%= render BadgeComponent.new(variant: :default, size: :sm, data: { role: "generation-existing" }) do %>
+                            <%= t("journeys.admin.generation.generated", status: t("journeys.admin.status.#{existing.status}")) %>
+                          <% end %>
+                        <% end %>
+                      </div>
+                      <p class="mt-2 text-sm font-semibold text-text-primary break-words [overflow-wrap:anywhere]"><%= candidate.name %></p>
+                    </div>
+
+                    <dl class="min-w-0 space-y-3">
+                      <div class="min-w-0">
+                        <dt class="text-caption uppercase tracking-wide"><%= t("journeys.admin.step_start") %></dt>
+                        <dd class="mt-0.5 text-sm text-text-secondary break-words [overflow-wrap:anywhere]"><%= start_label(candidate) %></dd>
+                      </div>
+                      <div class="min-w-0">
+                        <dt class="text-caption uppercase tracking-wide"><%= t("journeys.admin.step_then") %></dt>
+                        <dd class="mt-1.5">
+                          <% if candidate.steps.any? %>
+                            <ul class="flex flex-wrap gap-1.5" aria-label="<%= t("journeys.admin.generation.then_steps", steps: candidate.steps.map(&:label).to_sentence) %>">
+                              <% candidate.steps.each do |step| %>
+                                <li class="max-w-full truncate rounded-md border border-border-subtle bg-surface-active px-2 py-0.5 text-xs text-text-secondary"><%= step.label %></li>
+                              <% end %>
+                            </ul>
+                          <% else %>
+                            <p class="text-sm text-text-muted break-words [overflow-wrap:anywhere]"><%= then_note(candidate) %></p>
+                          <% end %>
+                        </dd>
+                      </div>
+                      <% if (note = left_to_admins(candidate)) %>
+                        <p class="text-xs text-text-muted break-words [overflow-wrap:anywhere]" data-role="generation-left-out"><%= note %></p>
+                      <% end %>
+                    </dl>
+
+                    <div class="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-border-subtle pt-3">
+                      <span class="text-xs tabular-nums text-text-muted"><%= step_count_label(candidate) %></span>
+                      <div class="flex items-center gap-2">
+                        <% if existing %>
+                          <%= render ButtonComponent.new(tag: :a, href: journey_path(existing), variant: :ghost, size: :sm, class: "min-h-9",
+                                                         data: { role: "generation-open" }) do %>
+                            <%= t("common.actions.view") %>
+                          <% end %>
+                        <% end %>
+                        <%= form_with url: generate_path, method: :post, local: true, data: { turbo: false } do %>
+                          <%= hidden_field_tag :domain_id, domain.id, id: nil %>
+                          <%= hidden_field_tag :candidate, candidate.key, id: nil %>
+                          <%= render ButtonComponent.new(type: "submit", variant: :secondary, size: :sm, class: "min-h-9") do %>
+                            <%= t("journeys.admin.generation.submit") %>
+                          <% end %>
+                        <% end %>
+                      </div>
+                    </div>
+                  </li>
+                <% end %>
+              </ul>
+            </section>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+  </div>
+<% end %>

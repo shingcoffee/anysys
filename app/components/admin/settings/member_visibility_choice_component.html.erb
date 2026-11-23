@@ -1,0 +1,10 @@
+<label class="inline-flex min-h-11 items-center gap-2 text-sm">
+  <% if choice[:locked] %>
+    <input type="hidden" name="<%= name %>" value="<%= choice[:key] %>"/>
+  <% end %>
+  <input type="checkbox" name="<%= name %>" value="<%= choice[:key] %>"
+         <%= 'checked' if choice[:checked] %> <%= 'disabled' if choice[:locked] %> class="rounded"/>
+  <span><%= choice[:label] %>
+    <% if choice[:locked] %><span class="text-text-secondary">(<%= t("comp_admin.shared.always_shown") %>)</span><% end %>
+  </span>
+</label>

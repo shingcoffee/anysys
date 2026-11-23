@@ -1,0 +1,11 @@
+#!/bin/bash -e
+
+mkdir -p /rails/tmp/pids /rails/storage /rails/log
+
+# If running the rails server then create or migrate existing database.
+# Thruster's default CMD is: ./bin/thrust ./bin/rails server
+if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
+  ./bin/rails db:prepare
+fi
+
+exec "${@}"

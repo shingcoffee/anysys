@@ -1,0 +1,10 @@
+en:
+  page_shortcuts:
+    errors:
+      invalid_path: "Enter a local path using lowercase letters, numbers, hyphens, and interior single dots."
+      reserved_path: "This path is reserved by the application."
+      path_taken: "This path is already used by a page shortcut."
+      website_path_taken: "This path is already used by a website page."
+      shortcut_slug_taken: "This slug is already used by a page shortcut."
+      unavailable_target: "This destination is not publicly available."
+      invalid_customer: "This shortcut does not belong to the selected customer."

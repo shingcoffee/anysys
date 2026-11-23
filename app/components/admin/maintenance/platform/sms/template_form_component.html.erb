@@ -1,0 +1,91 @@
+<%= form_with model: template, url: form_url, method: form_method, class: "flex flex-col gap-6" do |f| %>
+  <%= render FormErrorsComponent.new(resource: template) %>
+
+  <%= render Admin::Maintenance::Platform::ModuleSettings::SectionCardComponent.new(
+        title: t("maint_platform.sms.templates.form.details_title"),
+        description: t("maint_platform.sms.templates.form.details_hint")
+      ) do %>
+    <ul class="divide-y divide-border-subtle">
+      <li class="px-4 sm:px-6 py-4">
+        <div class="<%= field_grid_class %>">
+          <%= f.label :key, t("maint_platform.sms.templates.form.key_label"), class: "form-label mb-0" %>
+          <div class="w-full max-w-xl">
+            <%= f.text_field :key, class: "input-field",
+                  placeholder: t("maint_platform.sms.templates.form.key_placeholder") %>
+          </div>
+        </div>
+      </li>
+      <li class="px-4 sm:px-6 py-4">
+        <div class="<%= field_grid_class %>">
+          <%= f.label :description, t("common.labels.description"), class: "form-label mb-0" %>
+          <div class="w-full max-w-xl">
+            <%= f.text_field :description, class: "input-field" %>
+          </div>
+        </div>
+      </li>
+      <li class="px-4 sm:px-6 py-4">
+        <div class="<%= field_grid_class %>">
+          <%= f.label :purpose, t("sms_campaign_ui.platform.purpose"), class: "form-label mb-0" %>
+          <div class="w-full max-w-xl space-y-2 min-w-0">
+            <%= f.select :purpose, %w[transactional marketing].map { |purpose| [t("admin_modules.emails.streams.form.kinds.#{purpose}"), purpose] }, {}, class: "input-field", aria: { describedby: "sms-template-purpose-help", invalid: template.errors[:purpose].any? ? true : nil } %>
+            <p id="sms-template-purpose-help" class="text-caption"><%= t("sms_campaign_ui.platform.purpose_help") %></p>
+          </div>
+        </div>
+      </li>
+      <li class="px-4 sm:px-6 py-4">
+        <div class="<%= field_grid_class %>">
+          <%= f.label :body_template, t("sms_campaign_ui.platform.body_template"), class: "form-label mb-0" %>
+          <div class="w-full max-w-xl space-y-2 min-w-0">
+            <%= f.text_area :body_template, rows: 5, maxlength: 4096, class: "input-field w-full font-mono text-sm", aria: { describedby: "sms-template-body-help", invalid: template.errors[:body_template].any? ? true : nil } %>
+            <p id="sms-template-body-help" class="text-caption"><%= t("sms_campaign_ui.platform.body_help") %></p>
+          </div>
+        </div>
+      </li>
+      <li class="px-4 sm:px-6 py-4">
+        <div class="<%= field_grid_class %>">
+          <label class="form-label mb-0"><%= t("maint_platform.sms.templates.form.variables_label") %></label>
+          <div class="w-full max-w-xl">
+            <%= text_field_tag "sms_template[variables_raw]", variables_raw,
+                  class: "input-field",
+                  placeholder: t("maint_platform.sms.templates.form.variables_placeholder") %>
+          </div>
+        </div>
+      </li>
+      <li class="px-4 sm:px-6 py-4">
+        <div class="<%= field_grid_class %>">
+          <%= f.label :status, t("common.labels.status"), class: "form-label mb-0" %>
+          <div class="w-full max-w-xl">
+            <%= f.select :status, status_options.map { |s| [t("common.status.#{s}"), s] }, {},
+                  class: "input-field" %>
+          </div>
+        </div>
+      </li>
+    </ul>
+  <% end %>
+
+  <%= render Admin::Maintenance::Platform::ModuleSettings::SectionCardComponent.new(
+        title: t("maint_platform.sms.templates.form.codes_title"),
+        description: t("maint_platform.sms.templates.form.codes_hint")
+      ) do %>
+    <ul class="divide-y divide-border-subtle">
+      <% provider_keys.each do |key| %>
+        <% adapter = provider_adapter(key) %>
+        <li class="px-4 sm:px-6 py-4">
+          <div class="<%= field_grid_class %>">
+            <label class="form-label mb-0" for="<%= provider_code_field_id(key) %>">
+              <%= provider_code_label(adapter) %>
+            </label>
+            <div class="w-full max-w-xl">
+              <%= text_field_tag provider_code_field_name(key), template.provider_code(key),
+                    id: provider_code_field_id(key), class: "input-field" %>
+            </div>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <%= render Admin::Maintenance::Platform::ModuleSettings::FormActionsComponent.new(
+        cancel_path: cancel_path, submit_label: submit_label
+      ) %>
+<% end %>

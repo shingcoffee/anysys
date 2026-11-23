@@ -1,0 +1,33 @@
+{
+  "title": "Echo",
+  "description": "Echoes a name and an optional color with defaults.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name"],
+  "properties": {
+    "name": {
+      "$ref": "#/$defs/label",
+      "description": "Name to echo."
+    },
+    "color": {
+      "type": "string",
+      "description": "Accent color.",
+      "enum": ["red", "blue"],
+      "x-enum-descriptions": {
+        "red": "A red accent.",
+        "blue": "A blue accent."
+      },
+      "default": "red"
+    },
+    "count": {
+      "type": "integer",
+      "description": "How many times to echo.",
+      "minimum": 1,
+      "maximum": 9,
+      "default": 1
+    }
+  },
+  "examples": [
+    { "name": "Alpha", "color": "blue", "count": 2 }
+  ]
+}

@@ -1,0 +1,58 @@
+<%# app/components/admin/maintenance/platform/settings_link_card_component.html.erb %>
+<% if layout == :list %>
+  <div class="card overflow-hidden">
+    <% if show_heading? %>
+      <div class="card-header">
+        <h2 class="section-header"><%= title %></h2>
+        <p class="mt-0.5 text-caption"><%= subtitle %></p>
+      </div>
+    <% end %>
+    <ul class="divide-y divide-border-subtle">
+      <% links.each do |link| %>
+        <li class="hover:bg-canvas-elevated transition-colors">
+          <%= link_to link.path, class: "flex items-center justify-between gap-4 px-4 sm:px-6 py-4" do %>
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="size-9 rounded-lg bg-surface-active flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="<%= icon_path(link.icon) %>"/>
+                </svg>
+              </div>
+              <div class="min-w-0">
+                <h3 class="text-body text-text-primary font-medium truncate"><%= link.title %></h3>
+                <p class="text-caption truncate"><%= link.description %></p>
+              </div>
+            </div>
+            <span class="text-body-sm text-accent shrink-0"><%= t("maint_platform.module_settings.show.actions.open") %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% else %>
+  <div class="flex flex-col gap-3">
+    <% if show_heading? %>
+      <div>
+        <h2 class="section-header"><%= title %></h2>
+        <p class="mt-0.5 text-caption"><%= subtitle %></p>
+      </div>
+    <% end %>
+    <ul class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <% links.each do |link| %>
+        <li>
+          <%= link_to link.path, class: "card p-4 flex items-start gap-3 hover:bg-canvas-elevated transition-colors h-full" do %>
+            <div class="size-9 rounded-lg bg-surface-active flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                <path stroke-linecap="round" stroke-linejoin="round" d="<%= icon_path(link.icon) %>"/>
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <h3 class="text-body text-text-primary font-medium"><%= link.title %></h3>
+              <p class="text-caption line-clamp-2"><%= link.description %></p>
+            </div>
+            <span class="text-body-sm text-accent shrink-0 mt-0.5"><%= t("maint_platform.module_settings.show.actions.open") %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

@@ -1,0 +1,28 @@
+zh-CN:
+  speech_to_text:
+    widget:
+      mic_label: "语音输入"
+      stop_label: "停止录音"
+      recording: "正在录音…"
+      transcribing: "正在转写…"
+      permission_denied: "麦克风权限被拒绝。"
+      no_microphone: "未检测到麦克风。"
+      insecure: "语音输入需要使用 HTTPS 或 localhost。"
+      unavailable: "当前浏览器不支持语音输入。"
+      too_long: "录音时长过长（最长 {seconds} 秒）。"
+      too_large: "音频文件过大。"
+      generic_error: "无法转写音频，请重试。"
+      empty: "未检测到语音。"
+      vendor_down: "转写服务暂不可用，请稍后重试。"
+      disabled: "语音转文字功能暂不可用。"
+      rate_limited: "转写次数过多，请稍后再试。"
+    errors:
+      audio_blank: "请上传音频。"
+      audio_too_large: "音频文件过大。"
+      audio_content_type: "音频文件无效。"
+      audio_size_unknown: "无法确定音频文件大小。"
+      audio_destination: "音频用途无效。"
+      field_dom_id_blank: "字段不能为空。"
+      rate_limited: "转写次数过多，请稍后再试。"
+      rate_limited_burst: "录音发送过于频繁，请稍候再试。"
+      too_long: "录音时长过长。"

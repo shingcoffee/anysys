@@ -1,0 +1,39 @@
+<section id="<%= id %>" class="<%= section_classes %>" aria-labelledby="<%= id %>-heading">
+  <header class="flex items-center gap-3 pb-2">
+    <span class="flex size-7 shrink-0 items-center justify-center rounded-lg ring-1 ring-inset <%= icon_tile_classes %>" aria-hidden="true">
+      <%= helpers.attribute_group_icon(icon, css_class: "size-3.5") %>
+    </span>
+    <%= content_tag heading_tag, heading, id: "#{id}-heading", class: "min-w-0 flex-1 text-sm font-semibold text-text-primary break-words [overflow-wrap:anywhere]" %>
+  </header>
+
+  <dl class="divide-y divide-border-subtle">
+    <% fields.each do |field| %>
+      <% value = attribute_value(field) %>
+      <% files = attribute_files(field) %>
+      <div class="<%= field_classes(field) %>">
+        <dt class="text-sm text-text-muted break-words [overflow-wrap:anywhere]"><%= attribute_label(field) %></dt>
+        <% if files.any? %>
+          <dd class="<%= value_classes(field) %>">
+            <ul class="flex flex-wrap items-start gap-2">
+              <% files.each do |file| %>
+                <li class="min-w-0 max-w-full">
+                  <% if file.image? %>
+                    <%= link_to url_for(file), target: "_blank", rel: "noopener noreferrer", class: "block overflow-hidden rounded-lg ring-1 ring-border-subtle transition-base hover:ring-accent-muted focus-visible:ring-accent-muted" do %>
+                      <%= image_tag url_for(file), alt: file.filename.to_s, class: "size-20 object-cover sm:size-24" %>
+                    <% end %>
+                  <% else %>
+                    <%= link_to file.filename.to_s, helpers.rails_blob_path(file, disposition: "attachment"), class: "#{VALUE_LINK_CLASSES} text-sm break-words [overflow-wrap:anywhere]" %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </dd>
+        <% elsif blank_value?(value) %>
+          <dd class="<%= value_classes(field) %> text-sm text-text-tertiary"><%= value %></dd>
+        <% else %>
+          <dd class="<%= value_classes(field) %> text-sm text-text-primary whitespace-pre-line break-words [overflow-wrap:anywhere]"><%= linked_value(field, value) || value %></dd>
+        <% end %>
+      </div>
+    <% end %>
+  </dl>
+</section>

@@ -1,0 +1,49 @@
+<%
+  form_id = Websites::Admin::SettingsFormComponent::FORM_ID
+  settings_actions = []
+  if @website
+    if @website.published?
+      settings_actions << {
+        label: t("website.admin.pages.index.view_site"),
+        path: page_shortcuts_mounted_path(PageShortcuts::PublicPath.website_home(customer_id: current_customer_id, host: request.host)),
+        variant: :secondary,
+        target: "_blank",
+        rel: "noopener"
+      }
+    else
+      settings_actions << {
+        label: t("website.admin.pages.index.view_site"),
+        path: "#",
+        variant: :secondary,
+        class: "pointer-events-none opacity-50",
+        data: { aria_disabled: true }
+      }
+    end
+    settings_actions << {
+      label: t("common.actions.save"),
+      variant: :primary,
+      form: form_id
+    }
+  end
+%>
+<%= render Admin::Settings::PageComponent.new(
+  customer_id: current_customer_id,
+  breadcrumbs: [{ label: t("settings_navigation.items.website") }],
+  title: t("settings_navigation.items.website"),
+  description: t("website_settings.description"),
+  actions: settings_actions
+) do %>
+  <%= render Websites::Admin::SettingsFormComponent.new(
+        website: @website,
+        customer_id: current_customer_id,
+        form_url: admin_settings_modules_website_site_path(current_customer_id)
+      ) do %>
+    <% if @website %>
+      <%= render Websites::Admin::SkeletonReplaceComponent.new(
+            website: @website,
+            customer_id: current_customer_id,
+            replace_url: admin_settings_modules_website_skeleton_path(current_customer_id)
+          ) %>
+    <% end %>
+  <% end %>
+<% end %>

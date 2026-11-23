@@ -1,0 +1,29 @@
+---
+description: Reserved roles, URL categories, and module navigation areas
+alwaysApply: true
+---
+
+# Auth, URLs & Module Surfaces
+
+## Roles (exactly three)
+
+- `owner` — only `lingercoffee@gmail.com` under customer `81721200`; cross-tenant
+- `admin` — single-customer super-admin; never other tenants or platform Maintenance
+- `member` — own-user member surfaces only
+
+Enforce at the controller layer — never UI-hiding alone.
+
+## URL categories (exactly three)
+
+- **admin** `/:cid/admin/` — `admin` or `owner`
+- **member** `/:cid/member/` — `member` (GET/HEAD preview exception via `allow_admin_member_preview!`)
+- **public** — everything else; no auth required
+
+## Module surfaces (exactly four)
+
+1. Entries → `/:customer_id/modules/<module_key>`
+2. Customer settings → `/:customer_id/settings/modules/<module_key>`
+3. Enable/disable → `/:customer_id/maintenance/modules`
+4. Platform settings → `/:customer_id/maintenance/module_settings` (owner / `81721200` only)
+---
+

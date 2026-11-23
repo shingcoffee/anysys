@@ -1,0 +1,84 @@
+<%# Viewport-locked app shell: the outer column is exactly the viewport height
+    and clips its own overflow, so the chrome (banner + topbar + menu bar) stays
+    fixed and only <main> scrolls. This also gives <main> a definite, bounded
+    height, which is what lets edge-mode editors (page builder, flowchart editor,
+    code generators) size their `h-full` roots correctly and scroll their canvas
+    internally instead of pushing the whole page — and the toolbar — out of view. %>
+<%# The `drawer` controller scopes the whole shell so the topbar hamburger
+    (click->drawer#open) and the drawer panel/backdrop targets — rendered in
+    sibling components below — share one controller instance. %>
+<div class="h-screen flex flex-col overflow-hidden bg-canvas <%= root_print_classes %>" data-controller="drawer">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-surface focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-text-primary focus:shadow-float focus:outline-none focus:ring-2 focus:ring-accent">
+    <%= t("chrome.skip_to_content") %>
+  </a>
+  <%= render Platform::AnnouncementBannerComponent.new %>
+
+  <%= render Platform::ContextBannerComponent.new %>
+
+  <%= render TopbarComponent.new(customer: customer, user: user) %>
+
+  <%= render MenuBarComponent.new(
+        customer: customer,
+        items: menu_items,
+        current_menu_item: current_menu_item,
+        current_path: current_path
+      ) %>
+
+  <div class="flex flex-1 min-h-0 overflow-hidden <%= workspace_print_classes %>" data-shell-workspace>
+    <% if show_sidebar? %>
+      <div id="app-sidebar"
+           class="<%= sidebar_classes %>"
+           data-state="<%= sidebar_state %>"
+           data-controller="sidebar-collapsible"
+           data-sidebar-collapsible-collapsed-value="<%= sidebar_collapsed? %>"
+           data-sidebar-collapsible-cookie-value="<%= sidebar_cookie %>">
+        <%# The frame clips the fixed-width full sidebar while the wrapper's width
+            animates; its border replaces the clipped aside border. %>
+        <div class="relative flex h-full min-h-0 w-full overflow-hidden border-r border-border bg-surface">
+          <div data-sidebar-collapsible-target="full" class="<%= sidebar_full_classes %>"<% if sidebar_collapsed? %> inert<% end %>>
+            <%= render SidebarComponent.new(
+                  tree: tree,
+                  menu_item: current_menu_item,
+                  current_path: current_path,
+                  collapsible: true
+                ) %>
+          </div>
+
+          <div data-sidebar-collapsible-target="rail" class="<%= sidebar_rail_classes %>"<% unless sidebar_collapsed? %> inert<% end %>>
+            <%= render SidebarRailComponent.new(
+                  tree: tree,
+                  menu_item: current_menu_item,
+                  current_path: current_path
+                ) %>
+          </div>
+        </div>
+
+        <div data-sidebar-collapsible-target="tooltip"
+             role="tooltip"
+             class="pointer-events-none fixed z-50 hidden -translate-y-1/2 items-center gap-2 whitespace-nowrap rounded-md bg-text-primary px-2 py-1 text-xs font-medium text-surface shadow-float">
+          <span data-sidebar-collapsible-target="tooltipLabel"></span>
+          <kbd data-sidebar-collapsible-target="tooltipShortcut"
+               class="hidden rounded border border-surface/20 bg-surface/10 px-1 font-sans text-[10px] leading-4 text-surface/75"></kbd>
+        </div>
+      </div>
+    <% end %>
+
+    <%= render DrawerComponent.new(
+          customer: customer,
+          tree: tree,
+          menu_items: menu_items,
+          current_menu_item: current_menu_item,
+          current_path: current_path
+        ) %>
+
+    <main id="main-content" class="<%= main_classes %>">
+      <% if container_width == :edge %>
+        <%= content %>
+      <% else %>
+        <div class="<%= container_classes %> py-8 lg:py-10">
+          <%= content %>
+        </div>
+      <% end %>
+    </main>
+  </div>
+</div>

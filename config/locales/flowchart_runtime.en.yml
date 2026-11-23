@@ -1,0 +1,19 @@
+---
+en:
+  flowchart_runtime:
+    errors:
+      record_not_found: Record was not found.
+      record_invalid: The record is invalid.
+      record_not_destroyed: The record could not be deleted.
+      record_busy: The record is being changed by another submission. Please try again.
+      timed_out: The operation timed out.
+      transport_error: The remote service could not be reached (%{reason}).
+      http_status: The remote service returned HTTP %{status}.
+      circuit_open: The remote service is temporarily unavailable (%{name}).
+      rate_limited: Too many requests. Try again later.
+      duplicate_request: This request has already been processed.
+      invalid_json: The JSON payload is invalid.
+      business_error: A business rule was not met.
+      unknown_attribute: Unknown attribute %{attribute}.
+      blocked_destination: The request destination is not allowed
+      loop_limit: The loop stopped after %{max} passes without finishing.

@@ -1,0 +1,33 @@
+<%= render Member::AuthShellComponent.new(
+      customer: nil,
+      title:    t("auth.customer_registrations.new.shell_title"),
+      subtitle: t("auth.customer_registrations.new.shell_subtitle")
+    ) do %>
+
+  <div class="mb-8">
+    <h2 class="text-subtitle mb-1"><%= t("auth.customer_registrations.new.heading") %></h2>
+    <p class="text-body-sm">
+      <%= t("auth.customer_registrations.new.have_account") %>
+      <%= link_to t("auth.common.sign_in"), new_user_session_path,
+            class: "font-medium text-member-accent-text hover:underline" %>.
+    </p>
+  </div>
+
+  <%= form_with model: @user, scope: :user, url: customer_registration_path, local: true,
+        html: { class: "flex flex-col gap-5" } do |f| %>
+
+    <% if @user.errors.any? %>
+      <div class="rounded-lg bg-danger-subtle border border-danger/20 p-3">
+        <p class="text-sm text-danger"><%= @user.errors.full_messages.first %></p>
+      </div>
+    <% end %>
+
+    <div>
+      <%= f.label :email, class: "form-label form-label-required" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email",
+            placeholder: t("auth.sessions.email_placeholder"), class: "input-member" %>
+    </div>
+
+    <%= f.submit t("auth.customer_registrations.new.submit"), class: "btn-member w-full justify-center" %>
+  <% end %>
+<% end %>

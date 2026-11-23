@@ -1,0 +1,9 @@
+<div class="<%= wrapper_class %>" data-site-el="buttons">
+  <% buttons.each do |button| %>
+    <% if button[:href].present? %>
+      <a href="<%= button[:href] %>" class="<%= button[:css_class] %>"<% if button[:style] %> style="<%= button[:style] %>"<% end %>><%= button[:label] %></a>
+    <% else %>
+      <span class="<%= button[:css_class] %>"<% if button[:style] %> style="<%= button[:style] %>"<% end %>><%= button[:label] %></span>
+    <% end %>
+  <% end %>
+</div>

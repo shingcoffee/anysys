@@ -1,0 +1,97 @@
+<%# The `drawer` Stimulus controller is hoisted to the shell root (see
+    ShellComponent) so the topbar hamburger can reach it; this element only
+    hosts the panel/backdrop targets. %>
+<div class="md:hidden">
+  <div data-drawer-target="backdrop"
+       data-action="click->drawer#close"
+       class="hidden fixed inset-0 bg-text-primary/50 z-40 backdrop-blur-[2px] transition-opacity duration-300"></div>
+
+  <aside data-drawer-target="panel"
+         class="fixed top-0 left-0 z-50 flex h-full w-[88vw] max-w-[340px] -translate-x-full flex-col overflow-hidden border-r border-border-subtle bg-surface shadow-float transition-transform duration-300 ease-out">
+
+    <%# Header %>
+    <div class="flex h-16 flex-shrink-0 items-center justify-between border-b border-border-subtle px-4">
+      <%= render Branding::SapphireLogoComponent.new(size: "h-10") %>
+      <button type="button"
+              data-action="click->drawer#close"
+              aria-label="<%= t("chrome.drawer.close_menu") %>"
+              class="icon-button min-h-10 min-w-10">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <%# Navigation %>
+    <nav class="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-5" aria-label="<%= t("chrome.menu_bar.dashboard_menu") %>">
+      <% menu_items.each do |item| %>
+        <% if item.sidebar_contributor.nil? && !item.dropdown? %>
+          <%= link_to item_path(item), data: { action: "click->drawer#close", menu_item: item.key },
+                class: "flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent #{active_item?(item) ? 'bg-accent-subtle text-accent-text' : 'text-text-secondary hover:bg-surface-hover hover:text-text-primary'}",
+                "aria-current": (active_item?(item) ? "page" : nil) do %>
+            <%= render MenuIconComponent.new(key: item.key) %>
+            <%= item.label %>
+          <% end %>
+        <% else %>
+          <details data-menu-item="<%= item.key %>" <%= "open" if active_item?(item) %> class="group">
+            <summary class="flex min-h-11 cursor-pointer list-none items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent [&::-webkit-details-marker]:hidden <%= active_item?(item) ? 'bg-accent-subtle text-accent-text' : 'text-text-secondary hover:bg-surface-hover hover:text-text-primary' %>">
+              <%= render MenuIconComponent.new(key: item.key) %>
+              <span class="flex-1"><%= item.label %></span>
+              <svg class="size-4 text-text-muted transition-transform duration-200 group-open:rotate-90" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+              </svg>
+            </summary>
+            <% if item.dropdown? %>
+              <ul class="mb-2 ml-5 mt-1 flex flex-col gap-0.5 border-l border-border-subtle py-1 pl-3">
+                <% active_child = item.active_child_for(customer, current_path) %>
+                <% item.children.each do |child| %>
+                  <li><%= link_to child.label, item_path(child),
+                        class: "flex min-h-11 items-center rounded-lg px-3 text-sm hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent #{child == active_child ? 'bg-accent-subtle font-semibold text-accent-text' : 'text-text-secondary'}",
+                        "aria-current": (child == active_child ? "page" : nil),
+                        data: { action: "click->drawer#close" } %></li>
+                <% end %>
+              </ul>
+            <% else %>
+              <%= link_to item.label, item_path(item),
+                    class: "ml-8 mt-1 flex min-h-10 items-center rounded-lg px-3 text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                    data: { action: "click->drawer#close" } %>
+              <% nodes = tree.nodes_for(item.key) %>
+              <% if SidebarComponent::SEARCHABLE_MENU_ITEMS.include?(item.key) && nodes.any? %>
+                <%= render SidebarComponent.new(tree: tree, menu_item: item.key, current_path: current_path, mobile: true, search_id: "drawer-#{item.key}-search") %>
+              <% elsif nodes.any? %>
+                <ul class="mb-2 ml-5 mt-1 flex flex-col gap-0.5 border-l border-border-subtle py-1 pl-3">
+                  <% selected_key = SidebarNodeComponent.selected_key(nodes, current_path) %>
+                  <% nodes.each do |node| %>
+                    <%= render SidebarNodeComponent.new(node: node, current_path: current_path, mobile: true, selected_key: selected_key) %>
+                  <% end %>
+                </ul>
+              <% end %>
+            <% end %>
+          </details>
+        <% end %>
+      <% end %>
+    </nav>
+
+    <%# Footer %>
+    <div class="flex-shrink-0 border-t border-border-subtle bg-canvas-elevated px-5 py-3">
+      <p class="truncate text-xs font-medium text-text-tertiary"><%= customer.name %></p>
+    </div>
+  </aside>
+</div>
+
+<% if current_menu_item == :settings %>
+  <%# Native modal commands supply focus containment, Escape and focus restoration.
+      This settings-only sheet also serves tablets where the global drawer is hidden. %>
+  <dialog id="settings-navigation-dialog" aria-label="<%= t("settings_navigation.menu") %>"
+          class="fixed inset-y-0 left-0 m-0 h-dvh max-h-dvh w-[min(90vw,22rem)] max-w-full border-0 bg-surface p-0 text-text-primary shadow-float backdrop:bg-text-primary/50">
+    <div class="flex h-full min-h-0 flex-col">
+      <div class="flex shrink-0 items-center justify-between gap-3 border-b border-border-subtle p-3">
+        <p class="text-body font-semibold"><%= t("settings_navigation.menu") %></p>
+        <button type="button" commandfor="settings-navigation-dialog" command="close" class="icon-button min-h-11 min-w-11" aria-label="<%= t("chrome.drawer.close_menu") %>">
+          <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <%= render SidebarComponent.new(tree: tree, menu_item: :settings, current_path: current_path, mobile: true, search_id: "dialog-settings-search") %>
+    </div>
+  </dialog>
+<% end %>

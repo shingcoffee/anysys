@@ -1,0 +1,198 @@
+en:
+  flowchart_actions:
+    set_submission_outcome:
+      label: Set submission outcome
+      description: Set the public flash and post-submit destination
+      fields:
+        preset:
+          label: Preset
+          help: Standard thank-you copy, or a custom localized message.
+          options:
+            submitted: Submitted
+            saved: Saved
+            thank_you: Thank you
+            custom: Custom
+        message:
+          label: Message
+          help: Localized flash text used when the preset is custom.
+        flash:
+          label: Flash
+          help: Banner style shown after a successful submit.
+          options:
+            notice: notice
+            alert: alert
+        target:
+          label: Target
+          help: Stay on this form or open another launched page of this customer.
+          options:
+            form: form
+            page: page
+        page:
+          label: Page
+          help: Launched page of this customer to open after submit.
+        messageVariables:
+          label: Message variables
+          help: Context values interpolated into named placeholders in the localized message.
+    fail_with_error:
+      label: Fail with a business error
+      description: End the run on the failure track with a localized message
+      fields:
+        message:
+          label: Message
+          help: Localized error shown in the public flash.
+        field:
+          label: Field
+          help: Optional form field to highlight on the public page.
+          placeholder: e.g., email
+        errorField:
+          label: Form field
+          help: Optional form field to highlight on the public page.
+          placeholder: e.g., email
+        errorCode:
+          label: Error code
+          help: Machine-readable code stored on error details for later steps.
+        messageVariables:
+          label: Message variables
+          help: Context values interpolated into named placeholders in the localized message.
+      errors:
+        invalid_identifier: "%{field} must be a valid identifier"
+    hand_off_to_module:
+      label: Hand off to module
+      description: Send the visitor to a module after the submission saves
+      fields:
+        moduleKey:
+          label: Module
+          help: Key of a handoff-enabled module this customer has turned on, e.g. payment.
+          placeholder: e.g., payment
+        input:
+          label: Input
+          help: Inputs passed to the module. Each name is one of the module's input fields; each value is an expression.
+        exitKind:
+          label: After the module
+          help: Where to send the visitor when the module finishes.
+          options:
+            none: Stay on the default landing
+            page: Open a page
+            url: Open a URL
+            route: Named route
+        exitPage:
+          label: Exit page
+          help: Launched page of this customer to open when the module finishes.
+        exitUrl:
+          label: Exit URL
+          help: http(s) URL to open when the module finishes.
+          placeholder: e.g., https://example.test
+        exitRoute:
+          label: Exit route
+          help: Named route to open when the module finishes, e.g. customer_home.
+          placeholder: e.g., customer_home
+      errors:
+        invalid_url: "%{field} must be an http or https URL"
+    skip_journey_steps:
+      label: Skip journey steps
+      description: Leave later steps of the visitor's journey out
+      fields:
+        steps:
+          label: Steps
+          help: Keys of later journey steps to leave out. Only steps the journey lets processing skip are left out, and so are the steps that need their records.
+          placeholder: e.g., catering
+      errors:
+        invalid_step_key: "%{field} must list journey step keys: lowercase letters, numbers and underscores"
+    request_payment:
+      label: Request payment
+      description: Hand off to checkout after the submission, which creates the payment order
+      fields:
+        amount:
+          label: Amount
+          help: Expression for the order amount in major units.
+        currency:
+          label: Currency
+          help: Expression for the ISO currency code.
+        subject:
+          label: Subject
+          help: Expression for the order subject shown at checkout.
+        description:
+          label: Description
+          help: Optional payer note stored on the order as body.
+        paidRecord:
+          label: Record paid for
+          help: Expression for the saved record this payment is for. Leave blank for the page's own record.
+        paidFields:
+          label: When paid, set
+          help: Fields set on the record paid for once the payment succeeds. Each value is written as typed, such as a status option.
+        paidAtField:
+          label: Payment time field
+          help: Optional date or time field on the record paid for that receives the payment time.
+        paymentReferenceField:
+          label: Payment reference field
+          help: Optional text field on the record paid for that receives the payment reference.
+        metadata:
+          label: Metadata
+          help: Optional key/value pairs stored on the order. Each value is an expression.
+        expiresInMinutes:
+          label: Expires in (minutes)
+          help: Minutes until the checkout order expires. Leave blank for no expiry.
+        exitKind:
+          label: After checkout
+          help: Where to send the visitor when checkout finishes.
+          options:
+            none: Stay on the default landing
+            page: Open a page
+            url: Open a URL
+            route: Named route
+            record: Open the record paid for
+        exitPage:
+          label: Exit page
+          help: Launched page of this customer to open when checkout finishes.
+        exitUrl:
+          label: Exit URL
+          help: http(s) URL to open when checkout finishes.
+          placeholder: e.g., https://example.test
+        exitRoute:
+          label: Exit route
+          help: Named route to open when checkout finishes, e.g. customer_home.
+          placeholder: e.g., customer_home
+      errors:
+        invalid_url: "%{field} must be an http or https URL"
+        invalid_identifier: "%{field} must be a valid identifier"
+        not_a_field: "%{attribute} is not a field of %{entity} that a payment can set"
+        invalid_currency: "%{field} must be a 3-letter ISO 4217 currency code"
+        invalid_option: "%{value} is not an option of %{attribute}"
+    refund_payment:
+      label: Refund payment
+      description: Refund a captured payment of this customer
+      fields:
+        payment:
+          label: Payment
+          help: Expression for a payment id of this customer.
+        refundMode:
+          label: Refund mode
+          help: Refund the remaining captured amount, or a specified partial amount.
+          options:
+            partial: Partial
+            full: Full
+        amount:
+          label: Amount
+          help: Expression for the refund amount in major units.
+        reason:
+          label: Reason
+          help: Optional reason recorded with the refund.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read for the refund record.
+  flowchart_runtime:
+    errors:
+      hand_off_to_module:
+        module_unavailable: This module isn't available, so the submission can't continue there.
+      request_payment:
+        module_disabled: Payments are not enabled for this customer.
+        invalid_order: The payment order could not be created.
+        invalid_paid_record: The record this payment is for has not been saved.
+        invalid_paid_field: "%{field_name} is not a field the payment can set."
+      refund_payment:
+        not_found: The payment was not found for this customer.
+        not_captured: The payment has not been captured.
+        non_positive: The refund amount must be positive.
+        exceeds_remainder: "Refund of %{amount} exceeds the remaining %{remainder}."
+        billing_collection: Billing collections cannot be refunded from this step.
+        failed: The refund could not be completed.

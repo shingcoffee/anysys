@@ -1,0 +1,22 @@
+<%= render Member::AuthShellComponent.new(
+      customer: nil,
+      title:    t("auth.customer_registrations.check_email.shell_title"),
+      subtitle: t("auth.customer_registrations.check_email.shell_subtitle")
+    ) do %>
+
+  <div class="mb-8">
+    <h2 class="text-subtitle mb-1"><%= t("auth.customer_registrations.check_email.heading") %></h2>
+    <p class="text-body-sm">
+      <%= t("auth.customer_registrations.check_email.body_html", email: @email) %>
+    </p>
+  </div>
+
+  <%= form_with url: customer_registration_resend_path, method: :post, local: true, html: { class: "flex flex-col gap-3" } do %>
+    <%= submit_tag t("auth.unconfirmed.resend"), class: "btn-member w-full justify-center" %>
+  <% end %>
+
+  <p class="mt-4 text-center text-body-sm">
+    <%= link_to t("auth.common.back_to_sign_in"), new_user_session_path,
+          class: "font-medium text-member-accent-text hover:underline" %>
+  </p>
+<% end %>

@@ -1,0 +1,12 @@
+# Project-specific Devise overrides.
+# Standard Devise translations are provided by the devise-i18n gem for en and
+# zh-CN; this file only holds custom keys that the gem does not provide.
+zh-CN:
+  devise:
+    failure:
+      deactivated: "您的账户已被停用，请联系管理员。"
+    mailer:
+      confirmation_instructions:
+        subject: "确认您的 Anysys 邮箱"
+      reset_password_instructions:
+        subject: "重置您的 Anysys 密码"

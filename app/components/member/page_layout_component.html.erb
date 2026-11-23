@@ -1,0 +1,15 @@
+<div data-component="member-page-layout" class="space-y-8">
+  <% if hero? %>
+    <%= hero %>
+  <% end %>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+    <div class="lg:col-span-8 space-y-6 min-w-0"><%= primary %></div>
+
+    <% if aside? %>
+      <aside class="lg:col-span-4 space-y-5 min-w-0"><%= aside %></aside>
+    <% else %>
+      <div class="hidden lg:block lg:col-span-4" aria-hidden="true"></div>
+    <% end %>
+  </div>
+</div>

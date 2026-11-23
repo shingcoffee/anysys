@@ -1,0 +1,39 @@
+<header class="relative z-30 border-b border-border-subtle bg-surface">
+  <div class="mx-auto grid h-16 max-w-[1920px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 sm:gap-6 sm:px-6 lg:px-8">
+    <%# Logo & Mobile Menu %>
+    <div class="flex min-w-0 items-center gap-3">
+      <button type="button"
+              class="md:hidden icon-button min-h-10 min-w-10"
+              data-action="click->drawer#open"
+              aria-label="<%= t("chrome.topbar.open_menu") %>">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+
+      <%= link_to helpers.admin_dashboard_path(customer.id),
+                  class: "inline-flex shrink-0 items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                  aria: { label: t("chrome.topbar.dashboard_aria") } do %>
+        <%= render Branding::SapphireLogoComponent.new(size: "h-10") %>
+      <% end %>
+    </div>
+
+    <%# Search %>
+    <div class="hidden min-w-0 justify-center lg:flex">
+      <div class="w-full max-w-md xl:max-w-lg">
+        <%= render InlineSearchComponent.new(customer_id: customer.id) %>
+      </div>
+    </div>
+
+    <%# Actions %>
+    <div class="flex items-center justify-end gap-0.5 sm:gap-1.5">
+      <div class="lg:hidden">
+        <%= render InlineSearchComponent.new(customer_id: customer.id, mobile: true) %>
+      </div>
+      <%= render LocaleSwitcherComponent.new %>
+      <%= render HelpMenuComponent.new(user: user, customer_id: customer.id) %>
+      <%= render NotificationsButtonComponent.new(user: user, customer_id: customer.id) %>
+      <%= render UserMenuComponent.new(user: user, customer: customer) if user %>
+    </div>
+  </div>
+</header>

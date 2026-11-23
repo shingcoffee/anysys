@@ -1,0 +1,23 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "sms",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.email.entries.audience"), path: admin_modules_sms_contacts_path(current_customer_id) },
+        { label: t("admin_modules.sms.opt_outs.title") }
+      ],
+      title: t("admin_modules.sms.opt_outs.title"),
+      description: t("admin_modules.sms.opt_outs.description")
+    ) do %>
+  <%= render "admin/modules/sms/shared/audience_tabs", active_tab: :opt_outs %>
+  <%= render AdminTableComponent.new(
+    rows:       @rows,
+    columns:    @columns,
+    pagination: @pagination,
+    params:     params.permit(:q, :sort, :dir, :page).to_h.symbolize_keys,
+    search:     { param: :q, placeholder: t("admin_modules.sms.opt_outs.search_placeholder") },
+    empty_state: {
+      title: t("admin_modules.sms.opt_outs.empty_title"),
+      description: t("admin_modules.sms.opt_outs.empty_description")
+    }
+  ) %>
+<% end %>

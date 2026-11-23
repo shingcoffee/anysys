@@ -1,0 +1,88 @@
+<div role="img" aria-label="<%= copy('label') %>" class="relative mx-auto max-w-6xl">
+  <div aria-hidden="true" class="pointer-events-none absolute -inset-x-6 -top-8 bottom-10 rounded-[3rem] bg-gradient-to-r from-violet-600/40 via-fuchsia-500/30 to-sky-500/30 blur-3xl"></div>
+  <div aria-hidden="true" class="relative rounded-[1.75rem] border border-white/15 bg-white/[0.07] p-1.5 shadow-2xl shadow-black/50 backdrop-blur sm:p-2.5">
+    <div class="overflow-hidden rounded-[1.25rem] bg-white text-left text-slate-900 ring-1 ring-black/5">
+      <div class="flex h-11 items-center gap-3 border-b border-slate-200/80 bg-slate-50/90 px-4">
+        <span class="flex gap-1.5"><span class="size-3 rounded-full bg-rose-400"></span><span class="size-3 rounded-full bg-amber-400"></span><span class="size-3 rounded-full bg-emerald-400"></span></span>
+        <span class="mx-auto flex min-w-0 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1 text-[12px] font-medium text-slate-500">
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" class="size-3 shrink-0 text-emerald-500"><path d="M4.5 7V5a3.5 3.5 0 1 1 7 0v2M3.5 7h9v6.5h-9z" stroke-linejoin="round" /></svg>
+          <span class="truncate"><%= copy('url') %></span>
+        </span>
+        <span class="hidden w-14 sm:block"></span>
+      </div>
+      <div class="grid grid-cols-12">
+        <div class="col-span-3 hidden flex-col gap-1 border-r border-slate-200/80 bg-slate-50/60 p-4 md:flex lg:col-span-2">
+          <div class="mb-4 flex items-center gap-2 px-2 text-[14px] font-bold text-slate-900"><%= render Branding::SapphireLogoComponent.new(size: "h-5", css_class: "shrink-0", decorative: true) %><%= copy('brand') %></div>
+          <% nav_items.each_with_index do |item, index| %>
+            <span class="flex items-center gap-2.5 rounded-lg px-2 py-2 text-[13px] font-medium <%= index == 1 ? 'bg-white text-violet-700 shadow-sm ring-1 ring-slate-200' : 'text-slate-500' %>">
+              <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0"><path d="<%= nav_glyph(index) %>" /></svg>
+              <span class="truncate"><%= item %></span>
+            </span>
+          <% end %>
+        </div>
+        <div class="col-span-12 min-w-0 p-4 sm:p-6 md:col-span-9 lg:col-span-7">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="min-w-0">
+              <p class="text-[12px] font-medium text-slate-400"><%= copy('subtitle') %></p>
+              <p class="text-[20px] font-bold tracking-tight text-slate-950"><%= copy('title') %></p>
+            </div>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-3 py-1 text-[12px] font-semibold text-white shadow-md shadow-violet-500/30">
+              <svg aria-hidden="true" focusable="false" viewBox="0 0 20 20" fill="currentColor" class="size-3"><path d="M10 1.5l1.9 5.1a2 2 0 0 0 1.2 1.2l5.1 1.9-5.1 1.9a2 2 0 0 0-1.2 1.2L10 18.5l-1.9-5.7a2 2 0 0 0-1.2-1.2L1.8 9.7l5.1-1.9a2 2 0 0 0 1.2-1.2z" /></svg>
+              <%= copy('ai_badge') %>
+            </span>
+          </div>
+          <div class="mt-5 grid grid-cols-1 gap-3 min-[420px]:grid-cols-3">
+            <% stats.each_with_index do |stat, index| %>
+              <div class="rounded-xl border border-slate-200/80 bg-gradient-to-br from-white to-slate-50 p-3.5">
+                <p class="truncate text-[12px] font-medium text-slate-500"><%= stat['label'] %></p>
+                <p class="mt-1 text-[22px] font-bold tabular-nums tracking-tight text-slate-950"><%= stat['value'] %></p>
+                <p class="mt-0.5 text-[12px] font-semibold <%= index == 1 ? 'text-slate-400' : 'text-emerald-600' %>"><%= stat['delta'] %></p>
+              </div>
+            <% end %>
+          </div>
+          <div class="mt-5 overflow-hidden rounded-xl border border-slate-200/80">
+            <div class="grid grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1fr)] gap-3 border-b border-slate-200/80 bg-slate-50 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-slate-400 sm:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)]">
+              <% columns.each_with_index do |column, index| %><span class="truncate <%= 'hidden sm:block' if index == 2 %>"><%= column %></span><% end %>
+            </div>
+            <% rows.each_with_index do |row, index| %>
+              <div class="grid grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1fr)] items-center gap-3 border-b border-slate-100 px-4 py-2.5 text-[13px] last:border-b-0 sm:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)]">
+                <span class="flex min-w-0 items-center gap-2.5 font-semibold text-slate-800"><span class="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-[11px] font-bold text-white <%= avatar_tone(index) %>"><%= initials(row['name']) %></span><span class="truncate"><%= row['name'] %></span></span>
+                <span class="truncate text-slate-600"><%= row['level'] %></span>
+                <span class="hidden truncate tabular-nums text-slate-500 sm:block"><%= row['date'] %></span>
+                <span><span class="inline-flex whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-semibold <%= status_tone(index) %>"><%= row['status'] %></span></span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="col-span-3 hidden flex-col gap-4 border-l border-slate-200/80 bg-slate-50/60 p-4 lg:flex">
+          <div class="rounded-2xl bg-gradient-to-br from-violet-600 via-fuchsia-600 to-indigo-600 p-px shadow-lg shadow-violet-500/20">
+            <div class="rounded-[15px] bg-white p-4">
+              <p class="flex items-center gap-2 text-[13px] font-bold text-slate-900"><span class="inline-flex size-6 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white"><svg aria-hidden="true" focusable="false" viewBox="0 0 20 20" fill="currentColor" class="size-3.5"><path d="M10 1.5l1.9 5.1a2 2 0 0 0 1.2 1.2l5.1 1.9-5.1 1.9a2 2 0 0 0-1.2 1.2L10 18.5l-1.9-5.7a2 2 0 0 0-1.2-1.2L1.8 9.7l5.1-1.9a2 2 0 0 0 1.2-1.2z" /></svg></span><%= copy('assistant.title') %></p>
+              <p class="mt-3 text-[13px] leading-5 text-slate-600"><%= copy('assistant.message') %></p>
+              <span class="mt-3 inline-flex rounded-lg bg-slate-900 px-3 py-1.5 text-[12px] font-semibold text-white"><%= copy('assistant.action') %></span>
+            </div>
+          </div>
+          <div class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white">
+            <div class="relative h-24 bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-400">
+              <span class="absolute left-3 top-3 h-2 w-16 rounded-full bg-white/70"></span>
+              <span class="absolute left-3 top-7 h-2 w-24 rounded-full bg-white/40"></span>
+              <span class="absolute bottom-3 left-3 h-5 w-14 rounded-md bg-white"></span>
+            </div>
+            <div class="flex items-center justify-between gap-2 p-3">
+              <span class="truncate text-[13px] font-semibold text-slate-800"><%= copy('site.title') %></span>
+              <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700"><span class="size-1.5 rounded-full bg-emerald-500"></span><%= copy('site.status') %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div aria-hidden="true" class="absolute -left-8 top-[38%] hidden w-64 items-center gap-3 rounded-2xl border border-white/70 bg-white/95 p-3.5 text-left shadow-2xl shadow-violet-950/40 backdrop-blur xl:flex animate-float motion-reduce:animate-none">
+    <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 text-white shadow-lg shadow-emerald-500/30"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" class="size-5"><path d="M15 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM5 20v-1a5 5 0 0 1 10 0v1M18 8v6M15 11h6" /></svg></span>
+    <span class="min-w-0"><span class="block truncate text-[13px] font-bold text-slate-900"><%= copy('toasts.signup.title') %></span><span class="block truncate text-[12px] text-slate-500"><%= copy('toasts.signup.body') %></span></span>
+  </div>
+  <div aria-hidden="true" class="absolute -right-8 bottom-16 hidden w-60 items-center gap-3 rounded-2xl border border-white/70 bg-white/95 p-3.5 text-left shadow-2xl shadow-violet-950/40 backdrop-blur xl:flex animate-float motion-reduce:animate-none [animation-delay:-3.5s]">
+    <span class="inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-lg shadow-violet-500/30"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" class="size-5"><path d="M3 6h18v12H3zM3 10h18M7 15h3" /></svg></span>
+    <span class="min-w-0"><span class="block truncate text-[13px] font-bold text-slate-900"><%= copy('toasts.payment.title') %></span><span class="block truncate text-[12px] text-slate-500"><%= copy('toasts.payment.body') %></span></span>
+  </div>
+</div>

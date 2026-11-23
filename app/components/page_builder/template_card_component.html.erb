@@ -1,0 +1,187 @@
+<div class="<%= card_classes %>"
+     data-<%= controller_name %>-target="templateCard"
+     data-template-key="<%= key %>"
+     data-template-category="<%= template[:category] %>"
+     data-template-category-label="<%= category_label %>"
+     data-template-category-group="<%= category_group_label %>"
+     data-template-name="<%= name %>"
+     data-template-description="<%= description %>"
+     data-template-theme="<%= theme_preset %>"
+     data-action="click-><%= controller_name %>#selectTemplate dblclick-><%= controller_name %>#handleDoubleClick">
+
+  <%# Selected check mark %>
+  <div class="absolute top-1.5 right-1.5 z-10 <%= 'hidden' unless selected? %>" data-checkmark>
+    <svg class="w-5 h-5 text-indigo-600 drop-shadow-sm" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+    </svg>
+  </div>
+
+  <%# ── PREVIEW THUMBNAIL ── %>
+  <div class="relative bg-gray-50 border-b border-gray-200 p-2.5 pb-2 group min-h-[120px]">
+    <%# Zoom button %>
+    <button type="button"
+            class="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center justify-center w-7 h-7 text-gray-600 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            data-action="click-><%= controller_name %>#openPreviewModal"
+            title="<%= t("comp_page_builder.template_card.preview_title") %>">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+      </svg>
+    </button>
+
+    <%# Category badge %>
+    <div class="absolute bottom-1.5 left-1.5 z-10">
+      <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[7px] font-semibold bg-white/90 text-gray-600 ring-1 ring-gray-200/80 backdrop-blur-sm shadow-sm truncate max-w-[90%]"
+            data-category-badge>
+        <%= category_label %>
+      </span>
+    </div>
+
+    <%# Mini form mockup %>
+    <div class="bg-white rounded-md border border-gray-200 shadow-sm px-2 py-1.5 space-y-1 overflow-hidden max-h-[110px]" data-preview-content>
+      <% preview_rows.first(8).each do |row| %>
+        <div class="flex gap-1 items-start">
+          <% row.each do |el| %>
+            <% case el[:type]
+               when :section %>
+              <div class="w-full">
+                <div class="flex items-center gap-0.5 mb-0.5">
+                  <div class="w-1 h-1 rounded-full <%= accent_color_class %>"></div>
+                  <span class="text-[5px] font-bold text-gray-700 uppercase tracking-wider truncate"><%= el[:label] || t("comp_page_builder.template_card.mock_section") %></span>
+                </div>
+              </div>
+            <% when :input %>
+              <div class="<%= width_class(el[:width]) %>">
+                <% if el[:label] %>
+                  <div class="text-[4px] text-gray-400 mb-px truncate"><%= el[:label] %></div>
+                <% end %>
+                <div class="h-[7px] bg-gray-100 border border-gray-200 rounded-sm"></div>
+              </div>
+            <% when :textarea %>
+              <div class="<%= width_class(el[:width]) %>">
+                <% if el[:label] %>
+                  <div class="text-[4px] text-gray-400 mb-px truncate"><%= el[:label] %></div>
+                <% end %>
+                <div class="h-[14px] bg-gray-100 border border-gray-200 rounded-sm"></div>
+              </div>
+            <% when :select %>
+              <div class="<%= width_class(el[:width]) %>">
+                <% if el[:label] %>
+                  <div class="text-[4px] text-gray-400 mb-px truncate"><%= el[:label] %></div>
+                <% end %>
+                <div class="h-[7px] bg-gray-100 border border-gray-200 rounded-sm flex items-center justify-end pr-0.5">
+                  <svg class="w-1.5 h-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                </div>
+              </div>
+            <% when :checkbox %>
+              <div class="<%= width_class(el[:width]) %> flex items-center gap-0.5">
+                <div class="w-[6px] h-[6px] border border-gray-300 rounded-sm flex-shrink-0 bg-white"></div>
+                <span class="text-[4px] text-gray-500 truncate"><%= el[:label] || t("comp_page_builder.template_card.mock_option") %></span>
+              </div>
+            <% when :radio %>
+              <div class="<%= width_class(el[:width]) %> space-y-px">
+                <% 3.times do |i| %>
+                  <div class="flex items-center gap-0.5">
+                    <div class="w-[5px] h-[5px] border border-gray-300 rounded-full flex-shrink-0 bg-white"></div>
+                    <span class="text-[4px] text-gray-400"><%= i == 0 ? (el[:label] || t("comp_page_builder.template_card.mock_option")) : t("comp_page_builder.template_card.mock_option_n", number: i + 1) %></span>
+                  </div>
+                <% end %>
+              </div>
+            <% when :date %>
+              <div class="<%= width_class(el[:width]) %>">
+                <% if el[:label] %>
+                  <div class="text-[4px] text-gray-400 mb-px truncate"><%= el[:label] %></div>
+                <% end %>
+                <div class="h-[7px] bg-gray-100 border border-gray-200 rounded-sm flex items-center justify-end pr-0.5">
+                  <svg class="w-1.5 h-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                </div>
+              </div>
+            <% when :number %>
+              <div class="<%= width_class(el[:width]) %>">
+                <% if el[:label] %>
+                  <div class="text-[4px] text-gray-400 mb-px truncate"><%= el[:label] %></div>
+                <% end %>
+                <div class="h-[7px] bg-gray-100 border border-gray-200 rounded-sm flex items-center px-0.5">
+                  <span class="text-[4px] text-gray-400">0</span>
+                </div>
+              </div>
+            <% when :rating %>
+              <div class="<%= width_class(el[:width]) %>">
+                <% if el[:label] %>
+                  <div class="text-[4px] text-gray-400 mb-px truncate"><%= el[:label] %></div>
+                <% end %>
+                <div class="flex gap-px">
+                  <% 5.times do |i| %>
+                    <svg class="w-[6px] h-[6px] <%= i < 3 ? 'text-amber-400' : 'text-gray-300' %>" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                  <% end %>
+                </div>
+              </div>
+            <% when :file %>
+              <div class="<%= width_class(el[:width]) %>">
+                <% if el[:label] %>
+                  <div class="text-[4px] text-gray-400 mb-px truncate"><%= el[:label] %></div>
+                <% end %>
+                <div class="h-[12px] border border-dashed border-gray-300 rounded-sm bg-gray-50 flex items-center justify-center">
+                  <svg class="w-2 h-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                </div>
+              </div>
+            <% when :divider %>
+              <div class="w-full py-px">
+                <hr class="border-t border-gray-200">
+              </div>
+            <% when :spacer %>
+              <div class="w-full h-[4px]"></div>
+            <% when :button %>
+              <div class="w-full flex justify-end">
+                <div class="h-[8px] px-2 rounded-sm <%= accent_color_class %> flex items-center">
+                  <span class="text-[4px] text-white font-semibold"><%= el[:label] || t("common.actions.submit") %></span>
+                </div>
+              </div>
+            <% when :steps %>
+              <div class="w-full flex items-center justify-center gap-1 mb-0.5">
+                <% (el[:labels] || []).each_with_index do |label, i| %>
+                  <div class="flex items-center gap-0.5">
+                    <div class="w-[6px] h-[6px] rounded-full flex items-center justify-center text-[3px] font-bold text-white <%= i == 0 ? accent_color_class : 'bg-gray-300' %>"><%= i + 1 %></div>
+                    <span class="text-[4px] <%= i == 0 ? accent_text_class + ' font-semibold' : 'text-gray-400' %>"><%= label %></span>
+                  </div>
+                  <% if i < (el[:labels] || []).length - 1 %>
+                    <div class="w-2 border-t border-gray-300"></div>
+                  <% end %>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%# ── INFO SECTION ── %>
+  <div class="px-3 py-2.5 bg-white">
+    <div class="flex items-start justify-between gap-1">
+      <div class="min-w-0">
+        <h4 class="text-[11px] font-semibold text-gray-900 leading-tight truncate"><%= name %></h4>
+        <p class="text-[10px] text-gray-500 leading-tight mt-0.5 line-clamp-2"><%= description %></p>
+      </div>
+      <div class="flex flex-col items-end gap-0.5 flex-shrink-0">
+        <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[8px] font-medium ring-1 ring-inset <%= theme_badge_classes %>">
+          <%= theme_preset_label %>
+        </span>
+        <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[8px] font-medium bg-gray-50 text-gray-500 ring-1 ring-inset ring-gray-200 truncate max-w-[80px]"
+              title="<%= category_label %>">
+          <%= category_label %>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <% if controller_name == "template-applier" %>
+    <%# Apply button (hidden until card is selected) %>
+    <div class="hidden border-t border-gray-200 p-3 bg-gray-50" data-template-applier-target="applySection">
+      <button type="button"
+              class="btn btn-primary w-full"
+              data-action="click->template-applier#applyTemplate">
+        <%= t("comp_page_builder.template_card.apply") %>
+      </button>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,161 @@
+<div id="<%= dom_id(message) %>"
+     class="group/message flex w-full gap-3"
+     data-role="<%= message.role %>"
+     data-body="<%= body_text %>">
+  <% unless user? %>
+    <span class="mt-6 flex size-7 shrink-0 items-center justify-center rounded-lg bg-accent-subtle text-accent ring-1 ring-accent-muted/40" aria-hidden="true">
+      <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+      </svg>
+    </span>
+  <% end %>
+
+  <div class="flex min-w-0 flex-1 flex-col gap-1.5 <%= user? ? "items-end" : "items-start" %>">
+    <div class="flex items-baseline gap-2 <%= user? ? "flex-row-reverse pr-1" : "" %>">
+      <p class="text-xs font-medium text-text-secondary"><%= author_label %></p>
+      <time class="text-xs tabular-nums text-text-muted" datetime="<%= message.created_at.iso8601 %>"><%= timestamp_label %></time>
+      <% unless user? %>
+        <%# Copy belongs to the reply it copies, not to a global toolbar. Revealed on
+            hover or focus with a mouse; always visible on touch, which has no hover. %>
+        <button type="button"
+                class="inline-flex size-6 items-center justify-center rounded-md text-text-muted transition-base hover:bg-surface-active hover:text-text-primary focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent pointer-fine:opacity-0 pointer-fine:group-hover/message:opacity-100"
+                title="<%= t("ai_assistant.assistant.copy") %>"
+                aria-label="<%= t("ai_assistant.assistant.copy") %>"
+                data-action="click->ai-assistant#copy">
+          <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true" data-copy-idle>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08M15.75 18v.243a2.25 2.25 0 01-.659 1.591L14.6 20.4a2.25 2.25 0 01-1.591.659H8.25A2.25 2.25 0 016 18.75V15m9.75 3H6m9.75-14.25a1.5 1.5 0 00-1.5-1.5h-2.25a1.5 1.5 0 00-1.5 1.5m5.25 0v.75H10.5v-.75M6 15H4.5A2.25 2.25 0 012.25 12.75V6.108c0-1.135.845-2.098 1.976-2.192" />
+          </svg>
+          <svg class="hidden size-3.5 text-success" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" aria-hidden="true" data-copy-done>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+        </button>
+      <% end %>
+    </div>
+
+    <%# The user bubble keeps newlines, so the body must abut the tag with no template whitespace. %>
+    <div class="<%= bubble_classes %>"><% if user? %><%= body_text %><% else %>
+        <%= helpers.sanitize(body_html, tags: AiAssistant::Assistant::Markdown::TAGS, attributes: AiAssistant::Assistant::Markdown::ATTRIBUTES) %>
+      <% end %>
+      <% if images.any? %>
+        <div class="mt-2.5 flex flex-wrap gap-2">
+          <% images.each do |image| %>
+            <%= link_to url_for(image), target: "_blank", rel: "noopener noreferrer", class: "block overflow-hidden rounded-xl ring-1 ring-border-subtle transition-base hover:ring-accent-muted" do %>
+              <%= image_tag url_for(image), alt: t("ai_assistant.assistant.image_alt"), class: "max-h-40 object-contain" %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <% if page_links.any? %>
+      <ul class="my-1 flex w-full max-w-[min(92%,42rem)] flex-col gap-2" aria-label="<%= t("ai_assistant.assistant.page_links.title") %>" data-page-links>
+        <% page_links.each do |page| %>
+          <li>
+            <%= link_to page_form_path(page),
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  class: "group/link flex items-center gap-3 rounded-xl bg-surface px-3 py-2.5 ring-1 ring-border-subtle transition-base hover:bg-surface-hover hover:ring-accent-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                  data: { page_link: page.id } do %>
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent-subtle text-accent ring-1 ring-accent-muted/40" aria-hidden="true">
+                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                </svg>
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block truncate text-sm font-medium text-text-primary"><%= page.name %></span>
+                <span class="block truncate text-caption text-text-muted"><%= t("ai_assistant.assistant.page_links.subtitle") %></span>
+              </span>
+              <span class="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-accent">
+                <span class="hidden sm:inline"><%= t("ai_assistant.assistant.page_links.open") %></span>
+                <svg class="size-3.5 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 motion-reduce:transition-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                </svg>
+              </span>
+              <span class="sr-only"><%= t("ai_assistant.assistant.page_links.new_tab") %></span>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <% if assumptions.any? %>
+      <div class="w-full max-w-[min(92%,42rem)]" data-assumptions>
+        <p class="text-xs font-medium text-text-secondary"><%= t("ai_assistant.assistant.assumptions.title") %></p>
+        <p class="text-caption text-text-muted"><%= t("ai_assistant.assistant.assumptions.hint") %></p>
+        <ul class="list-disc pl-4 text-xs text-text-muted">
+          <% assumptions.each do |assumption| %>
+            <li class="break-words"><%= assumption %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <% if changes.any? %>
+      <details class="w-full max-w-[min(92%,42rem)] overflow-hidden rounded-xl bg-canvas ring-1 ring-border-subtle">
+        <summary class="flex cursor-pointer list-none items-center gap-2 px-3 py-2 text-xs font-medium text-text-secondary transition-base hover:text-text-primary">
+          <svg class="size-3.5 shrink-0 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+          <%= t("ai_assistant.assistant.changes.summary") %>
+        </summary>
+        <ul class="flex list-disc flex-col gap-0.5 border-t border-border-subtle px-3 py-2 pl-7 text-xs text-text-muted">
+          <% changes.each do |change| %>
+            <li><%= change_label(change) %></li>
+          <% end %>
+        </ul>
+      </details>
+    <% end %>
+
+    <% if website_undo_state == :available %>
+      <div class="flex w-full max-w-[min(92%,42rem)] flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-3" data-website-undo="available">
+        <%= button_to undo_path,
+              method: :post,
+              class: "btn btn-ghost w-full gap-1.5 px-3 py-1.5 text-[13px] sm:w-auto",
+              form: { class: "w-full sm:w-auto", data: { turbo_confirm: t("ai_assistant.assistant.website.undo.confirm") } } do %>
+          <svg class="size-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="<%= UNDO_ICON %>" />
+          </svg>
+          <%= t("ai_assistant.assistant.website.undo.button") %>
+        <% end %>
+        <% if undo_errors.any? %>
+          <p class="text-caption text-danger break-words" role="alert"><%= undo_error_text %></p>
+        <% end %>
+      </div>
+    <% elsif website_undo_state == :undone %>
+      <p class="inline-flex items-center gap-1.5 text-caption text-text-muted" data-website-undo="undone">
+        <svg class="size-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="<%= UNDO_ICON %>" />
+        </svg>
+        <%= t("ai_assistant.assistant.website.undo.done") %>
+      </p>
+    <% end %>
+
+    <% if subsystem_build %>
+      <div class="flex w-full max-w-[min(92%,42rem)] flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-3" data-subsystem-build="<%= subsystem_build.status %>">
+        <%= render BadgeComponent.new(variant: subsystem_build_badge, size: :sm, class: "w-fit") do %>
+          <%= t("ai_assistant.subsystems.status.#{subsystem_build.status}") %>
+        <% end %>
+        <% if subsystem_build.active? %>
+          <%= button_to t("ai_assistant.subsystems.cancel.button"),
+                cancel_build_path,
+                method: :post,
+                class: "btn btn-ghost w-full px-3 py-1.5 text-[13px] sm:w-auto",
+                form: { class: "w-full sm:w-auto", data: { turbo_confirm: t("ai_assistant.subsystems.cancel.confirm") } } %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if proposal %>
+      <%= render AiAssistant::ProposedChangesComponent.new(
+            proposal: proposal,
+            state: proposal_state,
+            message_id: message.id,
+            discard_path: discard_path
+          ) %>
+    <% end %>
+
+    <% if questions.any? %>
+      <%= render AiAssistant::ClarifyingQuestionsComponent.new(questions: questions, state: questions_state) %>
+    <% end %>
+  </div>
+</div>

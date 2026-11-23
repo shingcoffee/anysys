@@ -1,0 +1,29 @@
+<%
+  current_group = @page.current_group
+  home = @page.slug == DeveloperDocs::Catalog::HOME_SLUG
+  home_path = admin_maintenance_platform_developer_docs_path(current_customer_id)
+  doc_crumbs = [
+    { label: t("developer_docs.breadcrumb.maintenance"), path: admin_maintenance_path(current_customer_id) },
+    { label: t("developer_docs.breadcrumb.reference"), path: home_path }
+  ]
+  if current_group && !home
+    doc_crumbs << { label: t("developer_docs.groups.#{current_group.key}"), path: "#{home_path}#developer-doc-guide-group-#{current_group.key}" }
+  end
+  doc_crumbs << { label: docs_navigation_label(@page.slug, title: @page.title, translation_scope: "developer_docs") } unless home
+%>
+<%= render DeveloperDocs::ReaderComponent.new(
+  page: @page,
+  locale: current_locale.to_s,
+  home_groups: (home ? @hub_groups : nil),
+  home_path: home_path
+) do |reader| %>
+  <% reader.with_header do %>
+    <%= render AdminPageComponent.new(
+      breadcrumbs: doc_crumbs,
+      title: @page.title,
+      description: @page.summary,
+      wrap_title: true,
+      width: "full"
+    ) %>
+  <% end %>
+<% end %>

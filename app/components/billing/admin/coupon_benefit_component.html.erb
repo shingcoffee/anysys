@@ -1,0 +1,16 @@
+<div class="flex flex-col gap-2.5">
+  <div class="flex flex-wrap items-center gap-2">
+    <span class="inline-flex items-center gap-1.5 rounded-md border border-dashed border-accent-muted bg-accent-subtle px-2.5 py-1 font-mono text-body-sm font-medium text-accent-text break-all"><%= render Billing::Admin::IconComponent.new(name: :tag, class_name: "size-4") %><%= benefit[:code] %></span>
+    <span class="min-w-0 font-medium text-text-primary break-words"><%= benefit[:name] %></span>
+  </div>
+  <div class="flex flex-col gap-1">
+    <p class="font-semibold text-accent-text"><%= benefit[:discount_type].to_s == "percent" ? t("comp_billing.subscription_coupon.percent_benefit", percent: benefit[:percent_off]) : t("comp_billing.subscription_coupon.fixed_benefit", amount: Billing::CurrencyResolver.format(benefit[:amount_off_cents], benefit[:currency] || currency)) %></p>
+    <p class="text-body-sm text-text-secondary"><%= t("comp_billing.coupon_table.durations.#{benefit[:duration]}") %><% unless benefit[:remaining_cycles].nil? %> · <%= t("comp_billing.subscription_coupon.remaining_invoices", count: benefit[:remaining_cycles]) %><% end %></p>
+    <% if repeating_progress? %>
+      <div class="h-1.5 overflow-hidden rounded-full bg-surface-active" aria-hidden="true">
+        <div class="h-full rounded-full bg-accent" style="width: <%= remaining_percent %>%"></div>
+      </div>
+    <% end %>
+    <p class="text-body-sm text-text-secondary"><%= t(benefit[:reason_key].presence || (benefit[:eligible] ? "comp_billing.subscription_coupon.eligible_next" : "comp_billing.subscription_coupon.exhausted"), currency: currency) %></p>
+  </div>
+</div>

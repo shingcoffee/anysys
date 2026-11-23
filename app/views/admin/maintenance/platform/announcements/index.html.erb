@@ -1,0 +1,40 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("maint_platform.announcements.breadcrumb.maintenance"), path: admin_maintenance_path(current_customer_id) },
+    { label: t("maint_platform.announcements.breadcrumb.announcements") }
+  ],
+  title: t("maint_platform.announcements.index.title"),
+  description: t("maint_platform.announcements.index.description"),
+  actions: [
+    { label: t("maint_platform.announcements.index.new_action"),
+      path: new_admin_maintenance_platform_announcement_path(current_customer_id),
+      variant: :primary, icon: :plus }
+  ]
+) do %>
+  <%= render AdminTableComponent.new(
+    rows:        @rows,
+    columns:     @columns,
+    pagination:  @pagination,
+    params:      params.permit(:q, :sort, :dir, :page, :status, :severity).to_h.symbolize_keys,
+    search:      { param: :q, placeholder: t("maint_platform.announcements.index.search_placeholder") },
+    filters:     @filters,
+    row_path:    ->(row) { admin_maintenance_platform_announcement_path(current_customer_id, row) },
+    row_actions: ->(row) {
+      [
+        { label: t("common.actions.edit"),
+          path: edit_admin_maintenance_platform_announcement_path(current_customer_id, row) },
+        { label: t("common.actions.delete"),
+          path: admin_maintenance_platform_announcement_path(current_customer_id, row),
+          method: :delete,
+          tone: :danger,
+          data: { turbo_confirm: t("maint_platform.announcements.index.delete_confirm", title: row.title) } }
+      ]
+    },
+    empty_state: {
+      title: t("maint_platform.announcements.index.empty_title"),
+      description: t("maint_platform.announcements.index.empty_description"),
+      action_path: new_admin_maintenance_platform_announcement_path(current_customer_id),
+      action_text: t("maint_platform.announcements.index.empty_action")
+    }
+  ) %>
+<% end %>

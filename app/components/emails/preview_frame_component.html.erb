@@ -1,0 +1,8 @@
+<% if present? %>
+  <%= tag.iframe srcdoc: srcdoc,
+        sandbox: "",
+        title: title,
+        class: "w-full #{min_height_class} rounded-lg border border-border bg-white" %>
+<% elsif empty_message.present? %>
+  <p class="text-caption text-sm"><%= empty_message %></p>
+<% end %>

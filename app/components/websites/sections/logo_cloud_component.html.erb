@@ -1,0 +1,18 @@
+<section class="<%= spacing_class(theme.density == "compact" ? "py-10 md:py-14" : "py-14 md:py-20") %>">
+  <div class="<%= inner_measure_class %> flex flex-col items-center gap-10">
+    <% if present_text?(prop("heading")) %>
+      <p <%= el_attrs("heading", class: "max-w-2xl text-balance text-center text-site-base #{muted_class}") %>><%= prop("heading") %></p>
+    <% end %>
+    <ul class="grid w-full items-center gap-x-8 gap-y-10 <%= grid_class %>" role="list">
+      <% items.each do |item| %>
+        <li <%= item_attrs("items", class: "flex min-w-0 items-center justify-center") %>>
+          <% if mark?(item) %>
+            <img src="<%= item["image_url"] %>" alt="<%= item["name"] %>" class="<%= mark_class %>" loading="lazy">
+          <% else %>
+            <span <%= el_attrs("items.name", class: wordmark_class) %>><%= item["name"] %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</section>

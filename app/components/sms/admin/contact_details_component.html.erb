@@ -1,0 +1,25 @@
+<div class="space-y-6 min-w-0">
+  <div class="flex flex-wrap gap-3"><%= status_badge(contact.status) %><%= link_to ui("contacts.edit"), sms_path(:edit_contact, contact), class: "btn btn-secondary" %></div>
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 min-w-0">
+    <%= section(t("chrome.customer_card.contact")) do %>
+      <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <% [:phone_e164, :country_code, :timezone, :name].each do |key| %><%= fact(label_text(:fields, key == :phone_e164 ? :phone : key), contact.public_send(key).presence || t("sms_presentation.not_recorded")) %><% end %>
+        <%= fact(t("sms_audience.fields.source_kind"), label_text(:sources, contact.source_kind)) %><%= fact(ui("contacts.synced_at"), time_value(contact.synced_at)) %>
+      </dl>
+      <dl class="space-y-2"><% contact.custom_attributes.each do |key, value| %><%= fact(key, value) %><% end %></dl>
+    <% end %>
+    <%= section(ui("contacts.permission")) do %>
+      <dl class="space-y-4"><%= fact(t("sms_campaign_http.labels.consent_status"), status_badge(contact.consent_status)) %><%= fact(ui("contacts.eligibility"), @eligibility[:eligible] ? t("sms_campaign_ui.campaigns.eligible") : reason_label(@eligibility[:reason])) %><%= fact(ui("contacts.consent_changed_at"), time_value(contact.consent_changed_at)) %></dl>
+      <p class="text-sm text-text-secondary"><%= ui("contacts.grant_help") %></p>
+    <% end %>
+  </div>
+  <%= section(ui("contacts.history")) do %>
+    <%= render AdminTableComponent.new(rows: @consent_events[:records], columns: history_columns, pagination: @consent_events[:pagination], params: helpers.params.permit(:page, :per_page).to_h, base_path: sms_path(:contact, contact), frame_id: "sms-consent-history", empty_state: { title: ui("contacts.no_history") }) %>
+  <% end %>
+  <%= render Sms::Admin::ConsentFormComponent.new(contact: contact, form_values: @consent_form_values, errors: @errors) %>
+  <% if contact.status == "active" %>
+    <%= section(ui("contacts.archive")) do %><p class="text-text-secondary"><%= ui("contacts.archive_help") %></p><%= button_to ui("contacts.archive"), sms_path(:contact, contact), method: :delete, params: { lock_version: contact.lock_version }, class: "btn btn-secondary" %><% end %>
+  <% else %>
+    <%= section(ui("contacts.restore")) do %><p class="text-text-secondary"><%= ui("contacts.archive_help") %></p><%= button_to ui("contacts.restore"), sms_path(:contact, contact), method: :patch, params: { sms_contact: { status: "active", lock_version: contact.lock_version } }, class: "btn btn-secondary" %><% end %>
+  <% end %>
+</div>

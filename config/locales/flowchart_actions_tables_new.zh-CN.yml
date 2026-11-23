@@ -1,0 +1,82 @@
+zh-CN:
+  flowchart_actions:
+    next_sequence_number:
+      label: 序号
+      description: 为本客户分配下一个序号
+      fields:
+        sequenceName:
+          label: 序号名称
+          help: 该客户下计数器的标识。
+          placeholder: 例如 order
+        prefix:
+          label: 前缀
+          help: 加在补零数字前的文本。
+          placeholder: 例如 INV-
+        suffix:
+          label: 后缀
+          help: 加在补零数字后的文本。
+          placeholder: 例如 -CN
+        padding:
+          label: 补零宽度
+          help: 数字部分的补零宽度（1–12）。
+        startAt:
+          label: 起始值
+          help: 新周期发出的第一个数字（1–1000000）。
+        step:
+          label: 步长
+          help: 每次发放后增加的量（1–1000）。
+        resetEvery:
+          label: 重置周期
+          help: 该名称何时开启新的计数周期。
+          options:
+            never: 从不
+            year: 每年
+            month: 每月
+            day: 每天
+            week: 每周
+            quarter: 每季
+        dateSegment:
+          label: 日期段
+          help: 可选，插入前缀与补零数字之间的日期。
+          options:
+            none: 无
+            year: 年
+            year_month: 年月
+            date: 日期
+        separator:
+          label: 日期分隔符
+          help: 日期段与补零数字之间的分隔符。
+          placeholder: 例如 -
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+      errors:
+        invalid_identifier: "%{field} 必须是合法标识符"
+    create_notification:
+      label: 创建通知
+      description: 为本客户的用户创建站内通知
+      fields:
+        recipient:
+          label: 接收人
+          help: 求值为本客户用户 ID 的表达式。
+          placeholder: ctx[:current_user_id]
+        recipients:
+          label: 其他接收人
+          help: 额外的本客户用户 ID 上下文路径，将一并通知。
+        title:
+          label: 标题
+          help: 本地化的通知标题。
+        body:
+          label: 正文
+          help: 本地化的通知正文。
+        page:
+          label: 页面
+          help: 可选，本客户已上线页面或共享页面。
+  flowchart_runtime:
+    errors:
+      next_sequence_number:
+        failed: 未能分配序号。
+      create_notification:
+        recipient_not_found: 未找到属于本客户的通知接收人。
+        page_not_found: 通知页面不是本客户的已上线页面。
+        failed: 无法创建通知（%{reason}）。

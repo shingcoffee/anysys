@@ -1,0 +1,118 @@
+<% if editable %>
+<%= form_with url: form_url, method: :patch, local: true, class: "w-full max-w-3xl space-y-6" do %>
+  <% if row_action_alert_message.present? %>
+    <%= render AlertComponent.new(message: row_action_alert_message, type: :error) %>
+  <% end %>
+  <input type="hidden" name="<%= name_for(:surface_key) %>" value="<%= presenter.surface_key %>"/>
+  <%= render Admin::Settings::SectionComponent.new(title: t("settings_people.navigation")) do %>
+    <div class="space-y-4">
+      <label class="inline-flex min-h-11 items-center gap-2 text-sm">
+        <input type="hidden" name="<%= name_for(:enabled) %>" value="0"/>
+        <input type="checkbox" name="<%= name_for(:enabled) %>" value="1" <%= 'checked' if presenter.enabled? %> class="rounded"/>
+        <span><%= t("comp_admin.member_surface_form.visible_to_members") %></span>
+      </label>
+      <% { label: "settings_people.display_name", subtitle: "comp_admin.member_surface_form.subtitle" }.each do |field, label| %>
+        <div>
+          <label for="member-<%= field %>" class="form-label"><%= t(label) %></label>
+          <input id="member-<%= field %>" type="text" name="<%= name_for(field) %>" value="<%= presenter.public_send(field) %>" class="input-field"/>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <%= render Admin::Settings::SectionComponent.new(title: t("settings_people.list_display")) do %>
+    <div class="mb-5 max-w-xs">
+      <label for="member-per-page" class="form-label"><%= t("comp_admin.member_surface_form.page_size") %></label>
+      <input id="member-per-page" type="number" name="<%= name_for(:per_page) %>" value="<%= presenter.per_page %>" min="1" max="200" class="input-field"/>
+    </div>
+    <fieldset>
+      <legend class="form-label mb-2"><%= t("settings_people.content_columns") %></legend>
+      <input type="hidden" name="<%= array_name_for(:visible_column_keys) %>" value=""/>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <% presenter.column_choices.each do |choice| %>
+          <%= render Admin::Settings::MemberVisibilityChoiceComponent.new(choice: choice, name: array_name_for(:visible_column_keys)) %>
+        <% end %>
+      </div>
+    </fieldset>
+  <% end %>
+  <% if entity_surface? %>
+    <%= render Admin::Settings::SectionComponent.new(title: t("settings_people.row_action"), description: t("settings_people.row_action_help")) do %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="member-row-action-key" class="form-label"><%= t("comp_admin.member_surface_form.row_action_action") %></label>
+          <%= select_tag name_for(:row_action_key), options_for_select(row_action_key_options, overlay_value(:row_action_key)), row_action_select_html_options %>
+          <% if member_action_keys.empty? %>
+            <p class="text-sm text-text-secondary mt-1"><%= t("comp_admin.member_surface_form.row_action_empty") %></p>
+          <% end %>
+          <% if field_error?(:row_action_key) %>
+            <p class="text-sm text-danger mt-1"><%= t("admin_settings.errors.validations.row_action_invalid") %></p>
+          <% end %>
+        </div>
+        <div>
+          <label for="member-row-action-field" class="form-label"><%= t("comp_admin.member_surface_form.row_action_field") %></label>
+          <input id="member-row-action-field" type="text" name="<%= name_for(:row_action_field) %>" value="<%= overlay_value(:row_action_field) %>" placeholder="<%= t("comp_admin.member_surface_form.row_action_field_placeholder") %>" class="<%= row_action_control_class(:row_action_field, "font-mono text-sm") %>" <% if field_error?(:row_action_field) %>aria-invalid="true"<% end %>>
+          <p class="text-sm text-text-secondary mt-1"><%= t("comp_admin.member_surface_form.row_action_field_help") %></p>
+          <% if field_error?(:row_action_field) %>
+            <p class="text-sm text-danger mt-1"><%= t("admin_settings.errors.validations.row_action_invalid") %></p>
+          <% end %>
+        </div>
+        <div class="sm:col-span-2">
+          <label for="member-row-action-label" class="form-label"><%= t("comp_admin.member_surface_form.row_action_label") %></label>
+          <input id="member-row-action-label" type="text" name="<%= name_for(:row_action_label) %>" value="<%= overlay_value(:row_action_label) %>" placeholder="<%= t("member.entity_surfaces.row_action_default") %>" maxlength="60" class="<%= row_action_control_class(:row_action_label) %>" <% if field_error?(:row_action_label) %>aria-invalid="true"<% end %>>
+          <p class="text-sm text-text-secondary mt-1"><%= t("comp_admin.member_surface_form.row_action_label_help") %></p>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+  <%= render Admin::Settings::SectionComponent.new(title: t("settings_people.record_details")) do %>
+    <input type="hidden" name="<%= array_name_for(:visible_section_keys) %>" value=""/>
+    <input type="hidden" name="<%= array_name_for(:visible_detail_row_keys) %>" value=""/>
+    <div class="space-y-5">
+      <% presenter.section_choices.each do |section| %>
+        <fieldset class="space-y-2">
+          <legend class="form-label"><%= section[:label] %></legend>
+          <%= render Admin::Settings::MemberVisibilityChoiceComponent.new(choice: section, name: array_name_for(:visible_section_keys)) %>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pl-6">
+            <% presenter.detail_row_choices.select { |row| row[:section_key] == section[:key] }.each do |choice| %>
+              <%= render Admin::Settings::MemberVisibilityChoiceComponent.new(choice: choice, name: array_name_for(:visible_detail_row_keys)) %>
+            <% end %>
+          </div>
+        </fieldset>
+      <% end %>
+    </div>
+  <% end %>
+  <%= render Admin::Settings::SectionComponent.new(title: t("settings_people.empty_state")) do %>
+    <div class="space-y-4">
+      <div>
+        <label for="member-empty-headline" class="form-label"><%= t("comp_admin.member_surface_form.empty_headline") %></label>
+        <input id="member-empty-headline" type="text" name="<%= name_for(:empty_headline) %>" value="<%= presenter.empty_headline %>" class="input-field"/>
+      </div>
+      <div>
+        <label for="member-empty-body" class="form-label"><%= t("comp_admin.member_surface_form.empty_body") %></label>
+        <textarea id="member-empty-body" name="<%= name_for(:empty_body) %>" rows="3" class="input-field"><%= presenter.empty_body %></textarea>
+      </div>
+    </div>
+  <% end %>
+  <details class="card px-6 py-5">
+    <summary class="cursor-pointer min-h-11 font-medium"><%= t("settings_people.advanced") %></summary>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+      <div>
+        <label for="member-icon" class="form-label"><%= t("settings_people.icon") %></label>
+        <%= select_tag name_for(:icon), options_for_select(icon_options, presenter.icon), id: "member-icon", class: "input-field" %>
+      </div>
+      <div>
+        <label for="member-position" class="form-label"><%= t("comp_admin.member_surface_form.navigation_position") %></label>
+        <input id="member-position" type="number" name="<%= name_for(:position) %>" value="<%= presenter.position %>" min="0" class="input-field" aria-describedby="member-position-hint"/>
+        <p id="member-position-hint" class="text-sm text-text-secondary mt-1"><%= t("settings_people.order_hint") %></p>
+      </div>
+    </div>
+  </details>
+  <div class="flex flex-wrap justify-end gap-3 rounded-xl border border-border-subtle bg-canvas-elevated px-4 py-3 sm:px-6">
+    <%= link_to t("common.actions.cancel"), back_path, class: "btn btn-secondary" %>
+    <button type="submit" class="btn btn-primary"><%= t("common.actions.save") %></button>
+  </div>
+<% end %>
+<% else %>
+  <%= render Admin::Settings::SectionComponent.new(description: t("settings_people.builtin_note")) do %>
+    <%= render Admin::Settings::MemberSourceRowComponent.new(presenter: presenter, editable: false, customer: customer) %>
+  <% end %>
+<% end %>

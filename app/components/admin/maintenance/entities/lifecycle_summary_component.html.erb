@@ -1,0 +1,21 @@
+<details class="group/lifecycle mt-1" data-field="lifecycle">
+  <summary class="inline-flex cursor-pointer list-none items-center gap-1 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent [&::-webkit-details-marker]:hidden">
+    <%= render BadgeComponent.new(variant: :default, size: :sm) do %><%= count_label %><% end %>
+    <svg class="size-3 shrink-0 text-text-muted transition-transform group-open/lifecycle:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    </svg>
+  </summary>
+  <div class="mt-1.5 rounded-md border border-border-subtle bg-surface px-2.5 py-2 text-xs">
+    <p class="text-text-muted"><%= starts_at_label %></p>
+    <ul class="mt-1 space-y-0.5">
+      <% rows.each do |row| %>
+        <li class="break-words text-text-secondary">
+          <span class="font-medium text-text-primary"><%= row.from %></span>
+          <span aria-hidden="true">→</span>
+          <span class="font-medium text-text-primary"><%= row.to %></span>
+          <span class="text-text-muted">· <%= row.audiences %></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</details>

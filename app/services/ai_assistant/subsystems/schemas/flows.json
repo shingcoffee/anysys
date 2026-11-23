@@ -1,0 +1,525 @@
+{
+  "title": "Business flows",
+  "description": "The business flows of one sub-system, designed from the requirements before any data model exists: the journeys people walk, the business objects each step works on and the data it captures, in plain words. Entities, pages and processing are built from this afterwards.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "objects",
+    "journeys"
+  ],
+  "properties": {
+    "objects": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "description": "Every business object a step works on, such as a Booking or a Venue. Name only real things with their own records; a fixed list of labels is a choice field, not an object.",
+      "items": {
+        "$ref": "#/$defs/flowObject",
+        "description": "One business object."
+      }
+    },
+    "journeys": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "description": "The business flows. Each is walked by one kind of person in one sitting; a flow that involves several people is several journeys linked by the record's status.",
+      "items": {
+        "$ref": "#/$defs/flowJourney",
+        "description": "One business flow."
+      }
+    },
+    "not_covered": {
+      "type": "array",
+      "maxItems": 10,
+      "default": [],
+      "description": "Parts of the requirements no journey covers, such as reminders sent later.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 300,
+        "description": "One thing that is not covered, in plain words."
+      }
+    }
+  },
+  "$defs": {
+    "audience": {
+      "type": "string",
+      "enum": [
+        "admin",
+        "member",
+        "public"
+      ],
+      "description": "Who walks the journey.",
+      "x-enum-descriptions": {
+        "admin": "The organisation's staff.",
+        "member": "Signed-in people the domain serves, working on their own records.",
+        "public": "Anonymous visitors, only to sign themselves up."
+      }
+    },
+    "flowObject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "purpose"
+      ],
+      "description": "A business object. Steps name it, and the build later designs one entity for it.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Singular name, for example Booking."
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "description": "What one record of it stands for in the real world."
+        },
+        "person": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this object is the people the domain serves, as named in the brief's people. At most one object."
+        },
+        "status": {
+          "$ref": "#/$defs/flowStatus",
+          "description": "The status the object moves through during the flows. Leave out for objects without a lifecycle, such as a catalog record."
+        }
+      }
+    },
+    "flowStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "field",
+        "states",
+        "initial"
+      ],
+      "description": "The states a record moves through. The allowed changes are worked out from the steps that change the status.",
+      "properties": {
+        "field": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Name of the status field, for example Booking status."
+        },
+        "states": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 12,
+          "uniqueItems": true,
+          "description": "Every state in lifecycle order.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60,
+            "description": "One state, for example Requested."
+          }
+        },
+        "initial": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "The state a new record starts in; one of states."
+        }
+      }
+    },
+    "flowJourney": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "name",
+        "audience",
+        "steps"
+      ],
+      "description": "One business flow: the pages one kind of person fills in, in order.",
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,39}$",
+          "description": "Stable key in snake_case, for example request_booking."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Name people see, in the admin's language."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "One sentence on who walks this journey and what it gets done, in the admin's language."
+        },
+        "audience": {
+          "$ref": "#/$defs/audience",
+          "description": "Who walks this journey."
+        },
+        "start": {
+          "$ref": "#/$defs/flowStart",
+          "description": "Start from an existing record instead of a new one: staff working through Requested bookings, or a member paying their Approved one. Admin and member journeys only."
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "description": "The steps in order; each step is one page. Without start, the first step creates a record; with start, the first step adds to or updates the start record.",
+          "items": {
+            "$ref": "#/$defs/flowStep",
+            "description": "One step."
+          }
+        },
+        "continues_to": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,39}$",
+          "description": "Public sign-up journeys only: key of the member journey the visitor continues on once their email is confirmed."
+        },
+        "finish_message": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Message shown when the journey is done, in the admin's language."
+        }
+      }
+    },
+    "flowStart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "object"
+      ],
+      "description": "The existing record a journey starts from.",
+      "properties": {
+        "object": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Name of the object whose record the journey starts from. A member journey starts only from the member's own records."
+        },
+        "status_in": {
+          "type": "array",
+          "maxItems": 12,
+          "default": [],
+          "uniqueItems": true,
+          "description": "Offer the journey only on records in one of these states. Empty offers it on every record.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60,
+            "description": "One state of that object's status."
+          }
+        }
+      }
+    },
+    "flowStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "kind",
+        "object",
+        "label",
+        "fields"
+      ],
+      "description": "One step of a journey: one page, the data it captures, and what its submit does.",
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,39}$",
+          "description": "Key unique within the journey, for example booking. Never start, record, user or finish."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "create",
+            "add",
+            "update"
+          ],
+          "description": "What the page does to its record.",
+          "x-enum-descriptions": {
+            "create": "Creates a new record of the object.",
+            "add": "Adds rows of the object that belong to an earlier step's record, with add-another, such as a booking's guests.",
+            "update": "Changes the record an earlier step saved or the journey started from, such as a review or a confirmation."
+          }
+        },
+        "object": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Name of the object whose record this page saves."
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Step title people see, in the admin's language."
+        },
+        "parent": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,39}$",
+          "description": "add steps only: key of the earlier step whose record the rows belong to, or start for the record the journey started from."
+        },
+        "edits": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,39}$",
+          "description": "update steps only: key of the earlier step whose record this page changes, or start for the record the journey started from."
+        },
+        "optional": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether people may skip the step. Never the first step."
+        },
+        "skip": {
+          "$ref": "#/$defs/flowSkip",
+          "description": "Only some people need this step, and an earlier step's answers tell which: its processing leaves this step out, such as catering details only when the booking type is Catering. Never the first step; use optional when the person decides."
+        },
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "uniqueItems": true,
+          "description": "The data the person fills in on this page, named as people say it, in page order, for example Booking date. List the status field only where the person picks the next state, with status_choices. Leave out who the record belongs to and which record an add step's rows belong to: the build fills those.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60,
+            "description": "One field name."
+          }
+        },
+        "system_fields": {
+          "type": "array",
+          "maxItems": 10,
+          "default": [],
+          "uniqueItems": true,
+          "description": "Fields this step's processing fills rather than the person, such as a reference number or a total.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60,
+            "description": "One field name."
+          }
+        },
+        "processing": {
+          "type": "string",
+          "maxLength": 1000,
+          "description": "What must happen when the page is submitted, beyond saving its record: how system fields are worked out, records checked or changed and when the submit is refused, payments, and who is told what. Leave out when saving is all it needs."
+        },
+        "status_to": {
+          "type": "string",
+          "maxLength": 60,
+          "description": "The state this submit moves the record to without the person choosing it."
+        },
+        "status_choices": {
+          "type": "array",
+          "maxItems": 12,
+          "default": [],
+          "uniqueItems": true,
+          "description": "When the status field is in fields: the states the person may pick here, such as Approved and Declined.",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60,
+            "description": "One state."
+          }
+        },
+        "paid_status": {
+          "type": "string",
+          "maxLength": 60,
+          "description": "When this submit takes a payment: the state the record moves to once the payment succeeds. A step that takes a payment ends its journey."
+        },
+        "values": {
+          "type": "array",
+          "maxItems": 10,
+          "default": [],
+          "description": "Values from the brief this step's processing uses, such as an email recipient or a web address, copied exactly.",
+          "items": {
+            "$ref": "#/$defs/flowValue",
+            "description": "One value the admin gave."
+          }
+        }
+      }
+    },
+    "flowSkip": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "by",
+        "when"
+      ],
+      "description": "When an earlier step's processing leaves this step out.",
+      "properties": {
+        "by": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,39}$",
+          "description": "Key of the earlier step whose submit decides, from what that page saved."
+        },
+        "when": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "description": "When to leave the step out, in plain words about what the earlier step saved, for example: the booking type is not Catering."
+        }
+      }
+    },
+    "flowValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "value"
+      ],
+      "description": "One value the admin gave.",
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "What the value is, for example Bookings team email."
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "The value exactly as the admin wrote it."
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "objects": [
+        {
+          "name": "Member",
+          "purpose": "A club member who books venues.",
+          "person": true
+        },
+        {
+          "name": "Venue",
+          "purpose": "A room the club rents out."
+        },
+        {
+          "name": "Booking",
+          "purpose": "One member's request to use a venue on a date.",
+          "status": {
+            "field": "Booking status",
+            "states": [
+              "Requested",
+              "Approved",
+              "Declined",
+              "Paid"
+            ],
+            "initial": "Requested"
+          }
+        }
+      ],
+      "journeys": [
+        {
+          "key": "member_signup",
+          "name": "Join the club",
+          "description": "Visitors sign up as club members, then continue to request a booking.",
+          "audience": "public",
+          "steps": [
+            {
+              "key": "member",
+              "kind": "create",
+              "object": "Member",
+              "label": "Your details",
+              "fields": [
+                "Phone"
+              ]
+            }
+          ],
+          "continues_to": "request_booking"
+        },
+        {
+          "key": "request_booking",
+          "name": "Request a booking",
+          "description": "Members request a venue for a date; the bookings team is told.",
+          "audience": "member",
+          "steps": [
+            {
+              "key": "booking",
+              "kind": "create",
+              "object": "Booking",
+              "label": "Booking details",
+              "fields": [
+                "Venue",
+                "Booking date",
+                "Number of guests"
+              ],
+              "system_fields": [
+                "Total"
+              ],
+              "processing": "Set Total to the venue's daily rate. Refuse the request when the number of guests is more than the venue's capacity. Email the bookings team the member's name, venue and date.",
+              "values": [
+                {
+                  "label": "Bookings team email",
+                  "value": "bookings@club.example"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "review_booking",
+          "name": "Review a booking",
+          "description": "Staff approve or decline each requested booking and tell the member.",
+          "audience": "admin",
+          "start": {
+            "object": "Booking",
+            "status_in": [
+              "Requested"
+            ]
+          },
+          "steps": [
+            {
+              "key": "review",
+              "kind": "update",
+              "object": "Booking",
+              "label": "Approve or decline",
+              "edits": "start",
+              "fields": [
+                "Booking status",
+                "Review notes"
+              ],
+              "status_choices": [
+                "Approved",
+                "Declined"
+              ],
+              "processing": "Email the member whether the booking was approved or declined, with the review notes."
+            }
+          ]
+        },
+        {
+          "key": "pay_booking",
+          "name": "Pay for a booking",
+          "description": "Members pay for an approved booking.",
+          "audience": "member",
+          "start": {
+            "object": "Booking",
+            "status_in": [
+              "Approved"
+            ]
+          },
+          "steps": [
+            {
+              "key": "payment",
+              "kind": "update",
+              "object": "Booking",
+              "label": "Confirm and pay",
+              "edits": "start",
+              "fields": [
+                "Number of guests"
+              ],
+              "processing": "Refuse when the number of guests is more than the venue's capacity. Take payment of the booking's Total.",
+              "paid_status": "Paid"
+            }
+          ]
+        }
+      ],
+      "not_covered": [
+        "Reminder emails before the booking date"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+<%
+  edit_badges = if @page
+    [
+      if @page.try(:published?)
+        { label: t("common.status.published"), variant: :success }
+      else
+        { label: t("common.status.draft"), variant: :default }
+      end
+    ]
+  else
+    []
+  end
+  public_path = page_shortcuts_mounted_path(PageShortcuts::PublicPath.website_page(page: @page, host: request.host))
+  page_live = @website.try(:published?) && @page.try(:published?)
+%>
+<%= render AdminPageComponent.new(
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules"), path: admin_modules_path(current_customer_id) },
+        { label: t("chrome.sidebar.pages.website"), path: admin_modules_website_root_path(current_customer_id) },
+        { label: @page.try(:title).presence || t("website.admin.pages.index.title") }
+      ],
+      title: @page.try(:title).presence || t("website.admin.pages.index.title"),
+      description: render(Websites::Admin::PageAddressComponent.new(path: public_path, live: page_live)),
+      badges: edit_badges,
+      width: :edge,
+      actions: [
+        {
+          label: t("common.labels.preview"),
+          path: preview_admin_modules_website_page_path(current_customer_id, @page),
+          variant: :secondary,
+          target: "_blank",
+          rel: "noopener"
+        },
+        {
+          label: t("common.actions.save"),
+          variant: :primary,
+          form: Websites::Admin::ComposerComponent::FORM_ID
+        }
+      ]
+    ) do %>
+    <%= render Websites::Admin::ComposerComponent.new(
+          page: @page,
+          presentation: Websites::HomeSite::Presentation.for(website: @website, page: @page),
+          form_url: admin_modules_website_page_path(current_customer_id, @page),
+          preview_url: preview_admin_modules_website_page_path(current_customer_id, @page, embed: 1),
+          method: :patch,
+          structure_locked: true,
+          upload_url: admin_modules_website_media_path(current_customer_id),
+          public_path: public_path
+        ) %>
+<% end %>

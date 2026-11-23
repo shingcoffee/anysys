@@ -1,0 +1,87 @@
+zh-CN:
+  flowchart_actions:
+    rate_limiter:
+      label: 限流
+      description: 按租户限制操作频率
+      fields:
+        limiterName:
+          label: 限流器名称
+          help: 租户隔离的限流器名称。
+          placeholder: 例如 api_calls
+        capacity:
+          label: 容量
+          help: 每个窗口允许执行的次数。
+        window:
+          label: 窗口
+          help: 窗口时长（秒）；新窗口开始时计数清零。
+        scope:
+          label: 作用范围
+          help: 谁共用此限流器。全局为整客户一个桶（与原先行为一致）。
+          options:
+            global: 整客户
+            user: 当前用户
+            ip: 客户端 IP
+            custom: 自定义值
+        scopeVariable:
+          label: 范围取值
+          help: 进一步划分限流桶的上下文本路径。
+        cost:
+          label: 消耗
+          help: 本次运行占用的名额数。
+        onExceed:
+          label: 超限处理
+          help: 当前窗口次数用尽时的行为。
+          options:
+            fail: 失败
+            skip: 跳过
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        retryAfterVar:
+          label: 将重试等待保存为
+          help: 被拒绝时距窗口重置的秒数；放行时为 0。
+    idempotency_check:
+      label: 幂等检查
+      description: 确保同一键只执行一次
+      fields:
+        keyStrategy:
+          label: 键策略
+          help: 如何构造幂等键。
+          options:
+            ctx_field: 上下文字段
+            hash_of_inputs: 输入哈希
+            explicit: 显式键
+        ctxField:
+          label: 上下文字段
+          help: 其值作为幂等键的上下文路径。
+          placeholder: 例如 order_id
+        explicitKey:
+          label: 显式键
+          help: 字面幂等键。
+          placeholder: 例如 "order:42"
+        scope:
+          label: 作用范围
+          help: 键在整客户内唯一，还是叠加当前登录用户。
+          options:
+            tenant: 整客户
+            user: 当前用户
+        onDuplicate:
+          label: 重复处理
+          help: 该键已被占用时的行为。
+          options:
+            fail: 失败
+            skip: 跳过
+            flag: 仅标记
+        ttlSeconds:
+          label: TTL（秒）
+          help: 已占用键的保留时长。
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+  flowchart_runtime:
+    errors:
+      idempotency_user_required: 此幂等检查需要先登录。
+      idempotency_check:
+        failed: "无法完成幂等检查（%{reason}）。"
+      rate_limiter:
+        failed: "无法应用限流（%{reason}）。"

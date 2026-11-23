@@ -1,0 +1,26 @@
+<%# app/views/admin/modules/emails/templates/index.html.erb %>
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "email",
+      breadcrumbs: [{ label: t("admin_modules.nav.modules") }, { label: t("feature_modules.email.entries.content"), path: admin_modules_emails_templates_path(current_customer_id) }, { label: t("feature_modules.email.tabs.templates") }],
+      title: t("feature_modules.email.tabs.templates"),
+      description: t("admin_modules.emails.templates.index.description"),
+      actions: [{ label: t("admin_modules.emails.templates.actions.new_template"), path: new_admin_modules_emails_template_path(current_customer_id), variant: :primary, icon: :plus }]
+    ) do %>
+  <%= render AdminTableComponent.new(
+    rows:       @rows,
+    columns:    @columns,
+    pagination: @pagination,
+    params:     params.permit(:q, :sort, :dir, :page, :per_page, :status).to_h.symbolize_keys,
+    search:     { param: :q, placeholder: t("admin_modules.emails.templates.index.search_placeholder") },
+    filters:    @table_filters,
+    base_path:  admin_modules_emails_templates_path(current_customer_id),
+    row_path:   ->(t) { admin_modules_emails_template_path(current_customer_id, t) },
+    row_actions: @row_actions,
+    empty_state: {
+      title: t("admin_modules.emails.templates.index.empty_title"),
+      description: t("admin_modules.emails.templates.index.empty_description"),
+      action_path: new_admin_modules_emails_template_path(current_customer_id),
+      action_text: t("admin_modules.emails.templates.actions.new_template")
+    }
+  ) %>
+<% end %>

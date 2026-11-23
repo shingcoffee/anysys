@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <title><%= @page&.name || "Anysys" %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="<%= page_chrome_bg(@page) %> min-h-screen flex flex-col">
+    <div class="flex justify-end px-4 pt-4 sm:px-6">
+      <%= render LocaleSwitcherComponent.new %>
+    </div>
+    <main class="flex-1 flex items-start justify-center py-10 sm:py-16 px-4">
+      <div class="w-full mx-auto px-4 sm:px-6">
+
+        <%# Flash notice and page header aligned with the themed form width %>
+        <div class="<%= page_chrome_form_width(@page) %> mx-auto">
+          <% if notice.present? %>
+            <div class="mb-6 flex items-center gap-3 px-4 py-3 bg-white/90 backdrop-blur-sm border border-green-200 rounded-xl shadow-sm text-sm text-green-800">
+              <svg class="w-4 h-4 flex-shrink-0 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <%= notice %>
+            </div>
+          <% end %>
+          <% if alert.present? %>
+            <div class="mb-6 flex items-center gap-3 px-4 py-3 bg-white/90 backdrop-blur-sm border border-red-200 rounded-xl shadow-sm text-sm text-red-800">
+              <svg class="w-4 h-4 flex-shrink-0 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12V12.75z" />
+              </svg>
+              <%= alert %>
+            </div>
+          <% end %>
+
+          <%# Page title/description header — outside card, themed color %>
+          <% if @page %>
+            <div class="mb-6 px-1">
+              <h1 class="text-2xl sm:text-3xl font-bold tracking-tight <%= page_chrome_header_color(@page) %>">
+                <%= @page.name %>
+              </h1>
+              <% if @page.description.present? %>
+                <p class="mt-2 text-sm sm:text-base <%= page_chrome_desc_color(@page) %>">
+                  <%= @page.description %>
+                </p>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+
+        <%# Card shell — chromatic per preset, hugging the themed form width %>
+        <div class="<%= page_chrome_form_width(@page) %> mx-auto <%= page_chrome_card(@page) %>">
+          <%= yield %>
+        </div>
+
+      </div>
+    </main>
+  </body>
+</html>

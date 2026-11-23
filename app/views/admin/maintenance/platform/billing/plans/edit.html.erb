@@ -1,0 +1,17 @@
+<%= render Billing::Admin::PlatformPageComponent.new(
+  customer_id: current_customer_id,
+  section: :plans,
+  crumbs: [
+    { label: @plan.name, path: admin_maintenance_platform_billing_plan_path(current_customer_id, @plan) },
+    { label: t("common.actions.edit") }
+  ],
+  title: t("maint_platform.billing.plans.edit.title"),
+  description: t("maint_platform.billing.plans.edit.description")
+) do %>
+  <%= render Billing::Admin::PlanFormComponent.new(
+    plan:        @plan,
+    form:        @contract,
+    items:       @items,
+    customer_id: current_customer_id
+  ) %>
+<% end %>

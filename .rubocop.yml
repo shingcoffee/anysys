@@ -1,0 +1,116 @@
+# Omakase Ruby styling for Rails
+inherit_gem:
+  rubocop-rails-omakase: rubocop.yml
+
+# RSpec cops (rubocop-rspec 3.x is a plugin; load via plugins:, not require:).
+plugins:
+  - rubocop-rspec
+
+# Merge our Exclude entries with the gem/default ones instead of replacing them.
+inherit_mode:
+  merge:
+    - Exclude
+
+AllCops:
+  # Curated cop set — opt in to new cops explicitly, don't auto-enable.
+  NewCops: disable
+  Exclude:
+    # Page template payloads — excluded per project convention (AGENTS.md).
+    - "app/services/page_layout_templates/templates/**/*"
+
+# House style: no inner padding inside array/hash literals (`[a, b]`, `{a: b}`),
+# applied consistently across the entire codebase. Omakase defaults to padded
+# brackets; we deliberately override to match the established style rather than
+# rewrite tens of thousands of purely-cosmetic lines.
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: false
+
+# --- RSpec cops (curated) ---
+# See docs/superpowers/specs/2026-06-25-rspec-suite-simplification-design.md
+RSpec:
+  Include:
+    - "spec/**/*_spec.rb"
+    - "spec/support/**/*.rb"
+
+# DescribedClass is unsafe inside `controller(...) do`/`Class.new do` blocks —
+# `described_class` isn't in scope there, so autocorrecting `include SomeModule`
+# to `include described_class` breaks loading. SkipBlocks avoids that.
+RSpec/DescribedClass:
+  SkipBlocks: true
+
+# Lint-only, hand-fixed
+RSpec/NestedGroups:
+  Max: 4
+RSpec/MultipleExpectations:
+  Max: 4
+RSpec/ExampleLength:
+  Max: 25
+RSpec/MultipleMemoizedHelpers:
+  Max: 12
+
+# Disabled to avoid thousands of cosmetic-only changes (matches existing house style)
+RSpec/ContextWording:
+  Enabled: false
+RSpec/ExampleWording:
+  Enabled: false
+RSpec/MessageSpies:
+  Enabled: false
+RSpec/VerifiedDoubles:
+  Enabled: false
+RSpec/DescribeClass:
+  Enabled: false
+RSpec/SpecFilePathFormat:
+  Enabled: false
+RSpec/MultipleDescribes:
+  Enabled: false
+
+# Opinionated style cops that conflict with this codebase's established and
+# deliberate patterns. Enforcing them would mean rewriting hundreds of
+# pre-existing specs (behavior-changing and out of scope), so we disable them
+# rather than churn — consistent with the house-style decisions above.
+RSpec/MultipleExpectations:   # multi-expectation examples are common; aggregate_failures used where it aids clarity
+  Enabled: false
+RSpec/LetSetup:               # side-effect `let!` to force DB rows is intentional
+  Enabled: false
+RSpec/AnyInstance:            # allow_any_instance_of helper-stub pattern is established
+  Enabled: false
+RSpec/NamedSubject:           # implicit `subject` usage is acceptable here
+  Enabled: false
+RSpec/IndexedLet:             # let(:user1)/let(:user2) is fine for small fixtures
+  Enabled: false
+RSpec/DescribeMethod:         # describe strings are often behavioral, not "#method"
+  Enabled: false
+RSpec/InstanceVariable:       # view/controller specs legitimately use @ivars
+  Enabled: false
+RSpec/ExampleLength:          # setup-heavy generator/request specs run long
+  Enabled: false
+RSpec/MultipleMemoizedHelpers: # data-rich billing/payment specs need many lets
+  Enabled: false
+RSpec/StubbedMock:            # mock+stub (expect…and_return) pattern is intentional
+  Enabled: false
+RSpec/MessageChain:           # receive_message_chain used deliberately in a few places
+  Enabled: false
+RSpec/LeakyConstantDeclaration: # specs define throwaway test classes/constants
+  Enabled: false
+RSpec/RemoveConst:
+  Enabled: false
+RSpec/PendingWithoutReason:   # pending JS-driven specs (see js-eslint memory)
+  Enabled: false
+RSpec/VerifiedDoubleReference:
+  Enabled: false
+RSpec/BeEq:                   # eq(true)/be(true) is a cosmetic preference
+  Enabled: false
+RSpec/ReceiveMessages:        # unsafe autocorrect; leave existing stubs as written
+  Enabled: false
+RSpec/ExpectChange:           # block vs symbol form; unsafe to rewrite en masse
+  Enabled: false
+RSpec/PredicateMatcher:       # unsafe; predicate calls left as written
+  Enabled: false
+RSpec/ExpectActual:           # `expect([codes]).to include(status)` pattern; not safely autocorrectable
+  Enabled: false
+RSpec/IteratedExpectation:    # explicit per-element expectation loops are acceptable
+  Enabled: false
+RSpec/ScatteredLet:           # `let`s are split by an intentional ordered before-hook (see reconcile_spec)
+  Enabled: false

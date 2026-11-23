@@ -1,0 +1,116 @@
+<nav class="w-full lg:w-64 lg:flex-shrink-0 bg-surface border-r border-border-subtle flex flex-col overflow-hidden"
+     data-controller="generator-search"
+     data-generator-search-index-value="<%= h search_index_json %>"
+     data-generator-search-result-count-format-value="<%= t("comp_platform.code_generators.sidebar.result_count_format") %>">
+  <%# Header %>
+  <div class="px-4 pt-4 pb-3 border-b border-border-subtle">
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 rounded-lg bg-accent flex items-center justify-center">
+        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+      </div>
+      <div>
+        <h1 class="text-body font-bold text-text-primary"><%= t("comp_platform.code_generators.title") %></h1>
+        <p class="text-caption"><%= t("comp_platform.code_generators.generators_count", count: @total_count) %></p>
+      </div>
+    </div>
+  </div>
+
+  <%# Search %>
+  <div class="px-3 py-2.5">
+    <div class="relative">
+      <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input type="text"
+        data-generator-search-target="input"
+        data-action="input->generator-search#filter"
+        placeholder="<%= t("comp_platform.code_generators.sidebar.search_placeholder") %>"
+        class="input-field text-xs pl-8">
+    </div>
+  </div>
+
+  <%# Category list (shown when not searching) %>
+  <div class="flex-1 overflow-y-auto px-2 pb-2 pt-1" data-generator-search-target="categoryList" data-controller="generator-nav">
+
+    <%# === Primary element types: start === %>
+    <% primary_element_types.first(1).each do |item| %>
+      <%= render_element_type_link(item) %>
+    <% end %>
+
+    <%# === Process group with collapsible step action sub-categories === %>
+    <div class="mt-0.5" data-generator-nav-target="group">
+      <button type="button"
+              data-action="click->generator-nav#toggle"
+              data-generator-nav-target="groupToggle"
+              class="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-body-sm transition-colors
+                     <%= process_active? ? 'bg-canvas-elevated text-accent font-medium' : 'text-text-secondary hover:bg-surface-active hover:text-text-primary' %>">
+        <span class="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-info"></span>
+        <span class="truncate"><%= t("comp_platform.code_generators.sidebar.process") %></span>
+        <span class="ml-auto flex items-center gap-1">
+          <span class="text-[10px] flex-shrink-0 <%= process_active? ? 'text-accent bg-canvas-elevated px-1.5 rounded-full' : 'text-text-muted' %>"><%= step_action_total_count %></span>
+          <svg data-generator-nav-target="chevron" class="w-3 h-3 text-text-muted transition-transform <%= process_active? ? 'rotate-90' : '' %>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </button>
+      <div data-generator-nav-target="groupContent" class="<%= process_active? ? '' : 'hidden' %> mt-0.5 ml-2 border-l border-border-subtle pl-1">
+        <% step_action_categories.each do |item| %>
+          <a href="<%= item_url(item) %>"
+             data-generator-nav-target="link"
+             data-action="click->generator-nav#activate"
+             class="flex items-center gap-2 pl-3 pr-3 py-1 rounded-md text-xs transition-colors
+                    <%= active?(item) ? 'bg-canvas-elevated text-accent font-medium' : 'text-text-muted hover:bg-surface-active hover:text-text-primary' %>">
+            <svg class="w-3 h-3 flex-shrink-0 <%= active?(item) ? 'text-accent' : 'text-text-muted' %>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= step_action_icon(item[:key]) %>"/>
+            </svg>
+            <span class="truncate"><%= item[:label] %></span>
+            <span class="ml-auto text-[10px] flex-shrink-0
+                  <%= active?(item) ? 'text-accent bg-canvas-elevated px-1.5 rounded-full' : 'text-text-muted' %>">
+              <%= item[:count] %>
+            </span>
+          </a>
+        <% end %>
+      </div>
+    </div>
+
+    <%# === Primary element types: decision, loop, end === %>
+    <% primary_element_types.drop(1).each do |item| %>
+      <%= render_element_type_link(item) %>
+    <% end %>
+
+    <%# === Secondary element types (collapsible) === %>
+    <% if secondary_element_types.any? %>
+      <div class="mt-1 pt-1 border-t border-border-subtle" data-generator-nav-target="group">
+        <button type="button"
+                data-action="click->generator-nav#toggle"
+                data-generator-nav-target="groupToggle"
+                class="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-md text-xs transition-colors text-text-muted hover:text-text-secondary">
+          <span class="truncate font-medium uppercase tracking-wider"><%= t("comp_platform.code_generators.sidebar.more_elements") %></span>
+          <span class="ml-auto flex items-center gap-1">
+            <span class="text-[10px]"><%= secondary_element_types.size %></span>
+            <svg data-generator-nav-target="chevron" class="w-3 h-3 transition-transform <%= secondary_active? ? 'rotate-90' : '' %>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </span>
+        </button>
+        <div data-generator-nav-target="groupContent" class="<%= secondary_active? ? '' : 'hidden' %> mt-0.5">
+          <% secondary_element_types.each do |item| %>
+            <%= render_element_type_link(item) %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <%# Search results (shown when searching) %>
+  <div class="flex-1 overflow-y-auto px-2 pb-2 hidden" data-generator-search-target="searchResults">
+    <div class="px-2 pt-2 pb-1 flex items-center justify-between">
+      <span class="text-[10px] font-semibold uppercase tracking-wider text-text-muted"><%= t("comp_platform.code_generators.sidebar.search_results") %></span>
+      <span class="text-caption" data-generator-search-target="resultCount"></span>
+    </div>
+    <div data-generator-search-target="resultList"></div>
+    <div data-generator-search-target="noResults" class="hidden px-3 py-6 text-center">
+      <svg class="w-6 h-6 text-text-muted mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <p class="text-caption"><%= t("comp_platform.code_generators.sidebar.no_match") %></p>
+    </div>
+  </div>
+
+</nav>

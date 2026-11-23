@@ -1,0 +1,22 @@
+<%= tag.article class: article_class, role: "listitem", data: article_data do %>
+  <div class="relative">
+    <%= thumbnail %>
+    <% if overlay? %>
+      <div class="absolute inset-0 z-20 flex items-center justify-center gap-2 bg-neutral-950/40 opacity-100 backdrop-blur-[1px] transition-opacity duration-150 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+        <% if preview_path.present? %>
+          <%= render ButtonComponent.new(variant: :secondary, size: :sm, tag: :a, href: preview_path, target: "_blank", rel: "noopener") do %>
+            <%= t("website.platform.preview.open") %>
+          <% end %>
+        <% end %>
+        <% if edit_path.present? %>
+          <%= render ButtonComponent.new(variant: :primary, size: :sm, tag: :a, href: edit_path) do %>
+            <%= t("common.actions.edit") %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <div class="flex flex-1 flex-col px-4 py-4">
+    <%= content %>
+  </div>
+<% end %>

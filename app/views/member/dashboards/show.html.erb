@@ -1,0 +1,88 @@
+<% content_for :title, t("member.dashboards.show.title") %>
+<% content_for :member_nav, "home" %>
+<% chrome = member_chrome %>
+
+<%= render Member::PageLayoutComponent.new do |c| %>
+  <% c.with_hero do %>
+    <%= render Member::HeroCardComponent.new(
+          greeting: @greeting,
+          name:     current_user.first_name,
+          subhead:  t("member.dashboards.show.subhead"),
+          status:   { label: t("common.status.active"), tone: :success }
+        ) %>
+  <% end %>
+
+  <% c.with_primary do %>
+    <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <%= render Member::StatusCardComponent.new(
+            label: t("member.common.profile"),
+            value: t("member.dashboards.show.profile_value"),
+            icon:  :user,
+            cta_label: t("member.common.update_profile"),
+            cta_path:  "/#{current_user.customer_id}/member/profile",
+            tone: :success
+          ) %>
+
+      <% if @payments_enabled %>
+        <%= render Member::StatusCardComponent.new(
+              label: t("member.dashboards.show.payments_label"),
+              value: t("member.dashboards.show.payments_value"),
+              icon:  :credit_card,
+              cta_label: t("member.dashboards.show.payments_cta"),
+              cta_path:  "/#{current_user.customer_id}/member/payments"
+            ) %>
+      <% end %>
+
+      <%= render Member::StatusCardComponent.new(
+            label: t("member.common.security"),
+            value: current_user.mfa_required? ? t("member.dashboards.show.mfa_on") : t("member.dashboards.show.mfa_off"),
+            icon:  :shield_check,
+            cta_label: t("member.common.manage_security"),
+            cta_path:  "/#{current_user.customer_id}/member/security",
+            tone: current_user.mfa_required? ? :success : :warning
+          ) %>
+    </section>
+
+    <section>
+      <%= render Member::PageSectionComponent.new(title: t("member.dashboards.show.recent_activity")) do %>
+        <% if @recent_signins.empty? %>
+          <p class="<%= chrome.body_copy_class %>"><%= t("member.dashboards.show.empty") %></p>
+        <% else %>
+          <ul class="<%= chrome.table_divide_class %>">
+            <% @recent_signins.each do |row| %>
+              <li class="<%= chrome.list_row_class %>">
+                <div class="min-w-0">
+                  <p class="text-site-sm font-medium"><%= t("member.dashboards.show.signed_in") %></p>
+                  <p class="mt-0.5 truncate text-site-xs <%= chrome.muted_class %>"><%= t("member.dashboards.show.signin_meta", ago: time_ago_in_words(row[:at]), ip: row[:ip]) %></p>
+                </div>
+                <span class="badge badge-success shrink-0"><%= t("member.dashboards.show.signin_status") %></span>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+      <% end %>
+    </section>
+  <% end %>
+
+  <% c.with_aside do %>
+    <%= render Member::PageSectionComponent.new(title: t("member.dashboards.show.quick_links")) do %>
+      <ul class="space-y-3">
+        <li><%= link_to t("member.common.update_profile"), "/#{current_user.customer_id}/member/profile", class: chrome.text_link_class %></li>
+        <li><%= link_to t("member.common.manage_security"), "/#{current_user.customer_id}/member/security", class: chrome.text_link_class %></li>
+        <li><%= link_to t("member.common.sign_out"), "/auth/sign_out", data: { turbo_method: :delete }, class: chrome.text_link_class %></li>
+      </ul>
+    <% end %>
+
+    <%= render Member::PageSectionComponent.new(title: t("member.dashboards.show.account")) do %>
+      <div class="flex items-center gap-3">
+        <span class="<%= chrome.avatar_class %> size-12 text-site-base">
+          <%= "#{current_user.first_name[0]}#{current_user.last_name[0]}".upcase %>
+        </span>
+        <div class="min-w-0">
+          <p class="truncate text-site-sm font-medium"><%= current_user.display_name %></p>
+          <p class="truncate text-site-xs <%= chrome.muted_class %>"><%= current_user.email %></p>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

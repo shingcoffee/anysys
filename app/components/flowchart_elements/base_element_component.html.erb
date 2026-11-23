@@ -1,0 +1,8 @@
+<%= content_tag :div, html_attributes do %>
+  <div class="flex flex-col items-center gap-1 py-1">
+    <%= render_icon %>
+    <div class="<%= label_classes %>">
+      <%= label %>
+    </div>
+  </div>
+<% end %>

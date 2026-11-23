@@ -1,0 +1,14 @@
+en:
+  operations:
+    violations:
+      subsystem:
+        conversation_required: "A build runs inside an assistant conversation. Start it from the assistant."
+        build_active: "A build is already running in this conversation. Wait for it to finish, or cancel it, before starting another."
+        journey_not_chosen: "The journey %{key} is not in journeys. Add it there or pick one of the chosen journeys."
+        signup_processing: "The sign-up page of %{key} keeps its own processing. Pick another page."
+        step_not_found: "The journey %{key} has no step %{step}. Use a label it lists under adds, or leave step out for its first page."
+        duplicate_processing: "%{name} is listed twice. Give each processing its own name."
+        processing_name_taken: "%{name} is already used in this workspace. Choose another name."
+        preflight_blocked: "%{errors}"
+        actor_unknown: "%{actor} is not one of the people listed. Name the scenario's actor as people names them, or add them to people."
+        value_not_given: "%{value} is not an address the admin gave. Use one from their messages, or ask them for it."

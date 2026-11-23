@@ -1,0 +1,14 @@
+<section data-member-hero class="relative isolate">
+  <div class="pointer-events-none absolute -left-8 -top-16 -z-10 h-56 w-[28rem] max-w-[90%] rounded-full blur-3xl <%= chrome.theme.glow_class %>" aria-hidden="true"></div>
+
+  <div class="flex flex-col items-start gap-5">
+    <% if status %>
+      <p class="<%= chrome.kicker_pill_class %>">
+        <span class="size-1.5 rounded-full <%= chrome.theme.accent_dot_class %>" aria-hidden="true"></span>
+        <%= status[:label] %>
+      </p>
+    <% end %>
+    <h1 class="<%= chrome.title_class %>"><%= greeting %>, <%= name %>.</h1>
+    <p class="<%= chrome.subhead_class %>"><%= subhead %></p>
+  </div>
+</section>

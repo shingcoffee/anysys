@@ -1,0 +1,180 @@
+en:
+  flowchart_actions:
+    transition_state:
+      label: Transition state
+      description: Move a record field or context variable through a declared state machine.
+      fields:
+        stateSource:
+          label: State source
+          help: Read the current state from a loaded record or from a context variable.
+          options:
+            record: Record field
+            variable: Context variable
+        modelVariable:
+          label: Record
+          help: Context path of the loaded record. The field is written in memory; a later Save step persists it.
+        stateField:
+          label: State field
+          help: Attribute that holds the current state. The record is not saved by this step.
+        stateVariable:
+          label: State variable
+          help: Context path of the variable that holds the current state.
+          placeholder: e.g., status
+        targetSource:
+          label: Target source
+          help: Choose the next state from a literal or from a context variable.
+          options:
+            literal: Literal
+            variable: Context variable
+        targetState:
+          label: Target state
+          help: State to move to when the map allows it.
+          placeholder: e.g., approved
+        targetVariable:
+          label: Target variable
+          help: Context path of the state to move to.
+        transitions:
+          label: Transitions
+          help: From-state mapped to comma-separated allowed targets. Use * as the from-state to allow any current state.
+        initialState:
+          label: Initial state
+          help: State assumed when the current value is blank.
+        allowSameState:
+          label: Allow same state
+          help: Treat a target equal to the current state as a successful no-op.
+        guardExpression:
+          label: Guard
+          help: Extra boolean that must hold for the transition to proceed.
+        onInvalid:
+          label: On invalid
+          help: What to do when the map or guard rejects the transition.
+          options:
+            fail: Fail the step
+            skip: Leave the state unchanged and continue
+        timestampField:
+          label: Timestamp field
+          help: Optional attribute stamped with the current time when the transition happens. The record is not saved.
+        resultVar:
+          label: Save state as
+          help: Name of the variable later steps read for the resulting state.
+        previousStateVar:
+          label: Save previous state as
+          help: Name of the variable later steps read for the state before this step.
+        transitionedVar:
+          label: Save transitioned as
+          help: Name of the variable later steps read for whether the state changed.
+      errors:
+        plain_variable: "%{field} must be a plain variable name, not a nested path"
+    evaluate_rules:
+      label: Evaluate rules
+      description: Run a decision table with DMN-style hit policies for pricing, eligibility, routing, or scoring.
+      fields:
+        rules:
+          label: Rules
+          help: Condition expressions over ctx mapped to result expressions. Rows are tested in order.
+        hitPolicy:
+          label: Hit policy
+          help: How matching rows combine into one result.
+          options:
+            first: First match
+            collect: Collect all matches
+            sum: Sum
+            count: Count
+            min: Minimum
+            max: Maximum
+            any: Any (all matches equal)
+        uniqueResults:
+          label: Unique results
+          help: Drop duplicate values from a collected list.
+        defaultValue:
+          label: Default value
+          help: Expression used when nothing matches and On no match is Default.
+        onNoMatch:
+          label: On no match
+          help: What to do when no rule matches.
+          options:
+            default: Use default value
+            fail: Fail the step
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read for the decision result.
+        matchedVar:
+          label: Save matched rows as
+          help: Name of the variable later steps read for the 1-based row numbers that matched.
+    select_assignee:
+      label: Select assignee
+      description: Pick an owner or agent from a candidate pool for ticket routing and lead distribution.
+      fields:
+        candidateSource:
+          label: Candidate source
+          help: Pick from a context array, or from this customer's active users of a reserved role.
+          options:
+            variable: Context array
+            role: Users of a role
+        sourceVariable:
+          label: Candidates
+          help: Context path of the array of hashes or scalars to choose from.
+          placeholder: e.g., agents
+        role:
+          label: Role
+          help: Reserved role whose active users of this customer form the pool.
+          options:
+            admin: Admin
+            member: Member
+        strategy:
+          label: Strategy
+          help: How one candidate is chosen from the eligible pool.
+          options:
+            round_robin: Round robin
+            random: Random
+            weighted: Weighted
+            least_loaded: Least loaded
+            first: First eligible
+        poolKey:
+          label: Pool key
+          help: Tenant-scoped name of the rotation counter used by round robin.
+        weightField:
+          label: Weight field
+          help: Hash field that holds each candidate's weight.
+        loadField:
+          label: Load field
+          help: Hash field that holds each candidate's current load.
+        availabilityField:
+          label: Availability field
+          help: When set, only candidates whose field is truthy are eligible.
+        excludeVariable:
+          label: Exclude
+          help: Context path of an id or list of ids to skip, such as the previous assignee.
+        idField:
+          label: Id field
+          help: Hash field used as the candidate id. Scalars use their own value.
+        returns:
+          label: Return
+          help: Whether to store the whole candidate or only its id.
+          options:
+            candidate: Candidate
+            id: Id
+        onEmpty:
+          label: On empty
+          help: What to do when no eligible candidate remains.
+          options:
+            fail: Fail the step
+            nil: Save nil and continue
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read for the chosen assignee.
+  flowchart_runtime:
+    errors:
+      transition_state:
+        invalid_transition: Cannot move from %{from} to %{to}.
+        guard_failed: The transition guard from %{from} to %{to} did not pass.
+        missing_record: No record is loaded to transition.
+        failed: The state could not be changed (%{reason}).
+      evaluate_rules:
+        no_match: No rule matched.
+        non_numeric: A matching rule returned a non-numeric result.
+        any_conflict: Matching rules returned different results.
+        failed: The rules could not be evaluated (%{reason}).
+      select_assignee:
+        no_candidates: No eligible assignee remains.
+        failed: Could not select an assignee (%{reason}).

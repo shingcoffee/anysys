@@ -1,0 +1,19 @@
+<%= section(ui("campaigns.audience_estimate")) do %>
+  <% if @preview %>
+    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <%= fact(ui("campaigns.matched"), @preview[:matched_count]) %>
+      <%= fact(ui("campaigns.eligible"), @preview[:eligible_count]) %>
+      <%= fact(ui("shared.evaluated_at"), time_value(@preview[:evaluated_at])) %>
+    </dl>
+    <% [:excluded_counts, :deferred_counts].each do |group| %>
+      <% if @preview[group].present? %>
+        <h3 class="font-medium"><%= ui("campaigns.#{group}") %></h3>
+        <dl class="space-y-2"><% @preview[group].each do |reason, count| %><%= fact(reason_label(reason), count) %><% end %></dl>
+      <% end %>
+    <% end %>
+  <% else %>
+    <p class="text-text-secondary"><%= ui("campaigns.preview_needed") %></p>
+  <% end %>
+  <p class="text-sm text-text-secondary"><%= ui("campaigns.start_snapshot_help") %></p>
+  <p class="text-sm text-text-secondary"><%= ui("campaigns.eligibility_help") %></p>
+<% end %>

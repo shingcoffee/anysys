@@ -1,0 +1,13 @@
+<%= render AdminPageComponent.new(
+      breadcrumbs: breadcrumbs,
+      title: label,
+      description: description,
+      icon_path: icon_path,
+      icon_class: icon_class,
+      actions: actions,
+      wrap_title: true,
+      wrap_actions: true
+    ) do %>
+  <%= render SectionNavComponent.new(label: t("admin_misc.entities.show.tabs_label"), tabs: tabs) %>
+  <%= content %>
+<% end %>

@@ -1,0 +1,70 @@
+"zh-CN":
+  public_views:
+    flash:
+      response_save_error: "回复保存失败：%{errors}"
+      response_field_errors: "部分内容需要修改，请检查标出的字段后重试。"
+      response_submitted: "回复已提交，谢谢！"
+      outcomes:
+        submitted: "回复已提交，谢谢！"
+        saved: "回复已保存。"
+        thank_you: "谢谢！"
+        custom: "回复已提交，谢谢！"
+        registration_pending: "请查收邮件以完成注册。"
+    home:
+      auth_title: "登录您的账户"
+      auth_subtitle: "输入凭据以访问仪表盘"
+      password_placeholder: "密码"
+      remember_me: "记住我"
+    actions:
+      continue_here: "请在适用于您账号的表单中继续。"
+      not_for_your_account: "此表单不适用于您的账号。"
+    public_pages:
+      empty: "此表单暂无内容。"
+      not_found: "页面不存在"
+    forms:
+      submit: "提交"
+    composite:
+      no_records: "暂无记录"
+      showing_records: "共 %{count} 条记录"
+      row_action_default: "打开"
+    unsubscribes:
+      confirmed:
+        heading: "已退订"
+        body_html: "<strong>%{email}</strong> 已从邮件列表退订。"
+      not_found:
+        heading: "链接无效"
+        body: "此退订链接无效或已过期。"
+      show:
+        heading: "退订"
+        body_html: "确定将 <strong>%{email}</strong> 从邮件列表退订吗？"
+        submit: "确认退订"
+    preferences:
+      title: "邮件偏好"
+      description: "管理 %{email} 的邮件订阅偏好。"
+      updated: "偏好已保存。"
+      invalid_token: "此偏好链接无效或已过期。"
+      submit: "保存偏好"
+      required_label: "必填"
+      no_topics: "当前没有可用的订阅主题。"
+    layouts:
+      auth_title: "登录 — Anysys"
+      dashboard_title: "仪表盘"
+      member_title: "账户 — Anysys"
+      payment_title: "支付"
+      handoff_title: "继续"
+      preview:
+        title: "预览 - %{name}"
+        badge: "预览模式"
+        back_to_editor: "返回编辑器"
+      template_preview:
+        title: "模板预览 - %{name}"
+        badge: "模板预览"
+  emails:
+    signup_forms:
+      disabled: "此注册表单当前已禁用。"
+      subscribed: "订阅成功。"
+      subscribed_title: "订阅成功！"
+      subscribed_body: "感谢您的订阅。"
+    preferences:
+      updated: "偏好已保存。"
+      invalid_token: "此偏好链接无效或已过期。"

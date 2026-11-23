@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/app/assets/builds/tailwind.css">
+    <title>Flowchart editor behavioral fixture</title>
+  </head>
+  <body class="bg-slate-50">
+    <!-- Same controller/target contract as the app editor; property and action
+         fields are exclusively rendered by production FormBuilder/StepManager. -->
+    <main data-controller="flowchart-canvas"
+          data-flowchart-canvas-id-value="1"
+          data-flowchart-canvas-customer-id-value="81721200"
+          class="relative min-h-screen">
+      <div class="h-96 overflow-hidden">
+        <div data-flowchart-canvas-target="canvas"></div>
+      </div>
+      <aside data-controller="property-editor"
+             data-flowchart-canvas-target="propertySidebar"
+             data-property-editor-target="sidebar"
+             class="hidden absolute right-0 top-0 bottom-0 z-30 flex-col bg-white border-l border-slate-200 shadow-lg w-full sm:w-[420px] max-w-[90vw] overflow-x-hidden overflow-y-auto">
+        <h1 data-property-editor-target="title" class="px-3 py-2 text-xs font-semibold text-slate-800"></h1>
+        <nav data-property-editor-target="tabBar" class="px-3"></nav>
+        <form data-property-editor-target="form" data-action="submit->property-editor#save" class="flex min-w-0 flex-1 flex-col">
+          <div data-property-editor-target="tabPaneGeneral" class="min-w-0 px-3 py-2">
+            <div data-property-editor-target="formFieldsGeneral" class="min-w-0 space-y-2"></div>
+          </div>
+          <div data-property-editor-target="tabPaneSteps" class="min-w-0 px-3 py-2">
+            <div data-property-editor-target="formFieldsSteps" class="min-w-0 space-y-2"></div>
+          </div>
+          <div data-property-editor-target="tabPaneIo" class="min-w-0 px-3 py-2">
+            <div data-property-editor-target="formFieldsIo" class="min-w-0 space-y-2"></div>
+          </div>
+          <div data-property-editor-target="tabPaneAdvanced" class="min-w-0 px-3 py-2">
+            <div data-property-editor-target="formFieldsAdvanced" class="min-w-0 space-y-2"></div>
+          </div>
+          <div class="mt-auto flex gap-2 border-t border-slate-200 px-3 py-2">
+            <button type="submit" data-property-editor-target="saveButton" class="rounded-md bg-indigo-600 px-3 py-1.5 text-xs text-white">Save</button>
+            <button type="button" data-action="property-editor#close" class="rounded-md border border-slate-200 px-3 py-1.5 text-xs">Close</button>
+          </div>
+        </form>
+      </aside>
+    </main>
+  </body>
+</html>

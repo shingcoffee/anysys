@@ -1,0 +1,23 @@
+<%# Grouping state + selection toolbar for the entity attribute section.
+    Always rendered (independent of whether attributes already exist) so grouping
+    works for newly-added attributes too, not only server-rendered ones.
+    Local: entity %>
+<input type="hidden" name="entity[attribute_groups]"
+       data-entity-form-target="attributeGroupsInput"
+       value="<%= (entity.attribute_groups_json || []).to_json %>">
+
+<div class="hidden mb-2 flex items-center gap-3 px-3 py-2 rounded-md bg-accent-subtle"
+     data-entity-form-target="groupingToolbar">
+  <span class="text-sm text-text-primary">
+    <span data-entity-form-target="selectionCount">0</span> <%= t("maint_core.entities.grouping.selected") %>
+  </span>
+  <button type="button" class="btn btn-secondary btn-sm"
+          data-action="click->entity-form#openMoveToGroup"
+          data-entity-form-target="moveToGroupBtn">
+    <%= t("maint_core.entities.grouping.move_to_group") %>
+  </button>
+  <button type="button" class="btn btn-tertiary btn-sm"
+          data-action="click->entity-form#clearAttributeSelection">
+    <%= t("maint_core.entities.grouping.clear_selection") %>
+  </button>
+</div>

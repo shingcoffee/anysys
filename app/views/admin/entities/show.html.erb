@@ -1,0 +1,41 @@
+<% filter_keys = @filters.map { |f| f[:key] } %>
+<% list_params = params.permit(:q, :sort, :dir, :page, :per_page, :density, *filter_keys).to_h.symbolize_keys %>
+<% csv_path = admin_entity_path(current_customer.id, @entity, format: :csv, **list_params) %>
+<% can_create = @entity.active? && !@entity.category_bridge? %>
+<% export_action = { label: t("admin_misc.entities.show.export_csv"),
+                     path: csv_path,
+                     variant: :secondary,
+                     icon: :download,
+                     class: "min-h-11 w-full sm:w-auto" } %>
+
+<%= render Admin::Entities::BrowseComponent.new(
+      entity: @entity, customer_id: current_customer.id, tab: :entries, actions: [export_action],
+      entry_count: @entry_count, form_count: @form_count
+    ) do %>
+  <%= render Admin::Entities::EntriesTableComponent.new(
+    rows: @rows,
+    columns: @columns,
+    pagination: @pagination,
+    params: list_params,
+    filters: @filters,
+    search: { param: :q, placeholder: t("admin_misc.entities.show.search_placeholder") },
+    empty_state: {
+      title: t("admin_misc.entities.show.empty_title"),
+      description: (t("admin_misc.entities.show.empty_description") if can_create)
+    },
+    base_path: admin_entity_path(current_customer.id, @entity),
+    batch_path: batch_admin_entity_entries_path(current_customer.id, @entity),
+    entry_path: ->(row) { admin_entity_entry_path(current_customer.id, @entity, row) },
+    destroy_path: ->(row) { admin_entity_entry_path(current_customer.id, @entity, row) },
+    edit_path: (->(row) { edit_admin_entity_entry_path(current_customer.id, @entity, row) } if can_create),
+    density: @density
+  ) do |table| %>
+    <% table.with_toolbar_actions do %>
+      <%= render Admin::Entities::ColumnPickerComponent.new(
+        entity: @entity,
+        setting: @setting,
+        update_path: admin_entity_index_setting_path(current_customer.id, @entity)
+      ) %>
+    <% end %>
+  <% end %>
+<% end %>

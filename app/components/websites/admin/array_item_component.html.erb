@@ -1,0 +1,25 @@
+<%= content_tag accordion? ? :details : :div,
+      data: { array_item: true }, open: (true if accordion? && expanded?),
+      class: workspace? ? 'group/item relative min-w-0 overflow-hidden rounded-lg border border-border-subtle bg-canvas-elevated' : 'flex flex-col gap-3 rounded-xl border border-border-subtle bg-surface p-4 shadow-sm' do %>
+  <% if workspace? %>
+    <%= content_tag accordion? ? :summary : :div, class: header_class do %>
+      <% if accordion? %>
+        <svg class="size-4 shrink-0 text-text-muted transition-transform group-open/item:rotate-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 0 1 .02-1.06L11.168 10 7.23 6.29a.75.75 0 1 1 1.04-1.08l4.5 4.25a.75.75 0 0 1 0 1.08l-4.5 4.25a.75.75 0 0 1-1.06-.02Z" clip-rule="evenodd"/></svg>
+      <% end %>
+      <span data-item-number class="shrink-0 text-xs tabular-nums text-text-tertiary"><%= number %></span>
+      <% if image? %>
+        <img data-item-image alt="" data-action="error->website-builder#itemImageError" class="<%= 'hidden ' unless previewable? %>size-8 shrink-0 rounded-md object-cover ring-1 ring-border-subtle" <% if previewable? %>src="<%= image_url %>"<% end %>>
+      <% end %>
+      <span data-item-title class="text-body min-w-0 truncate font-medium"><%= title %></span>
+    <% end %>
+  <% end %>
+  <div class="<%= workspace? ? 'flex min-w-0 flex-col gap-2 px-3 pb-3' : 'contents' %>">
+    <% if workspace? %><%= render toolbar %><% end %>
+    <% field_rows.each do |row| %>
+      <div class="<%= workspace? && row.size > 1 ? 'grid min-w-0 grid-cols-1 gap-2 @min-[24rem]/content:grid-cols-2' : 'contents' %>">
+        <% row.each do |field| %><%= render prop_component(field) %><% end %>
+      </div>
+    <% end %>
+    <% unless workspace? %><%= render toolbar %><% end %>
+  </div>
+<% end %>

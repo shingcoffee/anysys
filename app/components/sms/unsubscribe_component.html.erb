@@ -1,0 +1,14 @@
+<main class="w-full px-4 py-8 sm:py-12">
+  <%= render CardComponent.new(padding: :none, class: "w-full max-w-lg mx-auto") do %>
+    <div class="p-4 sm:p-6 space-y-4">
+      <% if @errors.any? || @unsubscribe.nil? %>
+        <h1 class="text-xl font-semibold"><%= ui("invalid_title") %></h1><p class="text-text-secondary"><%= ui("invalid_help") %></p>
+      <% elsif @unsubscribe[:already_unsubscribed] || !@unsubscribe.key?(:masked_phone) %>
+        <h1 class="text-xl font-semibold"><%= ui("success") %></h1><p class="text-text-secondary"><%= ui("success_help") %></p>
+      <% else %>
+        <h1 class="text-xl font-semibold"><%= ui("title") %></h1><p class="font-medium break-words"><%= @unsubscribe[:masked_phone] %></p><p class="text-text-secondary"><%= ui("help") %></p>
+        <%= form_with url: helpers.sms_unsubscribe_path(helpers.params[:token]), method: :post, local: true, data: { turbo: false } do %><%= button_tag ui("confirm"), type: :submit, name: nil, class: "btn btn-primary w-full sm:w-auto" %><% end %>
+      <% end %>
+    </div>
+  <% end %>
+</main>

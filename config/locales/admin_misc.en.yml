@@ -1,0 +1,337 @@
+en:
+  admin_misc:
+    dashboard:
+      subtitle: "Here's what's happening across your workspace."
+      stats:
+        entities: "Entities"
+        pages: "Pages"
+        modules: "Modules"
+        users: "Users"
+        view: "View details"
+      pages_sub_label: "%{count} launched"
+      snapshot: "At a glance"
+      quick_actions: "Quick actions"
+      setup:
+        title: "Getting started"
+        progress: "%{done} of %{total} complete"
+        items:
+          create_entity: "Create your first entity"
+          launch_page: "Launch a page"
+          enable_module: "Enable a module"
+          invite_user: "Invite a teammate"
+      actions:
+        create_entity:
+          label: "Create entity"
+          description: "Set up a new data type"
+        new_page:
+          label: "New page"
+          description: "Bind a form to an entity"
+        enable_module:
+          label: "Enable module"
+          description: "Turn on a feature module"
+        invite_user:
+          label: "Invite user"
+          description: "Add a teammate"
+      modules:
+        title: "Enabled modules"
+        description: "Jump into features turned on for this organization."
+        open_settings: "Open settings"
+        open_assistant: "Open assistant"
+        blurbs:
+          authentication: "Manage users and sign-in for this organization."
+          email: "Templates, lists, and send activity."
+          payment: "Transactions, reconciliations, and merchant accounts."
+          sms: "Messages, opt-outs, and send limits."
+          captcha: "Protect public forms with captcha."
+          ai_assistant: "Open the admin assistant and customer settings."
+          fallback: "%{name} is on for this organization."
+      recents:
+        pages_title: "Recent pages"
+        entities_title: "Recent entities"
+        view_all: "View all"
+        pages_empty_title: "No pages yet"
+        pages_empty_description: "Pages you create will show up here."
+        entities_empty_title: "No entities yet"
+        entities_empty_description: "Create an entity to start capturing records."
+
+    domains:
+      breadcrumb: "Domains"
+      title: "Domains"
+      description: "Browse your organization's records, grouped by business area."
+      empty_title: "Nothing to browse yet"
+      empty_hint: "Record types set up for your organization appear here, grouped by domain."
+      tabs_label: "Domain views"
+      tabs:
+        pages: "Pages"
+        journeys: "Journeys"
+      summary_label: "Domain summary"
+      pages:
+        empty_title: "No pages here yet"
+        empty_description: "Pages bound to this domain's record types appear here, ready to preview, launch, and share."
+        search_placeholder: "Search pages…"
+        column: "Page"
+      forms:
+        empty_title: "No forms here yet"
+        empty_description: "Forms bound to this domain's record types appear here, ready to fill in, preview, launch, and share."
+      directory:
+        ungrouped: "Other"
+        ungrouped_hint: "Not assigned to a domain yet."
+        stats:
+          entries: "Total entries"
+          last_activity: "Last activity"
+          no_activity: "No activity yet"
+        columns:
+          name: "Name"
+          entries: "Entries"
+          pages: "Pages"
+          updated: "Last updated"
+        sort:
+          label: "Sort"
+          name: "Name"
+          recent: "Recent"
+          entries: "Most entries"
+        layout:
+          label: "Layout"
+          grid: "Grid"
+          list: "List"
+        shared: "Shared"
+        entry_count:
+          one: "%{formatted} entry"
+          other: "%{formatted} entries"
+        no_entries: "No entries yet"
+        updated: "Updated %{time}"
+        form_count:
+          one: "%{formatted} form"
+          other: "%{formatted} forms"
+        no_forms: "No forms"
+        forms_hint: "%{name} forms: %{live} of %{total} live"
+        page_count:
+          one: "%{formatted} page"
+          other: "%{formatted} pages"
+        no_pages: "No pages"
+        pages_hint: "%{name} pages: %{live} of %{total} live"
+        cardless_title: "No record types here"
+        cardless_hint: "Forms that aren't bound to a record type are kept here."
+        cardless_pages_hint: "Pages that aren't bound to a record type are kept here."
+        view_forms: "View forms"
+        view_pages: "View pages"
+    entities:
+      create_entity: "Create Entity"
+      show:
+        description: "Browse and manage %{name} entries"
+        search_placeholder: "Search entries…"
+        empty_title: "No entries yet"
+        empty_description: "Create the first entry to start building this list."
+        export_csv: "Export CSV"
+        tabs_label: "Record type views"
+      forms:
+        empty_title: "No forms yet"
+        empty_description: "Forms bound to %{name} appear here, ready to fill in, preview, launch, and share."
+      pages:
+        empty_title: "No pages yet"
+        empty_description: "Pages bound to %{name} appear here, ready to preview, launch, and share."
+      entry_detail:
+        title: "Entry #%{id}"
+        description: "Every field of this %{name} record, organized by attribute group."
+        ungrouped: "Other fields"
+        entity: "Record type"
+        record_heading: "Record details"
+        sections_heading: "Sections"
+        no_fields: "This record type has no fields yet."
+        field_count:
+          one: "%{count} field"
+          other: "%{count} fields"
+      entry_form:
+        create: "Create Entry"
+        title: "Create Entry — %{name}"
+        description: "Add a new record to %{name}."
+        submitting: "Creating…"
+        errors_heading: "Please correct the errors below."
+        unsupported_fields: "This form does not support these fields: %{fields}."
+        no_fields: "No editable fields are available for this record type."
+        created: "Entry created successfully."
+        update: "Save Changes"
+        updating: "Saving…"
+        edit_breadcrumb: "Edit Entry #%{id}"
+        edit_title: "Edit Entry #%{id} — %{name}"
+        edit_description: "Update this record in %{name}."
+        updated: "Entry updated successfully."
+        errors:
+          invalid_shape: "Enter a value in the expected format."
+          invalid_choice: "Select an available option."
+          invalid_number: "Enter a valid number."
+          invalid_date: "Enter a valid date in YYYY-MM-DD format."
+          invalid_datetime: "Enter a valid date and time in YYYY-MM-DDTHH:MM format."
+          invalid_boolean: "Choose a valid checkbox value."
+          rejected_value: "Submitted value: %{value}"
+          save_failed: "The entry could not be created. Please try again."
+          update_failed: "The entry could not be saved. Please try again."
+      entry_page:
+        missing_title: "No entry form yet"
+        missing_description: "%{name} has no launched form for adding or editing records. Generate and launch its page to continue."
+      quick_add:
+        option: "+ Add New"
+        title: "Add %{name}"
+        loading: "Loading form…"
+        unavailable: "This form could not be loaded. Close the dialog and try again."
+      association_entries:
+        section_hint: "Associated records"
+        entry_count:
+          one: "%{count} entry"
+          other: "%{count} entries"
+        add: "Add"
+        empty_title: "No %{name} linked yet."
+        empty_hint: "Use Add to link one or more %{name} records to this entry."
+        delete_confirm: "Remove this associated record? This cannot be undone."
+        new_title: "Add %{name}"
+        new_description: "Link %{entity} entry #%{id} to one or more %{name} records."
+        edit_title: "Edit %{name}"
+        edit_description: "Update this %{name} record linked to %{entity} entry #%{id}."
+        row_heading: "Entry %{number}"
+        add_row: "Add another"
+        remove_row: "Remove this entry"
+        submit: "Save Entries"
+        created:
+          one: "%{count} entry added."
+          other: "%{count} entries added."
+        updated: "Associated record updated."
+        deleted: "Associated record removed."
+        errors:
+          no_rows: "Add at least one entry."
+          too_many_rows: "Add at most %{count} entries at a time."
+      columns:
+        id: "ID"
+        created_at: "Created at"
+        updated_at: "Updated at"
+        linked_account: "Linked account"
+        user_full_name: "Full name"
+        linked_account_value: "%{name} (%{email})"
+        user_id: "user_id"
+        user_link: "%{id} → users.id %{id} (%{email})"
+        user_link_id: "%{id} → users.id %{id}"
+      index_setting:
+        updated: "Column preferences saved"
+        errors:
+          too_many: "too many columns selected"
+          invalid_keys: "contains unknown attributes"
+
+    entity_pages:
+      breadcrumb: "Forms"
+      title: "%{name} Forms"
+      description: "Forms associated with %{name}"
+      new_page: "New Form"
+      search_placeholder: "Search forms in %{name}…"
+      take_offline: "Take Offline"
+      launch: "Launch"
+      empty_title: "No forms in %{name}"
+      empty_description: "Create your first form for this entity."
+      empty_action: "New form"
+
+    maintenance:
+      breadcrumb: "Maintenance"
+      title: "Maintenance"
+      subtitle: "Manage definitions and system configuration"
+      cards:
+        entities_title: "Entities"
+        entities_description: "Define data structures and relationships"
+        flowcharts_title: "Flowcharts"
+        flowcharts_description: "Create and manage business logic flows"
+        pages_title: "Pages"
+        pages_description: "Build forms and interfaces"
+        constants_title: "Constants"
+        constants_description: "Reusable option lists"
+        modules_title: "Modules"
+        modules_description: "Enable or disable feature modules"
+        customer_profile_title: "Customer Profile"
+        customer_profile_description: "Organization info and settings"
+
+    module_config:
+      subtitle: "Configure this module for your organization"
+      module_status: "Module Status"
+      suspended: "Suspended"
+      not_enabled: "Not enabled"
+      enabled_since: "Enabled Since"
+      your_configuration: "Your Configuration"
+      select_prompt: "Select..."
+      enter_value: "Enter value..."
+      save_configuration: "Save Configuration"
+      no_settings: "This module has no configurable settings."
+      not_enabled_message: "This module is not enabled for your organization."
+      fields:
+        sms:
+          daily_send_cap: "Daily send cap"
+        email:
+          daily_send_cap: "Daily send cap"
+        ai_assistant:
+          language: "Language"
+          max_duration_seconds: "Max recording duration (seconds)"
+        authentication:
+          mfa_enabled: "MFA enabled"
+          session_timeout: "Session timeout"
+          max_login_attempts: "Max login attempts"
+      options:
+        ai_assistant:
+          language:
+            auto: "Auto"
+            en: "English"
+            "zh-CN": "Simplified Chinese"
+      go_to_modules: "Go to Module Management"
+      exit_landing:
+        header: "Exit Landing Page"
+        subtitle: "Where users return after this module completes."
+        default_prefix: "Module default:"
+        override_label: "Override URL (leave blank to use module default)"
+        override_hint_html: "Enter the full URL where users should be redirected after completing this module's flow."
+        save_override: "Save Override"
+
+    module_entries:
+      breadcrumb: "Modules"
+      search_placeholder: "Search…"
+
+    pages:
+      breadcrumb: "Forms"
+      title: "All Forms"
+      description: "Every form across your entities. Use the Forms sidebar to filter by data model."
+      new_page: "New Form"
+      search_placeholder: "Search forms…"
+      take_offline: "Take Offline"
+      launch: "Launch"
+      manage_access: "Manage access"
+      cannot_submit: "Can't be submitted"
+      cannot_submit_hint: "Every submission fails: %{problems}"
+      out_of_date: "Out of date"
+      out_of_date_hint: "Built from version %{built}; %{entity} is now on version %{current}."
+      fill_in: "Fill in"
+      open_in_new_tab: "Open in new tab"
+      fill_in_hint: "Fill in %{name}"
+      preview_hint: "Preview %{name}"
+      form:
+        description: "Fill in this form to add a new entry."
+      empty_title: "No forms yet"
+      empty_description: "Forms created in Maintenance will appear here for preview, launch, and visibility control."
+      empty_action: "New form"
+      columns:
+        page: "Form"
+        audience: "Audience"
+      audience:
+        aria_visible_to: "Visible to %{audiences}"
+        aria_unknown: "Visibility unknown"
+      publishing_panel:
+        subtitle: "Preview, launch, and control who can open this form"
+        close: "Close"
+      uncategorized:
+        title: "Uncategorized"
+        description: "Forms with no entity, or bound to a missing entity."
+        empty_title: "No uncategorized forms"
+        empty_description: "All forms are linked to an entity."
+        row_subtitle: "No entity"
+      filters:
+        entity_label: "Entity"
+        launch_label: "Status"
+        launched_option: "Live"
+        not_launched_option: "Draft"
+
+    person_link:
+      flash:
+        linked: "Account linked."
+        unlinked: "Account unlinked."

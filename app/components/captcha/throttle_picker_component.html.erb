@@ -1,0 +1,97 @@
+<%= form_with url: @url, method: :patch, local: true,
+              class: "flex flex-col gap-2 w-full min-w-0",
+              data: {
+                controller: "captcha-throttle-picker",
+                captcha_throttle_picker_custom_value: Captcha::ThrottlePresets::PRESET_CUSTOM,
+                captcha_throttle_picker_skip_value: Captcha::ThrottlePickerComponent::SKIP_VALUE,
+                action: "submit->captcha-throttle-picker#guard"
+              } do %>
+  <% @extra_params.each do |key, value| %>
+    <input type="hidden" name="<%= key %>" value="<%= value %>">
+  <% end %>
+  <input type="hidden"
+         name="preset"
+         value="<%= @preset %>"
+         data-captcha-throttle-picker-target="preset">
+  <% if include_skip? %>
+    <input type="hidden"
+           name="skipped"
+           value="<%= skipped? %>"
+           data-captcha-throttle-picker-target="skipped">
+  <% end %>
+  <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+    <% if content? %>
+      <div class="min-w-0 flex-1"><%= content %></div>
+    <% end %>
+    <div class="flex w-full min-w-0 flex-col items-end gap-2 sm:w-auto sm:flex-none">
+      <button type="button"
+              class="<%= customer_context? ? 'btn btn-secondary min-h-11 w-full sm:w-auto' : 'w-full text-right text-sm font-medium text-accent-text underline decoration-dotted underline-offset-4 hover:decoration-solid sm:w-auto' %>"
+              data-captcha-throttle-picker-target="display"
+              data-action="click->captcha-throttle-picker#edit"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-label="<%= @aria_label %>">
+        <%= display_label %>
+      </button>
+      <select hidden
+              class="input-field w-full sm:w-56"
+              data-captcha-throttle-picker-target="choice"
+              data-action="change->captcha-throttle-picker#choose keydown.esc->captcha-throttle-picker#escape blur->captcha-throttle-picker#blurChoice"
+              aria-label="<%= @aria_label %>">
+        <% rate_options.each do |value| %>
+          <option value="<%= value %>" <%= "selected" if option_selected?(value) %>>
+            <%= option_label(value) %>
+          </option>
+        <% end %>
+        <% if include_skip? %>
+          <option value="<%= Captcha::ThrottlePickerComponent::SKIP_VALUE %>" <%= "selected" if option_selected?(Captcha::ThrottlePickerComponent::SKIP_VALUE) %>>
+            <%= option_label("skip") %>
+          </option>
+        <% end %>
+      </select>
+      <div hidden
+           class="flex w-full justify-end"
+           data-captcha-throttle-picker-target="customFields">
+        <div class="<%= customer_context? ? 'flex max-w-full flex-col items-end gap-3 py-3' : 'flex max-w-full flex-col items-end gap-1.5 rounded-md border border-border-subtle bg-surface-subtle px-2.5 py-2' %>">
+          <div class="flex flex-wrap items-end justify-end <%= customer_context? ? 'gap-3' : 'gap-2' %>">
+            <div class="flex flex-col items-end gap-1">
+              <label class="<%= customer_context? ? 'form-label' : 'text-label' %>" for="<%= field_dom_id("limit") %>"><%= t("captcha.throttle.requests_label") %></label>
+              <input type="number"
+                     id="<%= field_dom_id("limit") %>"
+                     name="limit_count"
+                     min="1"
+                     max="10000"
+                     value="<%= @limit_count %>"
+                     class="input-field <%= customer_context? ? 'w-28 min-h-11' : 'w-20 px-2 py-1 text-xs' %>"
+                     data-captcha-throttle-picker-target="limitCount"
+                     aria-label="<%= t("captcha.throttle.limit_count_aria") %>">
+            </div>
+            <div class="flex flex-col items-end gap-1">
+              <label class="<%= customer_context? ? 'form-label' : 'text-label' %>" for="<%= field_dom_id("period") %>"><%= t("captcha.throttle.minutes_label") %></label>
+              <input type="number"
+                     id="<%= field_dom_id("period") %>"
+                     name="period_minutes"
+                     min="1"
+                     max="60"
+                     value="<%= @period_minutes %>"
+                     class="input-field <%= customer_context? ? 'w-24 min-h-11' : 'w-16 px-2 py-1 text-xs' %>"
+                     data-captcha-throttle-picker-target="periodMinutes"
+                     aria-label="<%= t("captcha.throttle.period_minutes_aria") %>">
+            </div>
+            <%= render ButtonComponent.new(
+                  variant: :primary,
+                  size: :sm,
+                  tag: :button,
+                  type: :button,
+                  class: customer_context? ? "min-h-11" : "px-2 py-1 text-xs",
+                  data: { action: "click->captcha-throttle-picker#apply" }
+                ) do %>
+              <%= t("captcha.throttle.apply") %>
+            <% end %>
+          </div>
+          <p class="<%= customer_context? ? 'text-sm text-text-secondary' : 'text-caption' %> text-right"><%= t("captcha.throttle.custom_hint") %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,147 @@
+<%# Platform countable-items catalog. Each item is a row in one card. %>
+<%# The enable control is a real checkbox over the switch, so the click lands %>
+<%# on the input instead of a clipped stand-in. %>
+<%# countable-items-reorder updates hidden position inputs after drag or arrow moves. %>
+<%= form_with url: form_url, method: :patch, id: "countable-items-form", class: "card min-w-0 max-w-full overflow-hidden" do |f| %>
+  <header class="flex flex-col gap-2 border-b border-border-subtle px-4 py-4 sm:flex-row sm:items-start sm:justify-between sm:px-5">
+    <div class="min-w-0 max-w-2xl space-y-1">
+      <p class="text-body-sm text-text-secondary"><%= t("comp_billing.countable_items_form.reorder_hint") %></p>
+      <p class="text-caption"><%= t("comp_billing.countable_items_form.supported_hint") %></p>
+    </div>
+    <p class="shrink-0 text-caption tabular-nums"><%= t("comp_billing.countable_items_form.items_count", count: sorted_items.size) %></p>
+  </header>
+
+  <ol data-controller="countable-items-reorder" class="min-w-0 divide-y divide-border-subtle">
+    <% sorted_items.each do |item| %>
+      <% idx = index_for(item) %>
+      <% input_prefix = "items[#{idx}]" %>
+
+      <li data-countable-items-reorder-target="row"
+          class="min-w-0 bg-surface has-[:checked]:[&_.item-fields]:opacity-100">
+        <%= hidden_field_tag "#{input_prefix}[id]", item.id, id: nil %>
+        <%= hidden_field_tag "#{input_prefix}[position]", idx,
+              id: "item_#{idx}_position",
+              data: { "countable-items-reorder-target": "positionInput" } %>
+
+        <div class="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+          <div class="flex min-w-0 items-center gap-2">
+            <button type="button"
+                    data-countable-items-reorder-target="handle"
+                    aria-label="<%= t("comp_billing.countable_items_form.drag_to_reorder", key: item.key) %>"
+                    class="inline-flex size-9 shrink-0 cursor-grab items-center justify-center rounded-lg text-text-muted hover:bg-surface-hover hover:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent active:cursor-grabbing">
+              <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="7" cy="5" r="1.5"/>
+                <circle cx="13" cy="5" r="1.5"/>
+                <circle cx="7" cy="10" r="1.5"/>
+                <circle cx="13" cy="10" r="1.5"/>
+                <circle cx="7" cy="15" r="1.5"/>
+                <circle cx="13" cy="15" r="1.5"/>
+              </svg>
+            </button>
+
+            <span data-countable-items-reorder-target="positionLabel"
+                  class="w-5 shrink-0 text-center text-caption tabular-nums text-text-tertiary select-none"
+                  aria-hidden="true"><%= idx + 1 %></span>
+
+            <div class="min-w-0">
+              <p class="truncate font-medium text-text-primary"><%= item.label %></p>
+              <p class="truncate font-mono text-caption text-text-tertiary"
+                 aria-label="<%= t("comp_billing.countable_items_form.key_aria", key: item.key) %>"
+                 data-testid="key-badge-<%= item.key %>">
+                <%= item.key %>
+              </p>
+            </div>
+          </div>
+
+          <div class="flex shrink-0 items-center justify-end gap-2">
+            <%= hidden_field_tag "#{input_prefix}[enabled]", "false", id: nil %>
+            <label class="relative inline-flex min-h-11 cursor-pointer items-center gap-2">
+              <%= check_box_tag "#{input_prefix}[enabled]", "true", item.enabled?,
+                    class: "peer absolute inset-0 z-10 cursor-pointer opacity-0",
+                    role: "switch",
+                    "aria-label": t("comp_billing.countable_items_form.enabled_for", key: item.key) %>
+              <span aria-hidden="true" class="pointer-events-none block h-6 w-11 shrink-0 rounded-full bg-border transition-colors peer-checked:bg-accent peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2"></span>
+              <span aria-hidden="true" class="pointer-events-none absolute left-0.5 top-1/2 size-5 -translate-y-1/2 rounded-full bg-white shadow-sm transition-transform peer-checked:translate-x-5"></span>
+              <span class="pointer-events-none pl-1 text-sm text-text-tertiary peer-checked:hidden"><%= t("common.status.off") %></span>
+              <span class="pointer-events-none hidden pl-1 text-sm font-medium text-accent-text peer-checked:inline"><%= t("comp_billing.countable_items_form.on_toggle") %></span>
+            </label>
+
+            <div class="inline-flex items-center overflow-hidden rounded-lg border border-border-subtle bg-surface">
+              <button type="button"
+                      data-countable-items-reorder-target="upButton"
+                      data-action="click->countable-items-reorder#moveUp"
+                      aria-label="<%= t("comp_billing.countable_items_form.move_up", key: item.key) %>"
+                      class="inline-flex size-9 items-center justify-center text-text-tertiary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-30">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+              <button type="button"
+                      data-countable-items-reorder-target="downButton"
+                      data-action="click->countable-items-reorder#moveDown"
+                      aria-label="<%= t("comp_billing.countable_items_form.move_down", key: item.key) %>"
+                      class="inline-flex size-9 items-center justify-center border-l border-border-subtle text-text-tertiary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-30">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="item-fields grid min-w-0 grid-cols-1 gap-3 px-4 pb-4 opacity-60 sm:grid-cols-2 sm:px-5 lg:grid-cols-12">
+          <div class="min-w-0 lg:col-span-4">
+            <label class="form-label" for="item_<%= idx %>_label"><%= t("comp_billing.countable_items_form.label_placeholder") %></label>
+            <%= text_field_tag "#{input_prefix}[label]", item.label,
+                  id: "item_#{idx}_label",
+                  class: "input-field",
+                  autocomplete: "off",
+                  "aria-label": t("comp_billing.countable_items_form.label_for", key: item.key) %>
+          </div>
+
+          <div class="min-w-0 lg:col-span-2">
+            <label class="form-label" for="item_<%= idx %>_unit"><%= t("comp_billing.countable_items_form.unit_label") %></label>
+            <%= text_field_tag "#{input_prefix}[unit]", item.unit,
+                  id: "item_#{idx}_unit",
+                  class: "input-field",
+                  placeholder: t("comp_billing.countable_items_form.unit_placeholder"),
+                  autocomplete: "off",
+                  "aria-label": t("comp_billing.countable_items_form.unit_for", key: item.key) %>
+          </div>
+
+          <div class="min-w-0 lg:col-span-3">
+            <label class="form-label" for="item_<%= idx %>_category"><%= t("comp_billing.countable_items_form.category_label") %></label>
+            <%= select_tag "#{input_prefix}[category]",
+                  options_for_select(category_options, item.category),
+                  id: "item_#{idx}_category",
+                  class: "input-field",
+                  "aria-label": t("comp_billing.countable_items_form.category_for", key: item.key) %>
+          </div>
+
+          <div class="min-w-0 lg:col-span-3">
+            <label class="form-label" for="item_<%= idx %>_period"><%= t("comp_billing.countable_items_form.period_label") %></label>
+            <%= select_tag "#{input_prefix}[period]",
+                  options_for_select(period_options, item.period),
+                  id: "item_#{idx}_period",
+                  class: "input-field",
+                  "aria-label": t("comp_billing.countable_items_form.period_for", key: item.key) %>
+          </div>
+
+          <div class="min-w-0 sm:col-span-2 lg:col-span-12">
+            <label class="form-label" for="item_<%= idx %>_description"><%= t("common.labels.description") %></label>
+            <%= text_area_tag "#{input_prefix}[description]", item.description,
+                  id: "item_#{idx}_description",
+                  rows: 1,
+                  class: "input-field resize-none",
+                  placeholder: t("comp_billing.countable_items_form.description_placeholder"),
+                  "aria-label": t("comp_billing.countable_items_form.description_for", key: item.key) %>
+          </div>
+        </div>
+      </li>
+    <% end %>
+  </ol>
+
+  <div class="flex items-center justify-end border-t border-border-subtle bg-canvas-elevated px-4 py-3 sm:px-5">
+    <%= f.submit t("comp_billing.countable_items_form.save_changes"), class: "btn btn-primary w-full sm:w-auto" %>
+  </div>
+<% end %>

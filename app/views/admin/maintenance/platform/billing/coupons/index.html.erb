@@ -1,0 +1,14 @@
+<%= render Billing::Admin::PlatformPageComponent.new(
+  customer_id: current_customer_id,
+  section: :coupons,
+  title: t("maint_platform.billing.coupons.index.title"),
+  description: t("maint_platform.billing.coupons.index.description"),
+  actions: [
+    { label: t("maint_platform.billing.coupons.index.new_coupon"),
+      path: new_admin_maintenance_platform_billing_coupon_path(current_customer_id),
+      variant: :primary, icon: :plus }
+  ]
+) do %>
+  <%= render Billing::Admin::CouponTableComponent.new(coupons: @coupons, customer_id: current_customer_id,
+        pagination: @pagination, page_path: @page_path) %>
+<% end %>

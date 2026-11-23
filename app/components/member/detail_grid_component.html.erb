@@ -1,0 +1,8 @@
+<dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
+  <% visible_rows.each do |row| %>
+    <div class="<%= cell_class(row) %>">
+      <dt class="<%= chrome.label_class %>"><%= row[:label] %></dt>
+      <dd class="<%= value_class(row) %>"><%= render_value(row) %></dd>
+    </div>
+  <% end %>
+</dl>

@@ -1,0 +1,33 @@
+<section class="<%= padding_class %> <%= theme.band_class unless custom_background? %>">
+  <div class="<%= inner_measure_class %> flex flex-col <%= gap_class %>">
+    <%= header(kicker: prop("kicker"), heading: prop("heading"), align: :center) %>
+    <div class="gap-6 <%= columns_class %>">
+      <% items.each do |item| %>
+        <figure <%= item_attrs("items", framed: true, class: "mb-6 flex break-inside-avoid flex-col gap-6 rounded-2xl p-7 md:p-8 #{card_border_class}") %>>
+          <blockquote>
+            <p <%= el_attrs("items.quote", class: "text-pretty text-site-md leading-relaxed md:text-site-lg") %>><%= item["quote"] %></p>
+          </blockquote>
+          <% if present_text?(item["name"]) || present_text?(item["role"]) %>
+            <figcaption class="flex items-center gap-3">
+              <div class="relative size-10 shrink-0 overflow-hidden rounded-full <%= theme.accent_soft_class %>">
+                <% if Websites::Href.media?(item["image_url"].to_s.strip) %>
+                  <img src="<%= item["image_url"] %>" alt="" class="absolute inset-0 size-full object-cover" loading="lazy">
+                <% else %>
+                  <span class="absolute inset-0 flex items-center justify-center text-site-xs font-medium"><%= initials(item["name"]) %></span>
+                <% end %>
+              </div>
+              <div class="flex min-w-0 flex-col">
+                <% if present_text?(item["name"]) %>
+                  <span <%= el_attrs("items.name", class: "truncate text-site-sm font-medium") %>><%= item["name"] %></span>
+                <% end %>
+                <% if present_text?(item["role"]) %>
+                  <span <%= el_attrs("items.role", class: "truncate text-site-sm #{muted_class}") %>><%= item["role"] %></span>
+                <% end %>
+              </div>
+            </figcaption>
+          <% end %>
+        </figure>
+      <% end %>
+    </div>
+  </div>
+</section>

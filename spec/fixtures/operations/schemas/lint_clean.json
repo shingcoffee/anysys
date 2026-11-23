@@ -1,0 +1,39 @@
+{
+  "title": "Lint clean",
+  "description": "A fully described contract used by SchemaLint.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name to accept."
+    },
+    "choice": {
+      "type": "string",
+      "description": "A closed choice.",
+      "enum": ["alpha", "beta"],
+      "x-enum-descriptions": {
+        "alpha": "The first choice.",
+        "beta": "The second choice."
+      }
+    }
+  },
+  "allOf": [
+    {
+      "description": "When choice is alpha, name must be non-empty.",
+      "if": {
+        "properties": { "choice": { "const": "alpha" } },
+        "required": ["choice"]
+      },
+      "then": {
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "description": "A non-empty name." }
+        }
+      }
+    }
+  ],
+  "examples": [
+    { "name": "Ready", "choice": "alpha" }
+  ]
+}

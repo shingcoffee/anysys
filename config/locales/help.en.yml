@@ -1,0 +1,31 @@
+en:
+  help:
+    errors:
+      too_many_files: "too many files (maximum %{count})"
+      invalid_file_type: "is not an allowed file type"
+      file_too_large: "must be %{size} or smaller"
+      file_size_label: "5MB"
+      resolved: "This ticket is resolved."
+      invalid_role: "is not a valid author role"
+      owner_cannot_notify: "Platform owners cannot notify themselves."
+    flash:
+      created: "Support ticket sent to the platform owner."
+      replied: "Reply sent."
+      email_sent: "Email sent to help@anysys.com."
+      email_failed: "The help email could not be sent. Please try again later."
+      resolved: "Support ticket marked resolved."
+    status:
+      open: "Open"
+      resolved: "Resolved"
+    unread: "Unread"
+  help_mailer:
+    shell:
+      brand: "Anysys"
+      footer: "Sent from Anysys Help. Reply to this email to reach the requester."
+    support_request:
+      subject: "Help email: %{subject}"
+      preheader: "New help email from an Anysys admin: %{subject}"
+      heading: "Help email"
+      label_customer: "Customer"
+      label_from: "From"
+      label_page: "Page"

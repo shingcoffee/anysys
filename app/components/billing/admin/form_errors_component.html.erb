@@ -1,0 +1,10 @@
+<div class="mb-4" role="alert">
+  <%= render AlertComponent.new(message: t("comp_billing.forms.invalid"), type: :error, auto_dismiss: false) %>
+  <ul class="mt-2 list-disc space-y-1 pl-5 text-danger">
+    <% errors.to_hash.each do |field, messages| %>
+      <% Array(messages).each do |message| %>
+        <li><%= link_to t("comp_billing.forms.field_error", field: t("#{label_prefix}.#{field}", default: t("common.labels.description")), message: message), "##{scope}_#{field.to_s.tr('.', '_')}", class: "underline" %></li>
+      <% end %>
+    <% end %>
+  </ul>
+</div>

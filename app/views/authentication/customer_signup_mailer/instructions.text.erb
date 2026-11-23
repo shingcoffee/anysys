@@ -1,0 +1,10 @@
+<% confirm_url = customer_registration_confirm_url(token: @token) %>
+<%= t("auth.mailer.customer_signup.greeting", email: @email) %>
+
+<%= t("auth.mailer.customer_signup.instructions") %>
+
+<%= confirm_url %>
+
+<%= t("auth.mailer.customer_signup.ignore") %>
+
+<%= t("auth.mailer.customer_signup.footer") %>

@@ -1,0 +1,19 @@
+<% if fields.any? %>
+  <%= form_with url: helpers.admin_maintenance_module_owner_configuration_path(customer_id, feature_module), method: :patch, local: true,
+        class: "flex flex-col gap-3 rounded-lg border border-border-subtle bg-surface-active/50 p-4",
+        data: { module_owner_configuration: feature_module.key } do %>
+    <div class="flex flex-col gap-0.5">
+      <p class="text-xs font-semibold uppercase tracking-wide text-text-secondary"><%= t("maint_core.modules.index.owner_limits_title") %></p>
+      <p class="text-xs text-text-muted"><%= t("maint_core.modules.index.owner_limits_hint") %></p>
+    </div>
+    <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+      <% fields.each do |key, definition| %>
+        <div class="flex w-full flex-col gap-1 sm:w-48">
+          <%= label_tag "owner_configuration_#{feature_module.key}_#{key}", field_label(key), class: "text-sm font-medium text-text-primary" %>
+          <%= number_field_tag "configuration[#{key}]", field_value(key, definition), id: "owner_configuration_#{feature_module.key}_#{key}", min: (key == "max_duration_seconds" ? 1 : 0), step: 1, required: true, class: "input-field min-h-9 w-full tabular-nums" %>
+        </div>
+      <% end %>
+      <%= submit_tag t("maint_core.modules.index.save_limit"), class: "btn btn-secondary w-full sm:w-auto" %>
+    </div>
+  <% end %>
+<% end %>

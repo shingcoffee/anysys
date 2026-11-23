@@ -1,0 +1,63 @@
+<div class="group/start flex gap-3 pb-4 sm:gap-4" data-role="journey-start">
+  <div class="flex flex-col items-center" aria-hidden="true">
+    <span class="flex size-8 shrink-0 items-center justify-center rounded-full border border-border bg-canvas text-text-secondary">
+      <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 4.5v15l12-7.5-12-7.5z" /></svg>
+    </span>
+    <span class="mt-2 w-px flex-1 bg-border-subtle"></span>
+  </div>
+
+  <fieldset class="min-w-0 flex-1 rounded-lg border border-border-subtle bg-canvas p-4">
+    <legend class="sr-only"><%= t("journeys.admin.start.legend") %></legend>
+    <%= hidden_field_tag field(:key), key, id: nil, data: { journey_builder_target: "startKey" } %>
+
+    <div class="flex min-h-8 flex-col gap-0.5">
+      <p class="text-xs font-medium uppercase tracking-wide text-text-muted" aria-hidden="true"><%= t("journeys.admin.start.legend") %></p>
+      <p class="text-sm text-text-secondary"><%= t("journeys.admin.start.description") %></p>
+    </div>
+
+    <div class="mt-3 inline-flex w-full rounded-lg border border-border-subtle bg-surface-active p-0.5 sm:w-auto">
+      <% KINDS.each do |value| %>
+        <label class="inline-flex min-h-9 flex-1 cursor-pointer items-center justify-center rounded-md px-3 text-sm font-medium text-text-secondary transition-base hover:text-text-primary has-[:checked]:bg-surface has-[:checked]:text-text-primary has-[:checked]:shadow-sm has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent sm:flex-none">
+          <%= radio_button_tag field(:kind), value, kind == value, id: nil, class: "sr-only", data: kind_data(value) %>
+          <%= kind_label(value) %>
+        </label>
+      <% end %>
+    </div>
+
+    <p class="mt-3 text-xs text-text-muted group-has-[[data-start-record]:checked]/start:hidden group-has-[[data-start-user]:checked]/start:hidden"><%= t("journeys.admin.start.create_hint") %></p>
+    <p class="mt-3 hidden text-xs text-text-muted group-has-[[data-start-user]:checked]/start:block" data-role="journey-start-user-hint"><%= t("journeys.admin.start.user_hint") %></p>
+    <div class="mt-3 hidden max-w-md group-has-[[data-start-record]:checked]/start:block">
+      <label class="block min-w-0">
+        <span class="form-label form-label-required"><%= t("journeys.admin.start.entity") %></span>
+        <%= select_tag field(:entity_id), options_for_select(entity_options, entity_id), include_blank: t("journeys.admin.start.entity_prompt"),
+                       id: "journey-start-entity", class: "input-field min-h-10 w-full", aria: { describedby: "journey-start-record-hint" },
+                       data: { journey_builder_target: "startEntity", action: "change->journey-builder#recordTypeChanged" } %>
+      </label>
+      <p id="journey-start-record-hint" class="mt-1.5 text-xs text-text-muted"><%= t("journeys.admin.start.record_hint") %></p>
+    </div>
+
+    <fieldset class="mt-4 hidden min-w-0 border-t border-border-subtle pt-4 group-has-[[data-start-record]:checked]/start:block"
+              aria-describedby="journey-start-when-hint" data-role="journey-start-when">
+      <legend class="sr-only"><%= t("journeys.admin.start.when") %></legend>
+      <p class="form-label" aria-hidden="true"><%= t("journeys.admin.start.when") %></p>
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <label class="block min-w-0">
+          <span class="form-label"><%= t("journeys.admin.start.when_field") %></span>
+          <%= select_tag when_field_name, options_for_select(field_options, when_field), include_blank: t("journeys.admin.start.when_any"),
+                         id: "journey-start-when-field", class: "input-field min-h-10 w-full",
+                         data: { journey_builder_target: "whenField", action: "change->journey-builder#whenFieldChanged" } %>
+        </label>
+        <div class="min-w-0" data-journey-builder-target="whenValues"<% if values_hidden? %> hidden<% end %>>
+          <p class="form-label"><%= t("journeys.admin.start.when_values") %></p>
+          <div class="flex flex-wrap gap-2" data-when-options>
+            <% value_options.each do |label, value, sources| %>
+              <%= value_choice(label, value, sources) %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <p id="journey-start-when-hint" class="mt-1.5 text-xs text-text-muted"><%= t("journeys.admin.start.when_hint") %></p>
+    </fieldset>
+    <template data-journey-builder-target="whenValueTemplate"><%= value_choice("", "") %></template>
+  </fieldset>
+</div>

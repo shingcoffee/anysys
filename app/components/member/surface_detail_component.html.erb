@@ -1,0 +1,27 @@
+<%= render Member::PageHeaderComponent.new(
+      title:    title,
+      subtitle: subtitle,
+      eyebrow:  eyebrow,
+      meta:     meta
+    ) %>
+
+<div class="space-y-6">
+  <% visible_sections.each do |section| %>
+    <% if grid_section?(section) %>
+      <%= render Member::PageSectionComponent.new(title: section[:title]) do %>
+        <%= render Member::DetailGridComponent.new(rows: section[:rows], record: record) %>
+      <% end %>
+    <% elsif list_section?(section) %>
+      <%= render Member::PageSectionComponent.new(title: section[:title]) do %>
+        <ul class="<%= chrome.table_divide_class %>">
+          <% list_items(section).each do |item| %>
+            <li class="<%= chrome.list_row_class %>">
+              <span class="<%= chrome.body_copy_class %>"><%= render_left(item) %></span>
+              <span class="font-mono text-site-sm tabular-nums"><%= render_right(item) %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

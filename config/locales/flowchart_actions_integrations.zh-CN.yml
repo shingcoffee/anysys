@@ -1,0 +1,125 @@
+zh-CN:
+  flowchart_actions:
+    verify_signature:
+      label: 校验签名
+      description: 校验入站 Webhook 的 HMAC 签名
+      fields:
+        payloadVariable:
+          label: 报文
+          help: 被签名的原始请求体在上下文中的路径。
+        signatureVariable:
+          label: 签名
+          help: 签名请求头或查询参数在上下文中的路径。
+        secretSource:
+          label: 密钥来源
+          help: 从何处读取 HMAC 密钥。禁止在流程中填写明文密钥。
+          options:
+            credentials: 凭据
+            env: 环境变量
+            ctx: 上下文
+        keyPath:
+          label: 密钥路径
+          help: 存放密钥的凭据点分路径或环境变量名。
+          placeholder: 凭据路径（a.b）或环境变量名
+        secretVariable:
+          label: 密钥变量
+          help: HMAC 密钥在上下文中的路径。
+        algorithm:
+          label: 算法
+          help: 用于重算签名的 HMAC 摘要算法。
+          options:
+            sha256: SHA-256
+            sha512: SHA-512
+            sha1: SHA-1
+        encoding:
+          label: 编码
+          help: 比较前 HMAC 摘要的编码方式。
+          options:
+            hex: 十六进制
+            base64: Base64
+        signaturePrefix:
+          label: 签名前缀
+          help: 比较前从请求头剥离的前缀（例如 sha256=）。
+          placeholder: 例如 sha256=
+        signedPayload:
+          label: 签名载荷
+          help: HMAC 仅覆盖报文体，还是覆盖时间戳加报文体。
+          options:
+            body: 报文体
+            timestamp_body: 时间戳+报文体
+        timestampVariable:
+          label: 时间戳
+          help: 写入签名载荷的时间戳在上下文中的路径。
+        payloadSeparator:
+          label: 载荷分隔符
+          help: 同时签名时间戳与报文体时插入两者之间的字符串。
+        toleranceSeconds:
+          label: 容差秒数
+          help: 允许的时间戳最大年龄（秒）；0 表示不校验时效。
+        onInvalid:
+          label: 签名无效时
+          help: 使步骤失败，或写入 false 后继续。
+          options:
+            fail: 失败
+            flag: 标记
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+      errors:
+        invalid_env_name: "keyPath 无效：%{value}。须为合法环境变量名"
+        invalid_credential_path: "keyPath 分段无效：%{value}。须为凭据键，例如 webhooks.signing_secret"
+    send_chat_message:
+      label: 发送聊天消息
+      description: 向团队群聊的入站 Webhook 投递消息
+      fields:
+        provider:
+          label: 平台
+          help: 入站 Webhook 所属的即时通讯平台。
+          options:
+            slack: Slack
+            teams: Teams
+            dingtalk: 钉钉
+            wecom: 企业微信
+            feishu: 飞书
+        webhookUrl:
+          label: Webhook 地址
+          help: 入站 Webhook 地址（Ruby 表达式）。
+          placeholder: https://hooks.example.com/services/...
+        messageType:
+          label: 消息类型
+          help: 纯文本或 Markdown 载荷。
+          options:
+            text: 文本
+            markdown: Markdown
+        title:
+          label: 标题
+          help: 显示在 Markdown 消息上方的可选标题。
+        text:
+          label: 正文
+          help: 消息正文。Liquid 占位符从上下文填充。
+          placeholder: 新订单 {{order_number}}
+        mentionAll:
+          label: "@所有人"
+          help: 提醒频道或群组中的每一位成员。
+        mentionMobiles:
+          label: "@手机号"
+          help: 在钉钉或企业微信中 @ 的手机号列表。
+        signingSecret:
+          label: 加签密钥
+          help: 钉钉或飞书机器人加签密钥的表达式。
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+  flowchart_runtime:
+    chat_message:
+      mention_all: 所有人
+    errors:
+      verify_signature:
+        invalid: Webhook 签名无效。
+        expired: Webhook 签名已过期。
+        missing_secret: 缺少 Webhook 加签密钥。
+      send_chat_message:
+        delivery_failed: 聊天消息投递失败（HTTP %{status}）。
+        provider_error: 聊天平台拒绝了该消息（%{code}）。
+        render_failed: 无法渲染聊天消息（%{reason}）。
+        transport_failed: 聊天消息发送失败（%{reason}）。

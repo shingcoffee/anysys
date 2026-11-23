@@ -1,0 +1,50 @@
+<div class="flex flex-col gap-6" data-email-send-activity-wizard-target="reviewPanel">
+  <dl class="divide-y divide-border-subtle">
+    <div class="py-3 grid grid-cols-1 sm:grid-cols-3 gap-1">
+      <dt class="form-label"><%= t("common.labels.name") %></dt>
+      <dd class="text-body text-text-primary sm:col-span-2" data-email-send-activity-wizard-target="reviewName">
+        <%= send_activity.name.presence || t("common.labels.em_dash") %>
+      </dd>
+    </div>
+    <div class="py-3 grid grid-cols-1 sm:grid-cols-3 gap-1">
+      <dt class="form-label"><%= t("admin_modules.emails.send_activities.form.lists_label") %></dt>
+      <dd class="text-body text-text-primary sm:col-span-2" data-email-send-activity-wizard-target="reviewList">
+        <%= send_activity.email_lists.any? ? send_activity.email_lists.map(&:name).join(", ") : t("common.labels.em_dash") %>
+      </dd>
+    </div>
+    <div class="py-3 grid grid-cols-1 sm:grid-cols-3 gap-1">
+      <dt class="form-label"><%= t("admin_modules.emails.send_activities.show.unique_recipients") %></dt>
+      <dd class="text-body text-text-primary sm:col-span-2" data-email-send-activity-wizard-target="reviewAudienceCount">
+        <%= send_activity.email_lists.any? ? send_activity.audience_count : t("common.labels.em_dash") %>
+      </dd>
+    </div>
+    <div class="py-3 grid grid-cols-1 sm:grid-cols-3 gap-1">
+      <dt class="form-label"><%= t("admin_modules.emails.send_activities.form.template_label") %></dt>
+      <dd class="text-body text-text-primary sm:col-span-2" data-email-send-activity-wizard-target="reviewTemplate">
+        <%= send_activity.email_template&.name || t("common.labels.em_dash") %>
+      </dd>
+    </div>
+    <div class="py-3 grid grid-cols-1 sm:grid-cols-3 gap-1">
+      <dt class="form-label"><%= t("admin_modules.emails.send_activities.form.schedule_label") %></dt>
+      <dd class="text-body text-text-primary sm:col-span-2" data-email-send-activity-wizard-target="reviewSchedule">
+        <% if send_activity.scheduled_at.present? && send_activity.send_timing != "now" %>
+          <%= l(send_activity.scheduled_at.in_time_zone(send_activity.timezone), format: :long) %>
+        <% else %>
+          <%= t("admin_modules.emails.send_activities.review.send_now") %>
+        <% end %>
+      </dd>
+    </div>
+    <div class="py-3 grid grid-cols-1 sm:grid-cols-3 gap-1" data-email-send-activity-wizard-target="reviewTimezoneRow">
+      <dt class="form-label"><%= t("common.labels.timezone") %></dt>
+      <dd class="text-body text-text-primary sm:col-span-2" data-email-send-activity-wizard-target="reviewTimezone">
+        <%= send_activity.timezone %>
+      </dd>
+    </div>
+    <div class="py-3 grid grid-cols-1 sm:grid-cols-3 gap-1">
+      <dt class="form-label"><%= t("admin_modules.emails.send_activities.form.recurrence_label") %></dt>
+      <dd class="text-body text-text-primary sm:col-span-2" data-email-send-activity-wizard-target="reviewRecurrence">
+        <%= t("admin_modules.emails.send_activities.form.recurrence_presets.#{Emails::SendActivities::RecurrencePresets.preset_for(send_activity.recurrence_rule)}") %>
+      </dd>
+    </div>
+  </dl>
+</div>

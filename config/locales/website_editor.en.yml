@@ -1,0 +1,78 @@
+en:
+  website:
+    admin:
+      pages:
+        edit:
+          back: "Back to pages"
+          kit_catalog: "Section types"
+          inspector_hint: "Edit the selected section. Changes appear in the preview."
+          preview_address: "Preview"
+          address_label: "Public address"
+          address_hidden: "Not visible to visitors yet"
+          address_opens: "(opens in a new tab)"
+          section_position: "%{number} of %{total}"
+          previous_section: "Previous"
+          next_section: "Next"
+          section_steps: "Move between sections"
+          back_to_sections: "All sections"
+          identity_preview: "Title, visibility, and home page"
+        index:
+          list_label: "Pages"
+        style:
+          heading: "Design"
+          trigger: "Design: %{target}"
+          reset: "Reset design"
+          edited: "Edited"
+          default: "Theme"
+          custom: "Custom color"
+          targets:
+            section: "Section"
+            buttons: "Buttons"
+            items: "%{list} items"
+          attributes:
+            background: "Background"
+            custom_background: "Custom background"
+            heading_font: "Heading font"
+            body_font: "Body font"
+            scale: "Text scale"
+            color: "Color"
+            font: "Font"
+            size: "Size"
+            weight: "Weight"
+            italic: "Style"
+            align: "Alignment"
+            shape: "Shape"
+            fill: "Fill"
+            text: "Text color"
+          tokens:
+            accent: "Accent"
+            ink: "Ink"
+            body: "Body"
+            muted: "Muted"
+            inverse: "Inverse"
+            band: "Band"
+            accent_soft: "Accent tint"
+            canvas: "Page"
+          options:
+            scales:
+              xs: "XS"
+              sm: "S"
+              lg: "L"
+              xl: "XL"
+              2xl: "2XL"
+            weights:
+              regular: "Regular"
+              medium: "Medium"
+              semibold: "Semibold"
+              bold: "Bold"
+            italics:
+              italic: "Italic"
+              normal: "Upright"
+            aligns:
+              start: "Start"
+              center: "Center"
+              end: "End"
+            shapes:
+              pill: "Pill"
+              rounded: "Rounded"
+              square: "Square"

@@ -1,0 +1,206 @@
+<%
+  show_actions = [
+    {
+      label: t("maint_core.nav.versions"),
+      path: "#",
+      variant: :ghost,
+      data: {
+        turbo: "false",
+        action: "versions#open",
+        "versions-id-param": @entity.id,
+        "versions-name-param": @entity.display_label
+      }
+    }
+  ]
+  if can_copy_definition?(@entity)
+    show_actions << {
+      label: t("common.actions.copy"),
+      path: admin_maintenance_entity_copy_path(current_customer_id, @entity),
+      variant: :secondary
+    }
+  end
+  show_actions << {
+    label: t("common.actions.edit"),
+    path: edit_admin_maintenance_entity_path(current_customer_id, @entity),
+    variant: :primary,
+    icon: :edit
+  }
+  if (reset = definition_override_reset_action(@entity))
+    show_actions << reset
+  end
+  if can_destroy_definition?(@entity)
+    show_actions << {
+      label: t("common.actions.delete"),
+      path: admin_maintenance_entity_path(current_customer_id, @entity),
+      variant: :danger,
+      icon: :trash,
+      data: { turbo_method: :delete, turbo_confirm: t("maint_core.entities.show.delete_confirm") }
+    }
+  end
+%>
+<%= tag.div(data: {
+      controller: "versions",
+      "versions-customer-id-value": current_customer_id,
+      "versions-resource-value": "entities"
+    }.merge(versions_i18n_data)) do %>
+<%= render AdminPageComponent.new(
+  breadcrumbs: definition_resource_breadcrumbs(:entities, @entity.display_label),
+  title: @entity.display_label,
+  description: @entity.description.presence,
+  actions: show_actions
+) do %>
+<%= tag.div(
+  data: {
+    controller: "entity-form",
+    entity_form_name_label_value: t("common.labels.name"),
+    entity_form_display_label_header_value: t("maint_core.entities.attrs.display_label"),
+    entity_form_html_type_header_value: t("maint_core.entities.attrs.html_type"),
+    entity_form_validators_header_value: t("maint_core.entities.attrs.validators"),
+    entity_form_visibility_header_value: t("maint_core.entities.attrs.visibility"),
+    entity_form_group_ungrouped_label_value: t("maint_core.entities.attrs.ungrouped"),
+    entity_form_admin_label_value: t("comp_admin.attribute_modal.admin"),
+    entity_form_member_label_value: t("comp_admin.attribute_modal.member"),
+    entity_form_public_label_value: t("comp_admin.attribute_modal.public"),
+    entity_form_visible_label_value: t("comp_admin.attribute_modal.visible"),
+    entity_form_editable_label_value: t("comp_admin.attribute_modal.editable"),
+    entity_form_apply_validators_label_value: t("comp_admin.attribute_modal.apply_validators"),
+    entity_form_none_label_value: t("common.labels.none"),
+    entity_form_group_header_value: t("comp_admin.attribute_modal.group_label"),
+    entity_form_configuration_header_value: t("comp_admin.attribute_modal.configuration_label"),
+    entity_form_description_header_value: t("common.labels.description"),
+    entity_form_identity_section_header_value: t("maint_core.entities.attr_view.identity"),
+    entity_form_audience_section_header_value: t("maint_core.entities.attr_view.audience"),
+    entity_form_validation_section_header_value: t("maint_core.entities.attr_view.validation"),
+    entity_form_details_section_header_value: t("maint_core.entities.attr_view.details"),
+    entity_form_no_description_provided_label_value: t("comp_admin.attribute_modal.no_description_provided"),
+    entity_form_config_label_header_value: t("comp_admin.attribute_modal.config_label_header"),
+    entity_form_config_value_header_value: t("comp_admin.attribute_modal.config_value_header"),
+    entity_form_option_default_label_value: t("comp_admin.attribute_modal.option_default_label"),
+    entity_form_config_accept_label_value: t("comp_admin.attribute_modal.config_accept_label"),
+    entity_form_config_multiple_label_value: t("comp_admin.attribute_modal.config_multiple_label"),
+    entity_form_yes_label_value: t("common.labels.yes"),
+    entity_form_no_label_value: t("common.labels.no"),
+    entity_form_html_type_labels_value: t("comp_admin.attribute_modal.html_type_labels").to_json,
+    entity_form_validator_labels_value: ValidatorRegistry.labels_for_js.to_json
+  }
+) do %>
+  <input type="hidden"
+         data-entity-form-target="attributeGroupsInput"
+         value="<%= (@entity.attribute_groups_json || []).to_json %>">
+
+  <div class="flex flex-wrap items-center gap-2 mb-6">
+    <div class="size-8 rounded-lg flex-shrink-0 flex items-center justify-center
+                <%= attribute_group_color_classes(@entity.color.presence || 'slate', variant: :bar) %>">
+      <%= attribute_group_icon(@entity.icon.presence || 'folder', css_class: "size-4 text-white") %>
+    </div>
+    <% if @entity.bridge_entity? %>
+      <%= render BadgeComponent.new(variant: :primary, size: :sm) do %>
+        <%= t("comp_misc.entity_info.bridge") %>
+      <% end %>
+    <% else %>
+      <%= render BadgeComponent.new(variant: :default, size: :sm) do %>
+        <%= t("comp_misc.entity_info.standard") %>
+      <% end %>
+    <% end %>
+    <% if @entity.extended_model.present? %>
+      <%= render BadgeComponent.new(variant: :info, size: :sm, data: { role: "extends-badge" }) do %>
+        <%= t("comp_misc.entity_info.extends_model", model: @entity.extended_model.demodulize) %>
+      <% end %>
+    <% end %>
+    <% if (current_version = @entity.display_current_version) %>
+      <%= render BadgeComponent.new(variant: :default, size: :sm) do %>
+        v<%= current_version.version_number %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if @entity.bridge_entity? %>
+    <%= render AlertComponent.new(message: t("maint_core.entities.show.bridge_notice"), type: :info) %>
+  <% end %>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+    <div class="lg:col-span-2 flex flex-col gap-6">
+      <%= render Entities::AccessCardComponent.new(entity: @entity, customer_id: current_customer_id) %>
+
+      <div class="card overflow-hidden">
+        <div class="px-5 py-3.5 border-b border-border-subtle">
+          <h2 class="text-sm font-medium text-text-primary"><%= t("maint_core.entities.show.entity_attributes") %></h2>
+        </div>
+        <div class="p-5">
+          <% attributes = @entity.property_schema_json || [] %>
+          <% if attributes.any? %>
+            <%= render "admin/maintenance/entities/attributes_table",
+                       entity: @entity,
+                       attributes: attributes,
+                       editable: false,
+                       show_view_action: true,
+                       show_visibility: false,
+                       truncate_validators: true %>
+          <% else %>
+            <p class="text-body-sm text-text-muted text-center py-8"><%= t("maint_core.entities.show.no_attributes") %></p>
+          <% end %>
+        </div>
+      </div>
+
+      <% unless @entity.bridge_entity? %>
+        <div class="card overflow-hidden">
+          <div class="px-5 py-3.5 border-b border-border-subtle">
+            <h2 class="text-sm font-medium text-text-primary"><%= t("maint_core.entities.show.entity_associations") %></h2>
+          </div>
+          <div class="p-5">
+            <% associations = @entity.associations_json || [] %>
+            <% if associations.any? %>
+              <%= render "admin/maintenance/entities/associations_table",
+                         associations: associations,
+                         editable: false,
+                         pending_bridge_label: t("maint_core.entities.assoc.not_created_yet") %>
+            <% else %>
+              <p class="text-body-sm text-text-muted text-center py-8"><%= t("maint_core.entities.show.no_associations") %></p>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <details class="card overflow-hidden group">
+        <summary class="px-5 py-3.5 flex items-center justify-between gap-3 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+          <h2 class="text-sm font-medium text-text-primary"><%= t("maint_core.entities.show.entry_model") %></h2>
+          <span class="text-caption text-text-muted flex-shrink-0 group-open:hidden"><%= t("maint_core.entities.show.generated_expand") %></span>
+          <span class="text-caption text-text-muted flex-shrink-0 hidden group-open:inline"><%= t("maint_core.entities.show.generated_collapse") %></span>
+        </summary>
+        <div class="px-5 pb-5 border-t border-border-subtle pt-4">
+          <% if @model_code.present? %>
+            <%= render CodeBlockComponent.new(code: @model_code, language: "ruby", filename: "entity_entry.rb") %>
+          <% else %>
+            <p class="text-body-sm text-text-muted text-center py-8"><%= t("maint_core.entities.show.no_model") %></p>
+            <p class="text-caption text-center"><%= t("maint_core.entities.show.no_model_hint") %></p>
+          <% end %>
+        </div>
+      </details>
+
+      <details class="card overflow-hidden group">
+        <summary class="px-5 py-3.5 flex items-center justify-between gap-3 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+          <h2 class="text-sm font-medium text-text-primary"><%= t("maint_core.entities.show.entry_contract") %></h2>
+          <span class="text-caption text-text-muted flex-shrink-0 group-open:hidden"><%= t("maint_core.entities.show.generated_expand") %></span>
+          <span class="text-caption text-text-muted flex-shrink-0 hidden group-open:inline"><%= t("maint_core.entities.show.generated_collapse") %></span>
+        </summary>
+        <div class="px-5 pb-5 border-t border-border-subtle pt-4">
+          <% if @contract_code.present? %>
+            <%= render CodeBlockComponent.new(code: @contract_code, language: "ruby", filename: "entity_entry_contract.rb") %>
+          <% else %>
+            <p class="text-body-sm text-text-muted text-center py-8"><%= t("maint_core.entities.show.no_contract") %></p>
+            <p class="text-caption text-center"><%= t("maint_core.entities.show.no_contract_hint") %></p>
+          <% end %>
+        </div>
+      </details>
+    </div>
+
+    <div class="lg:sticky lg:top-6">
+      <%= render Entities::InfoCardComponent.new(entity: @entity, customer_id: current_customer_id) %>
+    </div>
+  </div>
+
+  <%= render "admin/maintenance/entities/attribute_view_modal" %>
+<% end %>
+  <%= render VersionsModalComponent.new %>
+<% end %>
+<% end %>

@@ -1,0 +1,155 @@
+# Industry taxonomy — single source of truth for the Customer#industry enum
+# AND the grouped select options (Customer::INDUSTRY_GROUPS / grouped_industry_options).
+# Each industry maps to the integer persisted in customers.industry — DO NOT change
+# an existing keys integer (it would corrupt stored rows). Group order and within-group
+# order drive the select UI. Add new industries with the next free integer.
+---
+- name: "Technology \u0026 Digital"
+  industries:
+    technology: 0
+    software: 1
+    telecommunications: 2
+    cybersecurity: 3
+    artificial_intelligence: 4
+    cloud_computing: 5
+    gaming: 6
+    blockchain_cryptocurrency: 7
+    internet_of_things: 8
+    data_analytics: 9
+- name: "Finance \u0026 Insurance"
+  industries:
+    banking: 10
+    insurance: 11
+    financial_services: 12
+    accounting: 13
+    fintech: 14
+    investment_management: 15
+- name: "Healthcare \u0026 Life Sciences"
+  industries:
+    healthcare: 20
+    pharmaceuticals: 21
+    biotechnology: 22
+    medical_devices: 23
+    mental_health: 24
+    dental: 25
+    veterinary: 26
+- name: "Education \u0026 Research"
+  industries:
+    education: 30
+    higher_education: 31
+    edtech: 32
+    research: 33
+    training_development: 34
+- name: "Manufacturing \u0026 Industrial"
+  industries:
+    manufacturing: 40
+    automotive: 41
+    aerospace: 42
+    chemicals: 43
+    electronics: 44
+    food_processing: 45
+    textiles_apparel: 46
+    metals_steel: 47
+    plastics_rubber: 48
+    printing_packaging: 49
+    furniture_manufacturing: 160
+    robotics_automation: 161
+- name: "Primary Industries"
+  industries:
+    agriculture: 62
+    forestry_timber: 63
+    fishing_aquaculture: 64
+- name: "Retail \u0026 Consumer"
+  industries:
+    retail: 50
+    ecommerce: 51
+    consumer_goods: 52
+    fashion_apparel: 53
+    luxury_goods: 54
+    jewelry_watches: 55
+- name: "Food \u0026 Beverage"
+  industries:
+    food_beverage: 60
+    restaurants: 61
+- name: "Energy \u0026 Utilities"
+  industries:
+    energy: 70
+    oil_gas: 71
+    renewable_energy: 72
+    utilities: 73
+    mining: 74
+- name: "Construction \u0026 Real Estate"
+  industries:
+    construction: 80
+    real_estate: 81
+    architecture: 82
+    interior_design: 83
+    engineering_services: 84
+- name: "Transportation \u0026 Logistics"
+  industries:
+    transportation: 90
+    logistics: 91
+    airlines: 92
+    shipping: 93
+    maritime: 94
+    railroad: 95
+    warehousing_storage: 96
+    courier_postal: 97
+- name: "Media \u0026 Entertainment"
+  industries:
+    media: 100
+    entertainment: 101
+    publishing: 102
+    advertising: 103
+    film_television: 104
+    music: 105
+    photography_videography: 106
+- name: "Professional Services"
+  industries:
+    consulting: 110
+    legal: 111
+    recruitment: 112
+    marketing: 113
+    public_relations: 114
+    translation_interpretation: 115
+- name: "Hospitality \u0026 Tourism"
+  industries:
+    hospitality: 120
+    travel_tourism: 121
+    event_management: 122
+- name: "Government \u0026 Public Sector"
+  industries:
+    government: 130
+    defense: 131
+    public_administration: 132
+    law_enforcement: 133
+    space_technology: 134
+- name: "Nonprofit \u0026 Social"
+  industries:
+    nonprofit: 140
+    social_services: 141
+    philanthropy: 142
+    religious_organizations: 143
+- name: "Trades \u0026 Maintenance"
+  industries:
+    hvac_plumbing_electrical: 170
+    automotive_repair: 171
+    cleaning_janitorial: 172
+    landscaping_lawn_care: 173
+    pest_control: 174
+- name: "Other"
+  industries:
+    sports_recreation: 150
+    fitness_wellness: 151
+    beauty_cosmetics: 152
+    home_services: 153
+    childcare: 154
+    environmental_services: 155
+    pet_services: 156
+    waste_management_recycling: 157
+    security_services: 158
+    funeral_memorial: 159
+    dry_cleaning_laundry: 180
+    cannabis: 181
+    coworking_shared_spaces: 182
+    other: 999

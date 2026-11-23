@@ -1,0 +1,76 @@
+zh-CN:
+  operations:
+    violations:
+      entity:
+        name_reserved: "名称 %{name} 因使用 assoc_ 前缀而被保留。"
+        already_exists: "名为 %{name} 的实体已存在。"
+        name_in_trash: "名为 %{name} 的实体在回收站中，请先还原或永久删除后再使用该名称。"
+        duplicate_in_request: "名称 %{name} 在本次请求中出现了多次。"
+        not_found: "未找到名为 %{name} 的可编辑实体。"
+        not_editable: "实体 %{name} 不能通过此操作修改。"
+        person_not_first: "%{name} 扩展了用户模型，是主实体，须排在第一位。"
+        lifecycle_not_choice: "属性 %{slug} 只有作为使用静态选项的下拉或单选输入字段时，才能声明状态流转。"
+        lifecycle_unknown_state: "属性 %{slug} 的状态流转引用了 %{state}，它不是该字段的选项值。"
+        lifecycle_initial_missing: "属性 %{slug} 的状态流转需要恰好一个默认选项，作为新记录的初始状态。"
+        lifecycle_duplicate_transition: "属性 %{slug} 的状态流转重复列出了从 %{from} 到 %{to} 的变更。请只列一次，并在 by 中列出所有受众。"
+        lifecycle_self_transition: "属性 %{slug} 的状态流转包含从 %{state} 到自身的变更，请删除。"
+        owner_multiple: "实体 %{name} 有多个属性设为所有者，请只保留一个。"
+      attribute:
+        duplicate_name: "属性名称 %{name} 出现了多次。"
+        duplicate_slug: "属性标识 %{slug} 出现了多次。"
+        reserved_slug: "属性标识 %{slug} 为保留值。"
+        reserved_by_base_model: "属性标识 %{slug} 已是 %{model} 的字段，请删除该属性或改用其他标识。"
+        reserved_by_record: "属性标识 %{slug} 已被记录本身占用，请改用其他标识，例如 %{suggestion}。"
+        not_found: "未找到标识为 %{slug} 的属性。"
+        unknown_group: "该实体不存在分组 %{group}。"
+        in_use: "属性 %{slug} 仍被公式或聚合引用。"
+        display_field_in_use: "属性 %{slug} 是%{fields}的显示字段。请保留为文本、搜索、邮箱、电话、网址、数字或日期字段，或先在那里更换显示字段。"
+        display_field_hidden: "属性 %{slug} 须对 %{audience} 保持可见，因为已上线的表单 %{form} 使用了该字段。"
+        owner_invalid: "只有引用人员实体的属性才能设为记录所有者：%{slug}。"
+      rule:
+        not_allowed: "规则 %{type} 不允许用于 html_type %{html_type}。允许的规则：%{allowed}。"
+        invalid_range: "范围下限 min %{min} 必须小于或等于上限 max %{max}。"
+        invalid_pattern: "模式 %{pattern} 不是有效的正则表达式。"
+      options:
+        not_applicable: "html_type %{html_type} 不使用选项列表。"
+        duplicate_values: "选项值 %{value} 重复出现。"
+        constant_not_found: "未找到名为 %{name} 的常量。"
+        entity_not_found: "未找到用于选项列表的实体 %{name}。"
+        field_not_found: "实体 %{entity} 上不存在字段 %{field}。"
+        label_field_not_labelable: "实体 %{entity} 上的字段 %{field} 不能作为选项标签，请使用文本、搜索、邮箱、电话、网址、数字或日期字段。"
+      file:
+        not_applicable: "html_type %{html_type} 不使用文件设置。"
+      formula:
+        not_applicable: "当 kind 为 %{kind} 时不应设置公式。"
+        unknown_reference: "公式引用了未知属性 %{name}。"
+      aggregate:
+        not_applicable: "当 kind 为 %{kind} 时不应设置聚合。"
+        association_missing: "此聚合没有指向 %{entity} 的关联。"
+        source_required: "聚合函数 %{function} 需要 source_attribute。"
+        source_not_found: "未找到用于此聚合的桥接属性 %{slug}。"
+        source_not_numeric: "聚合来源 %{slug} 必须是数值型控件。"
+        filter_attribute_not_found: "未找到用于聚合筛选的桥接属性 %{slug}。"
+      group:
+        duplicate_key: "分组键 %{key} 出现了多次。"
+        duplicate_name: "分组名称 %{name} 出现了多次。"
+        not_found: "未找到键为 %{key} 的分组。"
+        order_mismatch: "reorder_groups 的 order 必须恰好列出每个现有分组键各一次（%{expected}）。"
+      association:
+        target_not_found: "未找到用于此关联的实体 %{name}。"
+        self_reference: "实体不能关联到自身（%{name}）。"
+        duplicate: "指向 %{name} 的关联已存在。"
+        not_found: "未找到指向 %{name} 的关联。"
+        display_field_not_found: "实体 %{entity} 上不存在显示字段 %{field}。"
+        display_field_not_labelable: "实体 %{entity} 上的显示字段 %{field} 须为文本、搜索、邮箱、电话、网址、数字或日期字段。"
+        bridge_slug_conflict: "桥接属性标识 %{slug} 与桥接实体上的其他字段冲突。"
+        person_not_primary: "%{entity} 关联了主人员实体 %{name}，请改在 %{name} 上声明此关联。"
+      settings:
+        unknown_default_key: "默认值键 %{key} 与任何属性标识都不匹配。"
+      extends:
+        not_allowed: "当前租户不能扩展 %{name}。"
+        person_not_unique: "%{primary} 已扩展用户模型，%{name} 不能再扩展。每次请求最多只能有一个人员实体。"
+      change:
+        position_target_not_found: "未找到用于该插入位置的现有项 %{target}。"
+      entity_domain:
+        already_exists: "名为 %{name} 的业务域已存在。"
+        not_found: "未找到名为 %{name} 的业务域。"

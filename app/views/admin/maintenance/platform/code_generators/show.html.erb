@@ -1,0 +1,31 @@
+<% content_for :container_width, :edge %>
+
+<div class="h-full flex flex-col bg-canvas">
+  <%= render Platform::CodeGenerators::ToolbarComponent.new(
+    generator_class: @generator_class,
+    path: params[:slug],
+    customer_id: current_customer_id
+  ) %>
+
+  <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+    <aside class="lg:flex-shrink-0">
+      <%= render Platform::CodeGenerators::SidebarComponent.new(
+        sidebar_data: @sidebar_data,
+        search_index: @search_index || [],
+        customer_id: current_customer_id,
+        active_category: @generator_class&._metadata&.dig(:category).to_s,
+        active_element_type: @generator_class&.generator_kind == :element_type ? @generator_class&.generator_name : nil,
+        total_count: @step_actions&.size.to_i + @element_types&.size.to_i
+      ) %>
+    </aside>
+
+    <main class="flex-1 min-w-0 overflow-y-auto bg-canvas">
+      <%= render Platform::CodeGenerators::DetailComponent.new(
+        generator_class: @generator_class,
+        source_code: @source_code,
+        path: params[:slug],
+        customer_id: current_customer_id
+      ) %>
+    </main>
+  </div>
+</div>

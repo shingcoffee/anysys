@@ -1,0 +1,25 @@
+<%= render Admin::Settings::SectionComponent.new(title: t("settings_people.role_details")) do %>
+  <dl class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl">
+    <div>
+      <dt class="form-label"><%= t("settings_people.scope") %></dt>
+      <dd class="mt-1 text-text-secondary"><%= presenter.scope %></dd>
+    </div>
+    <div>
+      <dt class="form-label"><%= t("common.labels.type") %></dt>
+      <dd class="mt-1 text-text-secondary"><%= presenter.kind %></dd>
+    </div>
+    <div>
+      <dt class="form-label"><%= t("settings_people.assigned_users") %></dt>
+      <dd class="mt-1 text-text-secondary"><%= role.users.count %></dd>
+    </div>
+    <% if role.description.present? %>
+      <div>
+        <dt class="form-label"><%= t("common.labels.description") %></dt>
+        <dd class="mt-1 text-text-secondary break-words"><%= role.description %></dd>
+      </div>
+    <% end %>
+  </dl>
+  <% if role.locked_grants? %>
+    <p class="mt-6 text-sm text-text-secondary"><%= t("settings_people.locked_note") %></p>
+  <% end %>
+<% end %>

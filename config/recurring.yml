@@ -1,0 +1,100 @@
+# examples:
+#   periodic_cleanup:
+#     class: CleanSoftDeletedRecordsJob
+#     queue: background
+#     args: [ 1000, { batch_size: 500 } ]
+#     schedule: every hour
+#   periodic_cleanup_with_command:
+#     command: "SoftDeletedRecord.due.delete_all"
+#     priority: 2
+#     schedule: at 5am every day
+
+production:
+  clear_solid_queue_finished_jobs:
+    command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
+    schedule: every hour at minute 12
+  email_send_activity_scheduler:
+    class: Emails::SendActivities::SchedulerJob
+    queue: default
+    schedule: every minute
+  email_send_activity_reconcile:
+    class: Emails::SendActivities::ReconcileSendActivitiesJob
+    queue: default
+    schedule: every 15 minutes
+  billing_daily:
+    class: "Billing::DailyBillingJob"
+    queue: default
+    schedule: every day at 3am
+  billing_collection_maintenance:
+    class: "Billing::CollectionMaintenanceJob"
+    queue: default
+    schedule: every 15 minutes
+  payments_charge_due_subscriptions:
+    class: "Payments::ChargeDueSubscriptionsJob"
+    queue: default
+    schedule: every hour at minute 5
+  payments_redrive_webhook_events:
+    class: "Payments::RedriveWebhookEventsJob"
+    queue: default
+    schedule: every hour at minute 20
+  payments_daily_maintenance:
+    class: "Payments::DailyMaintenanceJob"
+    queue: default
+    schedule: every day at 4am
+  sms_reconcile_messages:
+    class: "Sms::ReconcileMessagesJob"
+    queue: default
+    schedule: every 15 minutes
+  sms_recover_messages:
+    class: "Sms::RecoverMessagesJob"
+    queue: default
+    schedule: every 5 minutes
+  sms_campaign_scheduler:
+    class: "Sms::Campaigns::SchedulerJob"
+    queue: default
+    schedule: every minute
+  email_reconcile_messages:
+    class: "Emails::ReconcileMessagesJob"
+    queue: default
+    schedule: every 15 minutes
+  ai_assistant_reconcile_generations:
+    class: "AiAssistant::ReconcileGenerationsJob"
+    queue: default
+    schedule: every 15 minutes
+  speech_to_text_prune_clips:
+    class: "SpeechToText::PruneClipsJob"
+    queue: default
+    schedule: every day at 4:45am
+  people_expire_pending_claims:
+    class: "People::ExpirePendingClaimsJob"
+    queue: default
+    schedule: every day at 5am
+  journey_runs_purge:
+    class: "JourneyRuns::PurgeJob"
+    queue: default
+    schedule: every day at 5:30am
+
+development:
+  # Disabled by default in development — uncomment to exercise the daily billing
+  # pipeline (renew → collect → dunning → trial notices) on a schedule. Otherwise
+  # trigger it manually: bin/rails runner "Billing::DailyBillingJob.perform_now"
+  # billing_daily:
+  #   class: "Billing::DailyBillingJob"
+  #   queue: default
+  #   schedule: every day at 3am
+  # payments_charge_due_subscriptions:
+  #   class: "Payments::ChargeDueSubscriptionsJob"
+  #   queue: default
+  #   schedule: every hour at minute 5
+  # payments_redrive_webhook_events:
+  #   class: "Payments::RedriveWebhookEventsJob"
+  #   queue: default
+  #   schedule: every hour at minute 20
+  # payments_daily_maintenance:
+  #   class: "Payments::DailyMaintenanceJob"
+  #   queue: default
+  #   schedule: every day at 4am
+  # people_expire_pending_claims:
+  #   class: "People::ExpirePendingClaimsJob"
+  #   queue: default
+  #   schedule: every day at 5am

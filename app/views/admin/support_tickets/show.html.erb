@@ -1,0 +1,14 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("chrome.help_menu.help") },
+    { label: @support_ticket.subject }
+  ],
+  title: @support_ticket.subject
+) do %>
+  <%= render HelpThreadComponent.new(
+        support_ticket: @support_ticket,
+        messages: @messages,
+        viewer: current_user,
+        reply_path: admin_support_ticket_messages_path(current_customer_id, @support_ticket)
+      ) %>
+<% end %>

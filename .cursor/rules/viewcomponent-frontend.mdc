@@ -1,0 +1,17 @@
+---
+description: ViewComponent, Tailwind, and Stimulus frontend conventions
+globs: app/components/**,app/views/**,app/javascript/**
+alwaysApply: false
+---
+
+# Frontend Conventions
+
+- Encapsulate UI in ViewComponents (class + ERB); no large inline markup in controller views
+- Tailwind utilities only — no custom CSS frameworks or `<style>` blocks
+- Stimulus only under `app/javascript/controllers/` — no other JS frameworks
+- All surfaces responsive (mobile → desktop)
+- Payment widgets: `payments_<vendor>_<flow>_controller.js`
+- Captcha widgets: `captcha_<vendor>_controller.js`
+- Ignore page templates under `app/services/page_layout_templates/templates/` unless explicitly asked
+---
+

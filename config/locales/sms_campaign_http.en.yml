@@ -1,0 +1,114 @@
+en:
+  activerecord:
+    attributes:
+      sms/credential:
+        sender_rate_per_second: Account send rate (messages/second)
+  sms_campaign_http:
+    registration:
+      description: Audience-based SMS campaigns and transactional messaging via pluggable providers
+    navigation:
+      campaigns: Campaigns
+      contacts: Contacts
+      segments: Audiences
+    access_points:
+      contacts: SMS contacts
+      consent_events: SMS consent events
+      entity_syncs: SMS Entity synchronization
+      segments: SMS segments
+      campaigns: SMS campaigns
+      campaign_launches: Launch SMS campaigns
+      campaign_cancellations: Cancel SMS campaigns
+      campaign_reports: SMS campaign reports
+    flash:
+      saved: Changes saved.
+      created: Contact created.
+      archived: Contact archived.
+      deleted: Record deleted.
+      consent_recorded: Consent event recorded.
+      launched: Campaign queued.
+      cancelled: Remaining campaign messages cancelled.
+    errors:
+      payload_too_large: Request payload must not exceed 64 KiB.
+      unknown_parameters: The request contains unsupported or protected parameters.
+      object_required: Must be a JSON object.
+      string_required: Must be a valid text value.
+      integer_required: Must be a whole number in the supported range.
+      invalid_json: Invalid JSON or duplicate object keys. Correct the original input and try again.
+      json_too_large: JSON exceeds the permitted size.
+      invalid_schedule: Enter a valid local date and time in the selected IANA timezone. Ambiguous or nonexistent daylight-saving times are not allowed.
+      offset_required: Enter an ISO 8601 date and time with an explicit timezone offset.
+      invalid_filter: The selected filter or sort is not supported.
+      invalid_source: The Entity has no valid resolved source schema.
+      not_found: The SMS resource was not found.
+      not_draft: Only a draft campaign can be edited or deleted.
+      segment_in_use: This segment is referenced by a draft campaign and cannot be deleted.
+      invalid_review: Review the saved campaign again before launching.
+      invalid_unsubscribe: This unsubscribe link is invalid or has expired.
+      invalid_sender_rate: Account send rate must be a finite number greater than 0 and at most 1.
+    labels:
+      name: Name
+      phone_e164: Phone
+      country_code: Country
+      timezone: Timezone
+      source_kind: Source
+      consent_status: Consent
+      status: Status
+      description: Description
+      updated_at: Updated at
+      send_timing: Timing
+      scheduled_at: Scheduled
+      matched_count: Recipients
+      not_started: Not started
+      message_status: Message status
+      skip_reason: Reason
+      admitted_at: Admitted at
+    contact_status:
+      active: Active
+      archived: Archived
+    source_kind:
+      manual: Manual
+      entity: Entity
+    consent_status:
+      unknown: Unknown
+      granted: Granted
+      revoked: Revoked
+    campaign_status:
+      draft: Draft
+      scheduled: Scheduled
+      running: Running
+      completed: Completed
+      cancelled: Cancelled
+      failed: Failed
+    recipient_status:
+      pending: Pending
+      admitted: Admitted
+      skipped: Skipped
+      cancelled: Cancelled
+    message_status:
+      queued: Queued
+      pending: Pending
+      sent: Sent
+      delivered: Delivered
+      failed: Failed
+      unknown: Unknown
+      suppressed: Suppressed
+      expired: Expired
+    send_timing:
+      immediate: Send now
+      scheduled: Schedule
+    csv:
+      campaign_id: Campaign ID
+      recipient_id: Recipient ID
+      contact_id: Contact ID
+      name: Name
+      phone_e164: Phone
+      recipient_status: Recipient status
+      skip_reason: Skip reason
+      message_id: Message ID
+      message_status: Message status
+      dispatch_started_at: Attempt started at
+      sent_at: API accepted at
+      delivered_at: Delivered at
+      expires_at: Expires at
+      failure_code: Failure code
+      provider_segments: Provider-reported segments

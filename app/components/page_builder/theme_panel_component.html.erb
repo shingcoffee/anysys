@@ -1,0 +1,325 @@
+<div class="p-6 space-y-6" data-page-builder-target="themePanel">
+
+  <%# ═══════ PRESETS ═══════ %>
+  <div class="bg-white rounded-xl border border-gray-200 p-5">
+    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3"><%= t("comp_page_builder.theme_panel.presets") %></h3>
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+      <% [
+        ["modern",     t("comp_page_builder.theme_panel.preset.modern"),     "bg-indigo-600", "bg-indigo-100"],
+        ["minimalist", t("comp_page_builder.theme_panel.preset.minimalist"), "bg-slate-600",  "bg-slate-100"],
+        ["bold",       t("comp_page_builder.theme_panel.preset.bold"),       "bg-rose-600",   "bg-rose-100"],
+        ["elegant",    t("comp_page_builder.theme_panel.preset.elegant"),    "bg-violet-600", "bg-violet-100"],
+        ["playful",    t("comp_page_builder.theme_panel.preset.playful"),    "bg-emerald-600","bg-emerald-100"]
+      ].each do |preset_id, preset_label, preset_color, preset_light| %>
+        <button type="button"
+                data-action="click->page-builder#applyThemePreset"
+                data-preset="<%= preset_id %>"
+                class="flex flex-col items-center gap-1.5 p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer">
+          <div class="w-full h-8 rounded-md <%= preset_light %> flex items-center justify-center">
+            <div class="w-5 h-3 rounded-sm <%= preset_color %>"></div>
+          </div>
+          <div class="text-xs font-medium text-gray-600"><%= preset_label %></div>
+        </button>
+      <% end %>
+    </div>
+  </div>
+
+  <%# ═══════ COLORS ═══════ %>
+  <div class="bg-white rounded-xl border border-gray-200 p-5">
+    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4"><%= t("comp_page_builder.theme_panel.colors") %></h3>
+    <% color_hex = { "indigo" => "bg-indigo-600", "blue" => "bg-blue-600", "emerald" => "bg-emerald-600", "rose" => "bg-rose-600", "amber" => "bg-amber-600", "violet" => "bg-violet-600", "teal" => "bg-teal-600", "slate" => "bg-slate-600" } %>
+
+    <div class="space-y-4">
+      <%# Primary Color %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.primary_color") %></label>
+        <div class="flex flex-wrap gap-3" data-theme-group="primary_color">
+          <% %w[indigo blue emerald rose amber violet teal slate].each do |color| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="primary_color"
+                    data-theme-value="<%= color %>"
+                    class="w-9 h-9 rounded-full <%= color_hex[color] %> hover:scale-110 transition-transform focus:outline-none<%= color == 'indigo' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>"
+                    title="<%= t("comp_page_builder.theme_panel.color_names.#{color}") %>">
+            </button>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Accent Color %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.accent_color") %></label>
+        <div class="flex flex-wrap gap-3" data-theme-group="accent_color">
+          <% %w[indigo blue emerald rose amber violet teal slate].each do |color| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="accent_color"
+                    data-theme-value="<%= color %>"
+                    class="w-9 h-9 rounded-full <%= color_hex[color] %> hover:scale-110 transition-transform focus:outline-none<%= color == 'indigo' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>"
+                    title="<%= t("comp_page_builder.theme_panel.color_names.#{color}") %>">
+            </button>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# ═══════ TYPOGRAPHY ═══════ %>
+  <div class="bg-white rounded-xl border border-gray-200 p-5">
+    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4"><%= t("comp_page_builder.theme_panel.typography") %></h3>
+    <div class="space-y-4">
+      <%# Font Family %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.font_family") %></label>
+        <div class="grid grid-cols-3 gap-3" data-theme-group="font_family">
+          <% [["sans", t("comp_page_builder.theme_panel.fonts.sans"), "font-sans"], ["serif", t("comp_page_builder.theme_panel.fonts.serif"), "font-serif"], ["mono", t("comp_page_builder.theme_panel.fonts.mono"), "font-mono"]].each do |value, label, font_class| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="font_family"
+                    data-theme-value="<%= value %>"
+                    class="p-3 rounded-lg border border-gray-200 hover:border-gray-300 text-center transition-all<%= value == 'sans' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>">
+              <div class="<%= font_class %> text-lg text-gray-900">Aa</div>
+              <div class="text-xs text-gray-500 mt-1"><%= label %></div>
+            </button>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Label Style %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.label_style") %></label>
+        <div class="grid grid-cols-4 gap-2" data-theme-group="label_style">
+          <% [["default", t("comp_page_builder.theme_panel.label_styles.default")], ["bold", t("comp_page_builder.theme_panel.label_styles.bold")], ["uppercase", t("comp_page_builder.theme_panel.label_styles.uppercase")], ["floating", t("comp_page_builder.theme_panel.label_styles.floating")]].each do |value, label| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="label_style"
+                    data-theme-value="<%= value %>"
+                    class="px-3 py-2 rounded-lg border border-gray-200 hover:border-gray-300 text-center text-xs font-medium text-gray-600 transition-all<%= value == 'default' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>">
+              <%= label %>
+            </button>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# ═══════ FORM LAYOUT ═══════ %>
+  <div class="bg-white rounded-xl border border-gray-200 p-5">
+    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4"><%= t("comp_page_builder.theme_panel.form_layout") %></h3>
+    <div class="space-y-4">
+      <%# Form Width %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.width") %></label>
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2" data-theme-group="form_width">
+          <% [["sm", t("comp_page_builder.theme_panel.form_widths.sm")], ["md", t("comp_page_builder.theme_panel.form_widths.md")], ["lg", t("comp_page_builder.theme_panel.form_widths.lg")], ["xl", t("comp_page_builder.theme_panel.form_widths.xl")], ["full", t("comp_page_builder.theme_panel.form_widths.full")]].each do |value, label| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="form_width"
+                    data-theme-value="<%= value %>"
+                    class="px-2 py-2 rounded-lg border border-gray-200 hover:border-gray-300 text-center text-xs font-medium text-gray-600 transition-all<%= value == 'xl' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>">
+              <%= label %>
+            </button>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Form Padding %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.padding") %></label>
+        <div class="grid grid-cols-4 gap-2" data-theme-group="form_padding">
+          <% [["compact", t("comp_page_builder.theme_panel.paddings.compact")], ["normal", t("comp_page_builder.theme_panel.paddings.normal")], ["spacious", t("comp_page_builder.theme_panel.paddings.spacious")], ["generous", t("comp_page_builder.theme_panel.paddings.generous")]].each do |value, label| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="form_padding"
+                    data-theme-value="<%= value %>"
+                    class="px-2 py-2 rounded-lg border border-gray-200 hover:border-gray-300 text-center text-xs font-medium text-gray-600 transition-all<%= value == 'normal' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>">
+              <%= label %>
+            </button>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Form Shadow %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.shadow") %></label>
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2" data-theme-group="form_shadow">
+          <% [["none", t("comp_page_builder.theme_panel.shadows.none")], ["sm", t("comp_page_builder.theme_panel.shadows.sm")], ["md", t("comp_page_builder.theme_panel.shadows.md")], ["lg", t("comp_page_builder.theme_panel.shadows.lg")], ["xl", t("comp_page_builder.theme_panel.shadows.xl")]].each do |value, label| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="form_shadow"
+                    data-theme-value="<%= value %>"
+                    class="px-2 py-2 rounded-lg border border-gray-200 hover:border-gray-300 text-center text-xs font-medium text-gray-600 transition-all<%= value == 'none' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>">
+              <%= label %>
+            </button>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Form Border %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.border") %></label>
+        <div class="grid grid-cols-4 gap-2" data-theme-group="form_border">
+          <% [["none", t("comp_page_builder.theme_panel.borders.none")], ["subtle", t("comp_page_builder.theme_panel.borders.subtle")], ["visible", t("comp_page_builder.theme_panel.borders.visible")], ["strong", t("comp_page_builder.theme_panel.borders.strong")]].each do |value, label| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="form_border"
+                    data-theme-value="<%= value %>"
+                    class="px-2 py-2 rounded-lg border border-gray-200 hover:border-gray-300 text-center text-xs font-medium text-gray-600 transition-all<%= value == 'none' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>">
+              <%= label %>
+            </button>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Form Background %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.background") %></label>
+        <div class="grid grid-cols-3 gap-3" data-theme-group="form_background">
+          <% [["white", t("comp_page_builder.theme_panel.backgrounds.white"), "bg-white"], ["gray", t("comp_page_builder.theme_panel.backgrounds.gray"), "bg-gray-50"], ["warm", t("comp_page_builder.theme_panel.backgrounds.warm"), "bg-amber-50/30"]].each do |value, label, bg_class| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="form_background"
+                    data-theme-value="<%= value %>"
+                    class="p-3 rounded-lg border border-gray-200 hover:border-gray-300 text-center transition-all<%= value == 'white' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>">
+              <div class="h-8 rounded-md border border-gray-200 <%= bg_class %>"></div>
+              <div class="text-xs text-gray-500 mt-2"><%= label %></div>
+            </button>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# ═══════ INPUT FIELDS ═══════ %>
+  <div class="bg-white rounded-xl border border-gray-200 p-5">
+    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4"><%= t("comp_page_builder.theme_panel.input_fields") %></h3>
+    <div class="space-y-4">
+      <%# Input Style %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.style") %></label>
+        <div class="grid grid-cols-3 gap-3" data-theme-group="input_style">
+          <% [["outline", t("comp_page_builder.theme_panel.input_styles.outline")], ["filled", t("comp_page_builder.theme_panel.input_styles.filled")], ["underline", t("comp_page_builder.theme_panel.input_styles.underline")]].each do |value, label| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="input_style"
+                    data-theme-value="<%= value %>"
+                    class="p-3 rounded-lg border border-gray-200 hover:border-gray-300 text-center transition-all<%= value == 'outline' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>">
+              <% case value %>
+              <% when "outline" %>
+                <div class="h-7 border border-gray-300 rounded-md bg-white mx-2"></div>
+              <% when "filled" %>
+                <div class="h-7 bg-gray-100 rounded-md mx-2"></div>
+              <% when "underline" %>
+                <div class="h-7 border-b-2 border-gray-300 mx-2"></div>
+              <% end %>
+              <div class="text-xs text-gray-500 mt-2"><%= label %></div>
+            </button>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Border Radius %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.border_radius") %></label>
+        <div class="flex flex-wrap gap-3" data-theme-group="border_radius">
+          <% [["none", t("comp_page_builder.theme_panel.radii.none"), "rounded-none"], ["sm", t("comp_page_builder.theme_panel.radii.sm"), "rounded"], ["md", t("comp_page_builder.theme_panel.radii.md"), "rounded-md"], ["lg", t("comp_page_builder.theme_panel.radii.lg"), "rounded-lg"], ["full", t("comp_page_builder.theme_panel.radii.full"), "rounded-full"]].each do |value, label, radius_class| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="border_radius"
+                    data-theme-value="<%= value %>"
+                    class="flex flex-col items-center gap-1.5 p-2.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-all<%= value == 'lg' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>">
+              <div class="w-8 h-6 border-2 border-gray-400 <%= radius_class %>"></div>
+              <div class="text-xs text-gray-500"><%= label %></div>
+            </button>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Input Size %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.size") %></label>
+        <div class="grid grid-cols-3 gap-2" data-theme-group="input_size">
+          <% [["sm", t("comp_page_builder.theme_panel.input_sizes.sm")], ["md", t("comp_page_builder.theme_panel.input_sizes.md")], ["lg", t("comp_page_builder.theme_panel.input_sizes.lg")]].each do |value, label| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="input_size"
+                    data-theme-value="<%= value %>"
+                    class="px-3 py-2 rounded-lg border border-gray-200 hover:border-gray-300 text-center text-xs font-medium text-gray-600 transition-all<%= value == 'md' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>">
+              <%= label %>
+            </button>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Field Spacing %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.field_spacing") %></label>
+        <div class="grid grid-cols-3 gap-2" data-theme-group="field_spacing">
+          <% [["tight", t("comp_page_builder.theme_panel.spacings.tight")], ["normal", t("comp_page_builder.theme_panel.spacings.normal")], ["relaxed", t("comp_page_builder.theme_panel.spacings.relaxed")]].each do |value, label| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="field_spacing"
+                    data-theme-value="<%= value %>"
+                    class="px-3 py-2 rounded-lg border border-gray-200 hover:border-gray-300 text-center text-xs font-medium text-gray-600 transition-all<%= value == 'normal' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>">
+              <%= label %>
+            </button>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# ═══════ SUBMIT BUTTON ═══════ %>
+  <div class="bg-white rounded-xl border border-gray-200 p-5">
+    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4"><%= t("comp_page_builder.theme_panel.submit_button") %></h3>
+    <div class="space-y-4">
+      <%# Button Style %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.style") %></label>
+        <div class="grid grid-cols-4 gap-2" data-theme-group="button_style">
+          <% [["filled", t("comp_page_builder.theme_panel.button_styles.filled")], ["outline", t("comp_page_builder.theme_panel.button_styles.outline")], ["soft", t("comp_page_builder.theme_panel.button_styles.soft")], ["gradient", t("comp_page_builder.theme_panel.button_styles.gradient")]].each do |value, label| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="button_style"
+                    data-theme-value="<%= value %>"
+                    class="px-2 py-2 rounded-lg border border-gray-200 hover:border-gray-300 text-center text-xs font-medium text-gray-600 transition-all<%= value == 'filled' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>">
+              <%= label %>
+            </button>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Button Width %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.width") %></label>
+        <div class="grid grid-cols-2 gap-2" data-theme-group="button_width">
+          <% [["auto", t("comp_page_builder.theme_panel.button_widths.auto")], ["full", t("comp_page_builder.theme_panel.button_widths.full")]].each do |value, label| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="button_width"
+                    data-theme-value="<%= value %>"
+                    class="px-3 py-2 rounded-lg border border-gray-200 hover:border-gray-300 text-center text-xs font-medium text-gray-600 transition-all<%= value == 'full' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>">
+              <%= label %>
+            </button>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Button Size %>
+      <div>
+        <label class="text-sm font-medium text-gray-700 mb-2 block"><%= t("comp_page_builder.theme_panel.size") %></label>
+        <div class="grid grid-cols-3 gap-2" data-theme-group="button_size">
+          <% [["sm", t("comp_page_builder.theme_panel.button_sizes.sm")], ["md", t("comp_page_builder.theme_panel.button_sizes.md")], ["lg", t("comp_page_builder.theme_panel.button_sizes.lg")]].each do |value, label| %>
+            <button type="button"
+                    data-action="click->page-builder#updateTheme"
+                    data-theme-property="button_size"
+                    data-theme-value="<%= value %>"
+                    class="px-3 py-2 rounded-lg border border-gray-200 hover:border-gray-300 text-center text-xs font-medium text-gray-600 transition-all<%= value == 'md' ? ' ring-2 ring-indigo-500 ring-offset-2' : '' %>">
+              <%= label %>
+            </button>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

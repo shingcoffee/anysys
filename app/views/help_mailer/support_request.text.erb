@@ -1,0 +1,7 @@
+<%= @subject_line %>
+
+<%= @request_body %>
+
+<%= t("help_mailer.support_request.label_customer") %>: <%= @customer.name %> (<%= @customer.id %>)
+<%= t("help_mailer.support_request.label_from") %>: <%= @user.display_name %> <<%= @user.email %>>
+<%= t("help_mailer.support_request.label_page") %>: <%= @page_url.presence || t("common.labels.em_dash") %>

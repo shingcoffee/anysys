@@ -1,0 +1,49 @@
+<div class="flex flex-col gap-6">
+  <%= render Admin::Settings::SectionComponent.new(flush: true) do %>
+    <%= render Admin::Settings::SettingRowComponent.new(
+          label: t("settings_modules.captcha.managed_provider", name: provider_name),
+          description: (module_enabled && configured?) ? nil : t("settings_modules.captcha.unavailable_hint")
+        ) do %>
+      <%= render BadgeComponent.new(variant: :default, size: :sm) do %>
+        <%= t("settings_modules.captcha.#{!module_enabled ? 'disabled' : configured? ? 'ready' : 'unavailable'}") %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= render Admin::Settings::SectionComponent.new(title: t("settings_modules.captcha.page_limits"), description: t("settings_modules.captcha.limits_hint")) do %>
+    <% if empty? %>
+      <p class="py-4 text-sm text-text-secondary"><%= t("captcha.customer_status.empty") %></p>
+    <% else %>
+      <div data-controller="captcha-page-list" class="space-y-4">
+        <div class="max-w-md">
+          <label class="form-label" for="captcha-customer-pages-search"><%= t("captcha.customer_status.search") %></label>
+          <input type="search" id="captcha-customer-pages-search" class="input-field mt-1 w-full"
+                 autocomplete="off" data-captcha-page-list-target="search" data-action="input->captcha-page-list#search">
+        </div>
+        <div data-captcha-page-list-target="directory">
+          <ul class="divide-y divide-border-subtle">
+            <% pages.each do |page| %>
+              <li class="py-5" data-captcha-page-list-target="row" data-name="<%= page_name(page) %>" data-path="<%= page_public_path(page) %>">
+                <%= render ::Captcha::ThrottlePickerComponent.new(
+                  url: page_toggle_url(page), preset: page_preset(page), limit_count: page[:limit_count],
+                  period_minutes: page[:period_minutes], aria_label: page_toggle_aria(page), customer_context: true
+                ) do %>
+                  <div class="min-w-0 space-y-2">
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span class="break-words text-sm font-medium text-text-primary"><%= page_name(page) %></span>
+                      <%= render BadgeComponent.new(variant: :default, size: :sm) do %>
+                        <%= page_launched?(page) ? t("common.status.launched") : t("captcha.customer_status.not_launched") %>
+                      <% end %>
+                    </div>
+                    <%= link_to t("settings_modules.captcha.open_page"), page_public_path(page), class: "text-sm text-accent-text underline underline-offset-4", target: "_blank", rel: "noopener" %>
+                  </div>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+        <p class="hidden py-4 text-sm text-text-secondary" data-captcha-page-list-target="emptyFilter"><%= t("captcha.customer_status.search_empty") %></p>
+      </div>
+    <% end %>
+  <% end %>
+</div>

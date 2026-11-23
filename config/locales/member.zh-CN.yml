@@ -1,0 +1,188 @@
+"zh-CN":
+  member:
+    # Phrases reused across multiple member surfaces.
+    common:
+      edit_profile: "编辑资料"
+      update_profile: "更新资料"
+      manage_security: "管理安全设置"
+      sign_out: "退出登录"
+      security: "安全"
+      profile: "个人资料"
+      verification_code: "验证码"
+
+    entity_surfaces:
+      subtitle: "与您账户关联的记录。"
+      empty_headline: "暂无%{name}"
+      empty_body: "关联到您的账户后，记录将显示在此处。"
+      row_action_default: "打开"
+
+    dashboards:
+      show:
+        title: "首页 — Anysys"
+        subhead: "集中管理账户、付款和安全设置。"
+        profile_value: "已完善"
+        payments_label: "付款"
+        payments_value: "查看活动"
+        payments_cta: "查看全部"
+        mfa_on: "已开启两步验证"
+        mfa_off: "未开启两步验证"
+        recent_activity: "近期活动"
+        empty: "欢迎 — 您在门户中的活动记录将显示在此。"
+        signed_in: "已登录"
+        signin_meta: "%{ago}前 — %{ip}"
+        signin_status: "成功"
+        quick_links: "快捷链接"
+        account: "账户"
+        greeting_morning: "早上好"
+        greeting_afternoon: "下午好"
+        greeting_evening: "晚上好"
+
+    mfa:
+      setup:
+        title: "两步验证 — Anysys"
+        header_title: "设置两步验证"
+        header_subtitle: "使用身份验证器应用扫描二维码，然后输入 6 位验证码以开启。"
+        back_to_security: "← 返回安全设置"
+        step1_title: "扫描二维码"
+        step1_hint: "可使用 Google Authenticator、Authy、1Password 或任何兼容 RFC 6238 的应用。"
+        manual_secret_html: "无法扫描？请手动输入此密钥。"
+        step2_title: "输入 6 位验证码"
+        step2_hint: "输入应用显示的验证码以确认设置。"
+        submit: "验证并开启"
+        need_help: "需要帮助？"
+        need_help_body: "丢失了身份验证器？设置完成后，可在登录页通过恢复链接经邮件关闭两步验证。"
+        authenticator_apps: "身份验证器应用"
+        apps:
+          google: "Google Authenticator"
+          authy: "Authy"
+          one_password: "1Password"
+          microsoft: "Microsoft Authenticator"
+
+    flash:
+      payment_methods:
+        saved: "卡片保存成功"
+        confirm_failed: "卡片确认失败，请重试"
+        removed: "卡片已移除"
+        setup_failed: "无法开始银行卡绑定，请稍后重试。"
+      subscriptions:
+        cancelled: "订阅已取消"
+      profiles:
+        updated: "个人资料已更新"
+
+    mfa_mailer:
+      subject: "重置您账户的两步验证"
+      reset_link:
+        greeting: "您好，%{name}："
+        title: "重置两步验证"
+        requested: "我们收到了关闭此账户两步验证的请求。"
+        disable_link: "关闭两步验证"
+        open_link_prompt: "打开此链接以关闭两步验证："
+        expiry_note: "此链接将在 15 分钟后失效，且仅可使用一次。"
+        preheader: "两步验证重置链接已就绪，15 分钟后失效。"
+        heading: "安全"
+        fallback: "如果按钮无法打开，请将以下链接复制到浏览器中访问："
+        ignore: "如果这不是您本人的请求，请忽略此邮件——您的账户不会有任何变化。"
+        brand: "Anysys"
+        footer: "此邮件由 Anysys 发送。这是一封事务性通知，请勿直接回复。"
+
+    pages:
+      show:
+        title: "%{name} — 账户"
+        empty_headline: "暂无内容"
+        empty_body: "此页面暂无可显示的内容。"
+
+    profiles:
+      edit:
+        title: "编辑资料 — Anysys"
+        header_subtitle: "更新姓名或邮箱。"
+        back_to_profile: "← 返回个人资料"
+        save_changes: "保存更改"
+        current_password: "当前密码"
+        current_password_hint: "更改邮箱时必须填写。"
+        tip: "提示"
+        tip_body_html: "邮箱更改会立即生效，且必须验证当前密码。"
+      show:
+        title: "个人资料 — Anysys"
+        header_subtitle: "您的账户信息"
+        fields:
+          first_name: "名字"
+          last_name: "姓氏"
+          email: "邮箱"
+          member_since: "注册时间"
+        account_actions: "账户操作"
+        security_glance: "安全概览"
+        mfa_on: "两步验证已开启。"
+        mfa_off: "两步验证未开启 — 建议开启。"
+      errors:
+        email_taken: "已被占用"
+        email_requires_password: "需先设置密码后才能修改"
+        current_password_invalid: "不正确"
+
+    securities:
+      show:
+        title: "安全 — Anysys"
+        header_subtitle: "管理密码和两步验证。"
+        password: "密码"
+        password_desc_html: "用新密码替换当前密码，我们将通过邮件发送重置链接。"
+        change_password: "修改密码"
+        two_factor: "两步验证"
+        mfa_on_html: "两步验证已开启，每次登录都需输入验证码。"
+        mfa_off: "两步验证未开启，强烈建议开启。"
+        disable_mfa: "关闭两步验证"
+        confirm_disable: "确认关闭"
+        setup_mfa: "设置两步验证"
+        last_signin: "上次登录"
+        field_when: "时间"
+        field_from_ip: "来源 IP"
+        unknown_ip: "未知"
+        no_history: "暂无登录记录"
+        trusted_devices: "受信任的设备"
+        trusted_devices_desc: "登录时可跳过两步验证的设备。如有无法识别的设备请移除。"
+        trusted_devices_empty: "暂无受信任的设备。"
+        device_unknown: "未知设备"
+        device_last_used: "上次使用于 %{time}"
+        revoke_device: "移除"
+        revoke_device_confirm: "确定移除此受信任的设备？下次通过此设备登录时将需要两步验证。"
+        device_revoked: "已移除受信任的设备。"
+        account_safety: "账户安全"
+        safety_unique_pw: "为此账户使用独立的密码。"
+        safety_turn_on_html: "若尚未开启，请开启两步验证。"
+        safety_sign_out: "在共用设备上请退出登录。"
+        need_profile: "需要更新个人资料？"
+        go_to_profile: "前往个人资料 →"
+
+    surfaces:
+      title: "%{label} — Anysys"
+
+    auth_shell:
+      portal_name: "Anysys"
+
+    shell:
+      open_navigation: "打开导航"
+      close_navigation: "关闭导航"
+
+    sidebar:
+      nav_label: "会员导航"
+      primary_label: "主导航"
+
+    surface_detail:
+      back_to: "返回%{label}"
+
+    record_rows:
+      add: "添加"
+      change: "修改"
+      remove: "移除"
+      remove_confirm: "确定移除这一行吗？"
+      empty: "暂无内容。"
+      actions: "操作"
+      removed: "已移除。"
+
+    record_journeys:
+      title: "后续步骤"
+      description: "继续处理这条记录。"
+
+    surface_index:
+      total_count: "共 %{count} 条"
+
+    user_menu:
+      your_profile: "您的个人资料"

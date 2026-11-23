@@ -1,0 +1,49 @@
+<%#
+  Grouped segment builder, modeled on the flowchart Decision condition builder.
+  The root group is pre-rendered server-side; the `segment-builder` Stimulus
+  controller hydrates operator selects, adds/removes rows & nested groups,
+  flips individual AND/OR join toggles, and serializes the recursive tree to
+  the hidden output input.
+
+  Targets:
+    output        — hidden input with serialized segment_rules JSON (submitted)
+    groupRoot     — the root <div data-sb-group>
+    rowTemplate   — <template> cloned for a new condition row
+    groupTemplate — <template> cloned for a new nested group
+    joinTemplate  — <template> cloned for an AND/OR join toggle between members
+
+  DOM contract (read by segment_builder_controller.js):
+    [data-sb-group]   group container          [data-sb-rows]  members container
+    [data-sb-row]     condition row            [data-sb-join]   per-join AND/OR toggle button
+    [data-sb-join-wrap] join toggle wrapper
+    [data-sb-field] / [data-sb-operator] / [data-sb-value]   row inputs
+%>
+<div data-controller="segment-builder"
+     data-segment-builder-fields-value="<%= fields_value_json %>"
+     data-segment-builder-operator-labels-value="<%= operator_labels_json %>"
+     data-segment-builder-and-label-value="<%= t("comp_misc.segment_builder.and") %>"
+     data-segment-builder-or-label-value="<%= t("comp_misc.segment_builder.or") %>"
+     class="space-y-5">
+
+  <%# ── Hidden JSON output (the real form field the controller submits) ── %>
+  <input type="hidden"
+         name="<%= param_name %>"
+         value="<%= output_json %>"
+         data-segment-builder-target="output"
+         <% output_data.each do |key, value| %>data-<%= key.to_s.dasherize %>="<%= value %>" <% end %>
+         aria-label="<%= t("comp_misc.segment_builder.rules_json_aria") %>">
+
+  <%# ── Root group (pre-rendered tree) ── %>
+  <%= render_group(root_group, root: true) %>
+
+  <%# ── Templates cloned by the controller ── %>
+  <template data-segment-builder-target="rowTemplate">
+    <%= render_row({ "field" => "", "operator" => "", "value" => "" }) %>
+  </template>
+  <template data-segment-builder-target="groupTemplate">
+    <%= render_group({ "type" => "group", "joins" => [], "conditions" => [{ "field" => "", "operator" => "", "value" => "" }] }, root: false) %>
+  </template>
+  <template data-segment-builder-target="joinTemplate">
+    <%= join_toggle("AND") %>
+  </template>
+</div>

@@ -1,0 +1,15 @@
+<section class="<%= padding_class %>">
+  <div class="<%= inner_measure_class %> grid min-w-0 items-center gap-10 md:grid-cols-12 md:gap-12 lg:gap-20">
+    <div class="relative aspect-[4/5] md:aspect-[5/4] md:col-span-6 <%= image_order_class %> <%= image_frame_class %>">
+      <%= render_media(props["image_url"], alt: prop("heading"), css_class: "absolute inset-0 size-full object-cover") %>
+    </div>
+    <div class="flex flex-col gap-6 md:col-span-6 lg:col-span-5 <%= copy_order_class %> <%= "lg:col-start-8" unless image_right? %>">
+      <% if present_text?(prop("heading")) %>
+        <h2 <%= el_attrs("heading", class: section_heading_class) %>><%= prop("heading") %></h2>
+      <% end %>
+      <% if present_text?(prop("body")) %>
+        <p <%= el_attrs("body", class: "break-words whitespace-pre-line #{body_class} #{body_text_class}") %>><%= prop("body") %></p>
+      <% end %>
+    </div>
+  </div>
+</section>

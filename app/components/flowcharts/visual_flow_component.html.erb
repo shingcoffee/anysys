@@ -1,0 +1,36 @@
+<div class="card overflow-hidden"
+     data-controller="mermaid"
+     data-mermaid-render-error-format-value="<%= t("maint_core.flowcharts.show.mermaid_render_error_format") %>"
+     <% if graph %>
+       data-mermaid-source-value="<%= graph.to_mermaid %>"
+       <% if graph.failure_paths? %>data-mermaid-alternate-value="<%= graph.to_mermaid(failure_paths: true) %>"<% end %>
+     <% end %>>
+  <div class="px-5 py-3.5 border-b border-border-subtle flex flex-wrap items-center justify-between gap-3">
+    <h2 class="text-sm font-medium text-text-primary"><%= t("maint_core.flowcharts.show.visual_flow") %></h2>
+    <% if graph&.failure_paths? %>
+      <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+        <input type="checkbox" role="switch" class="peer <%= visually_hidden_class %>" data-action="change->mermaid#switch">
+        <span aria-hidden="true"
+              class="relative inline-flex h-5 w-9 flex-shrink-0 rounded-full bg-border transition-colors duration-200 peer-checked:bg-accent peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2 after:absolute after:top-0.5 after:left-0.5 after:size-4 after:rounded-full after:bg-surface after:shadow after:transition-transform after:duration-200 peer-checked:after:translate-x-4"></span>
+        <span class="text-caption text-text-secondary"><%= t("maint_core.flowcharts.show.diagram.show_failure_paths") %></span>
+      </label>
+    <% end %>
+  </div>
+  <div class="p-5">
+    <% if graph %>
+      <div data-mermaid-target="diagram" class="flex justify-center overflow-x-auto min-h-24"></div>
+      <div class="mt-4 pt-3 border-t border-border-subtle flex flex-wrap items-center gap-x-4 gap-y-2">
+        <span class="text-caption font-medium text-text-muted"><%= t("maint_core.flowcharts.show.diagram.legend") %></span>
+        <% legend.each do |item| %>
+          <span class="inline-flex items-center gap-1.5 text-caption text-text-secondary">
+            <span aria-hidden="true" class="inline-block size-3 border <%= item[:swatch] %>"></span>
+            <%= item[:label] %>
+          </span>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-body-sm text-text-muted text-center py-8"><%= t("maint_core.flowcharts.show.no_visual_flow") %></p>
+      <p class="text-caption text-center"><%= t("maint_core.flowcharts.show.no_visual_flow_hint") %></p>
+    <% end %>
+  </div>
+</div>

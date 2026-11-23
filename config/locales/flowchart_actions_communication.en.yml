@@ -1,0 +1,269 @@
+en:
+  flowchart_actions:
+    api_call:
+      label: HTTP request
+      description: Make an external HTTP request.
+      fields:
+        httpMethod:
+          label: HTTP Method
+          help: Verb used for the request.
+          options:
+            get: GET
+            head: HEAD
+            post: POST
+            put: PUT
+            patch: PATCH
+            delete: DELETE
+            options: OPTIONS
+        url:
+          label: URL
+          help: Request URL as a Ruby expression.
+          placeholder: https://api.example.com/...
+        headers:
+          label: Headers
+          help: Extra HTTP headers sent with the request.
+        queryParams:
+          label: Query params
+          help: Query string keys and values appended to the URL.
+        bodyTemplate:
+          label: Body
+          help: Ruby expression for the request body.
+        bodyFormat:
+          label: Body format
+          help: How the request body is encoded.
+          options:
+            json: json
+            form: form
+            text: text
+            xml: xml
+            binary: binary
+        authType:
+          label: Auth type
+          help: How credentials are sent.
+          options:
+            none: none
+            bearer: bearer
+            basic: basic
+            apikey: apiKey
+        authToken:
+          label: Auth token
+          help: Bearer token or API key expression.
+        authUsername:
+          label: Username
+          help: Basic-auth username expression.
+        authPassword:
+          label: Password
+          help: Basic-auth password expression.
+        apiKeyHeader:
+          label: API key header
+          help: Header name that carries the API key.
+        responseFormat:
+          label: Response format
+          help: How the response body is stored.
+          options:
+            json: json
+            text: text
+            binary: binary
+        responseParseKey:
+          label: Parse key
+          help: Optional dotted path to keep from a JSON response.
+        followRedirects:
+          label: Follow redirects
+          help: Follow HTTP redirects up to the configured hop limit.
+        maxRedirects:
+          label: Max redirects
+          help: Maximum redirect hops (0–20).
+        failOnHttpError:
+          label: Fail on HTTP error
+          help: Fail the step when the response is not 2xx. Turn off to branch on the saved status.
+        statusVar:
+          label: Save status as
+          help: Optional variable that stores the HTTP status code.
+        headersVar:
+          label: Save headers as
+          help: Optional variable that stores the response headers.
+        idempotencyKey:
+          label: Idempotency key
+          help: Value sent as Idempotency-Key; also allows transport retry on POST.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        retryOnTransportError:
+          label: Retry on transport error
+          help: Retry only when the request is idempotent.
+        retryAttempts:
+          label: Retry attempts
+          help: Extra transport attempts (1–2).
+        connectTimeout:
+          label: Connect timeout
+          help: Seconds to wait for a connection (1–5).
+        readTimeout:
+          label: Read timeout
+          help: Seconds to wait for a response (1–9).
+        circuitBreaker:
+          label: Circuit breaker
+          help: Fail fast when the remote is unhealthy.
+        breakerName:
+          label: Breaker name
+          help: Cache key suffix for this breaker.
+        failureThreshold:
+          label: Failure threshold
+          help: Failures before the breaker opens (1–20).
+        resetTimeoutSeconds:
+          label: Reset timeout
+          help: Seconds before a half-open retry (10–3600).
+    send_webhook:
+      label: Send Webhook
+      description: Outbound webhook POST
+      fields:
+        url:
+          label: URL
+          help: Webhook URL as a Ruby expression.
+          placeholder: Webhook URL
+        payloadExpression:
+          label: Payload
+          help: Ruby hash that becomes the JSON or form body.
+        headers:
+          label: Headers
+          help: Extra HTTP headers sent with the webhook.
+        secretExpression:
+          label: Signing secret
+          help: HMAC signing secret expression.
+        hmacAlgorithm:
+          label: HMAC algorithm
+          help: Digest used to sign the body.
+          options:
+            sha256: sha256
+            sha512: sha512
+            sha1: sha1
+        signatureHeader:
+          label: Signature header
+          help: Header that carries the HMAC signature.
+        idempotencyKey:
+          label: Idempotency key
+          help: Value sent as Idempotency-Key; required to retry this POST.
+        contentType:
+          label: Content type
+          help: Encoding of the webhook body.
+          options:
+            application_json: application/json
+            application_x_www_form_urlencoded: application/x-www-form-urlencoded
+        failOnHttpError:
+          label: Fail on HTTP error
+          help: Fail the step when the response is not 2xx. Turn off to branch on the saved status.
+        statusVar:
+          label: Save status as
+          help: Optional variable that stores the HTTP status code.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        retryOnTransportError:
+          label: Retry on transport error
+          help: Retry only when an idempotency key is present.
+        retryAttempts:
+          label: Retry attempts
+          help: Extra transport attempts (1–2).
+        connectTimeout:
+          label: Connect timeout
+          help: Seconds to wait for a connection (1–5).
+        readTimeout:
+          label: Read timeout
+          help: Seconds to wait for a response (1–9).
+        circuitBreaker:
+          label: Circuit breaker
+          help: Fail fast when the remote is unhealthy.
+        breakerName:
+          label: Breaker name
+          help: Cache key suffix for this breaker.
+        failureThreshold:
+          label: Failure threshold
+          help: Failures before the breaker opens (1–20).
+        resetTimeoutSeconds:
+          label: Reset timeout
+          help: Seconds before a half-open retry (10–3600).
+    send_email:
+      label: Send Email
+      description: Send an email whose recipients, subject and body are written here, so no email template is needed.
+      fields:
+        to:
+          label: To
+          help: "Recipient addresses, separated by commas. May read the record, e.g. {{ model.email }}."
+          placeholder: e.g., sales@example.com
+        subject:
+          label: Subject
+          help: "Subject line. Record values go in {{ }}, e.g. {{ model.order_number }}."
+          placeholder: "e.g., New order {{ model.order_number }}"
+        body:
+          label: Body
+          help: "Message text. Record values go in {{ }}, including totals worked out from related rows."
+          placeholder: "e.g., Order {{ model.order_number }} was placed. Total: {{ model.total }}"
+        cc:
+          label: CC
+          help: Carbon-copy addresses, separated by commas.
+          placeholder: e.g., manager@example.com
+        bcc:
+          label: BCC
+          help: Blind carbon-copy addresses, separated by commas.
+          placeholder: e.g., audit@example.com
+        replyTo:
+          label: Reply-To
+          help: Address replies go to.
+          placeholder: e.g., support@example.com
+        locale:
+          label: Locale
+          help: Locale used while sending. Blank uses the request locale.
+        attachmentsVariable:
+          label: Attachments
+          help: Context path of a generated document or blob ids to attach.
+        idempotencyKey:
+          label: Idempotency key
+          help: Deduplicates sends that share this key.
+        onError:
+          label: If it cannot be sent
+          help: Continue keeps the submission when the email cannot go out; fail refuses the submission.
+          options:
+            continue: continue
+            fail: fail
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+    send_template_email:
+      label: Send Template Email
+      description: Send a pre-defined email template via the Emails gateway
+      fields:
+        templateId:
+          label: Template
+          help: Email template sent for this customer.
+          placeholder: e.g., 123
+        to:
+          label: To
+          help: Context path of the recipient address.
+        vars:
+          label: Template variables
+          help: Values substituted into the template.
+        cc:
+          label: CC
+          help: Carbon-copy recipient expression.
+        bcc:
+          label: BCC
+          help: Blind carbon-copy recipient expression.
+        replyTo:
+          label: Reply-To
+          help: Reply-To address expression.
+        locale:
+          label: Locale
+          help: Locale used while sending. Blank uses the request locale.
+        idempotencyKey:
+          label: Idempotency key
+          help: Deduplicates sends that share this key.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+  flowchart_runtime:
+    errors:
+      send_email:
+        failed: The email could not be sent.
+      send_template_email:
+        failed: The email could not be sent.
+      send_webhook:
+        sign_failed: The webhook signature could not be computed.

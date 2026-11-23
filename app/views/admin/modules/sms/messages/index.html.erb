@@ -1,0 +1,22 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "sms",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.sms.entries.messages") }
+      ],
+      title: t("admin_modules.sms.messages.index.title"),
+      description: t("admin_modules.sms.messages.index.description")
+    ) do %>
+  <%= render AdminTableComponent.new(
+    rows:       @rows,
+    columns:    @columns,
+    pagination: @pagination,
+    params:     params.permit(:q, :sort, :dir, :page).to_h.symbolize_keys,
+    search:     { param: :q, placeholder: t("admin_modules.sms.messages.index.search_placeholder") },
+    row_path:   ->(m) { admin_modules_sms_message_path(current_customer_id, m) },
+    empty_state: {
+      title: t("admin_modules.sms.messages.index.empty_title"),
+      description: t("admin_modules.sms.messages.index.empty_description")
+    }
+  ) %>
+<% end %>

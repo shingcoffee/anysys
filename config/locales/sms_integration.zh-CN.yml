@@ -1,0 +1,15 @@
+zh-CN:
+  sms_integration:
+    errors:
+      idempotency_conflict: "此幂等键已用于另一条不同的短信请求。"
+      invalid_field: "%{field}：%{message}"
+      idempotency_key_invalid: "幂等键必须为字符串，不超过 %{limit} 字节，且不得包含控制字符。"
+      expiry_not_supported: "短信 HTTP 接口不支持 expires_at 参数。"
+      webhook_recipient_invalid: "短信回调中的收件号码无效。"
+      notification_not_accepted: "短信通知未被受理（状态：%{status}）。"
+    generator:
+      template_key_required: "使用短信渠道时必须设置 smsTemplateKey。"
+      template_key_invalid: "smsTemplateKey 只能包含小写字母、数字或下划线，且不超过 %{limit} 字节。"
+      vars_invalid: "smsVars 必须为模板变量对象或上下文表达式。对象须满足短信变量的类型与大小限制。"
+      idempotency_key_invalid: "smsIdempotencyKey 必须为字符串，不超过 %{limit} 字节，且不得包含控制字符。"
+      credentials_unsupported: "短信凭据与发送号码必须在短信模块中配置，不能在通知步骤中指定。"

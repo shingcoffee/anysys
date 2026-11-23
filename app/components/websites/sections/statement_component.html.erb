@@ -1,0 +1,19 @@
+<section class="<%= padding_class %>">
+  <div class="<%= inner_measure_class %>">
+    <% if present_text?(prop("kicker")) %>
+      <p <%= el_attrs("kicker", class: "#{kicker_class} mb-8 md:mb-12") %>><%= prop("kicker") %></p>
+    <% end %>
+    <% if present_text?(prop("headline")) %>
+      <h2 <%= el_attrs("headline", class: "max-w-6xl text-balance break-words text-site-4xl leading-[1.04] whitespace-pre-line sm:text-site-5xl md:text-site-7xl lg:text-site-8xl #{headline_font_class}") %>><%= prop("headline") %></h2>
+    <% end %>
+    <% if paragraphs.any? %>
+      <div class="mt-12 grid gap-6 border-t pt-8 md:mt-20 md:grid-cols-12 md:pt-10 <%= hairline_class %>">
+        <div class="flex flex-col gap-5 md:col-span-6 md:col-start-7 lg:col-span-5 lg:col-start-8">
+          <% paragraphs.each do |paragraph| %>
+            <p <%= el_attrs("body", class: "#{body_class} #{body_text_class}") %>><%= paragraph %></p>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>

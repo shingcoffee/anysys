@@ -1,0 +1,36 @@
+<div class="fixed inset-0 z-40 hidden bg-black/40 lg:hidden"
+     data-website-nav-target="backdrop"
+     data-action="click->website-nav#close"
+     aria-hidden="true"></div>
+
+<div id="website-nav-panel"
+     class="fixed inset-y-0 right-0 z-40 hidden h-dvh w-[min(20rem,88vw)] flex flex-col border-l <%= hairline_class %> <%= sheet_panel_class %> shadow-xl lg:hidden"
+     data-website-nav-target="panel"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="<%= sheet_title_id %>">
+  <div class="flex <%= bar_height_class %> shrink-0 items-center justify-between gap-4 border-b <%= hairline_class %> pl-7 pr-5 sm:pl-9 sm:pr-8">
+    <p id="<%= sheet_title_id %>" class="min-w-0 truncate text-site-xl leading-none <%= headline_font_class %>"><%= site_name %></p>
+    <button type="button"
+            class="<%= nav_button_class %>"
+            data-action="click->website-nav#close">
+      <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+      </svg>
+      <span class="sr-only"><%= close_label %></span>
+    </button>
+  </div>
+
+  <div class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain p-3 sm:px-5">
+    <nav class="flex flex-col gap-1" aria-label="<%= site_name %>">
+      <% nav_pages.each do |page| %>
+        <a href="<%= page_href(page) %>"
+           class="<%= sheet_link_class(page) %>"
+           <% if current?(page) %>aria-current="page"<% end %>>
+          <span class="truncate"><%= page_title(page) %></span>
+        </a>
+      <% end %>
+    </nav>
+
+  </div>
+</div>

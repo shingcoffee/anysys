@@ -1,0 +1,9 @@
+<div class="mb-6 border-b border-border-subtle">
+  <nav class="-mb-px flex gap-6 overflow-x-auto" aria-label="<%= nav_label %>">
+    <% tabs.each do |tab| %>
+      <%= link_to tab[:label], tab[:path],
+            aria: { current: tab[:active] ? "page" : nil },
+            class: "#{tab[:active] ? 'border-accent text-accent' : 'border-transparent text-text-muted hover:border-border-subtle hover:text-text-primary'} whitespace-nowrap border-b-2 py-3 px-1 text-sm font-medium" %>
+    <% end %>
+  </nav>
+</div>

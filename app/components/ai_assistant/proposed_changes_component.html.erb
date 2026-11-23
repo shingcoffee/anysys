@@ -1,0 +1,120 @@
+<%# A sibling of the "What I changed" trail, so a proposal reads as part of the
+    transcript rather than as a dialog dropped into it. `data-proposal` is what
+    the controller keys off to retire an older panel once a newer one lands. %>
+<section class="w-full max-w-[min(92%,42rem)] overflow-hidden rounded-xl bg-canvas ring-1 ring-border-subtle"
+         data-proposal="<%= state %>"
+         aria-label="<%= t("ai_assistant.assistant.plan.title") %>">
+  <header class="flex flex-wrap items-start justify-between gap-x-3 gap-y-1.5 border-b border-border-subtle px-3 py-2">
+    <div class="min-w-0">
+      <p class="text-xs font-medium text-text-secondary"><%= t("ai_assistant.assistant.plan.title") %></p>
+      <% if pending? %>
+        <p class="mt-0.5 text-caption text-text-muted"><%= t("ai_assistant.assistant.plan.subtitle") %></p>
+      <% end %>
+    </div>
+    <% if breaking_changes? %>
+      <span class="inline-flex max-w-full items-center gap-1 rounded-full bg-warning-subtle px-2 py-0.5 text-[11px] font-medium text-warning ring-1 ring-warning/20">
+        <svg class="size-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+        <span class="break-words"><%= t("ai_assistant.assistant.plan.breaking_badge") %></span>
+      </span>
+    <% end %>
+  </header>
+
+  <div class="flex flex-col gap-3 px-3 py-2.5">
+    <% entries.each do |entry| %>
+      <div class="min-w-0">
+        <p class="text-xs font-semibold text-text-primary break-words"><%= entry.name %></p>
+        <ul class="mt-1.5 flex flex-col gap-1">
+          <% entry.rows.each do |row| %>
+            <li class="flex min-w-0 flex-col gap-1 rounded-lg px-2 py-1 text-xs leading-5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-2 <%= row_classes(row) %>">
+              <span class="min-w-0 break-words"><%= row.label %></span>
+              <% if row.values.any? %>
+                <span class="flex min-w-0 flex-wrap items-center gap-1">
+                  <% row.values.each do |value| %>
+                    <code class="max-w-full break-words rounded-md bg-surface px-1.5 py-0.5 font-mono text-[11px] text-text-secondary ring-1 ring-border-subtle"><%= value %></code>
+                  <% end %>
+                </span>
+              <% end %>
+              <%# One branch for both a scalar change and a list of relabelled
+                  options: each is a before/after pair, and a new field is a
+                  pair with nothing on its left. %>
+              <% if row.pairs.any? %>
+                <span class="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
+                  <% row.pairs.each do |before, after| %>
+                    <span class="flex min-w-0 flex-wrap items-center gap-1">
+                      <% if before %>
+                        <code class="max-w-full break-words rounded-md bg-surface px-1.5 py-0.5 font-mono text-[11px] text-text-muted line-through ring-1 ring-border-subtle"><%= before %></code>
+                        <span class="shrink-0 text-text-muted" aria-hidden="true">&rarr;</span>
+                      <% end %>
+                      <code class="max-w-full break-words rounded-md bg-surface px-1.5 py-0.5 font-mono text-[11px] text-text-primary ring-1 ring-border-subtle"><%= after %></code>
+                    </span>
+                  <% end %>
+                </span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+
+  <% if pending? %>
+    <%# Apply posts the confirm phrase pinned to this message through the
+        ordinary message pipeline. The note is the slot the controller writes
+        into once a newer proposal supersedes this one. %>
+    <footer class="flex flex-col gap-2 border-t border-border-subtle px-3 py-2.5 sm:flex-row sm:flex-wrap sm:items-center">
+      <%= render ButtonComponent.new(
+            variant: :primary,
+            size: :sm,
+            type: :button,
+            class: "w-full sm:w-auto",
+            data: apply_data
+          ) do %>
+        <span data-proposal-apply-label><%= t("ai_assistant.assistant.plan.apply") %></span>
+      <% end %>
+      <% if discard_path %>
+        <span data-proposal-discard class="contents">
+          <%= button_to discard_path,
+                method: :post,
+                class: "btn btn-ghost w-full px-3 py-1.5 text-[13px] sm:w-auto",
+                form: { class: "w-full sm:w-auto" },
+                data: { turbo_submits_with: t("ai_assistant.assistant.plan.discarding") } do %>
+            <%= t("ai_assistant.assistant.plan.discard") %>
+          <% end %>
+        </span>
+      <% end %>
+      <%= render ButtonComponent.new(
+            variant: :secondary,
+            size: :sm,
+            type: :button,
+            class: "w-full sm:w-auto",
+            data: {
+              action: "click->ai-assistant#refineProposal",
+              "proposal-refine": ""
+            }
+          ) do %>
+        <%= t("ai_assistant.assistant.plan.refine") %>
+      <% end %>
+      <p class="hidden text-caption text-text-muted" data-proposal-note></p>
+    </footer>
+  <% elsif applied? %>
+    <footer class="flex items-center gap-1.5 border-t border-border-subtle px-3 py-2 text-caption text-success">
+      <svg class="size-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+      </svg>
+      <span><%= t("ai_assistant.assistant.plan.applied") %></span>
+    </footer>
+  <% elsif declined? %>
+    <footer class="flex items-center gap-1.5 border-t border-border-subtle px-3 py-2 text-caption text-text-muted">
+      <svg class="size-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+      <span><%= t("ai_assistant.assistant.plan.declined") %></span>
+    </footer>
+  <% else %>
+    <footer class="border-t border-border-subtle px-3 py-2">
+      <p class="text-caption text-text-muted" data-proposal-note><%= t("ai_assistant.assistant.plan.superseded") %></p>
+    </footer>
+  <% end %>
+</section>

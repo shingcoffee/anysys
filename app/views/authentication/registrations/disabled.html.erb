@@ -1,0 +1,16 @@
+<%= render Member::AuthShellComponent.new(
+      customer: current_customer,
+      title:    t("auth.registrations.disabled.shell_title"),
+      subtitle: t("auth.registrations.disabled.shell_subtitle")
+    ) do %>
+  <div class="mb-8">
+    <h2 class="text-subtitle mb-1"><%= t("auth.registrations.disabled.heading") %></h2>
+    <p class="text-body-sm">
+      <%= t("auth.registrations.disabled.body") %>
+    </p>
+  </div>
+
+  <%= link_to t("auth.common.back_to_sign_in"),
+        new_user_session_path,
+        class: "btn-member w-full justify-center" %>
+<% end %>

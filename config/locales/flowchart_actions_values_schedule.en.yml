@@ -1,0 +1,292 @@
+en:
+  flowchart_actions:
+    validate_value:
+      label: Validate Value
+      description: Validate one value against a business format, with optional normalisation
+      fields:
+        sourceVariable:
+          label: Source
+          help: Context path of the value to validate.
+        rule:
+          label: Rule
+          help: Business format to check.
+          options:
+            email: Email
+            phone: Phone
+            url: URL
+            uuid: UUID
+            regex: Regular expression
+            length: Length
+            range: Numeric range
+            in_list: In list
+            luhn: Luhn
+            iban: IBAN
+            cn_resident_id: Chinese resident ID
+            postal_code: Postal code
+            ip_address: IP address
+            date: Date
+            date_range: Date range
+            cn_mobile: China mobile
+            required: Required
+        phoneCountry:
+          label: Phone country
+          help: ISO alpha-2 country for national numbers. Blank requires an international number.
+          placeholder: "e.g., US (blank = international)"
+        pattern:
+          label: Pattern
+          help: Ruby regular expression the value must match.
+          placeholder: "e.g., \\A\\d+\\z"
+        minLength:
+          label: Min length
+          help: Shortest accepted string length.
+        maxLength:
+          label: Max length
+          help: Longest accepted string length.
+        minValue:
+          label: Min value
+          help: Lowest accepted number. Leave blank for an open lower bound.
+        maxValue:
+          label: Max value
+          help: Highest accepted number. Leave blank for an open upper bound.
+        allowedValues:
+          label: Allowed values
+          help: Values the source must match.
+        caseSensitive:
+          label: Case sensitive
+          help: Match letter case when comparing to the list.
+        postalCountry:
+          label: Postal country
+          help: Country whose postal-code pattern is applied.
+          placeholder: "e.g., US or CN"
+        urlSchemes:
+          label: URL schemes
+          help: Allowed URL schemes such as https and http.
+        dateFormat:
+          label: Date format
+          help: strptime pattern used to parse the date.
+          placeholder: "%Y-%m-%d"
+        minDate:
+          label: Min date
+          help: Inclusive lower date as YYYY-MM-DD, today, or tomorrow.
+          placeholder: "today or 2026-01-01"
+        maxDate:
+          label: Max date
+          help: Inclusive upper date as YYYY-MM-DD, today, or tomorrow.
+          placeholder: "2026-12-31"
+        ipVersion:
+          label: IP version
+          help: Require IPv4, IPv6, or either.
+          options:
+            any: Any
+            v4: IPv4
+            v6: IPv6
+        allowBlank:
+          label: Allow blank
+          help: Treat a blank source as valid.
+        onInvalid:
+          label: On invalid
+          help: Fail the step, or only set the result flag to false.
+          options:
+            fail: Fail
+            flag: Flag only
+        errorField:
+          label: Error field
+          help: Form field name attached to the error so the input can be highlighted.
+          placeholder: "e.g., email"
+        message:
+          label: Message
+          help: Custom localized error. Blank uses the per-rule default.
+        resultVar:
+          label: Save result as
+          help: Context variable set to true when the value is valid.
+        normalizedVar:
+          label: Save normalized as
+          help: Context variable that receives the canonical value when valid.
+      errors:
+        invalid_phone_country: "%{field} must be a blank value or an ISO alpha-2 country code"
+        invalid_pattern: "%{field} must be a valid regular expression"
+        range_bound_required: "Set minValue, maxValue, or both"
+        min_greater_than_max: "%{field} must be greater than or equal to the minimum"
+        empty_list: "%{field} must include at least one value"
+        unsupported_postal_country: "%{field} must be a supported postal-code country"
+        invalid_date_bound: "%{field} must be YYYY-MM-DD, today, or tomorrow"
+    format_value:
+      label: Format Value
+      description: Locale-aware display formatting for templates, documents and messages
+      fields:
+        sourceVariable:
+          label: Source
+          help: Context path of the value to format.
+        formatType:
+          label: Format type
+          help: How to present the value.
+          options:
+            number: Number
+            currency: Currency
+            percentage: Percentage
+            delimited: Delimited number
+            human_size: Human size
+            human_number: Human number
+            phone: Phone
+            date: Date
+            datetime: Date and time
+        locale:
+          label: Locale
+          help: Locale used for number and date formats. Blank uses the run locale.
+          placeholder: "e.g., en or zh-CN"
+        precision:
+          label: Precision
+          help: Digits after the decimal (or significant digits for human formats).
+        currencyUnit:
+          label: Currency unit
+          help: Currency symbol or code. Blank uses the locale default.
+          placeholder: "e.g., $ or ¥"
+        delimiter:
+          label: Delimiter
+          help: Thousands delimiter. Blank uses the locale default.
+          placeholder: "e.g., , or ."
+        separator:
+          label: Separator
+          help: Decimal separator. Blank uses the locale default.
+          placeholder: "e.g., . or ,"
+        stripInsignificantZeros:
+          label: Strip insignificant zeros
+          help: Drop trailing zeros after the decimal.
+        phoneCountry:
+          label: Phone country
+          help: ISO alpha-2 country used to parse a national number.
+          placeholder: "e.g., US (blank = international)"
+        phoneStyle:
+          label: Phone style
+          help: How to display a valid phone number.
+          options:
+            international: International
+            national: National
+            e164: E.164
+        dateStyle:
+          label: Date style
+          help: Built-in or custom date format.
+          options:
+            default: Default
+            short: Short
+            long: Long
+            iso8601: ISO 8601
+            custom: Custom
+        customFormat:
+          label: Custom format
+          help: strftime pattern used when Date style is custom.
+          placeholder: "%Y-%m-%d %H:%M"
+        timezone:
+          label: Timezone
+          help: IANA timezone for datetime values. Blank uses the run time zone.
+          placeholder: "e.g., UTC or Asia/Shanghai"
+        fallbackValue:
+          label: Fallback
+          help: Text written when the source is blank or cannot be formatted.
+          placeholder: "e.g., —"
+        resultVar:
+          label: Save result as
+          help: Context variable that receives the formatted text.
+      errors:
+        invalid_timezone: "%{field} must be a valid IANA timezone"
+        invalid_phone_country: "%{field} must be a blank value or an ISO alpha-2 country code"
+    next_occurrence:
+      label: Next Occurrence
+      description: Next run, renewal, or due dates from a recurrence rule
+      fields:
+        frequency:
+          label: Frequency
+          help: How the series repeats.
+          options:
+            daily: Daily
+            weekly: Weekly
+            monthly: Monthly
+            yearly: Yearly
+            cron: Cron
+        interval:
+          label: Interval
+          help: Repeat every N periods (not used for cron).
+        startVariable:
+          label: Series start
+          help: Context path of the series anchor. Blank uses now.
+        fromVariable:
+          label: After
+          help: Context path of the time occurrences must be strictly after. Blank uses now.
+        weekdays:
+          label: Weekdays
+          help: Days of week as mon..sun. Blank uses the start weekday.
+        dayOfMonth:
+          label: Day of month
+          help: 0 uses the start day, -1 the last day, 1–31 a fixed day.
+        monthEndPolicy:
+          label: Month-end policy
+          help: When the month has fewer days, clamp to the last day or skip the month.
+          options:
+            clamp: Clamp
+            skip: Skip
+        cronExpression:
+          label: Cron expression
+          help: Five- or six-field cron used when Frequency is cron.
+          placeholder: "e.g., 0 9 * * *"
+        timeOfDay:
+          label: Time of day
+          help: "HH:MM applied to calendar occurrences. Blank keeps the start time."
+          placeholder: "HH:MM"
+        timezone:
+          label: Timezone
+          help: IANA timezone for the series.
+          placeholder: "e.g., UTC"
+        businessDayAdjust:
+          label: Business-day adjust
+          help: Shift weekend results to the next or previous weekday.
+          options:
+            none: None
+            next_business_day: Next business day
+            previous_business_day: Previous business day
+        returns:
+          label: Returns
+          help: The next instant, or a list of upcoming instants.
+          options:
+            first: First
+            list: List
+        count:
+          label: Count
+          help: How many occurrences to return when Returns is list.
+        untilVariable:
+          label: Until
+          help: Context path of the time after which no occurrence is returned.
+        resultVar:
+          label: Save result as
+          help: Context variable that receives the next occurrence or list.
+      errors:
+        invalid_timezone: "%{field} must be a valid IANA timezone"
+        invalid_cron: "%{field} must be a valid cron expression"
+        invalid_time_of_day: "%{field} must be blank or HH:MM"
+        invalid_weekday: "%{field} values must be mon, tue, wed, thu, fri, sat, or sun"
+  flowchart_runtime:
+    errors:
+      validate_value:
+        failed: "Could not validate the value (%{reason})."
+        email: Enter a valid email address.
+        phone: Enter a valid phone number.
+        url: Enter a valid URL.
+        uuid: Enter a valid UUID.
+        regex: The value does not match the required pattern.
+        length: The value is not an accepted length.
+        range: The value is outside the accepted range.
+        in_list: The value is not in the allowed list.
+        luhn: Enter a valid number (Luhn check failed).
+        iban: Enter a valid IBAN.
+        cn_resident_id: Enter a valid Chinese resident ID number.
+        postal_code: Enter a valid postal code.
+        ip_address: Enter a valid IP address.
+        date: Enter a valid date.
+        date_range: Enter a date in the accepted range.
+        cn_mobile: Enter a valid Chinese mobile number.
+        required: This field is required.
+      format_value:
+        failed: "Could not format the value (%{reason})."
+      next_occurrence:
+        failed: "Could not compute the next occurrence (%{reason})."
+        invalid_anchor: The recurrence start, after, or until time is invalid.
+        no_occurrence: No occurrence falls after the given time.

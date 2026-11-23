@@ -1,0 +1,23 @@
+en:
+  flowchart_elements:
+    decision:
+      fields:
+        routeBy:
+          label: Route by
+          help: Choose whether branches match a subject value or a Yes / No condition.
+          options:
+            value: Value
+            condition: Yes / No
+        subject:
+          label: Subject
+          help: Ruby expression whose value is compared to each branch match value.
+          placeholder: "ctx[:status]"
+        condition:
+          label: Condition
+          help: Rows joined by AND or OR. The result selects the Yes or No branch.
+      errors:
+        too_few_branches: Decision requires at least two outgoing connections
+        duplicate_match_value: Match values must be unique
+        multiple_otherwise: Only one Otherwise branch is allowed
+        invalid_condition_match: Condition branches must match Yes (true), No (false), or Otherwise
+        missing_yes_branch: Condition routing needs a Yes branch and either No or Otherwise

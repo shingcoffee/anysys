@@ -1,0 +1,14 @@
+zh-CN:
+  member:
+    security:
+      mfa:
+        enabled:       "两步验证已开启。"
+        disabled:      "两步验证已关闭。"
+        invalid_code:  "验证码无效，请重试。"
+        throttled:     "尝试次数过多，请稍后再试。"
+        already_enabled: "两步验证已开启。"
+
+  authentication:
+    mfa_recovery:
+      consumed: "两步验证已关闭，请重新登录。"
+      invalid:  "此重置链接无效或已过期。"

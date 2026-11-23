@@ -1,0 +1,10 @@
+<% confirmation_url = user_confirmation_url(confirmation_token: @token) %>
+<%= t("auth.mailer.confirmation.greeting", email: @resource.email) %>
+
+<%= t("auth.mailer.confirmation.instructions") %>
+
+<%= confirmation_url %>
+
+<%= t("auth.mailer.confirmation.ignore") %>
+
+<%= t("auth.mailer.confirmation.footer") %>

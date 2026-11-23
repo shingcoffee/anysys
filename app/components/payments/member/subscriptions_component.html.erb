@@ -1,0 +1,115 @@
+<% if any_subscriptions? %>
+  <%# ── Subscriptions table ─────────────────────────────────────────────── %>
+  <div class="overflow-x-auto rounded-2xl ring-1 ring-inset <%= chrome.theme.dark? ? "ring-white/[0.08]" : "ring-neutral-900/[0.07]" %>">
+    <table class="min-w-full <%= chrome.table_divide_class %>" aria-label="<%= t("comp_payments.member.subscriptions.table_aria") %>">
+      <thead>
+        <tr>
+          <th scope="col" class="<%= chrome.table_header_class %>"><%= t("comp_payments.member.subscriptions.headers.plan") %></th>
+          <th scope="col" class="<%= chrome.table_header_class %>"><%= t("comp_payments.member.subscriptions.headers.amount") %></th>
+          <th scope="col" class="<%= chrome.table_header_class %> hidden sm:table-cell"><%= t("comp_payments.member.subscriptions.headers.cycle") %></th>
+          <th scope="col" class="<%= chrome.table_header_class %> hidden md:table-cell"><%= t("comp_payments.member.subscriptions.headers.card") %></th>
+          <th scope="col" class="<%= chrome.table_header_class %> hidden lg:table-cell"><%= t("comp_payments.member.subscriptions.headers.next_charge") %></th>
+          <th scope="col" class="<%= chrome.table_header_class %>"><%= t("common.labels.status") %></th>
+          <th scope="col" class="px-5 py-3"></th>
+        </tr>
+      </thead>
+
+      <tbody class="<%= chrome.table_divide_class %>">
+        <% subscriptions.each do |sub| %>
+          <tr class="<%= chrome.table_row_class %>">
+
+            <%# Plan name %>
+            <td class="px-5 py-4">
+              <p class="text-site-sm font-medium"><%= sub.plan_name %></p>
+              <p class="text-site-xs sm:hidden <%= chrome.muted_class %>"><%= cycle_label(sub) %></p>
+            </td>
+
+            <%# Amount + currency %>
+            <td class="px-5 py-4">
+              <span class="text-site-sm font-medium tabular-nums">
+                <%= amount_label(sub) %>
+              </span>
+            </td>
+
+            <%# Cycle — hidden on small screens (shown in plan name row) %>
+            <td class="hidden px-5 py-4 text-site-sm sm:table-cell <%= chrome.body_text_class %>">
+              <%= cycle_label(sub) %>
+            </td>
+
+            <%# Linked card — hidden on small/medium screens %>
+            <td class="hidden px-5 py-4 text-site-sm md:table-cell <%= chrome.body_text_class %>">
+              <% if sub.payment_method %>
+                <span class="inline-flex items-center gap-1.5">
+                  <svg class="size-3.5 shrink-0 <%= chrome.muted_class %>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                  </svg>
+                  <%= sub.payment_method.display_label %>
+                </span>
+              <% else %>
+                <span class="<%= chrome.muted_class %>"><%= t("common.labels.em_dash") %></span>
+              <% end %>
+            </td>
+
+            <%# Next charge date — hidden on small/medium screens %>
+            <td class="hidden px-5 py-4 text-site-sm tabular-nums lg:table-cell <%= chrome.body_text_class %>">
+              <%= next_charge_label(sub) %>
+            </td>
+
+            <%# Status badge %>
+            <td class="px-5 py-4">
+              <span class="badge <%= status_badge_class(sub) %>"
+                    aria-label="<%= t("comp_payments.member.subscriptions.status_aria", status: status_label(sub)) %>">
+                <%= status_label(sub) %>
+              </span>
+            </td>
+
+            <%# Action cell — SCA recovery when present; cancel unless already ended %>
+            <td class="px-5 py-4 text-right">
+              <% if (rec = recovery(sub)) %>
+                <div class="inline-block text-right"
+                     data-controller="payments--sca-recovery"
+                     data-payments--sca-recovery-publishable-key-value="<%= publishable_key %>"
+                     data-payments--sca-recovery-client-secret-value="<%= rec[:client_secret] %>"
+                     data-payments--sca-recovery-error-text-value="<%= t("comp_payments.member.subscriptions.verify_error") %>"
+                     data-payments--sca-recovery-unavailable-text-value="<%= t("comp_payments.shared.stripe_unavailable") %>">
+                  <button type="button"
+                          data-action="click->payments--sca-recovery#authenticate"
+                          class="<%= chrome.primary_button_class %>">
+                    <%= t("comp_payments.member.subscriptions.complete_verification") %>
+                  </button>
+                  <p data-payments--sca-recovery-target="error"
+                     class="mt-1 hidden <%= chrome.error_text_class %>" aria-live="polite"></p>
+                </div>
+              <% elsif cancellable?(sub) %>
+                <%= form_with url: cancel_url(sub), method: :post,
+                              class: "inline",
+                              data: { turbo_confirm: t("comp_payments.member.subscriptions.cancel_confirm") } do |f| %>
+                  <%= f.button t("common.actions.cancel"),
+                               type: "submit",
+                               class: chrome.danger_link_class %>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+<% else %>
+  <%# ── Empty state ─────────────────────────────────────────────────────── %>
+  <section data-member-card class="<%= chrome.card_class %> text-center" aria-label="<%= t("comp_payments.member.subscriptions.empty_title") %>">
+    <span class="<%= chrome.icon_well_class %> mx-auto mb-4"
+          aria-hidden="true">
+      <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+      </svg>
+    </span>
+    <h2 class="<%= chrome.section_title_class %>"><%= t("comp_payments.member.subscriptions.empty_title") %></h2>
+    <p class="mx-auto mt-2 max-w-xs <%= chrome.body_copy_class %>">
+      <%= t("comp_payments.member.subscriptions.empty_hint") %>
+    </p>
+  </section>
+<% end %>

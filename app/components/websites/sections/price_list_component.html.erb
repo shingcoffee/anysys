@@ -1,0 +1,21 @@
+<section class="<%= padding_class %>">
+  <div class="<%= inner_measure_class %> flex flex-col <%= gap_class %>">
+    <%= header(kicker: prop("kicker"), heading: prop("heading"), subhead: prop("subhead"), align: :center) %>
+    <div class="mx-auto grid w-full max-w-5xl gap-x-16 gap-y-8 md:grid-cols-2 md:gap-y-10">
+      <% items.each do |item| %>
+        <div <%= item_attrs("items", class: "flex min-w-0 flex-col gap-1.5") %>>
+          <div class="flex items-baseline gap-3">
+            <h3 <%= el_attrs("items.title", class: "min-w-0 break-words text-site-lg leading-snug md:text-site-xl #{headline_font_class}") %>><%= item["title"] %></h3>
+            <span class="min-w-6 flex-1 translate-y-[-0.25em] border-b border-dotted <%= leader_class %>" aria-hidden="true"></span>
+            <% if present_text?(item["price"]) %>
+              <p <%= el_attrs("items.price", class: "shrink-0 text-site-base tabular-nums md:text-site-lg #{theme.kicker_class}") %>><%= item["price"] %></p>
+            <% end %>
+          </div>
+          <% if present_text?(item["body"]) %>
+            <p <%= el_attrs("items.body", class: "text-pretty text-site-md leading-relaxed #{muted_class}") %>><%= item["body"] %></p>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

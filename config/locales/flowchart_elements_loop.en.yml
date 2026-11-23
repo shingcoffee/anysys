@@ -1,0 +1,50 @@
+en:
+  flowchart_elements:
+    loop:
+      fields:
+        loopType:
+          label: Loop type
+          help: Repeat while a condition is true, or walk each item in a list.
+          options:
+            while: Repeat while
+            for_each: For each item
+        runOnceFirst:
+          label: Run once before checking
+          help: Run the body once before the first condition check.
+        condition:
+          label: Condition
+          help: The loop continues while this is true.
+        collection:
+          label: Collection
+          help: Context path of the list to walk.
+          placeholder: items
+        itemVariable:
+          label: Item name
+          help: Context name bound to the current item.
+          placeholder: item
+        maxIterations:
+          label: Max iterations
+          help: The run fails if the loop is still going after this many passes (1–10,000).
+          placeholder: "100"
+        stopWhen:
+          label: Stop early when
+          help: Leave the loop successfully when this becomes true.
+        skipWhen:
+          label: Skip item when
+          help: Skip the current item and continue with the next one.
+        indexVariable:
+          label: Index name
+          help: Context name bound to the current item index, starting at 0.
+          placeholder: index
+        collectInto:
+          label: Collect items into
+          help: Context name that receives the items that were processed.
+          placeholder: results
+      errors:
+        reserved_header_local: "%{field} cannot be %{name} because that name is reserved for the loop header"
+        colliding_loop_variables: "itemVariable and indexVariable must be different"
+        invalid_identifier: "%{field} must be a valid identifier path"
+        out_of_range: "%{field} must be between %{min} and %{max}"
+        invalid_integer: "%{field} must be an integer"
+        not_boolean: "%{field} must be true or false"
+        reserved_name: "%{field} cannot be %{value}"

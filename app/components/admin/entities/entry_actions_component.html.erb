@@ -1,0 +1,15 @@
+<div class="flex flex-col gap-3 border-t border-border-subtle pt-6 sm:flex-row sm:justify-end">
+  <%= render ButtonComponent.new(type: "submit", name: nil, disabled: disabled?, class: "min-h-11 w-full sm:w-auto", data: { turbo_submits_with: submitting_label }) do %>
+    <%= submit_label %>
+  <% end %>
+  <%= render extra_action if extra_action %>
+  <% if dismiss_action %>
+    <%= render ButtonComponent.new(variant: :secondary, class: "min-h-11 w-full sm:w-auto", data: { action: dismiss_action }) do %>
+      <%= t("common.actions.cancel") %>
+    <% end %>
+  <% elsif cancel_path.present? %>
+    <%= render ButtonComponent.new(tag: :a, href: cancel_path, variant: :secondary, class: "min-h-11 w-full sm:w-auto", data: { turbo_frame: "_top" }) do %>
+      <%= t("common.actions.cancel") %>
+    <% end %>
+  <% end %>
+</div>

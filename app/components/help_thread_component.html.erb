@@ -1,0 +1,145 @@
+<div class="flex flex-col gap-3 lg:flex-row lg:items-stretch" data-controller="help-thread">
+  <section class="relative flex min-h-[70dvh] min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface shadow-xs lg:min-h-[calc(100dvh-12rem)] lg:flex-[2]"
+             data-help-region="chat"
+             aria-labelledby="support-ticket-conversation">
+      <div class="flex items-start gap-3 border-b border-border-subtle px-4 py-3 sm:px-5">
+        <span class="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl bg-accent-subtle text-accent ring-1 ring-accent/15" aria-hidden="true">
+          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.327 48.294 48.294 0 005.83-.399c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+          </svg>
+        </span>
+        <div class="min-w-0">
+          <h2 id="support-ticket-conversation" class="truncate text-sm font-semibold tracking-tight text-text-primary"><%= support_ticket.subject %></h2>
+          <p class="mt-0.5 line-clamp-2 text-caption"><%= t("chrome.help_menu.thread.conversation") %> · <%= messages_count_label %></p>
+        </div>
+      </div>
+
+      <div class="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-6" data-help-thread-target="thread">
+        <div id="<%= messages_dom_id %>" class="mx-auto flex w-full max-w-2xl flex-col gap-3 py-1">
+          <% messages.each do |message| %>
+            <%= render HelpMessageBubbleComponent.new(message: message, viewer: viewer) %>
+          <% end %>
+        </div>
+      </div>
+
+      <% if can_reply? %>
+        <div class="shrink-0 border-t border-border-subtle px-4 py-3 sm:px-6">
+          <%= form_with url: reply_path, method: :post, multipart: true,
+                        class: "mx-auto w-full max-w-2xl",
+                        data: reply_stimulus_data.merge(help_thread_target: "form") do %>
+            <label class="sr-only" for="help-reply-body"><%= t("chrome.help_menu.thread.reply") %></label>
+            <div class="rounded-2xl border border-border-subtle bg-canvas focus-within:border-accent focus-within:ring-2 focus-within:ring-accent-muted">
+              <textarea name="support_ticket_message[body]"
+                        id="help-reply-body"
+                        required
+                        maxlength="5000"
+                        rows="1"
+                        placeholder="<%= t("chrome.help_menu.thread.reply_placeholder") %>"
+                        data-action="keydown->help-thread#keydown"
+                        class="w-full max-h-40 min-h-11 resize-none border-0 bg-transparent px-4 pt-3 pb-1 text-sm leading-6 text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-0"></textarea>
+              <div class="flex items-end justify-between gap-2 px-2 pb-2">
+                <div class="min-w-0 flex-1">
+                  <%= render HelpAttachmentsFieldComponent.new(
+                        name: "support_ticket_message[images][]",
+                        accept: Help::AttachmentRules.image_accept,
+                        hint: t("chrome.help_menu.notify.images_hint"),
+                        input_id: "help-reply-files",
+                        compact: true
+                      ) %>
+                </div>
+                <%= render ButtonComponent.new(
+                      variant: :primary,
+                      size: :sm,
+                      type: :submit,
+                      class: "size-9 shrink-0 !p-0",
+                      "aria-label": t("chrome.help_menu.thread.send_reply"),
+                      data: { help_attachments_target: "submit" }
+                    ) do %>
+                  <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-7.5-15-7.5v6l10 1.5-10 1.5v6z" />
+                  </svg>
+                  <span class="sr-only"><%= t("chrome.help_menu.thread.send_reply") %></span>
+                <% end %>
+              </div>
+            </div>
+            <p class="mt-2 text-center text-caption"><%= t("chrome.help_menu.thread.send_hint") %></p>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="flex items-center gap-3 border-t border-border-subtle px-5 py-3.5">
+          <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-success-subtle text-success" aria-hidden="true">
+            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 12l2 2 4-4"/>
+              <circle cx="12" cy="12" r="9"/>
+            </svg>
+          </span>
+          <p class="text-sm text-text-secondary"><%= t("maint_platform.support_tickets.show.resolved_note") %></p>
+        </div>
+      <% end %>
+    </section>
+
+    <aside class="flex w-full shrink-0 flex-col overflow-hidden rounded-2xl border border-border-subtle bg-surface shadow-xs lg:min-w-0 lg:flex-1 lg:overflow-y-auto"
+           data-help-region="details"
+           aria-label="<%= t("maint_platform.support_tickets.show.meta.details") %>">
+      <div class="flex items-center justify-between gap-3 border-b border-border-subtle px-4 py-3.5">
+        <h2 class="text-sm font-semibold tracking-tight text-text-primary"><%= t("maint_platform.support_tickets.show.meta.details") %></h2>
+        <%= render BadgeComponent.new(variant: status_badge[:variant], size: :sm) do %><%= status_badge[:label] %><% end %>
+      </div>
+
+      <div class="flex flex-col gap-4 px-5 py-4">
+        <% if owner_view? %>
+          <div class="flex items-start gap-3">
+            <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent-subtle text-accent text-xs font-semibold ring-1 ring-accent/15" aria-hidden="true"><%= requester_initials %></span>
+            <div class="min-w-0">
+              <p class="text-caption text-text-muted"><%= t("maint_platform.support_tickets.show.meta.requester") %></p>
+              <p class="mt-0.5 truncate text-sm font-medium text-text-primary"><%= requester_name %></p>
+              <p class="truncate text-xs text-text-muted"><%= requester_email %></p>
+            </div>
+          </div>
+
+          <div class="border-t border-border-subtle pt-4">
+            <div class="flex items-start gap-3">
+              <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-surface-hover text-text-secondary" aria-hidden="true">
+                <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 21h18M6 21V8l6-3 6 3v13M9 21v-6h6v6"/>
+                </svg>
+              </span>
+              <div class="min-w-0">
+                <p class="text-caption text-text-muted"><%= t("maint_platform.support_tickets.show.meta.customer") %></p>
+                <p class="mt-0.5 truncate text-sm font-medium text-text-primary"><%= customer_name %></p>
+                <p class="text-xs text-text-muted tabular-nums"><%= customer_id_label %></p>
+              </div>
+            </div>
+            <% if show_act_as? %>
+              <%= link_to act_as_path, target: "_blank", rel: "noopener noreferrer",
+                    class: "btn btn-secondary mt-3 w-full text-[13px]" do %>
+                <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M7 17L17 7M8 7h9v9"/>
+                </svg>
+                <%= t("maint_platform.customers.index.act_as") %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+
+        <dl class="<%= owner_view? ? "border-t border-border-subtle pt-4 " : "" %>grid grid-cols-1 gap-3">
+          <div>
+            <dt class="text-caption text-text-muted"><%= t("maint_platform.support_tickets.show.meta.opened") %></dt>
+            <dd class="mt-0.5 text-sm text-text-primary tabular-nums"><%= created_label %></dd>
+          </div>
+          <div>
+            <dt class="text-caption text-text-muted"><%= t("maint_platform.support_tickets.show.meta.last_message") %></dt>
+            <dd class="mt-0.5 text-sm text-text-primary tabular-nums"><%= last_message_label %></dd>
+          </div>
+        </dl>
+      </div>
+
+      <% if can_resolve? %>
+        <div class="border-t border-border-subtle px-5 py-3">
+          <%= button_to t("maint_platform.support_tickets.show.resolve"), resolve_path, method: :post,
+                class: "btn btn-secondary w-full",
+                form: { data: { turbo_confirm: t("maint_platform.support_tickets.show.resolve_confirm") } } %>
+        </div>
+      <% end %>
+    </aside>
+</div>

@@ -1,0 +1,48 @@
+<section class="relative overflow-hidden bg-white <%= padding_class %>">
+  <div class="<%= inner_measure_class %>">
+    <% if media? %>
+      <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-20">
+        <div class="min-w-0 lg:col-span-5 <%= 'lg:order-2' if image_left? %>">
+          <% if present_text?(prop('heading')) %><h2 class="<%= section_heading_class %>"><%= prop('heading') %></h2><% end %>
+          <div class="mt-6 space-y-5"><% paragraphs(prop('body')).each do |paragraph| %><p class="whitespace-pre-line break-words text-[17px] leading-8 text-slate-600 text-pretty"><%= paragraph %></p><% end %></div>
+        </div>
+        <div class="relative min-w-0 lg:col-span-7 <%= 'lg:order-1' if image_left? %>">
+          <div aria-hidden="true" class="absolute -inset-4 rounded-[2.5rem] bg-gradient-to-tr from-violet-400/40 via-fuchsia-300/30 to-sky-300/40 blur-2xl"></div>
+          <div class="relative rounded-[2rem] border border-white bg-white p-2 shadow-2xl shadow-violet-900/15 ring-1 ring-slate-200/70">
+            <div class="<%= media_frame_class %> rounded-[1.5rem]"><%= render_media(prop('image_url'), alt: prop('heading'), css_class: 'absolute inset-0 size-full object-cover') %></div>
+          </div>
+          <% chips.each_with_index do |chip, index| %>
+            <div aria-hidden="true" class="absolute hidden items-center gap-2.5 rounded-2xl border border-white bg-white/95 px-4 py-3 text-[14px] font-semibold text-slate-900 shadow-xl shadow-violet-900/15 ring-1 ring-slate-200/60 backdrop-blur sm:flex animate-float motion-reduce:animate-none <%= index.zero? ? "top-8 #{image_left? ? '-right-4' : '-left-6'}" : "bottom-8 #{image_left? ? '-left-6' : '-right-4'} [animation-delay:-3.5s]" %>">
+              <span class="<%= icon_tile_class(index + 4, size: 'size-8') %> rounded-xl"><%= index.zero? ? check_icon(css_class: 'size-4') : sparkle_icon(css_class: 'size-4') %></span>
+              <%= chip %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% elsif contact_note? %>
+      <div class="rounded-[2rem] bg-gradient-to-br from-violet-500 via-fuchsia-500 to-sky-500 p-px shadow-2xl shadow-violet-500/15">
+        <div class="grid min-w-0 gap-6 rounded-[calc(2rem-1px)] bg-white p-7 sm:p-10 lg:grid-cols-12 lg:items-center lg:gap-12 lg:p-12">
+          <div class="flex min-w-0 flex-col items-start gap-5 lg:col-span-6">
+            <span class="<%= icon_tile_class(0, size: 'size-14') %>" aria-hidden="true"><%= glyph("M4 5h16v11H8l-4 4zM8 10h8M8 13h5", css_class: 'size-7') %></span>
+            <% if present_text?(prop('heading')) %><h2 class="<%= compact_heading_class %>"><%= prop('heading') %></h2><% end %>
+          </div>
+          <div class="min-w-0 space-y-4 lg:col-span-6"><% paragraphs(prop('body')).each do |paragraph| %><p class="whitespace-pre-line break-words text-[17px] leading-8 text-slate-600"><%= paragraph %></p><% end %></div>
+        </div>
+      </div>
+    <% else %>
+      <div class="grid min-w-0 gap-8 lg:grid-cols-12 lg:gap-16">
+        <% if present_text?(prop('heading')) %>
+          <div class="min-w-0 lg:col-span-5">
+            <span aria-hidden="true" class="mb-6 block h-1.5 w-16 rounded-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-sky-500"></span>
+            <h2 class="<%= section_heading_class %>"><%= prop('heading') %></h2>
+          </div>
+        <% end %>
+        <div class="min-w-0 w-full space-y-6 lg:col-span-7">
+          <% paragraphs(prop('body')).each_with_index do |paragraph, index| %>
+            <p class="whitespace-pre-line break-words <%= index.zero? && editorial? ? lead_paragraph_class : 'text-[17px] leading-8 text-slate-600 text-pretty' %>"><%= paragraph %></p>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>

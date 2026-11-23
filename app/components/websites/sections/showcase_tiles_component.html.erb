@@ -1,0 +1,30 @@
+<section class="py-3 md:py-4">
+  <div class="mx-auto grid max-w-[112rem] grid-cols-1 gap-3 px-3 sm:px-4 md:grid-cols-2 md:gap-4">
+    <% tiles.each_with_index do |tile, index| %>
+      <article <%= item_attrs("tiles", framed: true, class: tile_class(tile)) %>>
+        <div class="absolute inset-0 -z-10">
+          <%= render_media(tile["image_url"], alt: tile["title"].to_s, css_class: "absolute inset-0 size-full object-cover transition duration-[1400ms] ease-out group-hover:scale-[1.03]", appearance: tile_appearance(tile), eager: index.zero?) %>
+          <div class="absolute inset-x-0 top-0 h-3/4 bg-gradient-to-b <%= scrim_class(tile) %>"></div>
+        </div>
+        <div class="flex flex-col items-center gap-3 px-6 pt-12 text-center sm:px-10 md:gap-4 md:pt-16">
+          <% if present_text?(tile["kicker"]) %>
+            <p <%= el_attrs("tiles.kicker", class: tile_kicker_class(tile)) %>><%= tile["kicker"] %></p>
+          <% end %>
+          <% if present_text?(tile["title"]) %>
+            <h2 <%= el_attrs("tiles.title", class: title_class(tile)) %>><%= tile["title"] %></h2>
+          <% end %>
+          <% if present_text?(tile["body"]) %>
+            <p <%= el_attrs("tiles.body", class: copy_class(tile)) %>><%= tile["body"] %></p>
+          <% end %>
+          <% if pills(tile).any? %>
+            <div class="mt-2 flex flex-wrap items-center justify-center gap-3 md:mt-3">
+              <% pills(tile).each do |pill| %>
+                <%= content_tag(pill[:href].present? ? :a : :span, pill[:label], href: pill[:href].presence, class: pill[:css_class]) %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </article>
+    <% end %>
+  </div>
+</section>

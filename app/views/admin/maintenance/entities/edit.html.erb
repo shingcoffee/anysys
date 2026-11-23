@@ -1,0 +1,15 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: definition_resource_breadcrumbs(
+    :entities,
+    { label: @entity.display_label, path: admin_maintenance_entity_path(current_customer_id, @entity) },
+    t("common.actions.edit")
+  ),
+  title: t("maint_core.entities.edit.title"),
+  description: t("maint_core.entities.edit.subtitle_html")
+) do %>
+  <% if @entity.bridge_entity? %>
+    <%= render AlertComponent.new(message: t("maint_core.entities.edit.bridge_notice"), type: :info) %>
+  <% end %>
+
+  <%= render "admin/maintenance/entities/form" %>
+<% end %>

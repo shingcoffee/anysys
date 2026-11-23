@@ -1,0 +1,315 @@
+zh-CN:
+  flowchart_actions:
+    hash_manipulate:
+      label: 哈希操作
+      description: 对哈希/字典数据进行加工
+      fields:
+        sourceVariable:
+          label: 来源
+          help: 本步骤读取的哈希在上下文中的路径。
+          placeholder: 例如 data
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        operation:
+          label: 操作
+          help: 如何调整来源哈希的结构。
+          options:
+            pick: 选取
+            omit: 排除
+            keys: 键
+            values: 值
+            deep_merge: 深层合并
+            merge: 合并
+            diff: 差异
+            rename_keys: 重命名键
+            invert: 反转
+            deep_dup: 深拷贝
+            symbolize_keys: 符号键
+            stringify_keys: 字符串键
+            transform_keys: 转换键
+            transform_values: 转换值
+            compact: 去除空值
+            set_keys: 设置键
+            flatten: 展平
+        keys:
+          label: 键
+          help: 要选取或排除的键名。
+        otherVariable:
+          label: 另一哈希
+          help: 用于合并或比较的第二个哈希。
+          placeholder: 例如 overrides
+        renameMap:
+          label: 重命名映射
+          help: 原键名到新键名的对应关系。
+        transformExpression:
+          label: 转换表达式
+          help: 应用于每个键或值的 Ruby 表达式。
+        computedFields:
+          label: 计算字段
+          help: 要写入的键，以及每个值的 Ruby 表达式。
+        flattenSeparator:
+          label: 扁平化分隔符
+          help: 嵌套键段之间插入的字符串。
+        caseInsensitive:
+          label: 忽略大小写
+          help: 匹配键时不区分字母大小写。
+        mergeStrategy:
+          label: 合并策略
+          help: 两个哈希的组合方式。
+          options:
+            shallow: 浅层
+            deep: 深层
+            replace: 替换
+            append: 追加
+        arrayMergeMode:
+          label: 数组合并方式
+          help: 深层或追加合并时数组值的组合方式。
+          options:
+            concat: 拼接
+            replace: 替换
+            unique_union: 去重并集
+        onConflict:
+          label: 冲突处理
+          help: 两侧共有同一键时以哪一侧为准。
+          options:
+            first: 保留先出现的
+            last: 保留后出现的
+    compare_data:
+      label: 比较数据
+      description: 比较两个值
+      fields:
+        sourceVariable:
+          label: 左侧
+          help: 左侧哈希在上下文中的路径。
+          placeholder: 例如 before
+        otherVariable:
+          label: 右侧
+          help: 右侧哈希在上下文中的路径。
+          placeholder: 例如 after
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        mode:
+          label: 模式
+          help: 相等比较的维度。
+          options:
+            keys: 键
+            values: 值
+            deep: 深层
+        comparisonType:
+          label: 比较类型
+          help: 要执行的比较种类。
+          options:
+            equality: 相等
+            deep_equal: 深层相等
+            schema_match: 结构匹配
+            diff: 差异
+            equal: 相等
+        ignoreKeys:
+          label: 忽略的键
+          help: 比较前从两侧剥离的键。
+        caseInsensitive:
+          label: 忽略大小写
+          help: 比较前将字符串统一为小写。
+        numericTolerance:
+          label: 数值容差
+          help: 数值比较允许的绝对差值。
+    map_value:
+      label: 映射值
+      description: 通过查找表映射值
+      fields:
+        sourceVariable:
+          label: 来源变量
+          help: 要查找的值在上下文中的路径。
+          placeholder: 例如 status
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        matchMode:
+          label: 匹配方式
+          help: 如何将输入值与各行对应。
+          options:
+            exact: 精确
+            regex: 正则
+            range: 区间
+        mappings:
+          label: 映射
+          help: 输入值到输出值的对应关系。
+        rules:
+          label: 规则
+          help: 模式或区间到输出值的对应关系。
+        defaultValue:
+          label: 默认值
+          help: 没有匹配项时使用的值。
+          placeholder: 例如 Unknown
+        fallbackStrategy:
+          label: 回退策略
+          help: 没有匹配项时的处理方式。
+          options:
+            default: 默认（使用默认值）
+            pass_through: 透传（返回输入）
+            raise: 报错（无匹配则失败）
+        multiMatch:
+          label: 多重匹配
+          help: 将所有匹配值作为数组返回。
+        caseSensitive:
+          label: 区分大小写
+          help: 比较时是否区分字母大小写。
+    type_cast:
+      label: 类型转换
+      description: 将值转换为其他类型
+      fields:
+        sourceVariable:
+          label: 来源
+          help: 要转换的值在上下文中的路径。
+          placeholder: 例如 value
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        targetType:
+          label: 目标类型
+          help: 要将值转换成的类型。
+          options:
+            string: 字符串
+            integer: 整数
+            float: 浮点数
+            boolean: 布尔
+            date: 日期
+            datetime: 日期时间
+            array: 数组
+            hash: 哈希
+            big_decimal: 高精度小数
+            rational: 有理数
+            complex: 复数
+            symbol: 符号
+            time: 时间
+            date_time: 日期时间对象
+            json: JSON
+            decimal: 小数
+        format:
+          label: 格式
+          help: 日期与日期时间转换使用的 strftime 模式。
+          placeholder: 例如 %Y-%m-%d（日期/日期时间格式）
+        timezoneAware:
+          label: 时区感知
+          help: 在指定时区中解析或换算该值。
+        strictBoolean:
+          label: 严格布尔
+          help: 仅将 true、“true”和 1 视为真。
+        timezone:
+          label: 时区
+          help: 启用时区感知时使用的时区名。
+          placeholder: 例如 UTC 或 America/New_York
+        onError:
+          label: 出错时
+          help: 值无法转换时的处理方式。
+          options:
+            fail: 失败
+            nil: 空
+            default: 默认值
+        defaultValue:
+          label: 默认值
+          help: 出错时选择默认值则写入该内容。
+          placeholder: 例如 0
+    generate_id:
+      label: 生成 ID
+      description: 生成唯一标识符
+      fields:
+        idType:
+          label: 标识类型
+          help: 要生成的标识符种类。
+          options:
+            uuid: uuid
+            ulid: ulid
+            nanoid: nanoid
+            hash: 哈希
+            custom_pattern: 自定义模式
+            hex: 十六进制
+            base58: base58
+            urlsafe_base64: URL 安全 Base64
+            secure_random: 安全随机数
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        length:
+          label: 长度
+          help: 哈希、十六进制与随机类型的字符长度。
+        size:
+          label: 大小
+          help: nanoid 的字符数。
+        alphabet:
+          label: 字母表
+          help: nanoid 允许使用的字符。
+          placeholder: 例如 0123456789abcdefghijklmnopqrstuvwxyz
+        pattern:
+          label: 模式
+          help: 自定义标识符的 strftime 模式。
+          placeholder: 例如 %Y%m%d（自定义模式）
+        prefix:
+          label: 前缀
+          help: 加在生成标识符前面的文本。
+          placeholder: 例如 user
+        separator:
+          label: 分隔符
+          help: 前缀与标识符之间的文本。
+          placeholder: 例如 _ 或 -
+        uppercase:
+          label: 大写
+          help: 将生成的标识符转为大写。
+    log:
+      label: 日志
+      description: 写入日志或审计跟踪
+      fields:
+        logLevel:
+          label: 日志级别
+          help: 与消息一起写入的严重程度。
+          options:
+            debug: 调试
+            info: 信息
+            warn: 警告
+            error: 错误
+            fatal: 致命
+        messageTemplate:
+          label: 消息模板
+          help: 写入日志的消息。
+          placeholder: 例如 "用户 #{ctx[:user_id]} 已创建"
+        logger:
+          label: 记录器
+          help: 消息写入的位置。
+          options:
+            rails: Rails
+            stdout: 标准输出
+            file: 文件
+        filePath:
+          label: 文件路径
+          help: 租户日志沙箱下的相对文件名。
+          placeholder: 例如 log/custom.log
+        tags:
+          label: 标签
+          help: 附加到 Rails 带标签日志的额外值。
+        includeBacktrace:
+          label: 附带调用栈（仅错误级别）
+          help: 在 error 与 fatal 级别追加调用栈。
+        structured:
+          label: 结构化（JSON）
+          help: 将消息写成 JSON 负载。
+        maxMessageLength:
+          label: 最大消息长度
+          help: 将消息截断到该字符数（0 表示不截断）。
+      errors:
+        unsafe_path: 文件路径必须是不含路径穿越的相对文件名
+  flowchart_runtime:
+    errors:
+      hash_manipulate:
+        failed: 无法重塑哈希（%{reason}）。
+      compare_data:
+        failed: 无法比较这两个值（%{reason}）。
+      map_value:
+        failed: 无法映射该值（%{reason}）。
+      type_cast:
+        failed: 无法转换该值（%{reason}）。
+      generate_id:
+        failed: 无法生成标识符（%{reason}）。
+      log:
+        failed: 无法写入日志（%{reason}）。

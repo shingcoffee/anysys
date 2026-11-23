@@ -1,0 +1,34 @@
+<section class="rounded-xl border p-4 sm:p-5 print:hidden <%= banner_surface_classes %>" aria-labelledby="invoice-collection-heading">
+  <h3 id="invoice-collection-heading" class="<%= visually_hidden_class %>"><%= t("comp_billing.collection.heading") %></h3>
+  <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div class="flex min-w-0 items-start gap-3">
+        <span class="flex size-8 shrink-0 items-center justify-center rounded-full <%= tone_classes %>"><%= render Billing::Admin::IconComponent.new(name: tone_icon, class_name: "size-4") %></span>
+        <div class="min-w-0 pt-1">
+          <p role="status" class="text-body-sm font-semibold text-text-primary"><%= t("comp_billing.collection.states.#{collection_state}") %></p>
+          <% if fact(collection, :reason_key) %><p class="mt-0.5 text-body-sm text-text-secondary"><%= t(fact(collection, :reason_key)) %></p><% end %>
+          <% if collection_state.to_s == "exhausted" %><p class="mt-0.5 text-body-sm text-text-secondary"><%= t("comp_billing.invoice_detail.collection_exhausted") %></p><% end %>
+          <% if show_next_attempt? %>
+            <p class="mt-0.5 text-body-sm text-text-secondary"><%= t("comp_billing.invoice_detail.next_attempt") %>: <span class="font-medium text-text-primary tabular-nums"><%= billing_date(fact(collection, :next_attempt_at)) %></span></p>
+          <% end %>
+        </div>
+      </div>
+      <div class="flex shrink-0 flex-wrap items-center gap-2 pl-11 lg:pl-0">
+        <% if show_retry? %><%= button_to t("comp_billing.invoice_detail.pay_invoice"), retry_path, method: :post, class: "btn btn-primary btn-sm" %><% end %>
+        <% if show_one_time_payment? %><%= link_to t("settings_billing.one_time_payment.action"), one_time_payment_path, class: "btn #{show_retry? ? 'btn-secondary' : 'btn-primary'} btn-sm" %><% end %>
+        <%= link_to t("settings_navigation.items.billing_payment_methods"), helpers.admin_settings_billing_payment_methods_path(customer_id), class: "btn btn-ghost btn-sm" %>
+        <%= link_to result_path, class: "btn btn-ghost btn-sm px-2", title: t("comp_billing.collection.refresh"), aria: { label: t("comp_billing.collection.refresh") } do %>
+          <%= render Billing::Admin::IconComponent.new(name: :refresh, class_name: "size-4") %>
+        <% end %>
+      </div>
+    </div>
+    <% if fact(invoice, :settlement_review_code).present? %><%= render AlertComponent.new(message: t("comp_billing.invoice_detail.settlement_review"), type: :warning, auto_dismiss: false) %><% end %>
+    <% if stripe_recovery? %>
+      <%= tag.div data: recovery_data, class: "flex max-w-xl flex-col gap-3 rounded-lg border border-border-subtle bg-surface p-4" do %>
+        <div class="rounded-lg border border-border bg-surface p-3" data-payments--stripe-card-target="element" aria-label="<%= t('settings_billing.invoices.complete_authentication') %>"></div>
+        <p data-payments--stripe-card-target="error" class="hidden text-body-sm text-danger" role="alert"></p>
+        <button type="button" data-action="click->payments--stripe-card#submit" class="btn btn-primary w-full sm:w-auto"><%= t("settings_billing.invoices.complete_authentication") %></button>
+      <% end %>
+    <% end %>
+  </div>
+</section>

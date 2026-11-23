@@ -1,0 +1,10 @@
+<%= t("billing_mailer.subscription_past_due.title") %>
+
+<%= t("billing_mailer.subscription_past_due.intro") %>
+
+<%= t("billing_mailer.subscription_past_due.label_plan") %>: <%= @plan.name %>
+<%= t("billing_mailer.subscription_past_due.label_status") %>: <%= t("comp_billing.subscription_summary.statuses.#{@subscription.status}") %>
+
+<%= t("billing_mailer.subscription_past_due.outro") %>
+
+<%= t("billing_mailer.shell.footer") %>

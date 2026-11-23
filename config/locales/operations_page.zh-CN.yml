@@ -1,0 +1,8 @@
+zh-CN:
+  operations:
+    violations:
+      page:
+        not_found: "未找到对 %{audience} 受众可见、操作键为 %{key} 的页面。"
+        processing_refused: "%{page} 无法使用表单处理 %{name}：%{errors}"
+      processing:
+        not_found: "本工作区没有名为 %{name} 的表单处理。"

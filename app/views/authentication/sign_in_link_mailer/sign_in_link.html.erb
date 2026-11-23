@@ -1,0 +1,5 @@
+<%= render Authentication::MailerShellComponent.new(
+      scope:      :sign_in_link,
+      email:      @resource.email,
+      action_url: sign_in_link_url(token: @token)
+    ) %>

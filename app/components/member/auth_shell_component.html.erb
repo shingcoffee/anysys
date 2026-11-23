@@ -1,0 +1,43 @@
+<div data-shell="member-auth" class="flex min-h-screen flex-col bg-canvas">
+  <main class="flex flex-1 items-center justify-center px-4 py-8 sm:px-6 sm:py-12">
+    <div class="w-full max-w-4xl overflow-hidden rounded-2xl border border-border-subtle bg-surface shadow-elevated">
+      <div class="grid lg:grid-cols-2">
+        <%# brand pane — sits above the form on small screens %>
+        <aside data-pane="brand" class="flex flex-col gap-6 border-b border-border-subtle bg-canvas-elevated px-7 py-8 lg:gap-10 lg:border-b-0 lg:border-r lg:px-10 lg:py-12">
+          <div class="flex items-center gap-2.5">
+            <span class="inline-flex size-8 items-center justify-center rounded-lg bg-member-accent-subtle ring-1 ring-member-accent-muted">
+              <svg class="size-4 text-member-accent-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2 4 4 8-8 4 4"/>
+              </svg>
+            </span>
+            <span class="text-sm font-semibold tracking-tight text-text-primary"><%= brand_name %></span>
+          </div>
+
+          <div class="lg:my-auto">
+            <h1 class="text-[1.75rem] font-semibold leading-[1.15] tracking-[-0.025em] text-text-primary lg:text-[2rem]"><%= title %></h1>
+            <p class="mt-2.5 text-sm leading-relaxed text-text-secondary lg:mt-3.5 lg:text-base"><%= subtitle %></p>
+          </div>
+        </aside>
+
+        <%# form pane %>
+        <section data-pane="form" class="px-6 py-8 sm:px-10 sm:py-12">
+          <div class="mx-auto w-full max-w-sm">
+            <% if helpers.flash[:alert].present? %>
+              <div class="mb-6 rounded-lg border border-danger/20 bg-danger-subtle px-3.5 py-2.5" role="alert" data-turbo-temporary
+                   data-controller="flash" data-flash-auto-dismiss-value="true">
+                <p class="text-sm text-danger"><%= helpers.flash[:alert] %></p>
+              </div>
+            <% end %>
+            <% if helpers.flash[:notice].present? %>
+              <div class="mb-6 rounded-lg border border-member-accent-muted bg-member-accent-subtle px-3.5 py-2.5" role="status" data-turbo-temporary
+                   data-controller="flash" data-flash-auto-dismiss-value="true">
+                <p class="text-sm text-member-accent-text"><%= helpers.flash[:notice] %></p>
+              </div>
+            <% end %>
+            <%= content %>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>

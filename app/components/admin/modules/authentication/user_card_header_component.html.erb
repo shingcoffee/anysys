@@ -1,0 +1,21 @@
+<%= content_tag root_tag, class: root_classes do %>
+  <span class="flex size-8 shrink-0 items-center justify-center rounded-lg <%= tile_class %>" aria-hidden="true">
+    <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="<%= icon_path %>" />
+    </svg>
+  </span>
+  <div class="min-w-0 flex-1 self-center">
+    <%= content_tag heading_tag, title, id: heading_id, class: "text-base font-semibold text-text-primary break-words [overflow-wrap:anywhere]" %>
+    <% if description.present? %>
+      <p class="mt-0.5 text-xs text-text-muted whitespace-pre-line break-words [overflow-wrap:anywhere]"><%= description %></p>
+    <% end %>
+  </div>
+  <% if meta.present? %>
+    <span class="shrink-0 self-center text-xs text-text-muted tabular-nums"><%= meta %></span>
+  <% end %>
+  <% if collapsible? %>
+    <svg class="size-4 shrink-0 self-center text-text-muted transition-transform duration-200 group-open/section:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+    </svg>
+  <% end %>
+<% end %>

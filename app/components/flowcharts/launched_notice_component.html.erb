@@ -1,0 +1,11 @@
+<div role="status" class="bg-emerald-50 border-b border-emerald-200 px-4 py-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+  <div class="flex items-start gap-2 min-w-0 sm:items-center">
+    <svg class="w-5 h-5 text-emerald-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <span class="text-sm font-medium text-emerald-800"><%= message %></span>
+  </div>
+  <%= button_to launch_path, method: :post, class: "btn btn-success btn-sm flex-shrink-0 self-start sm:self-auto" do %>
+    <%= t("maint_core.flowcharts.launch_latest") %>
+  <% end %>
+</div>

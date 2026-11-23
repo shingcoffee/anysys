@@ -1,0 +1,26 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "sms",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.email.entries.audience"), path: admin_modules_sms_contacts_path(current_customer_id) },
+        { label: t("sms_campaign_http.navigation.contacts") }
+      ],
+      title: t("sms_campaign_http.navigation.contacts"),
+      description: t("sms_campaign_ui.contacts.description"),
+      actions: [
+        {
+          label: t("sms_campaign_ui.contacts.add"),
+          path: admin_modules_sms_new_contact_path(current_customer_id),
+          variant: :primary,
+          icon: :plus
+        },
+        {
+          label: t("sms_campaign_ui.contacts.sync"),
+          path: admin_modules_sms_new_contacts_entity_sync_path(current_customer_id),
+          variant: :secondary
+        }
+      ]
+    ) do %>
+  <%= render "admin/modules/sms/shared/audience_tabs", active_tab: :contacts %>
+  <%= render Sms::Admin::ContactsIndexComponent.new(records: @records, columns: @columns, pagination: @pagination, filters: @filters) %>
+<% end %>

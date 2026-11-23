@@ -1,0 +1,26 @@
+<%= render Member::AuthShellComponent.new(
+      customer: current_customer,
+      title:    t("auth.mfa_recoveries.create.shell_title"),
+      subtitle: t("auth.mfa_recoveries.create.shell_subtitle")
+    ) do %>
+
+  <div class="mb-8">
+    <h2 class="text-subtitle mb-1"><%= t("auth.mfa_recoveries.create.heading") %></h2>
+    <p class="text-body-sm"><%= t("auth.mfa_recoveries.create.subheading_html") %></p>
+  </div>
+
+  <div class="rounded-xl bg-member-accent-subtle ring-1 ring-member-accent-muted/60 p-4 flex items-start gap-3">
+    <svg class="h-5 w-5 mt-0.5 text-member-accent-text flex-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+    </svg>
+    <div class="text-sm text-member-accent-text">
+      <%= t("auth.mfa_recoveries.create.spam_prompt_html") %>
+      <%= link_to t("auth.mfa_recoveries.create.request_new_link"), new_mfa_recovery_path(current_customer_id), class: "font-medium underline hover:no-underline" %>.
+    </div>
+  </div>
+
+  <p class="mt-6 text-center text-sm text-text-tertiary">
+    <%= link_to t("auth.common.back_to_sign_in"), new_user_session_path,
+          class: "font-medium text-member-accent-text hover:underline" %>
+  </p>
+<% end %>

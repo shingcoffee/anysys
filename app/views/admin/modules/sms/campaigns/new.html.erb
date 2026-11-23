@@ -1,0 +1,12 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "sms",
+      title: t("sms_campaign_ui.campaigns.create"),
+      description: t("sms_campaign_ui.campaigns.description"),
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("sms_campaign_http.navigation.campaigns"), path: admin_modules_sms_campaigns_path(current_customer_id) },
+        { label: t("common.actions.new") }
+      ]
+    ) do %>
+  <%= render Sms::Admin::CampaignFormComponent.new(campaign: @campaign, templates: @templates, segments: @segments, contacts: @contacts, form_values: @form_values, preview: @preview, errors: @errors) %>
+<% end %>

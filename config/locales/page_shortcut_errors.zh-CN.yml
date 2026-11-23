@@ -1,0 +1,10 @@
+zh-CN:
+  page_shortcuts:
+    errors:
+      invalid_path: "请输入使用小写字母、数字、连字符及内部单个点的站内路径。"
+      reserved_path: "此路径为系统保留路径。"
+      path_taken: "此路径已被页面快捷路径使用。"
+      website_path_taken: "此路径已被网站页面使用。"
+      shortcut_slug_taken: "此路径标识已被页面快捷路径使用。"
+      unavailable_target: "此目标页面当前不可公开访问。"
+      invalid_customer: "此快捷路径不属于所选客户。"

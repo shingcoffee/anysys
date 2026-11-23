@@ -1,0 +1,7 @@
+<%= tag.main(**main_attributes) do %>
+  <% kit_sections.each do |section| %>
+    <%= tag.div(**section_wrapper(section)) do %>
+      <%= render section_component(section) %>
+    <% end %>
+  <% end %>
+<% end %>

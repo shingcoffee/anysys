@@ -1,0 +1,194 @@
+<%# app/components/page_builder/template_picker_component.html.erb %>
+<div data-<%= controller_name %>-target="picker" data-template-picker-cards-url="<%= cards_url %>">
+
+  <%# ── TRIGGER ── %>
+  <div class="space-y-2">
+    <%# Empty state %>
+    <div data-<%= controller_name %>-target="triggerEmpty"
+         class="<%= 'hidden' if selected? %> flex flex-col items-center justify-center gap-3 py-8 px-4 border-2 border-dashed border-border rounded-lg bg-canvas-elevated text-center">
+      <svg class="w-10 h-10 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+      </svg>
+      <p class="text-caption"><%= t("comp_page_builder.template_picker.none_selected") %></p>
+      <button type="button" class="btn btn-accent-outline text-xs"
+              data-action="click-><%= controller_name %>#openModal">
+        <%= t("comp_page_builder.template_picker.choose") %>
+      </button>
+    </div>
+
+    <%# Selected state %>
+    <div data-<%= controller_name %>-target="triggerSelected"
+         class="<%= 'hidden' unless selected? %> flex flex-col gap-3 py-3 px-4 border border-border rounded-lg bg-surface sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex items-center gap-3 min-w-0">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-surface-active text-accent shrink-0">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </span>
+        <div class="min-w-0">
+          <p class="text-body-sm font-medium text-text-primary truncate" data-<%= controller_name %>-target="triggerName"><%= selected_name %></p>
+          <p class="text-caption"><%= t("comp_page_builder.template_picker.referenced") %></p>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-2 sm:shrink-0">
+        <%# Shown when the bound entity already references a template — the choice is locked to it. %>
+        <span class="inline-flex hidden items-center gap-1 text-caption text-text-muted"
+              data-<%= controller_name %>-target="lockedNote" title="<%= t("comp_page_builder.template_picker.locked_title") %>">
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          <%= t("comp_page_builder.template_picker.set_by_entity") %>
+        </span>
+        <% if preview_url.present? %>
+          <a href="<%= preview_url %>" target="_blank" rel="noopener"
+             class="btn btn-secondary text-xs"><%= t("comp_page_builder.template_picker.preview") %></a>
+        <% else %>
+          <button type="button" class="btn btn-secondary text-xs"
+                  data-action="click-><%= controller_name %>#previewSelected"><%= t("comp_page_builder.template_picker.preview") %></button>
+        <% end %>
+        <button type="button" class="btn btn-secondary text-xs"
+                data-action="click-><%= controller_name %>#openModal"
+                data-<%= controller_name %>-target="changeBtn"><%= t("comp_page_builder.template_picker.change") %></button>
+        <button type="button" class="btn btn-ghost text-xs"
+                data-action="click-><%= controller_name %>#clearTemplate"
+                data-<%= controller_name %>-target="clearTemplateBtn"><%= t("comp_page_builder.template_picker.clear") %></button>
+      </div>
+    </div>
+  </div>
+
+  <%# ── HIDDEN FIELD ── %>
+  <input type="hidden"
+         name="<%= field_name %>"
+         value="<%= field_value %>"
+         data-<%= controller_name %>-target="selectedTemplate"
+         data-template-key="<%= field_key %>">
+
+  <%# ── PICKER MODAL ── %>
+  <div class="hidden fixed inset-0 z-50 overflow-y-auto"
+       data-<%= controller_name %>-target="pickerModal"
+       data-action="click-><%= controller_name %>#closeModalOnBackdrop">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+      <div class="fixed inset-0 transition-base bg-text-primary/75" aria-hidden="true"></div>
+      <div class="relative flex flex-col w-full max-w-6xl h-[85vh] text-left transform bg-surface rounded-xl shadow-float overflow-hidden">
+
+        <%# Header %>
+        <div class="flex items-start justify-between px-6 py-4 border-b border-border shrink-0">
+          <div>
+            <h3 class="text-subheading"><%= t("comp_page_builder.template_picker.modal_title") %></h3>
+            <p class="mt-1 text-body-sm"><%= t("comp_page_builder.template_picker.modal_desc") %></p>
+          </div>
+          <button type="button" class="icon-button" data-action="click-><%= controller_name %>#closeModal">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <%# Body: category sidebar (left) + search & results (right) %>
+        <div class="flex flex-col flex-1 min-h-0 md:flex-row">
+
+          <%# Category sidebar %>
+          <aside class="px-4 py-4 overflow-y-auto border-b border-border shrink-0 bg-canvas max-h-44 md:max-h-none md:w-64 md:border-b-0 md:border-r">
+            <p class="mb-2 text-label"><%= t("comp_page_builder.template_picker.browse_category") %></p>
+            <%= render "shared/category_tabs", controller_name: controller_name, category_counts: category_counts %>
+          </aside>
+
+          <%# Results pane: search + grid %>
+          <div class="flex flex-col flex-1 min-h-0">
+            <%# Search %>
+            <div class="px-6 py-3 border-b border-border shrink-0">
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <svg class="w-4 h-4 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                <input type="text" class="input-field pl-10 pr-10"
+                       placeholder="<%= t("comp_page_builder.template_picker.search_placeholder") %>"
+                       data-action="input-><%= controller_name %>#searchTemplates"
+                       data-<%= controller_name %>-target="searchInput">
+                <button type="button"
+                        class="absolute inset-y-0 right-0 flex items-center pr-3 text-text-muted hover:text-text-secondary transition-base hidden"
+                        data-action="click-><%= controller_name %>#clearSearch"
+                        data-<%= controller_name %>-target="searchClear" title="<%= t("comp_page_builder.template_picker.clear_search") %>">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div class="hidden mt-2 text-caption" data-<%= controller_name %>-target="searchResultsCount">
+                <span data-<%= controller_name %>-target="searchResultsNumber">0</span> <%= t("comp_page_builder.template_picker.templates_found") %>
+              </div>
+            </div>
+
+            <%# Grid: lazy-loaded cards %>
+            <div class="flex-1 px-6 py-4 overflow-y-auto bg-canvas">
+              <%# Loading state %>
+              <div data-<%= controller_name %>-target="loadingState" class="hidden flex flex-col items-center justify-center py-16 gap-3">
+                <svg class="w-8 h-8 text-accent animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+                <p class="text-caption"><%= t("comp_page_builder.template_picker.loading") %></p>
+              </div>
+
+              <%# Error state %>
+              <div data-<%= controller_name %>-target="errorState" class="hidden text-center py-16">
+                <p class="text-body-sm text-danger mb-3"><%= t("comp_page_builder.template_picker.load_error") %></p>
+                <button type="button" class="btn btn-secondary text-xs" data-action="click-><%= controller_name %>#loadTemplates"><%= t("comp_page_builder.template_picker.retry") %></button>
+              </div>
+
+              <%# Cards injected here on first open %>
+              <div data-<%= controller_name %>-target="templateContainer"></div>
+            </div>
+          </div>
+        </div>
+
+        <%# Footer %>
+        <div class="flex justify-end gap-3 px-6 py-4 border-t border-border shrink-0 bg-surface">
+          <button type="button" class="btn btn-secondary" data-action="click-><%= controller_name %>#closeModal"><%= t("common.actions.cancel") %></button>
+          <button type="button" class="btn btn-primary"
+                  data-action="click-><%= controller_name %>#confirmSelection"
+                  data-<%= controller_name %>-target="confirmBtn"><%= confirm_label %></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# ── PREVIEW ZOOM MODAL ── %>
+  <div class="hidden fixed inset-0 z-[60] overflow-y-auto"
+       data-<%= controller_name %>-target="previewModal"
+       data-action="click-><%= controller_name %>#closePreviewModalOnBackdrop">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+      <div class="fixed inset-0 transition-base bg-text-primary/75" aria-hidden="true"></div>
+      <div class="relative inline-block w-full max-w-6xl overflow-hidden text-left align-middle transition-base transform bg-surface rounded-xl shadow-float">
+        <div class="px-6 py-4 border-b border-border">
+          <div class="flex items-start justify-between">
+            <div class="flex-1 min-w-0 mr-4">
+              <h3 class="text-subheading" data-<%= controller_name %>-target="previewModalName"><%= t("comp_page_builder.template_picker.preview_modal_title") %></h3>
+              <p class="mt-1 text-body-sm" data-<%= controller_name %>-target="previewModalDescription"><%= t("comp_page_builder.template_picker.preview_modal_desc") %></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-accent"><span data-<%= controller_name %>-target="previewModalTheme"><%= t("comp_page_builder.template_picker.preview_modal_theme") %></span></span>
+              <button type="button" class="icon-button" data-action="click-><%= controller_name %>#closePreviewModal">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="px-6 py-6 bg-canvas">
+          <div class="card overflow-hidden">
+            <div class="p-8 min-h-[500px]" data-<%= controller_name %>-target="previewModalContent"></div>
+          </div>
+        </div>
+        <div class="px-6 py-4 bg-canvas border-t border-border">
+          <div class="flex justify-end gap-3">
+            <button type="button" class="btn btn-secondary" data-action="click-><%= controller_name %>#closePreviewModal"><%= t("common.actions.close") %></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

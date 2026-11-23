@@ -1,0 +1,27 @@
+<%= render Billing::Admin::CustomerBillingPageComponent.new(
+  customer_id: current_customer_id,
+  active: :payment_methods,
+  title: t("settings_billing.payment_methods.authorization"),
+  description: t("settings_billing.payment_methods.description"),
+  breadcrumbs: [
+    { label: t("settings_navigation.items.billing_payment_methods"), path: admin_settings_billing_payment_methods_path(current_customer_id) },
+    { label: t("settings_billing.payment_methods.authorization") }
+  ],
+  actions: [{ label: t("settings_billing.payment_methods.back_to_methods"), path: admin_settings_billing_payment_methods_path(current_customer_id) }],
+  tab_counts: current_billing_tab_counts
+) do %>
+  <%= render Billing::Admin::AuthorizationStepperComponent.new(
+    payment_method: @payment_method,
+    authorization_kind: @authorization_action.is_a?(Hash) ? @authorization_action[:kind] : nil
+  ) %>
+  <%= render Admin::Settings::SectionComponent.new do %>
+    <%= render Billing::Admin::PaymentAuthorizationComponent.new(
+      customer_id: current_customer_id, available_providers: @available_providers, payment_method: @payment_method,
+      provider_options: @provider_options, currency: @currency,
+      authorization: @authorization_action&.merge(
+        confirmation_url: @confirmation_url,
+        result_url: authorization_admin_settings_billing_payment_method_url(current_customer_id, @payment_method)
+      ), request_key: @payment_method.request_key
+    ) %>
+  <% end %>
+<% end %>

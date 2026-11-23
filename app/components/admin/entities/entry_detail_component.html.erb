@@ -1,0 +1,60 @@
+<div class="<%= layout_classes %>" <%= tag.attributes(data: reveal_data) %>>
+  <% if person_link? %>
+    <div class="min-w-0 lg:col-start-2 lg:row-start-1">
+      <%= render person_link %>
+    </div>
+  <% end %>
+
+  <div class="<%= main_classes %>">
+    <% if sections.empty? %>
+      <section class="card flex flex-col items-center px-4 py-12 text-center sm:px-6">
+        <span class="flex size-10 items-center justify-center rounded-xl bg-surface-active text-text-tertiary" aria-hidden="true">
+          <%= helpers.attribute_group_icon("file", css_class: "size-5") %>
+        </span>
+        <p class="mt-3 text-sm text-text-muted"><%= t("admin_misc.entities.entry_detail.no_fields") %></p>
+      </section>
+    <% else %>
+      <div class="card divide-y divide-border-subtle">
+        <% sections.each do |section| %>
+          <%= render group_card(section) %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if associations.any? %>
+      <section class="flex flex-col gap-3" aria-labelledby="entry-associations-heading">
+        <h2 id="entry-associations-heading" class="px-1 text-xs font-medium uppercase tracking-wider text-text-tertiary">
+          <%= t("admin_misc.entities.association_entries.section_hint") %>
+        </h2>
+        <% associations.each do |section| %>
+          <%= render association_section(section) %>
+        <% end %>
+      </section>
+    <% end %>
+    <% if association_dialog? %>
+      <%= render association_dialog %>
+    <% end %>
+  </div>
+
+  <aside class="<%= aside_classes %>">
+    <section class="card overflow-hidden" aria-labelledby="entry-record-heading">
+      <h2 id="entry-record-heading" class="border-b border-border-subtle px-4 py-3.5 text-sm font-semibold text-text-primary sm:px-5">
+        <%= t("admin_misc.entities.entry_detail.record_heading") %>
+      </h2>
+      <dl class="divide-y divide-border-subtle">
+        <% system_meta.each do |item| %>
+          <div class="flex items-baseline justify-between gap-4 px-4 py-3 sm:px-5">
+            <dt class="shrink-0 text-xs font-medium text-text-muted"><%= item[:label] %></dt>
+            <dd class="min-w-0 text-right text-sm text-text-primary break-words [overflow-wrap:anywhere] <%= 'tabular-nums' if item[:numeric] || item.key?(:time) %>">
+              <%= item.key?(:time) ? timestamp(item[:time]) : item[:value] %>
+            </dd>
+          </div>
+        <% end %>
+      </dl>
+    </section>
+
+    <% if section_index? %>
+      <%= render section_index %>
+    <% end %>
+  </aside>
+</div>

@@ -1,0 +1,38 @@
+zh-CN:
+  oauth:
+    authorize:
+      error:
+        title: "无法授权桌面应用。"
+        subtitle: "授权请求无效。请返回应用后重新登录。"
+      handoff:
+        title: "您已登录。"
+        subtitle: "请返回桌面应用以完成授权。"
+        heading: "正在打开桌面应用"
+        body: "应用打开后即可关闭此窗口。若无反应，请点击下方按钮。"
+        continue: "打开桌面应用"
+  doorkeeper:
+    authorizations:
+      error:
+        title: "发生错误"
+    errors:
+      messages:
+        invalid_request:
+          unknown: "请求缺少必要参数、包含不支持的参数值，或格式不正确。"
+          missing_param: "缺少必要参数：%{value}。"
+          request_not_authorized: "请求需要授权。授权所需参数缺失或无效。"
+          invalid_code_challenge: "必须提供 code_challenge。"
+        invalid_redirect_uri: "请求的重定向 URI 格式不正确，或与客户端注册的地址不匹配。"
+        unauthorized_client: "该客户端无权使用此方式发起请求。"
+        access_denied: "资源所有者或授权服务器拒绝了该请求。"
+        invalid_scope: "请求的 scope 无效、未知或格式不正确。"
+        invalid_code_challenge_method:
+          zero: "授权服务器不支持 PKCE。"
+          one: "code_challenge_method 必须为 %{challenge_methods}。"
+          other: "code_challenge_method 必须为以下之一：%{challenge_methods}。"
+        invalid_client: "客户端认证失败。"
+        invalid_grant: "授权码无效、已过期、已撤销，或与重定向 URI / 客户端不匹配。"
+        unsupported_grant_type: "授权服务器不支持该授权类型。"
+        invalid_token:
+          revoked: "访问令牌已被撤销"
+          expired: "访问令牌已过期"
+          unknown: "访问令牌无效"

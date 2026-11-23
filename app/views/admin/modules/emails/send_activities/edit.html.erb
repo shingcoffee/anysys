@@ -1,0 +1,16 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "email",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("admin_modules.nav.email") },
+        { label: t("admin_modules.nav.send_activities"), path: admin_modules_emails_send_activities_path(current_customer_id) },
+        { label: @send_activity.name, path: admin_modules_emails_send_activity_path(current_customer_id, @send_activity) },
+        { label: t("common.actions.edit") }
+      ],
+      title: t("admin_modules.emails.send_activities.edit.title"),
+      description: t("admin_modules.emails.send_activities.edit.subtitle")
+    ) do %>
+  <%= render Emails::SendActivityBuilderComponent.new(
+        send_activity: @send_activity, templates: @templates, lists: @lists,
+        url: admin_modules_emails_send_activity_path(current_customer_id, @send_activity), method: :patch) %>
+<% end %>

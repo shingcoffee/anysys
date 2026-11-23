@@ -1,0 +1,132 @@
+<% if assistant_available? %>
+  <div class="flex h-full min-h-0 flex-col bg-canvas lg:p-3"
+       data-controller="assistant-workspace"
+       data-assistant-workspace-active-value="conversation">
+    <div class="shrink-0 border-b border-border-subtle bg-canvas px-3 py-2 lg:hidden">
+      <div class="mx-auto grid max-w-sm grid-cols-2 rounded-full bg-surface-active p-1"
+           role="tablist"
+           aria-label="<%= t("ai_assistant.assistant.tabs.label") %>">
+        <button id="assistant-conversation-tab"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="assistant-conversation-panel"
+                tabindex="0"
+                class="min-h-10 rounded-full bg-surface px-3 py-2 text-sm font-medium text-text-primary shadow-xs transition-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                data-assistant-workspace-target="tab"
+                data-assistant-workspace-id="conversation"
+                data-action="click->assistant-workspace#select keydown->assistant-workspace#keydown">
+          <%= t("ai_assistant.assistant.tabs.conversation") %>
+        </button>
+        <button id="assistant-preview-tab"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="assistant-preview-panel"
+                tabindex="-1"
+                class="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium text-text-muted transition-base hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                data-assistant-workspace-target="tab"
+                data-assistant-workspace-id="preview"
+                data-action="click->assistant-workspace#select keydown->assistant-workspace#keydown">
+          <%= t("ai_assistant.assistant.tabs.preview") %>
+          <%# Always rendered: the pane behind this tab is refreshed by its own
+              broadcast, which never reaches the tablist, so the controller
+              toggles the mark from the pane's connect instead of the server
+              re-rendering it here. %>
+          <span class="<%= "hidden" unless artifact? %>"
+                data-assistant-workspace-target="artifactDot">
+            <span class="inline-block size-1.5 rounded-full bg-accent align-middle" aria-hidden="true"></span>
+            <span class="sr-only"><%= t("ai_assistant.assistant.tabs.preview_ready") %></span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[minmax(0,1.45fr)_minmax(24rem,0.9fr)] xl:grid-cols-[minmax(0,1.5fr)_minmax(26rem,0.85fr)] lg:gap-px lg:bg-border-subtle">
+      <section id="assistant-conversation-panel"
+               class="relative flex min-h-[70dvh] min-w-0 flex-col overflow-hidden bg-surface lg:flex lg:min-h-0 lg:rounded-l-2xl lg:shadow-sm"
+               role="tabpanel"
+               aria-labelledby="assistant-conversation-tab"
+               tabindex="0"
+               data-assistant-workspace-target="panel"
+               data-assistant-workspace-id="conversation"
+               <%# The tab semantics only hold below lg, where the tablist that
+                   names them is on screen. They are authored as data so the
+                   controller can put them back after stripping them, however
+                   many times the layout crosses the breakpoint. %>
+               data-assistant-workspace-role="tabpanel"
+               data-assistant-workspace-labelled-by="assistant-conversation-tab"
+               data-dashboard-region="chat">
+        <%# The chat list is a left slide-over over this pane. Collapsed it
+            costs one toolbar row; there is no rail holding width open for a
+            list that is only consulted when switching threads. %>
+        <%# Hosts the slide-over's open/closed state: Turbo replaces the list
+            inside it on every write, but never this wrapper, so the state
+            survives a broadcast and resets on a real page load. Relative so
+            the off-canvas panel is positioned against the whole chat pane. %>
+        <div class="relative flex min-h-0 flex-1 flex-col overflow-hidden"
+             data-ai-assistant-chats-host>
+          <%= render AiAssistant::ConversationListComponent.new(
+                customer: customer,
+                user: user,
+                current_id: assistant_conversation&.id
+              ) %>
+          <%# min-w-0: without it the flex item floors at its content width and
+              the composer/transcript spill past the rail into the clipped edge. %>
+          <div class="flex min-h-0 min-w-0 flex-1 flex-col">
+            <%= render AiAssistant::AssistantPanelComponent.new(
+                  messages: assistant_messages,
+                  customer_id: customer.id,
+                  user_id: user.id,
+                  user_name: user.display_name,
+                  conversation_id: assistant_conversation&.id,
+                  viewer: user
+                ) %>
+          </div>
+        </div>
+      </section>
+
+      <%# `flex` with no literal `hidden`: below lg the controller hides this on
+          connect, and a bare `hidden`/`lg:flex` pair left the pane as a block
+          when it was revealed — flex-col went inert and the artifact's h-full
+          had nothing to resolve against. %>
+      <aside id="assistant-preview-panel"
+             class="flex min-h-[70dvh] min-w-0 flex-col overflow-hidden bg-canvas lg:flex lg:min-h-0 lg:rounded-r-2xl lg:shadow-sm"
+             role="tabpanel"
+             aria-labelledby="assistant-preview-tab"
+             tabindex="-1"
+             data-assistant-workspace-target="panel"
+             data-assistant-workspace-id="preview"
+             data-assistant-workspace-role="tabpanel"
+             data-assistant-workspace-labelled-by="assistant-preview-tab"
+             data-dashboard-region="overview">
+        <%= render AiAssistant::ArtifactPaneComponent.new(
+              conversation: assistant_conversation,
+              customer: customer,
+              viewer: user
+            ) %>
+      </aside>
+    </div>
+  </div>
+<% else %>
+  <div class="flex h-full min-h-0 flex-col items-center justify-center bg-canvas px-6 py-16"
+       data-dashboard-region="chat"
+       aria-label="<%= t("ai_assistant.assistant.title") %>">
+    <div class="flex min-h-[70dvh] items-center justify-center">
+      <div class="flex w-full max-w-md flex-col items-center gap-5 rounded-2xl bg-surface px-6 py-10 text-center shadow-elevated ring-1 ring-border-subtle sm:px-10">
+        <span class="flex size-12 items-center justify-center rounded-2xl bg-accent-subtle text-accent ring-1 ring-accent-muted/40" aria-hidden="true">
+          <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
+          </svg>
+        </span>
+        <div class="flex flex-col gap-2">
+          <h1 class="text-xl font-semibold tracking-tight text-text-primary sm:text-2xl"><%= t("ai_assistant.assistant.title") %></h1>
+          <p class="text-body-sm text-text-muted"><%= t("ai_assistant.assistant.offline.body") %></p>
+        </div>
+        <%= render ButtonComponent.new(variant: :primary, tag: :a, href: modules_href) do %>
+          <%= t("ai_assistant.assistant.offline.cta") %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

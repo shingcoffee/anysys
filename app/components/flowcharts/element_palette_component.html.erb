@@ -1,0 +1,66 @@
+    <!-- Left Sidebar - Element Palette -->
+    <div class="shrink-0 w-[160px] sm:w-[200px] bg-slate-50 border-r border-slate-200 flex flex-col overflow-hidden"
+         data-controller="element-palette"
+         data-element-palette-current-flowchart-id-value="<%= flowchart.id %>"
+         data-element-palette-start-title-value="<%= t("comp_misc.flowchart_elements.start") %>"
+         data-element-palette-start-disabled-title-value="<%= t("comp_misc.element_palette.start_disabled_title") %>"
+         data-element-palette-no-other-flows-value="<%= t("comp_misc.element_palette.no_other_flows") %>"
+         data-element-palette-no-customer-context-value="<%= t("comp_misc.element_palette.no_customer_context") %>"
+         data-element-palette-load-failed-value="<%= t("comp_misc.element_palette.load_failed") %>"
+         data-element-palette-no-flowcharts-available-value="<%= t("comp_misc.element_palette.no_flowcharts_available") %>"
+         data-element-palette-subflow-name-prefix-value="<%= t("comp_misc.element_palette.subflow_name_prefix") %>">
+
+      <!-- Search -->
+      <div class="px-3 pt-3 pb-2">
+        <div class="flex items-center rounded-md border border-slate-200 bg-white px-2 shadow-sm focus-within:border-indigo-400 focus-within:ring-2 focus-within:ring-indigo-100">
+          <svg class="h-3.5 w-3.5 flex-shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input type="text"
+                 placeholder="<%= t("comp_misc.element_palette.search_placeholder") %>"
+                 data-action="input->element-palette#searchFlowcharts"
+                 data-element-palette-target="searchInput"
+                 class="ml-1.5 h-7 w-full border-0 bg-transparent text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-0">
+        </div>
+      </div>
+
+      <!-- Scrollable content -->
+      <div class="flex-1 overflow-y-auto px-3 pb-3">
+
+        <!-- Elements Section -->
+        <div class="mb-4">
+          <div class="flex items-center gap-1.5 mb-2">
+            <svg class="h-3 w-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <h3 class="text-[10px] font-semibold uppercase tracking-wider text-slate-500"><%= t("comp_misc.element_palette.elements") %></h3>
+          </div>
+          <div class="grid grid-cols-2 gap-1.5" data-element-palette-target="basicElements">
+            <%= render FlowchartElements::StartElementComponent.new %>
+            <%= render FlowchartElements::ProcessElementComponent.new %>
+            <%= render FlowchartElements::DecisionElementComponent.new %>
+            <%= render FlowchartElements::LoopElementComponent.new %>
+            <%= render FlowchartElements::EndElementComponent.new %>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="border-t border-slate-200 mb-4"></div>
+
+        <!-- Flows Section -->
+        <div>
+          <div class="flex items-center gap-1.5 mb-2">
+            <svg class="h-3 w-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+            <h3 class="text-[10px] font-semibold uppercase tracking-wider text-slate-500"><%= t("comp_misc.element_palette.flows") %></h3>
+          </div>
+          <div class="flex flex-col gap-1.5" data-element-palette-target="flowchartsList">
+            <div class="text-[11px] text-slate-400 py-2 text-center" data-element-palette-target="flowchartsPlaceholder">
+              <%= t("comp_misc.element_palette.loading") %>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>

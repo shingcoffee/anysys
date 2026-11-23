@@ -1,0 +1,27 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "authentication",
+      breadcrumbs: [{ label: t("admin_modules.nav.modules") }, { label: t("admin_modules.nav.users") }],
+      title: t("admin_modules.nav.users"),
+      description: t("admin_modules.users.index.description"),
+      actions: [
+        { label: t("admin_modules.users.actions.trash"), path: trash_admin_modules_authentication_users_path(current_customer_id), variant: :ghost, icon: :trash },
+        { label: t("admin_modules.users.actions.new_user"), path: new_admin_modules_authentication_user_path(current_customer_id), variant: :primary, icon: :plus }
+      ]
+    ) do %>
+  <%= render AdminTableComponent.new(
+        rows:        @rows,
+        columns:     @columns,
+        pagination:  @pagination,
+        params:      @table_params,
+        base_path:   admin_modules_authentication_users_path(current_customer_id),
+        search:      { param: :q, placeholder: t("admin_modules.users.index.search_placeholder") },
+        filters:     @filters,
+        row_path:    ->(user) { admin_modules_authentication_user_path(current_customer_id, user) },
+        empty_state: {
+          title: t("admin_modules.users.index.empty_title"),
+          description: t("admin_modules.users.index.empty_description"),
+          action_path: new_admin_modules_authentication_user_path(current_customer_id),
+          action_text: t("admin_modules.users.actions.create_first_user")
+        }
+      ) %>
+<% end %>

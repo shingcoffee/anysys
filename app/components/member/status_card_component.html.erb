@@ -1,0 +1,26 @@
+<article data-member-card class="group flex min-h-44 flex-col gap-5 <%= chrome.card_class %>">
+  <div class="flex items-center gap-3">
+    <span class="<%= chrome.icon_well_class %>" data-icon="<%= icon %>">
+      <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+        <% case icon %>
+        <% when :user %>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16 14a4 4 0 10-8 0M12 11a3 3 0 100-6 3 3 0 000 6zM4 21a8 8 0 0116 0"/>
+        <% when :credit_card %>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2 8h20M2 12h20M5 6h14a3 3 0 013 3v6a3 3 0 01-3 3H5a3 3 0 01-3-3V9a3 3 0 013-3z"/>
+        <% when :shield_check %>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3zM9 12l2 2 4-4"/>
+        <% else %>
+          <circle cx="12" cy="12" r="9"/>
+        <% end %>
+      </svg>
+    </span>
+    <span class="<%= chrome.label_class %>"><%= label %></span>
+  </div>
+
+  <p class="<%= value_class %>"><%= value %></p>
+
+  <%= link_to cta_path, class: "#{chrome.text_link_class} mt-auto" do %>
+    <%= cta_label %>
+    <svg class="size-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>
+  <% end %>
+</article>

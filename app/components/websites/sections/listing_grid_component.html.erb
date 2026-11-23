@@ -1,0 +1,35 @@
+<section class="<%= padding_class %>">
+  <div class="<%= inner_measure_class %> flex flex-col <%= gap_class %>">
+    <%= header(kicker: prop("kicker"), heading: prop("heading"), subhead: prop("subhead")) %>
+    <div class="grid gap-x-6 gap-y-12 md:gap-x-8 <%= grid_class %>">
+      <% listings.each do |listing| %>
+        <%= listing_tag(listing) do %>
+          <div class="relative <%= aspect_class %> <%= image_frame_class %>">
+            <%= render_media(listing["image_url"], alt: listing["title"].to_s, css_class: "absolute inset-0 size-full object-cover transition duration-700 ease-out group-hover:scale-[1.04]") %>
+            <% if present_text?(listing["badge"]) %>
+              <span <%= el_attrs("listings.badge", class: "absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-site-xs font-semibold text-neutral-950 shadow-sm shadow-neutral-900/10 backdrop-blur") %>><%= listing["badge"] %></span>
+            <% end %>
+          </div>
+          <div class="flex min-w-0 flex-col gap-1">
+            <div class="flex items-start justify-between gap-3">
+              <h3 <%= el_attrs("listings.title", class: "min-w-0 break-words text-site-md leading-snug md:text-site-lg #{headline_font_class}") %>><%= listing["title"] %></h3>
+              <% if present_text?(listing["rating"]) %>
+                <p class="flex shrink-0 items-center gap-1 pt-1 text-site-sm tabular-nums">
+                  <svg class="size-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 1.6l2.55 5.2 5.75.84-4.16 4.05.98 5.72L10 14.72l-5.12 2.69.98-5.72L1.7 7.64l5.75-.84L10 1.6z"/></svg>
+                  <span <%= el_attrs("listings.rating", aria: { hidden: true }) %>><%= listing["rating"] %></span>
+                  <span class="sr-only"><%= rating_label(listing) %></span>
+                </p>
+              <% end %>
+            </div>
+            <% if present_text?(listing["meta"]) %>
+              <p <%= el_attrs("listings.meta", class: "whitespace-pre-line text-pretty text-site-sm leading-relaxed md:text-site-base #{muted_class}") %>><%= listing["meta"] %></p>
+            <% end %>
+            <% if present_text?(listing["price"]) %>
+              <p <%= el_attrs("listings.price", class: "pt-1.5 text-site-base font-semibold tabular-nums") %>><%= listing["price"] %></p>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>

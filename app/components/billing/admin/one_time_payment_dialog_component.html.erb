@@ -1,0 +1,40 @@
+<%= render ModalDialogComponent.new(id: dialog_id, title: t("settings_billing.one_time_payment.cta"), description: formatted_amount) do %>
+  <div class="flex flex-col gap-4">
+    <% if error_message.present? %>
+      <div role="alert"><%= render AlertComponent.new(message: error_message, type: :error, auto_dismiss: false) %></div>
+    <% end %>
+
+    <div class="flex flex-col gap-3 rounded-xl border border-border-subtle bg-canvas-elevated p-4 sm:flex-row sm:items-start sm:justify-between">
+      <div class="min-w-0 flex flex-col gap-1">
+        <div class="flex flex-wrap items-center gap-2">
+          <% if kind_label %><p class="font-medium text-text-primary"><%= kind_label %></p><% end %>
+          <% if currency.present? %><%= render BadgeComponent.new(variant: :default, size: :sm) do %><%= currency %><% end %><% end %>
+        </div>
+        <p class="text-body-sm font-medium text-text-primary tabular-nums"><%= invoice_number %></p>
+        <% if period_start && period_end %>
+          <p class="text-caption tabular-nums"><%= t("comp_billing.period_range", start: date_label(period_start), end: date_label(period_end)) %></p>
+        <% end %>
+        <% if due_at %>
+          <p class="text-caption tabular-nums"><%= date_label(due_at) %></p>
+        <% end %>
+      </div>
+      <p class="text-title tabular-nums text-text-primary sm:text-right"><%= formatted_amount %></p>
+    </div>
+
+    <p class="flex items-start gap-2 text-caption">
+      <span class="text-success"><%= render Billing::Admin::IconComponent.new(name: :shield_check, class_name: "mt-0.5 size-4") %></span>
+      <span><%= t("settings_billing.one_time_payment.note_short") %></span>
+    </p>
+
+    <div class="flex flex-col gap-3">
+      <h3 class="text-body font-semibold text-text-primary"><%= t("settings_billing.one_time_payment.choose_provider") %></h3>
+      <%= render Billing::Admin::OneTimeProviderTilesComponent.new(
+        providers: providers, currency: currency, post_url: post_url, invoice_id: invoice_id, columns: 2
+      ) %>
+    </div>
+
+    <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+      <button type="button" data-action="modal-dialog#close" class="btn btn-ghost"><%= t("common.actions.cancel") %></button>
+    </div>
+  </div>
+<% end %>

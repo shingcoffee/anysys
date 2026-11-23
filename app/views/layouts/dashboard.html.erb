@@ -1,0 +1,59 @@
+<%# Viewport-locked: html/body must clip too, otherwise a tall <main> inflates
+    the document and the window scrollbar scrolls the whole shell off-screen. %>
+<% settings_printable = content_for(:settings_printable) == "true" %>
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>" class="h-full overflow-hidden <%= 'print:h-auto print:overflow-visible' if settings_printable %>">
+  <head>
+    <title><%= content_for(:title) || t("public_views.layouts.dashboard_title") %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "lexxy", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="h-full overflow-hidden bg-canvas antialiased <%= 'print:h-auto print:overflow-visible print:bg-white' if settings_printable %>">
+    <%
+       menu_items = MenuRegistry.for(current_user, customer: current_customer)
+      menu_item = current_dashboard_menu_item
+      dashboard_context = DashboardContext.new(
+        current_user:     current_user,
+        current_customer: current_customer,
+        current_menu_item: menu_item,
+        request_path:     request.path
+      )
+      dashboard_tree = SidebarBuilder.build(dashboard_context, menu_item: menu_item)
+      width = if content_for?(:container_width)
+                content_for(:container_width).to_s.strip.to_sym
+              else
+                default_container_width_for(request.path)
+              end
+    %>
+    <%= render ShellComponent.new(
+      customer: current_customer,
+      user: current_user,
+      tree: dashboard_tree,
+      menu_items: menu_items,
+      current_menu_item: menu_item,
+      current_path: request.path,
+      container_width: width,
+      settings_printable: settings_printable
+    ) do %>
+      <% flash.each do |type, message| %>
+        <% next unless message.is_a?(String) # structured flash payloads (e.g. feature_module_result) are data, not banners %>
+        <%= render AlertComponent.new(
+              message: message,
+              type:    flash_alert_type(type),
+              auto_dismiss: true
+            ) %>
+      <% end %>
+      <%= yield %>
+    <% end %>
+  </body>
+</html>

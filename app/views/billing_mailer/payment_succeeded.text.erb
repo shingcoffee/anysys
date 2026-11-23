@@ -1,0 +1,12 @@
+<% amount = Billing::CurrencyResolver.format(@invoice.total_cents, @invoice.currency) %>
+<%= t("billing_mailer.payment_succeeded.title") %>
+
+<%= t("billing_mailer.payment_succeeded.intro") %>
+
+<%= t("billing_mailer.payment_succeeded.label_amount_paid") %>: <%= amount %>
+<%= t("billing_mailer.payment_succeeded.label_invoice_number") %>: <%= @invoice.number %>
+<%= t("billing_mailer.payment_succeeded.label_paid_at") %>: <%= format_mail_datetime(@invoice.paid_at) %>
+
+<%= t("billing_mailer.payment_succeeded.outro") %>
+
+<%= t("billing_mailer.shell.footer") %>

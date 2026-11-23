@@ -1,0 +1,13 @@
+<div class="<%= frame_class %>">
+  <img src="<%= src %>" alt="<%= alt %>" class="absolute inset-0 size-full object-cover object-center" loading="<%= loading %>" decoding="async">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="<%= illustration.fetch(:view_box) %>" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false" class="absolute inset-0 size-full pointer-events-none">
+    <% illustration.fetch(:labels).each do |label| %>
+      <%= tag.g(transform: label[:transform]) do %>
+        <%= tag.g(transform: label[:inner_transform]) do %>
+          <rect x="<%= label.fetch(:plate)[0] %>" y="<%= label.fetch(:plate)[1] %>" width="<%= label.fetch(:plate)[2] %>" height="<%= label.fetch(:plate)[3] %>" rx="<%= label.fetch(:radius, 10) %>" fill="<%= label.fetch(:fill) %>" />
+          <text x="<%= label.fetch(:text)[0] %>" y="<%= label.fetch(:text)[1] %>" font-size="<%= label.fetch(:text)[2] %>" font-weight="600" text-anchor="<%= label.fetch(:anchor, "start") %>" fill="<%= label.fetch(:text_fill) %>" class="font-sans font-semibold"><%= t(label.fetch(:key)) %></text>
+        <% end %>
+      <% end %>
+    <% end %>
+  </svg>
+</div>

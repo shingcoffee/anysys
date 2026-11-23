@@ -1,0 +1,11 @@
+<div class="<%= wrapper_class %>">
+  <% if present_text?(kicker) %>
+    <p <%= slot_attrs(:kicker, kicker_class) %>><%= kicker %></p>
+  <% end %>
+  <% if present_text?(heading) %>
+    <h2 <%= slot_attrs(:heading, heading_class) %>><%= heading %></h2>
+  <% end %>
+  <% if present_text?(subhead) %>
+    <p <%= slot_attrs(:subhead, subhead_class) %>><%= subhead %></p>
+  <% end %>
+</div>

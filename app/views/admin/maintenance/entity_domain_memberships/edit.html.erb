@@ -1,0 +1,9 @@
+<%= render AdminPageComponent.new(
+      breadcrumbs: definition_resource_breadcrumbs(:entities, t("maint_core.entity_domains.move.title")),
+      title: t("maint_core.entity_domains.move.title"),
+      description: t("maint_core.entity_domains.move.description", name: @entity.display_label)
+    ) do %>
+  <%= render Admin::Maintenance::Entities::EntityDomainMembershipFormComponent.new(
+        entity: @entity, domains: @domains, selected_domain_id: @selected_domain_id, customer_id: current_customer_id
+      ) %>
+<% end %>

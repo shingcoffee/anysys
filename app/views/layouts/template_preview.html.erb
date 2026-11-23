@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <title><%= t("public_views.layouts.template_preview.title", name: @page.name) %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-50 min-h-screen">
+    <!-- Preview Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+      <div class="max-w-4xl mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 mr-3">
+              <%= t("public_views.layouts.template_preview.badge") %>
+            </span>
+            <span class="text-sm font-medium text-gray-900"><%= @page.name %></span>
+          </div>
+          <button type="button"
+                  data-controller="window"
+                  data-action="click->window#close"
+                  class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+            <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            <%= t("common.actions.close") %>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Preview Content -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+      <%= yield %>
+    </main>
+  </body>
+</html>

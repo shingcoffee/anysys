@@ -1,0 +1,11 @@
+<%= render Billing::Admin::PlatformPageComponent.new(
+  customer_id: current_customer_id,
+  section: :settings,
+  title: t("maint_platform.billing.settings.show.title"),
+  description: t("maint_platform.billing.settings.show.description"),
+  actions: [{ label: t("common.actions.edit"), path: edit_admin_maintenance_platform_billing_settings_path(current_customer_id), icon: :edit }]
+) do %>
+  <div class="max-w-4xl">
+    <%= render Billing::Admin::SettingsFormComponent.new(settings: @settings, form: @contract, customer_id: current_customer_id, mode: :show) %>
+  </div>
+<% end %>

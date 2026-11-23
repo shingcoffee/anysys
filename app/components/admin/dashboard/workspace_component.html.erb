@@ -1,0 +1,208 @@
+<div class="mx-auto flex w-full max-w-screen-2xl flex-col gap-6 lg:gap-8">
+  <%= render LandingHeaderComponent.new(customer: customer, user: user) do %>
+    <% header_actions.each do |action| %>
+      <%= render ButtonComponent.new(
+            variant: primary_header_action?(action) ? :primary : :secondary,
+            size: :md,
+            tag: :a,
+            href: action.path,
+            class: "inline-flex min-h-9 items-center gap-1.5 pointer-coarse:min-h-11"
+          ) do %>
+        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+        </svg>
+        <%= action.label %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <section aria-labelledby="dashboard-overview-title">
+    <h2 id="dashboard-overview-title" class="sr-only"><%= t("admin_misc.dashboard.snapshot") %></h2>
+    <div class="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+      <% metrics.each do |metric| %>
+        <% theme = metric_theme(metric) %>
+        <%= link_to metric.href,
+              data: { dashboard_metric: metric.key },
+              class: "group relative flex min-w-0 flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-border-subtle bg-surface p-4 no-underline shadow-xs transition-all duration-200 hover:-translate-y-0.5 #{theme[:border]} hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 sm:p-5" do %>
+          <span class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-linear-to-r <%= theme[:bar] %> opacity-80 transition-opacity group-hover:opacity-100" aria-hidden="true"></span>
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0 space-y-2">
+              <p class="truncate text-sm font-medium text-text-secondary transition-colors group-hover:text-text-primary"><%= metric.label %></p>
+              <p class="text-3xl font-bold leading-none tabular-nums tracking-tight text-text-primary sm:text-4xl"><%= metric_value(metric) %></p>
+            </div>
+            <span class="flex size-10 shrink-0 items-center justify-center rounded-xl ring-1 ring-inset transition-base <%= theme[:well] %>" aria-hidden="true">
+              <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                <path stroke-linecap="round" stroke-linejoin="round" d="<%= metric.icon %>"/>
+              </svg>
+            </span>
+          </div>
+          <div class="flex items-center justify-between gap-2 border-t border-border-subtle/80 pt-3 text-xs text-text-muted">
+            <% if metric.sub_label.present? %>
+              <span class="inline-flex min-w-0 items-center gap-1.5 font-medium text-text-secondary">
+                <span class="size-1.5 shrink-0 rounded-full bg-success" aria-hidden="true"></span>
+                <span class="truncate"><%= metric.sub_label %></span>
+              </span>
+            <% else %>
+              <span class="truncate font-medium text-text-tertiary transition-colors group-hover:text-accent-text"><%= t("admin_misc.dashboard.stats.view") %></span>
+            <% end %>
+            <span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-canvas-elevated text-text-muted transition-base group-hover:translate-x-0.5 group-hover:bg-accent-subtle group-hover:text-accent" aria-hidden="true">
+              <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+              </svg>
+            </span>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:col-span-2 lg:grid-cols-1 xl:grid-cols-2" data-dashboard-region="recents">
+      <%= render Admin::Dashboard::RecentListComponent.new(
+            title: t("admin_misc.dashboard.recents.pages_title"),
+            view_all_href: admin_domains_path(customer.id),
+            view_all_label: t("admin_misc.dashboard.recents.view_all"),
+            items: recent_pages,
+            empty_title: t("admin_misc.dashboard.recents.pages_empty_title"),
+            empty_description: t("admin_misc.dashboard.recents.pages_empty_description"),
+            empty_cta_label: t("admin_misc.pages.empty_action"),
+            empty_cta_href: new_admin_maintenance_page_path(customer.id),
+            kind: :pages
+          ) %>
+      <%= render Admin::Dashboard::RecentListComponent.new(
+            title: t("admin_misc.dashboard.recents.entities_title"),
+            view_all_href: admin_domains_path(customer.id),
+            view_all_label: t("admin_misc.dashboard.recents.view_all"),
+            items: recent_entities,
+            empty_title: t("admin_misc.dashboard.recents.entities_empty_title"),
+            empty_description: t("admin_misc.dashboard.recents.entities_empty_description"),
+            empty_cta_label: t("admin_misc.entities.create_entity"),
+            empty_cta_href: admin_assistant_path(customer.id),
+            kind: :entities
+          ) %>
+    </div>
+
+    <% if show_setup? || rail_actions.any? %>
+      <aside class="flex flex-col gap-6" data-dashboard-region="rail">
+        <% if show_setup? %>
+          <%= render CardComponent.new(variant: :default, padding: :none, class: "overflow-hidden rounded-2xl border-border-subtle shadow-xs") do %>
+            <section class="flex flex-col" aria-labelledby="dashboard-setup-title">
+              <div class="flex flex-col gap-3 border-b border-border-subtle bg-canvas-elevated/70 px-5 py-4">
+                <div class="flex items-center justify-between gap-3">
+                  <div class="flex min-w-0 items-center gap-2.5">
+                    <span class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent-subtle text-accent ring-1 ring-inset ring-accent-muted/70" aria-hidden="true">
+                      <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                    </span>
+                    <h2 id="dashboard-setup-title" class="truncate text-md font-semibold tracking-tight text-text-primary"><%= t("admin_misc.dashboard.setup.title") %></h2>
+                  </div>
+                  <span class="shrink-0 rounded-full bg-accent-subtle px-2.5 py-0.5 text-xs font-semibold tabular-nums text-accent-text ring-1 ring-inset ring-accent-muted/60"><%= t("admin_misc.dashboard.setup.progress", done: setup_done_count, total: setup_items.size) %></span>
+                </div>
+                <div class="h-1.5 overflow-hidden rounded-full bg-surface-active" role="progressbar" aria-labelledby="dashboard-setup-title" aria-valuenow="<%= setup_progress_percent %>" aria-valuemin="0" aria-valuemax="100">
+                  <div class="h-full rounded-full bg-linear-to-r from-accent to-accent-hover transition-all" style="width: <%= setup_progress_percent %>%"></div>
+                </div>
+              </div>
+              <ul class="flex flex-col p-2">
+                <% setup_items.each do |item| %>
+                  <li>
+                    <%= link_to item.href,
+                          class: "group flex min-h-10 items-center gap-3 rounded-xl px-3 py-2 no-underline transition-base hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent pointer-coarse:min-h-11" do %>
+                      <% if item.done %>
+                        <span class="flex size-5 shrink-0 items-center justify-center rounded-full bg-success text-white shadow-2xs" aria-hidden="true">
+                          <svg class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+                          </svg>
+                        </span>
+                        <span class="flex-1 text-sm text-text-muted line-through decoration-border-strong"><%= item.label %></span>
+                      <% else %>
+                        <span class="size-5 shrink-0 rounded-full border-2 border-dashed border-border-strong bg-surface transition-base group-hover:border-accent group-hover:bg-accent-subtle" aria-hidden="true"></span>
+                        <span class="flex-1 text-sm font-medium text-text-primary transition-base group-hover:text-accent"><%= item.label %></span>
+                        <svg class="size-4 shrink-0 text-border-strong transition-base group-hover:translate-x-0.5 group-hover:text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+                        </svg>
+                      <% end %>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
+            </section>
+          <% end %>
+        <% end %>
+
+        <% if rail_actions.any? %>
+          <%= render CardComponent.new(variant: :default, padding: :none, class: "flex flex-1 flex-col overflow-hidden rounded-2xl border-border-subtle shadow-xs") do %>
+            <section class="flex h-full flex-col" aria-labelledby="dashboard-quick-actions-title">
+              <div class="flex items-center justify-between gap-3 border-b border-border-subtle bg-canvas-elevated/70 px-5 py-4">
+                <div class="flex min-w-0 items-center gap-2.5">
+                  <span class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-warning-subtle text-warning ring-1 ring-inset ring-amber-200/70" aria-hidden="true">
+                    <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>
+                    </svg>
+                  </span>
+                  <h2 id="dashboard-quick-actions-title" class="truncate text-md font-semibold tracking-tight text-text-primary"><%= t("admin_misc.dashboard.quick_actions") %></h2>
+                </div>
+                <span class="inline-flex items-center rounded-full bg-surface-active px-2 py-0.5 text-xs font-semibold tabular-nums text-text-secondary"><%= rail_actions.size %></span>
+              </div>
+              <div class="grid flex-1 grid-cols-1 gap-px bg-border-subtle/80 md:grid-cols-2 lg:grid-cols-1 md:[&>*:last-child:nth-child(odd)]:col-span-2 lg:[&>*:last-child:nth-child(odd)]:col-span-1">
+                <% rail_actions.each do |qa| %>
+                  <div class="flex bg-surface">
+                    <%= render QuickActionCardComponent.new(
+                          label: qa.label,
+                          description: qa.description,
+                          path: qa.path,
+                          icon: qa.icon,
+                          compact: true,
+                          icon_classes: action_icon_classes(qa)
+                        ) %>
+                  </div>
+                <% end %>
+              </div>
+            </section>
+          <% end %>
+        <% end %>
+      </aside>
+    <% end %>
+  </div>
+
+  <% if modules.any? %>
+    <section class="flex flex-col gap-4" aria-labelledby="dashboard-modules-title">
+      <div class="flex flex-wrap items-end justify-between gap-3">
+        <div class="flex min-w-0 items-start gap-3">
+          <span class="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl bg-purple-50 text-purple-600 ring-1 ring-inset ring-purple-200/80" aria-hidden="true">
+            <svg class="size-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"/>
+            </svg>
+          </span>
+          <div class="flex min-w-0 flex-col gap-0.5">
+            <h2 id="dashboard-modules-title" class="flex items-center gap-2 text-md font-semibold tracking-tight text-text-primary">
+              <%= t("admin_misc.dashboard.modules.title") %>
+              <%= render BadgeComponent.new(variant: :primary, size: :sm, class: "tabular-nums") do %>
+                <%= modules.size %>
+              <% end %>
+            </h2>
+            <p class="text-xs leading-relaxed text-text-muted"><%= t("admin_misc.dashboard.modules.description") %></p>
+          </div>
+        </div>
+        <%= link_to admin_modules_path(customer.id),
+              class: "group/all inline-flex min-h-8 items-center gap-1.5 rounded-lg border border-border-subtle bg-surface px-3 py-1.5 text-xs font-semibold text-text-secondary no-underline shadow-2xs transition-base hover:border-accent-muted hover:bg-accent-subtle/50 hover:text-accent-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent pointer-coarse:min-h-11" do %>
+          <%= t("admin_misc.dashboard.recents.view_all") %>
+          <svg class="size-3.5 transition-transform group-hover/all:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+          </svg>
+        <% end %>
+      </div>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <% modules.each do |mod| %>
+          <%= render Admin::Dashboard::ModuleCardComponent.new(
+                key: mod.key,
+                name: mod.name,
+                description: mod.description,
+                primary: mod.primary,
+                secondaries: Array(mod.secondaries)
+              ) %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+</div>

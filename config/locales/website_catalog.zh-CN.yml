@@ -1,0 +1,31 @@
+zh-CN:
+  website:
+    platform:
+      preview:
+        badge: "预览"
+        back: "返回目录"
+        pages: "预览页面"
+        open: "预览"
+      catalog:
+        filter:
+          all: "全部"
+          category: "分类"
+          family: "系列"
+          count: "%{count}"
+        families:
+          standalone: "独立布局"
+        chips:
+          pages: "%{count} 个页面"
+          sections: "%{count} 个区块"
+          more: "+%{count}"
+        empty:
+          layouts_title: "没有布局"
+          layouts_description: "此系列下没有布局。可换一个筛选，或新建布局。"
+          skeletons_title: "没有骨架"
+          skeletons_description: "此分类下没有骨架。可换一个筛选。"
+        back: "返回目录"
+        theme:
+          swatches: "主题"
+      skeletons:
+        form:
+          page_index: "第 %{index} 页"

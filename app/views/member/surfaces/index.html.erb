@@ -1,0 +1,14 @@
+<% content_for :title, t("member.surfaces.title", label: @surface.label) %>
+<% content_for :member_nav, @surface.key %>
+
+<%= render Member::PageLayoutComponent.new do |c| %>
+  <% c.with_primary do %>
+    <%= render Member::SurfaceIndexComponent.new(
+          surface:    @surface,
+          records:    @records,
+          page_meta:  @page_meta,
+          customer:   current_customer,
+          row_action: @surface.row_action
+        ) %>
+  <% end %>
+<% end %>

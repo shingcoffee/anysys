@@ -1,0 +1,65 @@
+<% identity = capture do %>
+  <div class="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
+    <span class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-surface-active text-xs font-semibold ring-1 ring-inset ring-border-subtle <%= tile_classes %>" aria-hidden="true">
+      <%= tile_content %>
+    </span>
+    <div class="min-w-0 flex-1">
+      <h4 id="<%= card_id %>-heading" class="min-w-0 text-sm font-semibold text-text-primary break-words [overflow-wrap:anywhere]"><%= entity.display_label %></h4>
+      <% if linked? %>
+        <p class="mt-1 text-xs text-text-muted tabular-nums">
+          <span><%= t("common.labels.updated_at") %> <%= updated_at %></span>
+        </p>
+      <% else %>
+        <p class="mt-1 text-xs text-text-muted break-words [overflow-wrap:anywhere]"><%= missing_description %></p>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<article id="<%= card_id %>" aria-labelledby="<%= card_id %>-heading" class="min-w-0">
+  <% unless identity? %>
+    <h4 id="<%= card_id %>-heading" class="sr-only"><%= entity.display_label %></h4>
+  <% end %>
+  <% if identity? && creatable? %>
+    <div class="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:gap-4 sm:px-6"
+         data-controller="modal-dialog" data-modal-dialog-open-value="<%= form_open? %>">
+      <%= identity %>
+      <%= render ButtonComponent.new(variant: :primary, size: :sm, class: "min-h-11 w-full shrink-0 sm:min-h-9 sm:w-auto",
+            aria: { haspopup: "dialog", controls: dialog_id }, data: { action: "modal-dialog#open" }) do %>
+        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        <%= t("admin_modules.users.show.profiles.create_profile") %>
+      <% end %>
+      <%= render ModalDialogComponent.new(id: dialog_id, title: dialog_title, description: user.display_name) do %>
+        <%= render entry_form %>
+      <% end %>
+    </div>
+  <% elsif identity? %>
+    <div class="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:gap-4 sm:px-6">
+      <%= identity %>
+      <% if linked? %>
+        <%= render ButtonComponent.new(variant: :secondary, size: :sm, tag: :a, href: entry_path,
+              class: "min-h-11 w-full shrink-0 sm:min-h-9 sm:w-auto",
+              aria: { label: view_label }) do %>
+          <%= t("admin_modules.users.show.profiles.view_entry") %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if linked? %>
+    <div class="divide-y divide-border-subtle <%= "border-t border-border-subtle" if identity? %>">
+      <% unless details? %>
+        <p class="px-4 py-10 text-center text-sm text-text-muted sm:px-6"><%= t("admin_modules.users.show.profiles.no_fields") %></p>
+      <% end %>
+      <% groups.each_with_index do |group, index| %>
+        <%= render group_card(group, index) %>
+      <% end %>
+      <% if associations.any? %>
+        <p class="bg-canvas/60 px-4 py-2.5 text-xs font-medium uppercase tracking-wider text-text-tertiary sm:px-6"><%= t("admin_misc.entities.association_entries.section_hint") %></p>
+        <% associations.each do |section| %>
+          <%= render association_section(section) %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</article>

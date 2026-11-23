@@ -1,0 +1,37 @@
+<div class="space-y-6 min-w-0">
+  <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+    <%= status_badge(@campaign.status) %>
+    <%= link_to ui("campaigns.csv"), sms_path(:campaign_report, @campaign, **@filters.except(:page, :per_page).merge(format: :csv)), class: "btn btn-primary" %>
+    <%= link_to ui("shared.refresh"), sms_path(:campaign_report, @campaign, **@filters), class: "btn btn-secondary" %>
+    <%= link_to ui("report.campaign_details"), sms_path(:campaign, @campaign), class: "btn btn-secondary" %>
+  </div>
+  <% if @campaign.started_at.nil? %>
+    <%= section(ui("report.not_started")) do %><p class="text-text-secondary"><%= ui("campaigns.start_snapshot_help") %></p><%= time_value(@campaign.scheduled_at) %><% end %>
+  <% else %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+      <% self.class::MAIN_METRICS.each do |key| %><%= section(label_text(:metrics, key)) do %><p class="text-2xl font-semibold tabular-nums"><%= @report[key] %></p><% end %><% end %>
+    </div>
+    <%= section(ui("report.outcomes")) do %>
+      <dl class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4"><% self.class::OTHER_METRICS.each do |key| %><%= fact(label_text(:metrics, key), @report[key]) %><% end %></dl>
+      <p class="text-sm text-text-secondary"><%= ui("report.milestone_help") %></p>
+    <% end %>
+  <% end %>
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+    <%= section(ui("report.skips_delays")) do %>
+      <% [:skip_counts, :deferred_counts].each do |group| %><h3 class="font-medium"><%= ui("report.#{group}") %></h3><dl class="space-y-2"><% @report.fetch(group, {}).each do |reason, count| %><%= fact(reason_label(reason), count) %><% end %></dl><% end %>
+    <% end %>
+    <%= section(ui("campaigns.sending_facts")) do %>
+      <dl class="space-y-4">
+        <% [:snapshot_at, :refreshed_at].each do |key| %><%= fact(ui("report.#{key}"), time_value(@report[key])) %><% end %>
+        <%= fact(ui("campaigns.expires_at"), time_value(@campaign.expires_at)) %>
+        <%= fact(ui("report.delivery_rate"), @report[:delivery_rate].nil? ? t("common.status.unknown") : number_to_percentage(@report[:delivery_rate] * 100, precision: 1)) %>
+        <%= fact(t("sms_presentation.fields.provider_segments"), @report[:provider_segments_total]) %>
+        <%= fact(ui("report.provider_segments_missing_count"), @report[:provider_segments_missing_count]) %>
+      </dl>
+      <p class="text-sm text-text-secondary"><%= ui("report.segment_help") %></p>
+      <p class="text-sm text-text-secondary"><%= ui("report.delivery_rate_help") %></p>
+      <p class="text-sm text-text-secondary"><%= ui("campaigns.completed_help") %></p>
+    <% end %>
+  </div>
+  <%= render AdminTableComponent.new(rows: @records, columns: display_columns, pagination: @pagination, params: @filters, base_path: sms_path(:campaign_report, @campaign), search: { param: :q, placeholder: ui("report.search") }, filters: report_filters, row_path: ->(recipient) { sms_path(:contact, recipient.contact_id) }, row_actions: ->(recipient) { recipient.message_id ? [{ label: ui("report.message_details"), path: sms_path(:message, recipient.message_id) }] : [] }, empty_state: { title: ui("report.no_recipients") }) %>
+</div>

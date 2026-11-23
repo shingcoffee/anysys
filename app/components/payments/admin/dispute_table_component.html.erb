@@ -1,0 +1,24 @@
+<%= render Admin::CardTableComponent.new(
+      headers: [
+        { label: t("comp_payments.dispute_table.headers.provider"),   align: :left },
+        { label: t("comp_payments.dispute_table.headers.dispute_id"), align: :left },
+        { label: t("comp_payments.dispute_table.headers.reason"),     align: :left },
+        { label: t("comp_payments.dispute_table.headers.amount"),     align: :left },
+        { label: t("comp_payments.dispute_table.headers.opened_at"),  align: :left },
+        { label: t("common.labels.status"),                           align: :left }
+      ],
+      empty: disputes.empty?,
+      empty_text: t("comp_payments.dispute_table.empty")) do %>
+  <% disputes.each do |d| %>
+    <tr class="table-row">
+      <td class="px-4 py-3 text-body text-text-secondary"><%= provider_label(d.provider) %></td>
+      <td class="px-4 py-3 text-body text-text-secondary tabular-nums"><%= d.psp_dispute_id %></td>
+      <td class="px-4 py-3 text-body text-text-secondary"><%= reason_label(d.reason) %></td>
+      <td class="px-4 py-3 text-body text-text-primary tabular-nums"><%= formatted_amount(d) %></td>
+      <td class="px-4 py-3 text-body text-text-secondary tabular-nums"><%= d.opened_at.present? ? l(d.opened_at, format: :long) : t("common.labels.em_dash") %></td>
+      <td class="px-4 py-3">
+        <%= render BadgeComponent.new(variant: status_variant(d.status), size: :sm) do %><%= status_label(d.status) %><% end %>
+      </td>
+    </tr>
+  <% end %>
+<% end %>

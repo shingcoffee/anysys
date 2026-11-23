@@ -1,0 +1,161 @@
+/**
+ * Rouge Syntax Highlighting - VS Code Dark+ Theme
+ */
+
+/* Base */
+.highlight {
+  color: #d4d4d4;
+}
+
+/* Comments */
+.highlight .c,
+.highlight .c1,
+.highlight .cm,
+.highlight .cp,
+.highlight .cs,
+.highlight .cd {
+  color: #6a9955;
+  font-style: italic;
+}
+
+/* Keywords */
+.highlight .k,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kt,
+.highlight .kc {
+  color: #569cd6;
+}
+
+/* Names */
+.highlight .n,
+.highlight .nb,
+.highlight .ni,
+.highlight .nl,
+.highlight .py,
+.highlight .nv,
+.highlight .bp {
+  color: #d4d4d4;
+}
+
+.highlight .nn {
+  color: #4ec9b0;
+}
+
+.highlight .na {
+  color: #9cdcfe;
+}
+
+.highlight .nc {
+  color: #4ec9b0;
+}
+
+.highlight .nd {
+  color: #dcdcaa;
+}
+
+.highlight .ne {
+  color: #4ec9b0;
+}
+
+.highlight .nf,
+.highlight .fm {
+  color: #dcdcaa;
+}
+
+.highlight .no {
+  color: #4fc1ff;
+}
+
+/* Variables */
+.highlight .vi,
+.highlight .vc,
+.highlight .vg {
+  color: #9cdcfe;
+}
+
+/* Strings */
+.highlight .s,
+.highlight .s1,
+.highlight .s2,
+.highlight .sb,
+.highlight .sc,
+.highlight .sd,
+.highlight .sh,
+.highlight .sx {
+  color: #ce9178;
+}
+
+.highlight .se {
+  color: #d7ba7d;
+}
+
+.highlight .si {
+  color: #569cd6;
+}
+
+.highlight .sr {
+  color: #d16969;
+}
+
+/* Symbols */
+.highlight .ss {
+  color: #4ec9b0;
+}
+
+/* Numbers */
+.highlight .m,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .mo,
+.highlight .mb,
+.highlight .mx,
+.highlight .il {
+  color: #b5cea8;
+}
+
+/* Operators */
+.highlight .o,
+.highlight .ow {
+  color: #d4d4d4;
+}
+
+/* Punctuation */
+.highlight .p {
+  color: #d4d4d4;
+}
+
+/* Generic */
+.highlight .ge {
+  font-style: italic;
+}
+
+.highlight .gs {
+  font-weight: bold;
+}
+
+.highlight .gd {
+  color: #f44747;
+}
+
+.highlight .gi {
+  color: #6a9955;
+}
+
+.highlight .gh,
+.highlight .gu {
+  color: #569cd6;
+}
+
+/* Errors */
+.highlight .err {
+  color: #f44747;
+}
+
+/* Whitespace */
+.highlight .w {
+  color: #d4d4d4;
+}

@@ -1,0 +1,37 @@
+---
+description: Core Anysys coding, stack, and multi-tenant conventions
+alwaysApply: true
+---
+
+# Core Conventions
+
+Full detail: root `AGENTS.md`. Non-trivial work uses `.cursor/agents/` + `.cursor/skills/`.
+
+Default model is Grok 4.6 for every parent session and every subagent. Do not switch models.
+
+## Stack
+
+- Ruby 3.2.8 / Rails 8.1.2 / Tailwind only / Stimulus only / ViewComponent / Reform / dry-rb / RSpec
+- UI/UX design: rely on the shadcn/ui plugin (`shadcn` skill + `plugin-shadcn-shadcn` MCP tools) for any design or component decision
+- Thin models; business logic in plain Ruby services (`app/services/<domain>/`, `self.call(...) = new(...).call` → `Result`); validation in Reform contracts
+- Trailblazer (`Trailblazer::Activity`) ONLY in the flowchart source-code generator and the code it generates — never for other business logic
+- Prefer mature gems over hand-rolled protocol/crypto; wrap behind a thin app service
+- No backward-compatibility shims — treat as a brand-new app
+
+## Multi-tenancy
+
+- Most models need `customer_id`
+- Platform owner customer: `81721200` (owner role may cross tenants)
+- Roles are only `owner`, `admin`, `member` (see AGENTS.md reserved-role rules)
+
+## I18n (hard rule)
+
+- No hard-coded user-facing strings. Both `en` and `zh-CN` required.
+- Views/components: `t("...")`; non-controller Ruby: `I18n.t("...")`
+- Stimulus: English `default:` Value + server-passed `data-*-value`; never literal UI text in JS
+
+## Git
+
+- Do not auto-commit; only commit when explicitly asked
+---
+

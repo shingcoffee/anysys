@@ -1,0 +1,12 @@
+<section data-member-card class="<%= section_classes %>">
+  <% if title.present? %>
+    <header class="mb-6 border-b pb-5 <%= chrome.hairline_class %>">
+      <h2 class="<%= chrome.section_title_class %>"><%= title %></h2>
+      <% if description.present? %>
+        <p class="mt-2 <%= chrome.body_copy_class %>"><%= description %></p>
+      <% end %>
+    </header>
+  <% end %>
+
+  <%= content %>
+</section>

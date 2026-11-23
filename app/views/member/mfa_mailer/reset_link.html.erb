@@ -1,0 +1,14 @@
+<%= render Mailers::ShellComponent.new(
+      preheader: t("member.mfa_mailer.reset_link.preheader"),
+      brand:     t("member.mfa_mailer.reset_link.brand"),
+      heading:   t("member.mfa_mailer.reset_link.heading"),
+      title:     t("member.mfa_mailer.reset_link.title"),
+      greeting:  t("member.mfa_mailer.reset_link.greeting", name: @user.display_name),
+      body:      t("member.mfa_mailer.reset_link.requested"),
+      action:    t("member.mfa_mailer.reset_link.disable_link"),
+      action_url: @url,
+      fallback:  t("member.mfa_mailer.reset_link.fallback"),
+      note:      t("member.mfa_mailer.reset_link.expiry_note"),
+      ignore:    t("member.mfa_mailer.reset_link.ignore"),
+      footer:    t("member.mfa_mailer.reset_link.footer")
+    ) %>

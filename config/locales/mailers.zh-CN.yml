@@ -1,0 +1,4 @@
+zh-CN:
+  mailers:
+    shell:
+      blank_value: "—"

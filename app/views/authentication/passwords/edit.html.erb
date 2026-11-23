@@ -1,0 +1,38 @@
+<%= render Member::AuthShellComponent.new(
+      customer: current_customer,
+      title:    t("auth.passwords.edit.shell_title"),
+      subtitle: t("auth.passwords.edit.shell_subtitle")
+    ) do %>
+
+  <div class="mb-8">
+    <h2 class="text-subtitle mb-1"><%= t("auth.common.new_password") %></h2>
+    <p class="text-body-sm"><%= t("auth.passwords.edit.subheading") %></p>
+  </div>
+
+  <%= form_for(resource, as: resource_name,
+        url: user_password_path,
+        html: { method: :put, class: "space-y-5" }) do |f| %>
+
+    <%= f.hidden_field :reset_password_token %>
+
+    <% if resource.errors.any? %>
+      <div class="rounded-lg bg-danger-subtle border border-danger/20 p-3">
+        <p class="text-sm text-danger"><%= resource.errors.full_messages.first %></p>
+      </div>
+    <% end %>
+
+    <div>
+      <%= f.label :password, t("auth.common.new_password"), class: "form-label form-label-required" %>
+      <%= f.password_field :password, autocomplete: "new-password",
+            placeholder: t("auth.common.min_chars_placeholder", count: @minimum_password_length || 8),
+            class: "input-member" %>
+    </div>
+
+    <div>
+      <%= f.label :password_confirmation, t("auth.common.confirm_password"), class: "form-label form-label-required" %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input-member" %>
+    </div>
+
+    <%= f.submit t("auth.passwords.edit.submit"), class: "btn-member w-full justify-center" %>
+  <% end %>
+<% end %>

@@ -1,0 +1,13 @@
+en:
+  code_generator_inputs:
+    errors:
+      group_fields: "groupByFields must contain valid field names or key/value rows with a valid field name in every key."
+      clone_overrides: "overrideAttributes must be a JSON object mapping valid attribute names to scalar values or ctx references."
+      schedule: "schedule must map weekday names to valid HH:MM-HH:MM ranges with the opening time before the closing time."
+      holidays: "holidays must map valid YYYY-MM-DD dates to holiday names; malformed or duplicate rows are not allowed."
+      archive_entries: "entries must be a JSON array of objects with a name and exactly one valid sourceKey or string literal."
+      download_headers: "headers must be a JSON object or key/value array with valid header names and scalar values without line breaks."
+      csv_columns: "columns must be a non-empty JSON array of objects with string headers and valid field paths using nestedSeparator."
+      tools: "tools must contain unique ctx tool names with blank values, as a JSON object or key/value array."
+      tools_provider: "The selected provider does not support tools."
+      tool_binding: "Tool %{name} must be bound to a RubyLLM::Tool instance in ctx."

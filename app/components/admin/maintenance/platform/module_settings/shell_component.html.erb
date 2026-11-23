@@ -1,0 +1,19 @@
+<div data-module-settings-shell="true">
+  <%= render AdminPageComponent.new(
+        breadcrumbs: breadcrumbs,
+        title: feature_module.display_name,
+        description: feature_module.description,
+        actions: actions,
+        badges: badges,
+        icon_path: icon_path,
+        icon_class: icon_class
+      ) do %>
+    <%= render Admin::Maintenance::Platform::ModuleSettings::NavComponent.new(
+          module_key: feature_module.key,
+          current: current,
+          customer_id: customer_id
+        ) %>
+
+    <main class="min-w-0"><%= content %></main>
+  <% end %>
+</div>

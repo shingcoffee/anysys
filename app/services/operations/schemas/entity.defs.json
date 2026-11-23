@@ -1,0 +1,1363 @@
+{
+  "$comment": "Shared public-vocabulary shapes for create_entity, update_entity, and get_entity.",
+  "$defs": {
+    "entityName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Entity identity the customer reads on the page. Unique per tenant including trash. Must not start with assoc_. Slug is derived and read-only."
+    },
+    "slug": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "^[A-Za-z0-9_]+$",
+      "description": "Stable attribute identifier derived from name when omitted. Immutable after create. Used by formulas, aggregates, defaults, and change ops."
+    },
+    "groupKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50,
+      "pattern": "^[A-Za-z0-9_-]+$",
+      "description": "Stable group identifier stored as the group's id. Unique within the entity. Attributes reference it via group."
+    },
+    "entitySpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "description": "One entity to create. Associations, option sources, and aggregates may name other entities in this same call.",
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/entityName",
+          "description": "Entity identity the customer reads on the page. Unique per tenant including trash. Must not start with assoc_. Slug is derived and read-only."
+        },
+        "display_label": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Label shown on the form and in lists. Default the name."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Optional help text for editors. Default empty."
+        },
+        "extends": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "x-vocabulary": "extendable_models",
+          "description": "Base model this entity extends, or null for none. Default none. Must be one of the tenant's extendable models."
+        },
+        "settings": {
+          "$ref": "#/$defs/entitySettings",
+          "description": "Icon, colour and pre-filled values for this entity. All fields optional."
+        },
+        "attribute_groups": {
+          "type": "array",
+          "maxItems": 30,
+          "description": "Named sections on the form. Array order is page order. Default none. At most 30.",
+          "items": {
+            "$ref": "#/$defs/attributeGroup",
+            "description": "A labelled section of attributes. Create-shaped: omitted icon/color receive defaults."
+          }
+        },
+        "attributes": {
+          "type": "array",
+          "maxItems": 150,
+          "description": "Fields on this entity. Array order is page order. Default none. At most 150.",
+          "items": {
+            "$ref": "#/$defs/attribute",
+            "description": "A field on an entity. Create-shaped: omitted kind is input and omitted html_type is text."
+          }
+        },
+        "associations": {
+          "type": "array",
+          "maxItems": 20,
+          "description": "Links to other entities. Each creates a bridge entity automatically. Default none. At most 20.",
+          "items": {
+            "$ref": "#/$defs/association",
+            "description": "A link to another entity. The bridge entity is created automatically. Cannot point at this entity."
+          }
+        }
+      }
+    },
+    "entitySettings": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Icon, colour and pre-filled values for this entity. All fields optional.",
+      "properties": {
+        "icon": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "default": "custom",
+          "description": "Icon key shown for this entity. Default custom."
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#6366f1",
+          "description": "Hex colour shown for this entity, including the leading #. Default #6366f1."
+        },
+        "default_values": {
+          "$ref": "#/$defs/defaultValues",
+          "description": "Values pre-filled in new entries. Keys are attribute slugs already on this entity. Default empty."
+        }
+      }
+    },
+    "defaultValues": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Values pre-filled in new entries. Keys are attribute slugs already on this entity. Default empty.",
+      "patternProperties": {
+        "^[A-Za-z0-9_]+$": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "null"
+          ],
+          "description": "Initial value stored under this attribute slug."
+        }
+      }
+    },
+    "attributeGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "name"
+      ],
+      "description": "A labelled section of attributes. Create-shaped: omitted icon/color receive defaults.",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/groupKey",
+          "description": "Stable group identifier stored as the group's id. Unique within the entity. Attributes reference it via group."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Section heading shown on the form. Unique within the entity, case-insensitive."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Optional section help text. Default empty."
+        },
+        "icon": {
+          "type": "string",
+          "default": "folder",
+          "x-vocabulary": "group_icons",
+          "description": "Section icon. Default folder."
+        },
+        "color": {
+          "type": "string",
+          "default": "slate",
+          "x-vocabulary": "group_colors",
+          "description": "Section colour token. Default slate."
+        }
+      }
+    },
+    "groupPatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Partial group update. Omitted keys stay as they are. Null clears an optional field. Key is not patchable.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Replacement section heading. Used by update_group."
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 500,
+          "description": "Replacement help text. Null clears it. Used by update_group."
+        },
+        "icon": {
+          "type": "string",
+          "description": "Replacement section icon. Same allowed values as attribute_groups icon."
+        },
+        "color": {
+          "type": "string",
+          "description": "Replacement section colour token. Same allowed values as attribute_groups color."
+        }
+      }
+    },
+    "attribute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "description": "A field on an entity. Create-shaped: omitted kind is input and omitted html_type is text.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Field label used to derive the slug when slug is omitted."
+        },
+        "slug": {
+          "$ref": "#/$defs/slug",
+          "description": "Stable attribute identifier derived from name when omitted. Immutable after create. Used by formulas, aggregates, defaults, and change ops."
+        },
+        "display_label": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Shown label. Default the name."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Optional help text under the control. Default empty."
+        },
+        "kind": {
+          "type": "string",
+          "default": "input",
+          "x-vocabulary": "attribute_kinds",
+          "description": "How the value is produced. Default input. Bridge attributes are always input."
+        },
+        "html_type": {
+          "type": "string",
+          "default": "text",
+          "x-vocabulary": "html_types",
+          "description": "Form control. Default text. Computed attributes are stored as number."
+        },
+        "group": {
+          "type": "string",
+          "description": "Group key this field belongs to. Default ungrouped. Must match an attribute_groups key."
+        },
+        "rules": {
+          "type": "array",
+          "maxItems": 20,
+          "description": "Attribute rules (validators). Default none. Allowed types depend on html_type. At most 20.",
+          "items": {
+            "$ref": "#/$defs/rule",
+            "description": "One attribute rule. Extra value fields depend on the rule type; presence/format rules take none."
+          }
+        },
+        "access": {
+          "$ref": "#/$defs/access",
+          "description": "Who sees the field and who the rules apply to. Default all audiences true. Rules apply only where the field is visible."
+        },
+        "options": {
+          "$ref": "#/$defs/options",
+          "description": "Choice list for select, radio, and checkbox. Required on those html_types. Ignored on other controls."
+        },
+        "file": {
+          "$ref": "#/$defs/file",
+          "description": "Upload settings for file and image controls. Ignored on other html_types."
+        },
+        "formula": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "description": "Expression over sibling attribute slugs. Required when kind is calculated. Identifiers must be slugs on this entity."
+        },
+        "aggregate": {
+          "$ref": "#/$defs/aggregate",
+          "description": "Computed aggregate through an association bridge. Required when kind is computed."
+        },
+        "owner": {
+          "type": "boolean",
+          "description": "When true, this reference marks which person the record belongs to. Valid only on an entity_entries field whose target is a person entity, at most once per entity. Omit when false. Invalid on person entities, bridge attributes, non-references, and non-person targets."
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/lifecycle",
+          "description": "Status lifecycle. Only on select or radio input with static options and exactly one default option. Default none."
+        }
+      },
+      "allOf": [
+        {
+          "description": "Select, radio, and checkbox controls require options.",
+          "if": {
+            "properties": {
+              "html_type": {
+                "x-vocabulary": "selection_html_types",
+                "description": "A selection control."
+              }
+            },
+            "required": [
+              "html_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "options"
+            ]
+          }
+        },
+        {
+          "description": "kind calculated requires formula.",
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "calculated",
+                "description": "When kind is calculated."
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "formula"
+            ]
+          }
+        },
+        {
+          "description": "kind computed requires aggregate.",
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "computed",
+                "description": "When kind is computed."
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "aggregate"
+            ]
+          }
+        }
+      ]
+    },
+    "attributePatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Partial attribute update (JSON Merge Patch). Omitted keys stay as they are. Null clears an optional field. Slug is not patchable.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Replacement field name. Does not change the slug."
+        },
+        "display_label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100,
+          "description": "Replacement shown label. Null resets it to the name."
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2000,
+          "description": "Replacement help text. Null clears it."
+        },
+        "kind": {
+          "type": "string",
+          "description": "Replacement kind: input, calculated, or computed. Breaking when it changes."
+        },
+        "html_type": {
+          "type": "string",
+          "description": "Replacement form control. Changing html_type is a breaking change. Same allowed values as attribute html_type."
+        },
+        "group": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Replacement group key. Null ungroups the field."
+        },
+        "rules": {
+          "type": "array",
+          "maxItems": 20,
+          "description": "Replacement rule list. Arrays replace wholesale.",
+          "items": {
+            "$ref": "#/$defs/ruleLite",
+            "description": "One attribute rule. Same fields as a full rule. type must be allowed for the html_type."
+          }
+        },
+        "access": {
+          "$ref": "#/$defs/access",
+          "description": "Who sees the field and who the rules apply to. Default all audiences true. Rules apply only where the field is visible."
+        },
+        "options": {
+          "$ref": "#/$defs/options",
+          "description": "Choice list for select, radio, and checkbox. Required on those html_types. Ignored on other controls."
+        },
+        "file": {
+          "$ref": "#/$defs/file",
+          "description": "Upload settings for file and image controls. Ignored on other html_types."
+        },
+        "formula": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1000,
+          "description": "Replacement formula when kind is calculated. Null clears it."
+        },
+        "aggregate": {
+          "$ref": "#/$defs/aggregate",
+          "description": "Computed aggregate through an association bridge. Required when kind is computed."
+        },
+        "owner": {
+          "type": "boolean",
+          "description": "When true, this reference marks which person the record belongs to. Same rules as attribute owner. False or omit clears the flag."
+        },
+        "lifecycle": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/lifecycle"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Replacement status lifecycle. Arrays replace wholesale. Null clears it."
+        }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transitions"
+      ],
+      "description": "Status lifecycle. States are the option values; a new record starts at the default option. A save making an unlisted change, or clearing the value, is refused.",
+      "properties": {
+        "transitions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "description": "Allowed changes. List each from/to pair once.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "from",
+              "to",
+              "by"
+            ],
+            "description": "One allowed change.",
+            "properties": {
+              "from": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Option value the record is in."
+              },
+              "to": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Option value it may move to. Differs from from."
+              },
+              "by": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "description": "Who may make this change.",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "admin",
+                    "member",
+                    "public",
+                    "system"
+                  ],
+                  "x-enum-descriptions": {
+                    "admin": "Tenant admins and the platform owner.",
+                    "member": "A signed-in member, including processing on their submit.",
+                    "public": "An anonymous visitor's submit.",
+                    "system": "A write with no person behind it, such as a payment confirmation."
+                  },
+                  "description": "An audience."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "bridgeAttribute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "description": "An extra input field stored on the association bridge. Always kind input. Same create defaults as attribute.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Bridge field name. Slug is derived when omitted."
+        },
+        "slug": {
+          "$ref": "#/$defs/slug",
+          "description": "Stable attribute identifier derived from name when omitted. Immutable after create. Used by formulas, aggregates, defaults, and change ops."
+        },
+        "display_label": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Shown label. Default the name."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Optional help text. Default empty."
+        },
+        "html_type": {
+          "type": "string",
+          "default": "text",
+          "description": "Form control. Default text. Same allowed values as attribute html_type."
+        },
+        "rules": {
+          "type": "array",
+          "maxItems": 20,
+          "description": "Attribute rules. Default none. Allowed types depend on html_type.",
+          "items": {
+            "$ref": "#/$defs/ruleLite",
+            "description": "One attribute rule. Same fields as a full rule. type must be allowed for the html_type."
+          }
+        },
+        "access": {
+          "$ref": "#/$defs/access",
+          "description": "Who sees the field and who the rules apply to. Default all audiences true. Rules apply only where the field is visible."
+        },
+        "options": {
+          "$ref": "#/$defs/optionsLite",
+          "description": "Choice list for select, radio, and checkbox. Required on those html_types."
+        },
+        "file": {
+          "$ref": "#/$defs/file",
+          "description": "Upload settings for file and image controls. Ignored on other html_types."
+        },
+        "kind": {
+          "type": "string",
+          "const": "input",
+          "default": "input",
+          "description": "Always input for bridge attributes. Default input. Do not send calculated or computed."
+        },
+        "owner": {
+          "type": "boolean",
+          "description": "When true, this reference marks which person the record belongs to. Invalid on bridge attributes; the semantic validator reports attribute.owner_invalid. Omit when false."
+        }
+      },
+      "allOf": [
+        {
+          "description": "Select, radio, and checkbox bridge fields require options.",
+          "if": {
+            "properties": {
+              "html_type": {
+                "x-vocabulary": "selection_html_types",
+                "description": "A selection control."
+              }
+            },
+            "required": [
+              "html_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "options"
+            ]
+          }
+        }
+      ]
+    },
+    "bridgeAttributePatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Partial bridge-attribute update (JSON Merge Patch). Omitted keys stay. Null clears an optional field. Slug is not patchable.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Replacement name. Does not change the slug."
+        },
+        "display_label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100,
+          "description": "Replacement shown label. Null resets it to the name."
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2000,
+          "description": "Replacement help text. Null clears it."
+        },
+        "html_type": {
+          "type": "string",
+          "description": "Replacement form control. Same allowed values as attribute html_type."
+        },
+        "rules": {
+          "type": "array",
+          "maxItems": 20,
+          "description": "Replacement rule list. Arrays replace wholesale.",
+          "items": {
+            "$ref": "#/$defs/ruleLite",
+            "description": "One attribute rule. Same fields as a full rule. type must be allowed for the html_type."
+          }
+        },
+        "access": {
+          "$ref": "#/$defs/access",
+          "description": "Who sees the field and who the rules apply to. Default all audiences true. Rules apply only where the field is visible."
+        },
+        "options": {
+          "$ref": "#/$defs/options",
+          "description": "Choice list for select, radio, and checkbox. Required on those html_types. Ignored on other controls."
+        },
+        "file": {
+          "$ref": "#/$defs/file",
+          "description": "Upload settings for file and image controls. Ignored on other html_types."
+        },
+        "owner": {
+          "type": "boolean",
+          "description": "When true, this reference marks which person the record belongs to. Invalid on bridge attributes; the semantic validator reports attribute.owner_invalid. Omit when false."
+        }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "description": "One attribute rule. Extra value fields depend on the rule type; presence/format rules take none.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "x-vocabulary": "rule_types",
+          "description": "Which rule to apply. Each value states the value fields it takes and the html_types it is allowed on; a rule outside that list is rejected with rule.not_allowed."
+        },
+        "value": {
+          "type": "number",
+          "description": "Bound for single-value rules such as length_maximum or greater_than. Default none."
+        },
+        "min": {
+          "type": "number",
+          "description": "Inclusive lower bound for range rules such as length_in_range. Default none."
+        },
+        "max": {
+          "type": "number",
+          "description": "Inclusive upper bound for range rules. Must be >= min."
+        },
+        "pattern": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Ruby regular expression for format_custom. Default none.",
+          "maxLength": 500
+        },
+        "values": {
+          "type": "array",
+          "maxItems": 200,
+          "description": "Allowed or excluded strings for inclusion/exclusion. Default none. At most 200.",
+          "items": {
+            "type": "string",
+            "description": "One list member."
+          }
+        }
+      },
+      "allOf": [
+        {
+          "description": "Single-value rules require value.",
+          "if": {
+            "properties": {
+              "type": {
+                "x-vocabulary": "rule_types_single_value",
+                "description": "A single-value rule."
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "value"
+            ]
+          }
+        },
+        {
+          "description": "Range rules require min and max.",
+          "if": {
+            "properties": {
+              "type": {
+                "x-vocabulary": "rule_types_range",
+                "description": "A range rule."
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "min",
+              "max"
+            ]
+          }
+        },
+        {
+          "description": "Pattern rules require pattern.",
+          "if": {
+            "properties": {
+              "type": {
+                "x-vocabulary": "rule_types_pattern",
+                "description": "A pattern rule."
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "pattern"
+            ]
+          }
+        },
+        {
+          "description": "List rules require values.",
+          "if": {
+            "properties": {
+              "type": {
+                "x-vocabulary": "rule_types_list",
+                "description": "A list rule."
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "values"
+            ]
+          }
+        }
+      ]
+    },
+    "access": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Who sees the field and who the rules apply to. Default all audiences true. Rules apply only where the field is visible.",
+      "properties": {
+        "visible_to": {
+          "$ref": "#/$defs/audienceFlags",
+          "description": "Audience flags. Omitted keys default true. Set false to hide or skip rules for that audience."
+        },
+        "rules_apply_to": {
+          "$ref": "#/$defs/audienceFlags",
+          "description": "Audience flags. Omitted keys default true. Set false to hide or skip rules for that audience."
+        },
+        "editable_by": {
+          "$ref": "#/$defs/audienceFlags",
+          "description": "Audience flags. Omitted keys default true. Set false to show the field read-only to an audience that sees it, such as a status the system sets that members may read."
+        }
+      }
+    },
+    "audienceFlags": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Audience flags. Omitted keys default true. Set false to hide or skip rules for that audience.",
+      "properties": {
+        "admin": {
+          "type": "boolean",
+          "default": true,
+          "description": "Applies to tenant admins and the platform owner. Default true."
+        },
+        "member": {
+          "type": "boolean",
+          "default": true,
+          "description": "Applies to signed-in members. Default true."
+        },
+        "public": {
+          "type": "boolean",
+          "default": true,
+          "description": "Applies to anonymous public visitors. Default true."
+        }
+      }
+    },
+    "options": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source"
+      ],
+      "description": "Choice list for select, radio, and checkbox. Required on those html_types. Ignored on other controls.",
+      "properties": {
+        "source": {
+          "type": "string",
+          "x-vocabulary": "option_sources",
+          "description": "Where the choices come from."
+        },
+        "values": {
+          "type": "array",
+          "maxItems": 200,
+          "description": "Static choices. Required when source is static. At most 200. Duplicate stored values are rejected.",
+          "items": {
+            "$ref": "#/$defs/optionValue",
+            "description": "One static choice. A string is stored as both label and value."
+          }
+        },
+        "constant": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Constant name. Required when source is constant. Customer-owned constants win over shared namesakes."
+        },
+        "entity": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Entity whose entries fill the list. Required when source is entity_entries. May name an entity in this same call."
+        },
+        "label_field": {
+          "type": "string",
+          "description": "Slug of a human-readable attribute of that entity (text, search, email, tel, url, number or date) shown as the choice label. The stored value is always the record id."
+        }
+      },
+      "allOf": [
+        {
+          "description": "source static requires values.",
+          "if": {
+            "properties": {
+              "source": {
+                "const": "static",
+                "description": "When source is static."
+              }
+            },
+            "required": [
+              "source"
+            ]
+          },
+          "then": {
+            "required": [
+              "values"
+            ]
+          }
+        },
+        {
+          "description": "source constant requires constant.",
+          "if": {
+            "properties": {
+              "source": {
+                "const": "constant",
+                "description": "When source is constant."
+              }
+            },
+            "required": [
+              "source"
+            ]
+          },
+          "then": {
+            "required": [
+              "constant"
+            ]
+          }
+        },
+        {
+          "description": "source entity_entries requires entity and label_field.",
+          "if": {
+            "properties": {
+              "source": {
+                "const": "entity_entries",
+                "description": "When source is entity_entries."
+              }
+            },
+            "required": [
+              "source"
+            ]
+          },
+          "then": {
+            "required": [
+              "entity",
+              "label_field"
+            ]
+          }
+        }
+      ]
+    },
+    "optionValue": {
+      "description": "One static choice. A string is stored as both label and value.",
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "A choice whose label and stored value are this string."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "label"
+          ],
+          "description": "A choice with a distinct label and stored value.",
+          "properties": {
+            "label": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Text shown for this choice."
+            },
+            "value": {
+              "type": "string",
+              "description": "Stored value. Default the label."
+            },
+            "default": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether this choice is pre-selected. Default false."
+            }
+          }
+        }
+      ]
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Upload settings for file and image controls. Ignored on other html_types.",
+      "properties": {
+        "accept": {
+          "type": "string",
+          "description": "accept attribute, e.g. .pdf,image/*. Default none (any file)."
+        },
+        "multiple": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether more than one file may be chosen. Default false."
+        }
+      }
+    },
+    "aggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "related_entity",
+        "function"
+      ],
+      "description": "Computed aggregate through an association bridge. Required when kind is computed.",
+      "properties": {
+        "related_entity": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Entity this aggregate walks to. May name an entity in this same call. An association must exist in the declared direction."
+        },
+        "function": {
+          "type": "string",
+          "x-vocabulary": "aggregate_functions",
+          "description": "Aggregate function. count does not need source_attribute; the others do."
+        },
+        "source_attribute": {
+          "type": "string",
+          "description": "Bridge-attribute slug to aggregate. Required except for count. Must be numeric for avg, sum, min, and max."
+        },
+        "precision": {
+          "type": "integer",
+          "minimum": 0,
+          "x-vocabulary-max": "aggregate_max_precision",
+          "description": "Decimal places for non-count functions. Default none (unrounded)."
+        },
+        "filter": {
+          "$ref": "#/$defs/aggregateFilter",
+          "description": "Keep related bridge rows matching this comparison. Default none (all rows)."
+        },
+        "direction": {
+          "type": "string",
+          "default": "source",
+          "x-vocabulary": "aggregate_directions",
+          "description": "Which side owns the association. Default source."
+        }
+      }
+    },
+    "aggregateFilter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attribute",
+        "operator",
+        "value"
+      ],
+      "description": "Keep related bridge rows matching this comparison. Default none (all rows).",
+      "properties": {
+        "attribute": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Bridge-attribute slug to compare."
+        },
+        "operator": {
+          "type": "string",
+          "x-vocabulary": "filter_operators",
+          "description": "Comparison operator."
+        },
+        "value": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ],
+          "description": "Value compared against the filter attribute."
+        }
+      }
+    },
+    "association": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "related_entity",
+        "display_field"
+      ],
+      "description": "A link to another entity. The bridge entity is created automatically. Cannot point at this entity.",
+      "properties": {
+        "related_entity": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Target entity name. May name an entity in this same call."
+        },
+        "display_field": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Slug of a human-readable attribute of the related entity (text, search, email, tel, url, number or date) used as the label of each linked record."
+        },
+        "display_field_label": {
+          "type": "string",
+          "description": "Label for the display field. Default the titleized display_field."
+        },
+        "bridge_attributes": {
+          "type": "array",
+          "maxItems": 50,
+          "description": "Extra input fields stored on the bridge. Default none.",
+          "items": {
+            "$ref": "#/$defs/bridgeAttribute",
+            "description": "An extra input field stored on the association bridge. Always kind input. Same create defaults as attribute."
+          }
+        }
+      }
+    },
+    "associationPatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Partial association update (JSON Merge Patch). related_entity identifies the row and is not patchable. Arrays replace wholesale.",
+      "properties": {
+        "display_field": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Replacement display-field slug. The same type rule applies."
+        },
+        "display_field_label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Replacement display-field label. Null resets it to the titleized display_field."
+        },
+        "bridge_attributes": {
+          "type": "array",
+          "maxItems": 50,
+          "description": "Replacement bridge-attribute list. Prefer add/update/remove_bridge_attribute for surgical edits.",
+          "items": {
+            "$ref": "#/$defs/bridgeAttribute",
+            "description": "An extra input field stored on the association bridge. Always kind input. Same create defaults as attribute."
+          }
+        }
+      }
+    },
+    "position": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "Insert relative to an existing item. Omit to append at the end. Give exactly one of before or after.",
+      "properties": {
+        "before": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Place the item immediately before this existing slug or group key."
+        },
+        "after": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Place the item immediately after this existing slug or group key."
+        }
+      },
+      "allOf": [
+        {
+          "description": "Do not send both before and after.",
+          "if": {
+            "required": [
+              "before"
+            ]
+          },
+          "then": {
+            "not": {
+              "required": [
+                "after"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "ruleLite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "description": "One attribute rule. Same fields as a full rule. type must be allowed for the html_type.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Rule type. Same values as attributes[].rules[].type, where every value is listed with its meaning, value fields and allowed html_types."
+        },
+        "value": {
+          "type": "number",
+          "description": "Bound for single-value rules such as length_maximum. Default none."
+        },
+        "min": {
+          "type": "number",
+          "description": "Inclusive lower bound for range rules. Default none."
+        },
+        "max": {
+          "type": "number",
+          "description": "Inclusive upper bound for range rules. Must be >= min."
+        },
+        "pattern": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Ruby regular expression for format_custom. Default none.",
+          "maxLength": 500
+        },
+        "values": {
+          "type": "array",
+          "maxItems": 200,
+          "description": "Allowed or excluded strings for inclusion/exclusion. Default none. At most 200.",
+          "items": {
+            "type": "string",
+            "description": "One list member."
+          }
+        }
+      }
+    },
+    "attributeLite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "description": "Create-shaped attribute. Omitted kind is input and omitted html_type is text. Select/radio/checkbox require options; calculated requires formula; computed requires aggregate.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Field label used to derive the slug when slug is omitted."
+        },
+        "slug": {
+          "$ref": "#/$defs/slug",
+          "description": "Stable attribute identifier derived from name when omitted. Immutable after create. Used by formulas, aggregates, defaults, and change ops."
+        },
+        "display_label": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Shown label. Default the name."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Optional help text under the control. Default empty."
+        },
+        "kind": {
+          "type": "string",
+          "default": "input",
+          "description": "How the value is produced. Default input.",
+          "x-vocabulary": "attribute_kinds"
+        },
+        "html_type": {
+          "type": "string",
+          "default": "text",
+          "description": "Form control. Default text. Computed attributes are stored as number.",
+          "x-vocabulary": "html_types"
+        },
+        "group": {
+          "type": "string",
+          "description": "Group key this field belongs to. Default ungrouped. Must match an attribute_groups key."
+        },
+        "rules": {
+          "type": "array",
+          "maxItems": 20,
+          "description": "Attribute rules (validators). Default none. Allowed types depend on html_type. At most 20.",
+          "items": {
+            "$ref": "#/$defs/ruleLite",
+            "description": "One attribute rule. Same fields as a full rule. type must be allowed for the html_type."
+          }
+        },
+        "access": {
+          "$ref": "#/$defs/access",
+          "description": "Who sees the field and who the rules apply to. Default all audiences true. Rules apply only where the field is visible."
+        },
+        "options": {
+          "$ref": "#/$defs/optionsLite",
+          "description": "Choice list for select, radio, and checkbox. Required on those html_types."
+        },
+        "file": {
+          "$ref": "#/$defs/file",
+          "description": "Upload settings for file and image controls. Ignored on other html_types."
+        },
+        "formula": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "description": "Expression over sibling attribute slugs. Required when kind is calculated. Identifiers must be slugs on this entity."
+        },
+        "aggregate": {
+          "$ref": "#/$defs/aggregateLite",
+          "description": "Computed aggregate through an association bridge. Required when kind is computed."
+        },
+        "owner": {
+          "type": "boolean",
+          "description": "When true, this reference marks which person the record belongs to. Valid only on an entity_entries field whose target is a person entity, at most once per entity. Omit when false."
+        }
+      }
+    },
+    "optionsLite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source"
+      ],
+      "description": "Choice list. Same fields as options. source is static, constant, or entity_entries.",
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "Where the choices come from: static, constant, or entity_entries."
+        },
+        "values": {
+          "type": "array",
+          "maxItems": 200,
+          "description": "Static choices. Required when source is static. At most 200. Duplicate stored values are rejected.",
+          "items": {
+            "$ref": "#/$defs/optionValue",
+            "description": "One static choice. A string is stored as both label and value."
+          }
+        },
+        "constant": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Constant name. Required when source is constant. Customer-owned constants win over shared namesakes."
+        },
+        "entity": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Entity whose entries fill the list. Required when source is entity_entries. May name an entity in this same call."
+        },
+        "label_field": {
+          "type": "string",
+          "description": "Slug of a human-readable attribute of that entity (text, search, email, tel, url, number or date) shown as the choice label. The stored value is always the record id."
+        }
+      },
+      "allOf": [
+        {
+          "description": "source entity_entries requires entity and label_field.",
+          "if": {
+            "properties": {
+              "source": {
+                "const": "entity_entries",
+                "description": "When source is entity_entries."
+              }
+            },
+            "required": [
+              "source"
+            ]
+          },
+          "then": {
+            "required": [
+              "entity",
+              "label_field"
+            ]
+          }
+        }
+      ]
+    },
+    "aggregateFilterLite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attribute",
+        "operator",
+        "value"
+      ],
+      "description": "Keep related bridge rows matching this comparison. Default none (all rows).",
+      "properties": {
+        "attribute": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Bridge-attribute slug to compare."
+        },
+        "operator": {
+          "type": "string",
+          "description": "Comparison operator: =, !=, >, >=, <, or <=."
+        },
+        "value": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ],
+          "description": "Value compared against the filter attribute."
+        }
+      }
+    },
+    "aggregateLite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "related_entity",
+        "function"
+      ],
+      "description": "Computed aggregate. Same fields as aggregate.",
+      "properties": {
+        "related_entity": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Entity this aggregate walks to. May name an entity in this same call. An association must exist in the declared direction."
+        },
+        "function": {
+          "type": "string",
+          "description": "Aggregate function: avg, sum, count, min, or max. count does not need source_attribute."
+        },
+        "source_attribute": {
+          "type": "string",
+          "description": "Bridge-attribute slug to aggregate. Required except for count. Must be numeric for avg, sum, min, and max."
+        },
+        "precision": {
+          "type": "integer",
+          "minimum": 0,
+          "x-vocabulary-max": "aggregate_max_precision",
+          "description": "Decimal places for non-count functions. Default none (unrounded)."
+        },
+        "filter": {
+          "$ref": "#/$defs/aggregateFilterLite",
+          "description": "Keep related bridge rows matching this comparison. Default none."
+        },
+        "direction": {
+          "type": "string",
+          "default": "source",
+          "description": "Which side owns the association: source or target. Default source."
+        }
+      }
+    }
+  }
+}

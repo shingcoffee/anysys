@@ -1,0 +1,18 @@
+<%= error_summary(root: "sms_contact") %>
+<% if @errors.any? && contact.persisted? %><%= link_to ui("shared.reload_saved"), sms_path(:edit_contact, contact), class: "link" %><% end %>
+<%= form_with scope: :sms_contact, url: contact.persisted? ? sms_path(:contact, contact) : sms_path(:contacts), method: contact.persisted? ? :patch : :post, local: true, class: "space-y-6" do |f| %>
+  <%= f.hidden_field :lock_version, value: form_value(:lock_version, contact.lock_version) %>
+  <%= section(t("chrome.customer_card.contact")) do %>
+    <p class="text-text-secondary"><%= ui("contacts.no_implied_consent") %></p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <%= field(f, :phone, type: :tel, required: true, help: ui("contacts.phone_help")) %>
+      <%= field(f, :country_code, required: true, maxlength: 2, help: ui("contacts.country_help")) %>
+      <%= field(f, :name, maxlength: 200) %>
+      <%= field(f, :timezone, help: ui("contacts.timezone_help")) %>
+      <% if contact.persisted? %><%= field(f, :status, type: :select, options: %w[active archived].map { |s| [label_text(:statuses, s), s] }) %><% end %>
+    </div>
+    <% if contact.persisted? %><p class="text-sm text-text-secondary"><%= t("sms_audience.errors.phone_changed") %></p><% end %>
+    <%= field(f, :custom_attributes_json, type: :textarea, help: ui("contacts.attributes_help"), maxlength: 8192, spellcheck: false) %>
+  <% end %>
+  <div class="flex flex-col sm:flex-row gap-3"><%= f.submit ui("contacts.save"), name: nil, class: "btn btn-primary" %><%= link_to ui("contacts.back"), sms_path(:contacts), class: "btn btn-secondary" %></div>
+<% end %>

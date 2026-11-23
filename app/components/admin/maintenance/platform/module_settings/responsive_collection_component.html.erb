@@ -1,0 +1,34 @@
+<div data-responsive-collection="true"
+     role="table"
+     aria-label="<%= label %>"
+     aria-colcount="<%= columns.size %>">
+  <span class="sr-only lg:hidden" aria-hidden="true" data-responsive-collection-mobile-label></span>
+  <div class="max-w-full overflow-x-auto" data-responsive-collection-viewport>
+    <div role="rowgroup">
+      <div class="hidden border-b border-border-subtle bg-surface-subtle px-4 py-3 text-xs font-semibold text-text-muted lg:grid lg:gap-4 <%= desktop_grid_class %>"
+           role="row"
+           data-responsive-collection-desktop-header>
+        <% columns.each_with_index do |column, index| %>
+          <div role="columnheader"
+               aria-colindex="<%= index + 1 %>"
+               aria-sort="<%= column[:sort_direction] || "none" %>">
+            <% if column[:sort_path].present? %>
+              <%= link_to column[:sort_path],
+                    class: "inline-flex items-center gap-1 text-text-secondary hover:text-text-primary",
+                    data: column[:data] || {} do %>
+                <%= column[:label] %>
+                <% if column[:sort_direction] == :ascending %><span aria-hidden="true">↑</span><% end %>
+                <% if column[:sort_direction] == :descending %><span aria-hidden="true">↓</span><% end %>
+              <% end %>
+            <% else %>
+              <%= column[:label] %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div role="rowgroup" data-responsive-collection-body>
+      <%= content %>
+    </div>
+  </div>
+</div>

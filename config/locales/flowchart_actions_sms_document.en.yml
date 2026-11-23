@@ -1,0 +1,88 @@
+---
+en:
+  flowchart_actions:
+    send_sms:
+      label: Send SMS
+      description: Send an SMS using an approved template.
+      fields:
+        templateKey:
+          label: Template
+          help: Approved SMS template sent for this customer.
+          placeholder: e.g., verify_code
+        to:
+          label: To
+          help: Context path of the recipient phone number.
+        vars:
+          label: Template variables
+          help: Values substituted into the template.
+        idempotencyKey:
+          label: Idempotency key
+          help: Deduplicates sends that share this key.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+    generate_document:
+      label: Generate document
+      description: Generate a PDF document from a title, body, and optional table.
+      fields:
+        title:
+          label: Title
+          help: Document title. Liquid placeholders resolve from the run context.
+          placeholder: e.g., Invoice {{ name }}
+        body:
+          label: Body
+          help: Paragraphs of body text. Lines starting with ## become headings.
+          placeholder: Hello {{ name }}
+        sourceVariable:
+          label: Table source
+          help: Context path of the optional table rows.
+          placeholder: e.g., rows
+        columns:
+          label: Table columns
+          help: Column header mapped to a row field.
+        pageSize:
+          label: Page size
+          help: Paper size of the generated PDF.
+          options:
+            a4: a4
+            letter: letter
+            legal: legal
+        orientation:
+          label: Orientation
+          help: Portrait or landscape page layout.
+          options:
+            portrait: portrait
+            landscape: landscape
+        header:
+          label: Header
+          help: Optional header drawn at the top of every page. Liquid placeholders resolve from the run context.
+        footer:
+          label: Footer
+          help: Optional footer drawn at the bottom of every page. Liquid placeholders resolve from the run context.
+        pageNumbers:
+          label: Page numbers
+          help: Print a page number on every page.
+        filename:
+          label: Filename
+          help: Filename stored on the generated PDF blob.
+          placeholder: e.g., document.pdf
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+  flowchart_runtime:
+    errors:
+      send_sms:
+        suppressed: This phone number has opted out of SMS.
+        quota: The SMS send was rejected because the quota was exceeded.
+        invalid_number: The recipient phone number is invalid.
+        template_missing: The SMS template was not found or is not active.
+        invalid_vars: The SMS template variables are invalid.
+        credentials_missing: SMS credentials are not configured.
+        module_disabled: SMS is not enabled for this customer.
+        idempotency_conflict: This SMS idempotency key was already used for a different request.
+        marketing_ineligible: This recipient is not eligible for marketing SMS.
+        provider_code_missing: The SMS template has no code for the active provider.
+        api_error: The SMS gateway rejected the send.
+        failed: "The SMS could not be sent (%{reason})."
+      generate_document:
+        failed: "The document could not be generated (%{reason})."

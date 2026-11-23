@@ -1,0 +1,386 @@
+<% if missing_site? %>
+  <%= render AlertComponent.new(message: t("website.admin.settings.missing_site"), type: :error) %>
+<% else %>
+  <div class="grid w-full min-w-0 max-w-6xl grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_12.5rem] xl:gap-8"
+       data-controller="website-theme-picker"
+       data-website-settings="true"
+       data-action="change->website-theme-picker#apply"
+       data-website-theme-picker-tokens-value="<%= ERB::Util.html_escape(theme_picker_tokens.to_json) %>"
+       data-website-theme-picker-nav-active-class="<%= Websites::Admin::SettingsFormComponent::NAV_ACTIVE_CLASS %>"
+       data-website-theme-picker-nav-inactive-class="<%= Websites::Admin::SettingsFormComponent::NAV_INACTIVE_CLASS %>">
+    <nav class="sticky top-0 z-20 min-w-0 xl:order-last xl:top-6 xl:self-start"
+         aria-label="<%= t("website.admin.settings.jump") %>"
+         data-settings-nav="true">
+      <div class="rounded-xl bg-surface/95 p-1.5 shadow-xs ring-1 ring-border-subtle backdrop-blur-sm xl:bg-transparent xl:p-0 xl:shadow-none xl:ring-0 xl:backdrop-blur-none">
+        <p class="hidden px-3 pb-2 text-xs font-semibold uppercase tracking-[0.08em] text-text-tertiary xl:block" aria-hidden="true"><%= t("website.admin.settings.jump") %></p>
+        <div class="flex gap-1 overflow-x-auto xl:flex-col xl:overflow-visible xl:border-l xl:border-border-subtle xl:pl-2">
+          <% jump_items.each do |item| %>
+            <a href="<%= item[:href] %>"
+               data-website-theme-picker-target="nav"
+               data-action="click->website-theme-picker#highlight"
+               class="<%= nav_link_class %>">
+              <%= item[:label] %>
+            </a>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+
+    <div class="flex min-w-0 flex-col gap-6">
+      <% if errors_message.present? %>
+        <%= render AlertComponent.new(message: errors_message, type: :error) %>
+      <% end %>
+
+      <%= form_with url: form_url, method: :patch, html: { id: form_id, class: "flex min-w-0 flex-col gap-6" } do %>
+        <section id="publish"
+                 class="card min-w-0 scroll-mt-24 overflow-hidden"
+                 data-website-theme-picker-target="section"
+                 data-site-status="<%= published? ? "live" : "hidden" %>"
+                 aria-labelledby="website-settings-publish-heading">
+          <div class="flex flex-col gap-4 px-4 py-5 sm:flex-row sm:items-center sm:gap-5 sm:px-6">
+            <span class="flex size-12 shrink-0 items-center justify-center rounded-xl <%= status_tile_class %>" aria-hidden="true">
+              <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="<%= Websites::Admin::SettingsFormComponent::WEBSITE_ICON_PATH %>"/></svg>
+            </span>
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <h2 id="website-settings-publish-heading" class="section-header scroll-mt-24"><%= t("website_settings.publishing.heading") %></h2>
+                <%= render BadgeComponent.new(variant: published? ? :success : :default, size: :sm) do %>
+                  <%= t("website.admin.settings.publish.#{published? ? 'status_on' : 'status_off'}") %>
+                <% end %>
+              </div>
+              <p class="mt-1 max-w-2xl text-sm leading-normal text-text-secondary" id="website_published_hint"><%= t("website_settings.publishing.hint") %></p>
+              <% if site_address %>
+                <div class="mt-2 min-w-0 text-sm"><%= render Websites::Admin::PageAddressComponent.new(path: site_address, live: published?) %></div>
+              <% end %>
+              <%= link_to t("page_shortcuts.manage"), helpers.admin_maintenance_page_shortcuts_path(resolved_customer_id), class: "mt-2 inline-flex min-h-11 items-center text-sm text-accent-text underline" %>
+            </div>
+            <label class="flex min-h-11 shrink-0 cursor-pointer items-center gap-3 self-start rounded-lg sm:self-center" for="website_published">
+              <span id="website_published_label" class="text-sm font-medium text-text-primary"><%= t("website_settings.publishing.label") %></span>
+              <input type="hidden" name="website[published]" value="0">
+              <input type="checkbox"
+                     role="switch"
+                     id="website_published"
+                     name="website[published]"
+                     value="1"
+                     class="peer sr-only"
+                     aria-labelledby="website_published_label"
+                     aria-describedby="website_published_hint"
+                     <%= "checked" if published? %>>
+              <span aria-hidden="true" class="<%= Websites::Admin::SettingsFormComponent::SWITCH_CLASS %>"></span>
+            </label>
+          </div>
+        </section>
+
+        <%= render Websites::Admin::SettingsSectionComponent.new(
+              id: "website-settings-identity",
+              heading: t("website.admin.settings.identity.heading"),
+              description: t("website.admin.settings.identity.description")
+            ) do %>
+          <div class="grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-2">
+            <div class="flex min-w-0 flex-col gap-2">
+              <label class="form-label mb-0" for="website_name"><%= t("website.admin.settings.identity.name") %></label>
+              <input type="text"
+                     id="website_name"
+                     name="website[name]"
+                     value="<%= website.try(:name) %>"
+                     required
+                     class="input-field h-10"
+                      <%= "aria-invalid=true aria-describedby=website-name-error" if field_error(:name).present? %>>
+              <% if field_error(:name).present? %>
+                <p id="website-name-error" class="text-sm text-danger"><%= field_error(:name) %></p>
+              <% end %>
+            </div>
+            <div class="flex min-w-0 flex-col gap-2">
+              <label class="form-label mb-0" for="website_tagline"><%= t("website.admin.settings.identity.tagline") %></label>
+              <input type="text"
+                     id="website_tagline"
+                     name="website[tagline]"
+                     value="<%= website.try(:tagline) %>"
+                     class="input-field h-10">
+            </div>
+          </div>
+        <% end %>
+
+        <%= render Websites::Admin::SettingsSectionComponent.new(
+              id: "website-settings-theme",
+              heading: t("website.admin.settings.theme.appearance"),
+              description: t("website.admin.settings.theme.description")
+            ) do %>
+          <link rel="stylesheet" href="<%= font_library_url %>">
+          <div class="@container/theme min-w-0">
+            <fieldset class="mb-8 min-w-0" data-theme-presets>
+              <legend class="form-label"><%= t("website.admin.settings.theme.presets") %></legend>
+              <p class="-mt-1 mb-3 text-xs leading-normal text-text-tertiary"><%= t("website.admin.settings.theme.presets_hint") %></p>
+              <div class="grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-3 @3xl/theme:grid-cols-4 @5xl/theme:grid-cols-5">
+                <% presets.each do |preset| %>
+                  <% look = preset[:theme] %>
+                  <label class="relative block min-w-0 cursor-pointer" for="website_theme_preset_<%= preset[:key] %>">
+                    <input type="radio"
+                           class="peer sr-only"
+                           name="website[theme][preset]"
+                           id="website_theme_preset_<%= preset[:key] %>"
+                           value="<%= preset[:key] %>"
+                           <%= "checked" if preset_checked?(preset[:key]) %>
+                           data-website-theme-picker-target="preset"
+                           data-tokens="<%= ERB::Util.html_escape(preset[:tokens].to_json) %>"
+                           data-action="change->website-theme-picker#applyPreset">
+                    <span class="<%= Websites::Admin::SettingsFormComponent::PRESET_CARD_CLASS %>">
+                      <span class="flex h-24 flex-col justify-between p-3 <%= look.dark? ? "bg-neutral-950 text-white" : "bg-white text-neutral-950" %> <%= look.type_body_class %>"
+                            style="<%= look.root_style %>"
+                            aria-hidden="true">
+                        <span class="text-2xs font-semibold uppercase tracking-[0.16em] <%= look.kicker_class %>"><%= preset[:name] %></span>
+                        <span class="flex items-end justify-between gap-2">
+                          <span class="text-2xl leading-none <%= look.type_headline_class %>"><%= t("website.admin.settings.theme.specimen") %></span>
+                          <span class="h-5 w-10 <%= look.button_shape_class %> <%= look.filled_button_class %>"></span>
+                        </span>
+                      </span>
+                      <span class="flex min-w-0 flex-1 flex-col gap-0.5 border-t border-border-subtle px-3 py-2.5">
+                        <span class="flex min-w-0 items-center gap-1.5">
+                          <span class="truncate text-sm font-medium text-text-primary"><%= preset[:name] %></span>
+                          <span class="<%= "hidden " unless customized?(preset[:key]) %>shrink-0 rounded-full bg-accent-subtle px-1.5 py-0.5 text-2xs font-medium text-accent-text"
+                                data-website-theme-picker-target="customized"
+                                data-preset="<%= preset[:key] %>"><%= t("website.admin.settings.theme.customized") %></span>
+                        </span>
+                        <span class="line-clamp-2 text-xs leading-snug text-text-tertiary"><%= preset[:description] %></span>
+                      </span>
+                    </span>
+                  </label>
+                <% end %>
+              </div>
+            </fieldset>
+            <p class="form-label mb-4 border-t border-border-subtle pt-6"><%= t("website.admin.settings.theme.fine_tune") %></p>
+            <div class="grid min-w-0 grid-cols-1 gap-6 @3xl/theme:grid-cols-[minmax(0,1fr)_16rem] @3xl/theme:items-start">
+              <div class="flex min-w-0 flex-col gap-6">
+                <% Websites::Admin::SettingsFormComponent::THEME_GROUPS.each do |group| %>
+                  <fieldset class="min-w-0" <%= "aria-describedby=website-theme-error" if field_error(:theme).present? %>>
+                    <legend class="form-label"><%= t("website_settings.appearance.#{group[:token]}") %></legend>
+                    <div class="<%= group[:grid] %>">
+                      <% group[:values].each do |value| %>
+                        <%= render Websites::Admin::ThemeOptionComponent.new(
+                              token: group[:token],
+                              value: value,
+                              checked: theme.public_send(group[:token]) == value
+                            ) %>
+                      <% end %>
+                    </div>
+                  </fieldset>
+                <% end %>
+              </div>
+
+              <div class="min-w-0 @3xl/theme:sticky @3xl/theme:top-6">
+                <p class="form-label"><%= t("website.admin.settings.theme.preview.kicker") %></p>
+                <%= render Websites::ThemePreviewSwatchComponent.new(theme: theme, site_name: website.try(:name)) %>
+                <p class="mt-3 text-xs leading-normal text-text-tertiary"><%= t("website.admin.settings.theme.footer") %></p>
+              </div>
+            </div>
+            <% if field_error(:theme).present? %>
+              <p id="website-theme-error" class="mt-3 text-sm text-danger"><%= field_error(:theme) %></p>
+            <% end %>
+          </div>
+        <% end %>
+
+        <%= render Websites::Admin::SettingsSectionComponent.new(
+              id: "website-settings-seo",
+              heading: t("website_settings.search.heading"),
+              description: t("website.admin.settings.seo.helper")
+            ) do %>
+          <div class="flex max-w-2xl flex-col gap-5">
+            <div class="flex flex-col gap-2">
+              <label class="form-label mb-0" for="website_seo_title"><%= t("website_settings.search.title") %></label>
+              <input type="text"
+                     id="website_seo_title"
+                     name="website[seo][title]"
+                     value="<%= seo_hash["title"] %>"
+                     aria-describedby="website_seo_title_hint"
+                     class="input-field h-10">
+              <p id="website_seo_title_hint" class="text-xs leading-normal text-text-tertiary"><%= t("website_settings.search.title_hint") %></p>
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="form-label mb-0" for="website_seo_description"><%= t("website_settings.search.description") %></label>
+              <textarea id="website_seo_description"
+                        name="website[seo][description]"
+                        rows="3"
+                        aria-describedby="website_seo_description_hint"
+                        class="input-field min-h-20"><%= seo_hash["description"] %></textarea>
+              <p id="website_seo_description_hint" class="text-xs leading-normal text-text-tertiary"><%= t("website_settings.search.description_hint") %></p>
+            </div>
+          </div>
+        <% end %>
+
+        <%= render Websites::Admin::SettingsSectionComponent.new(
+              id: "website-settings-footer",
+              heading: t("website.admin.settings.footer.heading"),
+              description: t("website.admin.settings.footer.description")
+            ) do %>
+          <div class="flex max-w-3xl flex-col gap-6">
+            <div class="flex max-w-2xl flex-col gap-2">
+              <label class="form-label mb-0" for="website_footer_blurb"><%= t("website_settings.footer.introduction") %></label>
+              <textarea id="website_footer_blurb"
+                        name="website[footer][blurb]"
+                        rows="3"
+                        class="input-field min-h-20"><%= footer_hash["blurb"] %></textarea>
+            </div>
+
+            <div class="flex flex-col gap-3">
+              <div>
+                <p class="form-label mb-0"><%= t("website.admin.settings.footer.columns") %></p>
+                <p class="mt-1 text-sm leading-normal text-text-secondary"><%= t("website_settings.footer.editing_hint") %></p>
+              </div>
+
+              <% if footer_columns.any? %>
+                <ol data-controller="countable-items-reorder" class="flex flex-col gap-3" data-footer-columns="true">
+                  <% footer_columns.each_with_index do |column, idx| %>
+                    <li data-countable-items-reorder-target="row"
+                        class="min-w-0 overflow-hidden rounded-lg border border-border-subtle bg-surface">
+                      <div class="flex items-end gap-1.5 border-b border-border-subtle bg-canvas-elevated px-2 py-2.5 sm:gap-2 sm:px-3">
+                        <button type="button"
+                                data-countable-items-reorder-target="handle"
+                                aria-label="<%= t("website.admin.pages.edit.drag") %>"
+                                class="flex size-10 shrink-0 cursor-grab touch-none items-center justify-center rounded-md text-text-tertiary hover:bg-surface-hover hover:text-text-secondary active:cursor-grabbing">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                            <circle cx="7" cy="5" r="1.5"/>
+                            <circle cx="13" cy="5" r="1.5"/>
+                            <circle cx="7" cy="10" r="1.5"/>
+                            <circle cx="13" cy="10" r="1.5"/>
+                            <circle cx="7" cy="15" r="1.5"/>
+                            <circle cx="13" cy="15" r="1.5"/>
+                          </svg>
+                        </button>
+                        <span data-countable-items-reorder-target="positionLabel"
+                              class="mb-2.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-surface text-2xs font-semibold tabular-nums text-text-secondary ring-1 ring-border-subtle"
+                              aria-hidden="true"><%= idx + 1 %></span>
+                        <input type="hidden"
+                               name="website[footer][columns][<%= idx %>][position]"
+                               value="<%= idx %>"
+                               data-countable-items-reorder-target="positionInput">
+                        <div class="min-w-0 flex-1">
+                          <label class="mb-1 block text-xs font-medium text-text-tertiary" for="website_footer_column_<%= idx %>_heading"><%= t("website.admin.settings.footer.column_heading") %></label>
+                          <input type="text"
+                                 id="website_footer_column_<%= idx %>_heading"
+                                 name="website[footer][columns][<%= idx %>][heading]"
+                                 value="<%= column["heading"] %>"
+                                 class="input-field h-10 font-medium">
+                        </div>
+                        <div class="flex shrink-0">
+                          <button type="button"
+                                  data-countable-items-reorder-target="upButton"
+                                  data-action="click->countable-items-reorder#moveUp"
+                                  aria-label="<%= t("website.admin.pages.index.move_up") %>"
+                                  class="flex size-10 items-center justify-center rounded-md text-text-secondary hover:bg-surface-active hover:text-text-primary disabled:opacity-30">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                              <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"/>
+                            </svg>
+                          </button>
+                          <button type="button"
+                                  data-countable-items-reorder-target="downButton"
+                                  data-action="click->countable-items-reorder#moveDown"
+                                  aria-label="<%= t("website.admin.pages.index.move_down") %>"
+                                  class="flex size-10 items-center justify-center rounded-md text-text-secondary hover:bg-surface-active hover:text-text-primary disabled:opacity-30">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="flex flex-col gap-3 px-3 py-3 sm:px-4">
+                        <div class="hidden grid-cols-2 gap-3 text-xs font-medium text-text-tertiary sm:grid" aria-hidden="true">
+                          <span><%= t("website.admin.settings.footer.link_label") %></span>
+                          <span><%= t("website.admin.settings.footer.link_url") %></span>
+                        </div>
+                        <% links_for(column).each_with_index do |link, link_idx| %>
+                          <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3" data-footer-link="true">
+                            <div class="flex min-w-0 flex-col gap-1">
+                              <label class="text-xs font-medium text-text-tertiary sm:sr-only" for="website_footer_column_<%= idx %>_link_<%= link_idx %>_label"><%= t("website.admin.settings.footer.link_label") %></label>
+                              <input type="text"
+                                     id="website_footer_column_<%= idx %>_link_<%= link_idx %>_label"
+                                     name="website[footer][columns][<%= idx %>][links][<%= link_idx %>][label]"
+                                     value="<%= link["label"] %>"
+                                     class="input-field h-10"
+                                     placeholder="<%= t("website.admin.settings.footer.add_link") %>">
+                            </div>
+                            <div class="flex min-w-0 flex-col gap-1">
+                              <label class="text-xs font-medium text-text-tertiary sm:sr-only" for="website_footer_column_<%= idx %>_link_<%= link_idx %>_url"><%= t("website.admin.settings.footer.link_url") %></label>
+                              <input type="text"
+                                     id="website_footer_column_<%= idx %>_link_<%= link_idx %>_url"
+                                     name="website[footer][columns][<%= idx %>][links][<%= link_idx %>][url]"
+                                     value="<%= link["url"] %>"
+                                     class="input-field h-10 font-mono text-sm"
+                                     placeholder="<%= t("website.admin.pages.form.href_placeholder") %>">
+                            </div>
+                          </div>
+                        <% end %>
+                      </div>
+                    </li>
+                  <% end %>
+                </ol>
+              <% end %>
+
+              <% if add_column_slot? %>
+                <% new_idx = footer_columns.size %>
+                <div class="rounded-lg border border-dashed border-border bg-canvas-elevated/60 px-3 py-4 sm:px-4" data-footer-add-column="true">
+                  <p class="flex items-center gap-2 text-sm font-medium text-text-primary">
+                    <svg class="size-4 text-text-tertiary" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"/></svg>
+                    <%= t("website.admin.settings.footer.add_column") %>
+                  </p>
+                  <div class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                    <div class="flex min-w-0 flex-col gap-1">
+                      <label class="text-xs font-medium text-text-tertiary" for="website_footer_column_new_heading"><%= t("website.admin.settings.footer.column_heading") %></label>
+                      <input type="text"
+                             id="website_footer_column_new_heading"
+                             name="website[footer][columns][<%= new_idx %>][heading]"
+                             class="input-field h-10"
+                             placeholder="<%= t("website.admin.settings.footer.add_column") %>">
+                    </div>
+                    <div class="flex min-w-0 flex-col gap-1">
+                      <label class="text-xs font-medium text-text-tertiary" for="website_footer_column_new_link_label"><%= t("website.admin.settings.footer.link_label") %></label>
+                      <input type="text"
+                             id="website_footer_column_new_link_label"
+                             name="website[footer][columns][<%= new_idx %>][links][0][label]"
+                             class="input-field h-10"
+                             placeholder="<%= t("website.admin.settings.footer.add_link") %>">
+                    </div>
+                    <div class="flex min-w-0 flex-col gap-1">
+                      <label class="text-xs font-medium text-text-tertiary" for="website_footer_column_new_link_url"><%= t("website.admin.settings.footer.link_url") %></label>
+                      <input type="text"
+                             id="website_footer_column_new_link_url"
+                             name="website[footer][columns][<%= new_idx %>][links][0][url]"
+                             class="input-field h-10 font-mono text-sm"
+                             placeholder="<%= t("website.admin.pages.form.href_placeholder") %>">
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+              <% if field_error(:footer).present? %>
+                <p class="text-sm text-danger"><%= field_error(:footer) %></p>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <% if layouts.any? %>
+          <%= render Websites::Admin::SettingsSectionComponent.new(
+                id: "website-settings-layout",
+                heading: t("website_settings.page_defaults"),
+                description: t("website.admin.settings.layout.description")
+              ) do %>
+            <div class="flex max-w-md flex-col gap-2">
+              <label class="form-label mb-0" for="website_default_layout_key"><%= t("website.admin.settings.layout.label") %></label>
+              <select id="website_default_layout_key" name="website[default_layout_key]" class="input-field h-10">
+                <% layout_groups.each do |group_label, items| %>
+                  <optgroup label="<%= group_label %>">
+                    <% items.each do |layout| %>
+                      <option value="<%= layout.key %>" <%= "selected" if layout.key.to_s == selected_layout_key %>><%= layout.display_name %></option>
+                    <% end %>
+                  </optgroup>
+                <% end %>
+              </select>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <%= content if content? %>
+    </div>
+  </div>
+<% end %>

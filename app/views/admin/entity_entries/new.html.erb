@@ -1,0 +1,19 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("admin_misc.domains.breadcrumb"), path: admin_domains_path(current_customer.id) },
+    { label: @entity.display_label, path: admin_entity_path(current_customer.id, @entity) },
+    { label: t("admin_misc.entities.entry_form.create") }
+  ],
+  title: t("admin_misc.entities.entry_form.title", name: @entity.display_label),
+  description: t("admin_misc.entities.entry_form.description", name: @entity.display_label),
+  icon_path: Admin::Pages::OpsTableComponent::ENTITY_ICON,
+  icon_class: "bg-accent-subtle text-accent",
+  wrap_title: true
+) do %>
+  <%= render Admin::Pages::FormPanelComponent.new(
+    empty_title: t("admin_misc.entities.entry_page.missing_title"),
+    empty_description: t("admin_misc.entities.entry_page.missing_description", name: @entity.display_label)
+  ) do %>
+    <%= render inline: @content if @content.present? %>
+  <% end %>
+<% end %>

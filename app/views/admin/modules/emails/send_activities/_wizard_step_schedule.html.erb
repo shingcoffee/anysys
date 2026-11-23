@@ -1,0 +1,69 @@
+<% send_timing = f.object.send_timing.presence || (f.object.scheduled_at.present? ? "later" : "now") %>
+<% recurrence_preset = Emails::SendActivities::RecurrencePresets.preset_for(f.object.recurrence_rule) %>
+<% show_timezone = send_timing == "later" || recurrence_preset != "none" %>
+<div class="flex flex-col gap-6">
+  <div data-wizard-field-group>
+    <%= f.label :name, t("common.labels.name"), class: "form-label form-label-required" %>
+    <%= f.text_field :name, class: "input-field mt-1", required: true,
+          data: {
+            wizard_field: true,
+            wizard_required_msg: t("admin_modules.emails.send_activities.wizard.errors.name_required")
+          } %>
+  </div>
+
+  <fieldset data-wizard-field-group
+            data-wizard-required-msg="<%= t("admin_modules.emails.send_activities.wizard.errors.timing_required") %>"
+            data-email-send-activity-wizard-target="timingGroup">
+    <legend class="form-label form-label-required mb-2"><%= t("admin_modules.emails.send_activities.form.timing_label") %></legend>
+    <div class="flex flex-col sm:flex-row gap-3">
+      <label class="inline-flex items-center gap-2 text-body text-text-primary">
+        <%= f.radio_button :send_timing, "now",
+              checked: send_timing == "now",
+              class: "h-4 w-4 text-primary focus:ring-primary",
+              data: { action: "email-send-activity-wizard#timingChanged", email_send_activity_wizard_target: "timingRadio" } %>
+        <span><%= t("admin_modules.emails.send_activities.form.send_now_option") %></span>
+      </label>
+      <label class="inline-flex items-center gap-2 text-body text-text-primary">
+        <%= f.radio_button :send_timing, "later",
+              checked: send_timing == "later",
+              class: "h-4 w-4 text-primary focus:ring-primary",
+              data: { action: "email-send-activity-wizard#timingChanged", email_send_activity_wizard_target: "timingRadio" } %>
+        <span><%= t("admin_modules.emails.send_activities.form.schedule_at_option") %></span>
+      </label>
+    </div>
+  </fieldset>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="<%= 'hidden' if send_timing == 'now' %>" data-wizard-field-group data-email-send-activity-wizard-target="scheduleFields">
+      <%= f.label :scheduled_at, t("admin_modules.emails.send_activities.form.schedule_label"), class: "form-label form-label-required" %>
+      <%= f.datetime_local_field :scheduled_at,
+            value: f.object.scheduled_at&.in_time_zone(f.object.timezone.presence || "UTC")&.strftime("%Y-%m-%dT%H:%M"),
+            class: "input-field mt-1",
+            data: {
+              wizard_field: true,
+              wizard_required_msg: t("admin_modules.emails.send_activities.wizard.errors.schedule_required"),
+              email_send_activity_wizard_target: "scheduledAt"
+            } %>
+    </div>
+    <div class="<%= 'hidden' unless show_timezone %>" data-wizard-field-group data-email-send-activity-wizard-target="timezoneFields">
+      <%= f.label :timezone, t("common.labels.timezone"), class: "form-label form-label-required" %>
+      <%= f.select :timezone,
+            ActiveSupport::TimeZone.us_zones.map { |tz| [tz.to_s, tz.tzinfo.name] } + [["UTC", "UTC"]],
+            { include_blank: false },
+            class: "input-field mt-1",
+            data: { wizard_field: true, email_send_activity_wizard_target: "timezoneSelect" } %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :recurrence_preset, t("admin_modules.emails.send_activities.form.recurrence_label"), class: "form-label" %>
+    <%= f.select :recurrence_preset,
+          Emails::SendActivities::RecurrencePresets.select_options,
+          { selected: recurrence_preset },
+          class: "input-field mt-1",
+          data: {
+            action: "email-send-activity-wizard#recurrenceChanged",
+            email_send_activity_wizard_target: "recurrenceSelect"
+          } %>
+  </div>
+</div>

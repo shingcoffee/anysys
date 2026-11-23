@@ -1,0 +1,271 @@
+en:
+  flowchart_actions:
+    query_models:
+      label: Query Models
+      description: Complex model queries
+      fields:
+        entity:
+          label: Entity
+          help: Entity to query. Leave blank to use the page's bound entity.
+        conditions:
+          label: Conditions
+          help: Filter the bound entity's records. Every query stays inside this customer.
+        select:
+          label: Select
+          help: Entity attributes to return when the result is values, or to project when returning records.
+        returns:
+          label: Returns
+          help: Return matching records or just the selected attribute values.
+          options:
+            records: Records
+            values: Values
+        recordScope:
+          label: Record scope
+          help: All tenant rows, or only the signed-in member's own rows.
+          options:
+            all: All records
+            own: Own records
+        pageVariable:
+          label: Page Variable
+          help: Context path holding the current page number.
+        pageSize:
+          label: Page Size
+          help: Rows per page (1–200). Leave blank to skip pagination.
+        limit:
+          label: Limit
+          help: Maximum rows to return when pagination is off.
+        orderBy:
+          label: Order By
+          help: Attribute or column to sort by.
+        orderDirection:
+          label: Order Direction
+          help: Sort ascending or descending.
+          options:
+            asc: Ascending
+            desc: Descending
+        distinct:
+          label: Distinct
+          help: Drop duplicate rows from the result.
+        onEmpty:
+          label: When empty
+          help: Return an empty list, or fail the step, when no rows match.
+          options:
+            empty: Empty list
+            fail: Fail
+        offset:
+          label: Offset
+          help: Rows to skip when pagination is off.
+        thenOrderBy:
+          label: Then order by
+          help: Secondary sort attribute used when the primary sort ties.
+        thenOrderDirection:
+          label: Then order direction
+          help: Secondary sort ascending or descending.
+          options:
+            asc: Ascending
+            desc: Descending
+        paginationVar:
+          label: Save pagination as
+          help: Variable that stores page metadata when a page size is set.
+      errors:
+        unsafe_column: "%{column} is not a safe column name"
+    count_records:
+      label: Count Records
+      description: Count matching records
+      fields:
+        entity:
+          label: Entity
+          help: Entity to count. Leave blank to use the page's bound entity.
+        conditions:
+          label: Conditions
+          help: Filter the bound entity's records before counting.
+        resultAs:
+          label: Result as
+          help: Return the count, whether any row exists, or whether none exist.
+          options:
+            count: Count
+            exists: Exists
+            absent: Absent
+        recordScope:
+          label: Record scope
+          help: All tenant rows, or only the signed-in member's own rows.
+          options:
+            all: All records
+            own: Own records
+        distinct:
+          label: Distinct
+          help: Count distinct values only.
+        distinctField:
+          label: Distinct Field
+          help: Attribute whose distinct values are counted.
+        groupBy:
+          label: Group By
+          help: Attribute to group the count by.
+        onZero:
+          label: When zero
+          help: Return 0, or fail the step, when no rows match.
+          options:
+            zero: Return zero
+            fail: Fail
+      errors:
+        unsafe_column: "%{column} is not a safe column name"
+    aggregate_query:
+      label: Aggregate Query
+      description: Run aggregate queries (sum, avg, etc.)
+      fields:
+        entity:
+          label: Entity
+          help: Entity to aggregate. Leave blank to use the page's bound entity.
+        aggregations:
+          label: Aggregations
+          help: Attribute and operation pairs (sum, avg, min, max, count).
+        aggregateFunction:
+          label: Aggregate Function
+          help: Function used when aggregations is empty.
+          options:
+            sum: Sum
+            average: Average
+            minimum: Minimum
+            maximum: Maximum
+            count: Count
+        aggregateField:
+          label: Aggregate Field
+          help: Attribute to aggregate when aggregations is empty.
+        groupBy:
+          label: Group By
+          help: Single attribute to group by.
+        groupByFields:
+          label: Group By Fields
+          help: Attributes to group by.
+        having:
+          label: Having
+          help: Allowlisted aggregate comparison (for example SUM(amount) > 100).
+        resultFormat:
+          label: Result Format
+          help: Return a single value or a keyed hash.
+          options:
+            scalar: Scalar
+            hash: Hash
+        conditions:
+          label: Conditions
+          help: Filter the bound entity's records before aggregating.
+        recordScope:
+          label: Record scope
+          help: All tenant rows, or only the signed-in member's own rows.
+          options:
+            all: All records
+            own: Own records
+        roundTo:
+          label: Round to
+          help: Decimal places to round the aggregate result to. Leave blank to keep full precision.
+      errors:
+        invalid_operation: "Invalid aggregation operation: %{operation}"
+        scalar_needs_single_aggregation: A scalar result needs exactly one aggregation
+        invalid_having: having must match an allowlisted aggregate comparison (e.g. SUM(amount) > 100)
+        having_needs_group: having requires at least one group-by field
+        unsafe_column: "%{column} is not a safe column name"
+    batch_operation:
+      label: Batch Operation
+      description: Perform batch operations on multiple records
+      fields:
+        entity:
+          label: Entity
+          help: Entity whose rows are batched. Leave blank to use the page's bound entity.
+        operationType:
+          label: Operation Type
+          help: How each batch of records is processed.
+          options:
+            find_each: Find each
+            in_batches: In batches
+            each_batch: Each batch
+            update_all: Update all
+            destroy_all: Destroy all
+        batchSize:
+          label: Batch Size
+          help: Records processed per batch.
+        stepBody:
+          label: Step Body
+          help: Ruby run for each record or batch.
+        fieldAssignments:
+          label: Field Assignments
+          help: Attributes to write when updating all matching records.
+        conditions:
+          label: Conditions
+          help: Extra filters ANDed onto the tenant-scoped source.
+        recordScope:
+          label: Record scope
+          help: All tenant rows, or only the signed-in member's own rows.
+          options:
+            all: All records
+            own: Own records
+        errorCollection:
+          label: Collect errors
+          help: Continue after a row fails and store the errors.
+        maxRecords:
+          label: Max records
+          help: Stop after this many records. 0 means no cap.
+        stopOnError:
+          label: Stop on error
+          help: After collecting an error, skip the remaining records.
+        progressVar:
+          label: Save progress as
+          help: Variable that stores how many records were processed.
+      errors:
+        assignments_required: Field assignments are required when updating all records
+        internal_column: "Cannot write internal columns: %{columns}"
+    bulk_import:
+      label: Bulk Import
+      description: Bulk import records
+      fields:
+        entity:
+          label: Entity
+          help: Entity to import into. Leave blank to use the page's bound entity.
+        onDuplicateKey:
+          label: On Duplicate Key
+          help: Skip or update when a unique attribute already matches.
+          options:
+            update: Update
+            skip: Skip
+        uniqueBy:
+          label: Unique By
+          help: Attributes used to find an existing row.
+        fieldMappings:
+          label: Field mappings
+          help: Source column names mapped to entity attributes. Leave empty to use column names as-is.
+        recordScope:
+          label: Record scope
+          help: Match existing rows across the tenant, or only the signed-in member's own rows.
+          options:
+            all: All records
+            own: Own records
+        batchSize:
+          label: Batch size
+          help: Rows committed per batch (1–1000).
+        onRowError:
+          label: On row error
+          help: Fail the import, or skip the row and continue.
+          options:
+            fail: Fail
+            skip: Skip
+        errorsVar:
+          label: Save errors as
+          help: Variable that stores skipped-row errors.
+      errors:
+        internal_column: "Cannot match on internal columns: %{columns}"
+  flowchart_runtime:
+    errors:
+      batch_operation:
+        incompatible_scope: The batch source relation cannot use limit, distinct, lock, readonly, or offset
+        entity_not_accessible: The batch entity is not accessible to this customer.
+      bulk_import:
+        too_many_rows: Cannot import %{count} rows (maximum is %{max})
+        row_failed: Row %{index} failed (%{reason})
+        entity_not_accessible: The import entity is not accessible to this customer.
+      query_models:
+        empty: The query returned no rows.
+        failed: The query could not run (%{reason}).
+      count_records:
+        zero: No matching records were found.
+        failed: The count could not run (%{reason}).
+      aggregate_query:
+        failed: The aggregate could not run (%{reason}).

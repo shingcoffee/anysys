@@ -1,0 +1,337 @@
+"zh-CN":
+  admin_misc:
+    dashboard:
+      subtitle: "工作区动态一览。"
+      stats:
+        entities: "实体"
+        pages: "页面"
+        modules: "模块"
+        users: "用户"
+        view: "查看详情"
+      pages_sub_label: "已发布 %{count} 个"
+      snapshot: "数据一览"
+      quick_actions: "快捷操作"
+      setup:
+        title: "快速上手"
+        progress: "已完成 %{done}/%{total}"
+        items:
+          create_entity: "创建第一个实体"
+          launch_page: "发布一个页面"
+          enable_module: "启用一个模块"
+          invite_user: "邀请一位团队成员"
+      actions:
+        create_entity:
+          label: "创建实体"
+          description: "定义新的数据类型"
+        new_page:
+          label: "新建页面"
+          description: "为实体绑定表单"
+        enable_module:
+          label: "启用模块"
+          description: "开启功能模块"
+        invite_user:
+          label: "邀请用户"
+          description: "添加团队成员"
+      modules:
+        title: "已启用的模块"
+        description: "进入本组织已开启的功能。"
+        open_settings: "打开设置"
+        open_assistant: "打开助手"
+        blurbs:
+          authentication: "管理本组织的用户与登录。"
+          email: "模板、受众名单与发送记录。"
+          payment: "交易、对账与商户账户。"
+          sms: "短信、退订与发送上限。"
+          captcha: "用验证码保护公开表单。"
+          ai_assistant: "打开管理端助手并查看本组织设置。"
+          fallback: "本组织已启用%{name}。"
+      recents:
+        pages_title: "最近页面"
+        entities_title: "最近实体"
+        view_all: "查看全部"
+        pages_empty_title: "暂无页面"
+        pages_empty_description: "创建的页面会显示在这里。"
+        entities_empty_title: "暂无实体"
+        entities_empty_description: "创建实体后即可开始录入数据。"
+
+    domains:
+      breadcrumb: "业务域"
+      title: "业务域"
+      description: "按业务领域分组浏览本组织的记录。"
+      empty_title: "暂无可浏览的内容"
+      empty_hint: "为本组织配置的记录类型将按业务域分组显示在此处。"
+      tabs_label: "业务域视图"
+      tabs:
+        pages: "页面"
+        journeys: "引导流程"
+      summary_label: "业务域概览"
+      pages:
+        empty_title: "暂无页面"
+        empty_description: "绑定到本业务域记录类型的页面将显示在此处，可预览、发布和共享。"
+        search_placeholder: "搜索页面…"
+        column: "页面"
+      forms:
+        empty_title: "暂无表单"
+        empty_description: "绑定到本业务域记录类型的表单将显示在此处，可直接填写、预览、发布和共享。"
+      directory:
+        ungrouped: "其他"
+        ungrouped_hint: "尚未归入任何业务域。"
+        stats:
+          entries: "条目总数"
+          last_activity: "最近活动"
+          no_activity: "暂无活动"
+        columns:
+          name: "名称"
+          entries: "条目"
+          pages: "页面"
+          updated: "最近更新"
+        sort:
+          label: "排序"
+          name: "名称"
+          recent: "最近活动"
+          entries: "条目最多"
+        layout:
+          label: "布局"
+          grid: "网格"
+          list: "列表"
+        shared: "共享"
+        entry_count:
+          one: "%{formatted} 个条目"
+          other: "%{formatted} 个条目"
+        no_entries: "暂无条目"
+        updated: "%{time}更新"
+        form_count:
+          one: "%{formatted} 个表单"
+          other: "%{formatted} 个表单"
+        no_forms: "暂无表单"
+        forms_hint: "%{name}表单：已发布 %{live} 个，共 %{total} 个"
+        page_count:
+          one: "%{formatted} 个页面"
+          other: "%{formatted} 个页面"
+        no_pages: "暂无页面"
+        pages_hint: "%{name}页面：已发布 %{live} 个，共 %{total} 个"
+        cardless_title: "暂无记录类型"
+        cardless_hint: "未绑定记录类型的表单归于此处。"
+        cardless_pages_hint: "未绑定记录类型的页面归于此处。"
+        view_forms: "查看表单"
+        view_pages: "查看页面"
+    entities:
+      create_entity: "创建实体"
+      show:
+        description: "浏览并管理%{name}条目"
+        search_placeholder: "搜索条目…"
+        empty_title: "暂无条目"
+        empty_description: "创建第一条条目，开始构建此列表。"
+        export_csv: "导出 CSV"
+        tabs_label: "记录类型视图"
+      forms:
+        empty_title: "暂无表单"
+        empty_description: "绑定到%{name}的表单将显示在此处，可直接填写、预览、发布和共享。"
+      pages:
+        empty_title: "暂无页面"
+        empty_description: "绑定到%{name}的页面将显示在此处，可预览、发布和共享。"
+      entry_detail:
+        title: "条目 #%{id}"
+        description: "按属性分组查看此%{name}记录的全部字段。"
+        ungrouped: "其他字段"
+        entity: "记录类型"
+        record_heading: "记录信息"
+        sections_heading: "分组导航"
+        no_fields: "此记录类型尚未定义任何字段。"
+        field_count:
+          one: "%{count} 个字段"
+          other: "%{count} 个字段"
+      entry_form:
+        create: "创建条目"
+        title: "创建条目 — %{name}"
+        description: "为%{name}添加一条记录。"
+        submitting: "正在创建…"
+        errors_heading: "请修正以下错误。"
+        unsupported_fields: "此表单不支持以下字段：%{fields}。"
+        no_fields: "此记录类型没有可编辑的字段。"
+        created: "条目创建成功。"
+        update: "保存更改"
+        updating: "正在保存…"
+        edit_breadcrumb: "编辑条目 #%{id}"
+        edit_title: "编辑条目 #%{id} — %{name}"
+        edit_description: "更新%{name}中的这条记录。"
+        updated: "条目更新成功。"
+        errors:
+          invalid_shape: "请按要求的格式输入。"
+          invalid_choice: "请选择有效选项。"
+          invalid_number: "请输入有效数字。"
+          invalid_date: "请输入有效日期（格式：YYYY-MM-DD）。"
+          invalid_datetime: "请输入有效日期时间（格式：YYYY-MM-DDTHH:MM）。"
+          invalid_boolean: "请勾选有效的值。"
+          rejected_value: "本次提交值：%{value}"
+          save_failed: "条目创建失败，请重试。"
+          update_failed: "条目保存失败，请重试。"
+      entry_page:
+        missing_title: "暂无录入表单"
+        missing_description: "%{name}尚无可用于添加或编辑记录的已上线表单。请先生成并上线其页面。"
+      quick_add:
+        option: "+ 新增"
+        title: "新增%{name}"
+        loading: "正在加载表单…"
+        unavailable: "表单加载失败，请关闭对话框后重试。"
+      association_entries:
+        section_hint: "关联记录"
+        entry_count:
+          one: "%{count} 条"
+          other: "%{count} 条"
+        add: "添加"
+        empty_title: "尚未关联%{name}。"
+        empty_hint: "点击“添加”为此条目关联一条或多条%{name}记录。"
+        delete_confirm: "确定移除这条关联记录吗？此操作无法撤销。"
+        new_title: "添加%{name}"
+        new_description: "为%{entity}条目 #%{id} 关联一条或多条%{name}记录。"
+        edit_title: "编辑%{name}"
+        edit_description: "更新与%{entity}条目 #%{id} 关联的这条%{name}记录。"
+        row_heading: "第 %{number} 条"
+        add_row: "再添加一条"
+        remove_row: "移除此条"
+        submit: "保存"
+        created:
+          one: "已添加 %{count} 条记录。"
+          other: "已添加 %{count} 条记录。"
+        updated: "关联记录已更新。"
+        deleted: "关联记录已移除。"
+        errors:
+          no_rows: "请至少添加一条记录。"
+          too_many_rows: "每次最多添加 %{count} 条记录。"
+      columns:
+        id: "ID"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        linked_account: "关联账户"
+        user_full_name: "姓名"
+        linked_account_value: "%{name}（%{email}）"
+        user_id: "user_id"
+        user_link: "%{id} → users.id %{id}（%{email}）"
+        user_link_id: "%{id} → users.id %{id}"
+      index_setting:
+        updated: "列偏好已保存"
+        errors:
+          too_many: "选择的列过多"
+          invalid_keys: "包含未知属性"
+
+    entity_pages:
+      breadcrumb: "表单"
+      title: "%{name}表单"
+      description: "关联%{name}的表单"
+      new_page: "新建表单"
+      search_placeholder: "搜索%{name}中的表单…"
+      take_offline: "下线"
+      launch: "发布"
+      empty_title: "%{name}暂无表单"
+      empty_description: "为此实体创建第一个表单。"
+      empty_action: "新建表单"
+
+    maintenance:
+      breadcrumb: "维护"
+      title: "维护"
+      subtitle: "管理定义和系统配置"
+      cards:
+        entities_title: "实体"
+        entities_description: "定义数据结构和关联关系"
+        flowcharts_title: "流程图"
+        flowcharts_description: "创建并管理业务逻辑流程"
+        pages_title: "页面"
+        pages_description: "构建表单和界面"
+        constants_title: "常量"
+        constants_description: "可复用的选项列表"
+        modules_title: "模块"
+        modules_description: "启用或停用功能模块"
+        customer_profile_title: "客户资料"
+        customer_profile_description: "组织信息与设置"
+
+    module_config:
+      subtitle: "为您的组织配置此模块"
+      module_status: "模块状态"
+      suspended: "已暂停"
+      not_enabled: "未启用"
+      enabled_since: "启用于"
+      your_configuration: "您的配置"
+      select_prompt: "选择…"
+      enter_value: "输入值…"
+      save_configuration: "保存配置"
+      no_settings: "此模块无可配置项。"
+      not_enabled_message: "您的组织尚未启用此模块。"
+      fields:
+        sms:
+          daily_send_cap: "每日发送上限"
+        email:
+          daily_send_cap: "每日发送上限"
+        ai_assistant:
+          language: "语言"
+          max_duration_seconds: "最长录制时长（秒）"
+        authentication:
+          mfa_enabled: "双重验证"
+          session_timeout: "会话超时"
+          max_login_attempts: "最大登录失败次数"
+      options:
+        ai_assistant:
+          language:
+            auto: "自动"
+            en: "英语"
+            "zh-CN": "简体中文"
+      go_to_modules: "前往模块管理"
+      exit_landing:
+        header: "退出落地页"
+        subtitle: "用户完成此模块后返回的位置。"
+        default_prefix: "模块默认值："
+        override_label: "覆盖 URL（留空则使用模块默认值）"
+        override_hint_html: "输入用户完成此模块流程后要跳转的完整 URL。"
+        save_override: "保存覆盖"
+
+    module_entries:
+      breadcrumb: "模块"
+      search_placeholder: "搜索…"
+
+    pages:
+      breadcrumb: "表单"
+      title: "全部表单"
+      description: "所有实体中的全部表单。使用侧栏「表单」可按数据模型筛选。"
+      new_page: "新建表单"
+      search_placeholder: "搜索表单…"
+      take_offline: "下线"
+      launch: "发布"
+      manage_access: "管理访问"
+      cannot_submit: "无法提交"
+      cannot_submit_hint: "所有提交都会失败：%{problems}"
+      out_of_date: "版本过旧"
+      out_of_date_hint: "基于第 %{built} 版生成；%{entity}当前为第 %{current} 版。"
+      fill_in: "填写"
+      open_in_new_tab: "在新标签页打开"
+      fill_in_hint: "填写「%{name}」"
+      preview_hint: "预览「%{name}」"
+      form:
+        description: "填写此表单以新增一条记录。"
+      empty_title: "暂无表单"
+      empty_description: "在「维护」中创建的表单会显示在此，供预览、发布与控制可见性。"
+      empty_action: "新建表单"
+      columns:
+        page: "表单"
+        audience: "受众"
+      audience:
+        aria_visible_to: "可见对象：%{audiences}"
+        aria_unknown: "可见性未知"
+      publishing_panel:
+        subtitle: "预览、发布，并控制谁可以打开此表单"
+        close: "关闭"
+      uncategorized:
+        title: "未分类"
+        description: "未绑定实体，或绑定到已不存在实体的表单。"
+        empty_title: "暂无未分类表单"
+        empty_description: "所有表单均已关联实体。"
+        row_subtitle: "无实体"
+      filters:
+        entity_label: "实体"
+        launch_label: "状态"
+        launched_option: "已发布"
+        not_launched_option: "草稿"
+
+    person_link:
+      flash:
+        linked: "账号已关联。"
+        unlinked: "已取消账号关联。"

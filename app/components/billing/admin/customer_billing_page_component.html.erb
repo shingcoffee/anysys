@@ -1,0 +1,21 @@
+<%= render ::Admin::Settings::PageComponent.new(
+  customer_id: customer_id, title: title, description: description, breadcrumbs: page_breadcrumbs, actions: actions
+) do %>
+  <div class="mx-auto flex w-full max-w-5xl min-w-0 flex-col gap-8">
+    <nav aria-label="<%= t("settings_billing.nav.aria_label") %>" class="overflow-x-auto print:hidden" data-billing-tabs>
+      <ul class="flex min-w-full w-max items-center gap-6 border-b border-border-subtle" role="list">
+        <% tabs.each do |tab| %>
+          <li>
+            <%= link_to tab[:href], class: tab_class(tab[:current]), aria: { current: ("page" if tab[:current]) } do %>
+              <span><%= tab[:label] %></span>
+              <% if tab[:count] %>
+                <span data-tab-count="<%= tab[:key] %>" class="inline-flex min-w-5 items-center justify-center rounded-full bg-warning-subtle px-1.5 py-0.5 text-[11px] font-semibold leading-none tabular-nums text-warning"><%= tab[:count] %></span>
+              <% end %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </nav>
+    <%= content %>
+  </div>
+<% end %>

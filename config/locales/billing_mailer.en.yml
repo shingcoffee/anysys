@@ -1,0 +1,87 @@
+en:
+  billing_mailer:
+    collection_blocked:
+      subject: "Collection blocked for invoice %{number}"
+      body: "Invoice %{number} needs a ready, compatible billing payment method. Review its collection status: %{url}"
+    collection_exhausted:
+      subject: "Automatic retries ended for invoice %{number}"
+      body: "Automatic collection retries for invoice %{number} have ended. Review authorized recovery options: %{url}"
+    collection_authorized:
+      subject: "Collection authorization changed for invoice %{number}"
+      body: "The platform owner changed collection authorization for invoice %{number}. Issued financial terms are unchanged. Review the invoice: %{url}"
+    settlement_review:
+      subject: "Settlement review required for invoice %{number}"
+      body: "Payment for invoice %{number} was recorded, but the associated subscription effect requires platform reconciliation. Review the invoice and payment history: %{url}"
+    shell:
+      brand: "Anysys"
+      footer: "Sent by Anysys. This is a billing notification — replies are not monitored."
+
+    invoice_issued:
+      subject: "Invoice %{number} issued — %{amount}"
+      preheader: "Invoice %{number} is ready for your account."
+      heading: "Invoice"
+      title: "Your invoice is ready"
+      intro: "The invoice below has been issued to your Anysys account. Payment is due on the date shown."
+      label_invoice_number: "Invoice number"
+      label_plan: "Plan"
+      label_period: "Period"
+      label_amount_due: "Amount due"
+      label_due_date: "Due date"
+      outro: "Sign in to review line items and download a copy of this invoice."
+
+    payment_succeeded:
+      subject: "Payment received for invoice %{number}"
+      preheader: "We received your payment for invoice %{number}."
+      heading: "Payment received"
+      title: "Payment received"
+      intro: "Your payment has been applied to the invoice below."
+      label_invoice_number: "Invoice number"
+      label_amount_paid: "Amount paid"
+      label_paid_at: "Paid at"
+      outro: "A receipt is on file in your account."
+
+    payment_failed:
+      subject: "Payment failed for invoice %{number} — attempt %{attempt}"
+      preheader: "We could not collect payment for invoice %{number}."
+      heading: "Payment failed"
+      title: "We could not collect this payment"
+      intro: "The attempt below did not succeed. Please keep your payment method current so service is not interrupted."
+      label_invoice_number: "Invoice number"
+      label_amount_due: "Amount due"
+      label_attempt: "Failed collection attempts"
+      label_next_attempt: "Next attempt"
+      next_attempt_scheduled: "Scheduled"
+      outro: "Review the invoice's collection status and payment method. Updating a method does not itself settle the invoice."
+
+    trial_ending:
+      price: "%{amount} %{currency} / %{interval}"
+      subject: "Your trial ends on %{date}"
+      preheader: "Your free trial ends on %{date}."
+      heading: "Trial ending"
+      title: "Your trial is ending"
+      intro: "When the trial ends, this subscription continues at the regular rate unless you cancel first."
+      label_plan: "Plan"
+      label_trial_ends: "Trial ends"
+      label_price_after_trial: "Price after trial"
+      outro: "Sign in to manage or cancel the subscription before the trial ends."
+
+    subscription_cancelled:
+      subject: "Subscription cancelled"
+      preheader: "Your Anysys subscription has been cancelled."
+      heading: "Subscription cancelled"
+      title: "Your subscription is cancelled"
+      intro: "The service-end date below is the recorded subscription end. Cancellation does not waive outstanding invoices or refund captured payments. Finite free limits apply after paid access ends."
+      label_plan: "Plan"
+      label_cancelled_at: "Cancelled at"
+      label_service_ends: "Service ends"
+      outro: "If this was unexpected, sign in and contact support."
+
+    subscription_past_due:
+      subject: "Subscription payment past due — action required"
+      preheader: "A subscription payment is past due and needs attention."
+      heading: "Past due"
+      title: "This subscription needs attention"
+      intro: "Payment is past due. Update your payment method as soon as you can to keep service running."
+      label_plan: "Plan"
+      label_status: "Status"
+      outro: "Purchased access is bounded by the saved grace policy. Finite free limits apply afterward; existing records remain readable."

@@ -1,0 +1,8 @@
+zh-CN:
+  operations:
+    violations:
+      journey:
+        option_not_found: "%{domain} 没有流程选项 %{key}。请调用 list_journey_options，并使用其返回的键。"
+        generation_failed: "无法生成流程 %{key}：%{errors}"
+    journeys:
+      sign_up_disabled: "本工作区未开启注册，注册流程保持为草稿。"

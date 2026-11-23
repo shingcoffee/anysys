@@ -1,0 +1,147 @@
+{
+  "title": "Create entity",
+  "description": "Create one or more related customer-owned entities in a single transaction, all joining one existing domain. Use this for new entities only \u2014 never to change an existing one (call update_entity). Create a new sub-system's domain first with create_domain. Associations, entity-entry option sources, and computed aggregates may refer to other entities in this same call by name. Applies immediately; do not claim an update was applied. Names must be unique per tenant including trash and must not start with assoc_.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "domain",
+    "entities"
+  ],
+  "properties": {
+    "domain": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Name of an existing domain (sub-system) in this workspace that every entity in this call joins. Create a new sub-system's domain first with create_domain."
+    },
+    "entities": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "description": "Entities to create atomically. One to ten items. Later items may reference earlier names.",
+      "items": {
+        "$ref": "#/$defs/entitySpec",
+        "description": "One entity to create. Associations, option sources, and aggregates may name other entities in this same call."
+      }
+    }
+  },
+  "examples": [
+    {
+      "domain": "Academics",
+      "entities": [
+        {
+          "name": "Course",
+          "attribute_groups": [
+            {
+              "key": "basics",
+              "name": "Basics",
+              "icon": "folder",
+              "color": "indigo"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "Title",
+              "group": "basics"
+            },
+            {
+              "name": "Level",
+              "html_type": "select",
+              "group": "basics",
+              "options": {
+                "source": "static",
+                "values": [
+                  "Beginner",
+                  "Intermediate",
+                  "Advanced"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Student",
+          "attributes": [
+            {
+              "name": "Email",
+              "html_type": "email"
+            },
+            {
+              "name": "Courses Taken",
+              "kind": "computed",
+              "aggregate": {
+                "related_entity": "Course",
+                "function": "count"
+              }
+            }
+          ],
+          "associations": [
+            {
+              "related_entity": "Course",
+              "display_field": "title",
+              "bridge_attributes": [
+                {
+                  "name": "Enrolled On",
+                  "html_type": "date"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "domain": "Ticketing",
+      "entities": [
+        {
+          "name": "Ticket",
+          "display_label": "Support ticket",
+          "description": "A customer support case.",
+          "settings": {
+            "icon": "custom",
+            "color": "#0f766e"
+          },
+          "attributes": [
+            {
+              "name": "Subject",
+              "html_type": "text"
+            },
+            {
+              "name": "Priority",
+              "html_type": "radio",
+              "options": {
+                "source": "static",
+                "values": [
+                  "Low",
+                  "High"
+                ]
+              }
+            },
+            {
+              "name": "Attachment",
+              "html_type": "file",
+              "file": {
+                "accept": ".pdf",
+                "multiple": false
+              }
+            },
+            {
+              "name": "Hours",
+              "html_type": "number"
+            },
+            {
+              "name": "Rate",
+              "html_type": "number"
+            },
+            {
+              "name": "Total",
+              "kind": "calculated",
+              "html_type": "number",
+              "formula": "hours * rate"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

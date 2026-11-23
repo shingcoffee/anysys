@@ -1,0 +1,63 @@
+zh-CN:
+  operations:
+    violations:
+      generic: "无法完成此操作（%{code}）。"
+      did_you_mean: "你是不是指：%{candidates}？"
+      schema:
+        required: "缺少必填属性 %{property}。"
+        enum: "取值必须是以下之一：%{allowed}。"
+        type: "类型必须为 %{expected}。"
+        unknown_property: "未知属性。"
+        pattern: "取值必须匹配模式 %{expected}。"
+        format: "取值必须符合格式 %{expected}。"
+        min_length: "长度至少为 %{expected} 个字符。"
+        max_length: "长度至多为 %{expected} 个字符。"
+        min_items: "数组至少包含 %{expected} 项。"
+        max_items: "数组至多包含 %{expected} 项。"
+        minimum: "取值至少为 %{expected}。"
+        maximum: "取值至多为 %{expected}。"
+        unique_items: "数组项必须唯一。"
+        min_properties: "对象至少包含 %{expected} 个属性。"
+        max_properties: "对象至多包含 %{expected} 个属性。"
+        invalid: "取值不符合输入契约。"
+      operation:
+        unknown: "未知操作，可用操作：%{available}。"
+        version_changed: "该操作契约自提案创建以来已变更。"
+      permission:
+        denied: "你无权执行此操作。"
+      conflict:
+        version_changed: "目标自读取以来已变更，请重新读取后重试。"
+      idempotency:
+        key_reused: "该幂等键已用于不同的输入。"
+      proposal:
+        not_pending: "该提案当前不在待确认状态。"
+        already_pending: "已有提案等待确认，请将更新合并到一次调用中。"
+      attempts:
+        exhausted: "此操作的重试次数已用完。"
+      domain:
+        invalid: "变更被拒绝：%{errors}。"
+      internal:
+        error: "操作意外失败，请重试或联系管理员。"
+      quota:
+        exceeded: "该客户已达此资源的配额上限。"
+    guidance:
+      succeeded: "操作已完成。"
+      confirmation_required: "请等待管理员审核并应用该方案，不要声称变更已生效。"
+      dry_run: "操作有效，未写入任何数据。"
+      invalid: "请修正错误后重新调用 %{operation}。"
+      conflict: "请重新读取目标后重新调用 %{operation}。"
+      forbidden: "向用户说明为何不允许此操作，不要重试。"
+      failed: "向用户说明操作意外失败，不要盲目重复同一调用。"
+      fix_payload: "请修正 fix_payload 项后重新调用 %{operation}，不要向用户提及。"
+      attempts_remaining: "剩余尝试次数：%{attempts}。"
+      ask_user: "就 ask_user 项一次性向用户提问：每项一个问题，并将列出的候选作为选项提供。"
+      refresh: "请重新读取目标后重新调用 %{operation}。"
+      blocked: "向用户说明 blocked 项，不要重试。"
+    problems:
+      succeeded: "操作已完成。"
+      confirmation_required: "需要确认"
+      dry_run: "试运行"
+      invalid: "操作输入无效"
+      conflict: "目标已变更"
+      forbidden: "禁止执行"
+      failed: "操作失败"

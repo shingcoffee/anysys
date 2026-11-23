@@ -1,0 +1,319 @@
+---
+CodeGenerators::ElementTypes::Decision::DecisionGenerator:
+  file: app/services/code_generators/element_types/decision/decision_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::End::EndGenerator:
+  file: app/services/code_generators/element_types/end/end_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Loop::LoopGenerator:
+  file: app/services/code_generators/element_types/loop/loop_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Background::EnqueueJobGenerator:
+  file: app/services/code_generators/element_types/process/background/enqueue_job_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Background::ScheduleJobGenerator:
+  file: app/services/code_generators/element_types/process/background/schedule_job_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Caching::CacheDeleteGenerator:
+  file: app/services/code_generators/element_types/process/caching/cache_delete_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Caching::CacheFetchGenerator:
+  file: app/services/code_generators/element_types/process/caching/cache_fetch_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Caching::CacheReadGenerator:
+  file: app/services/code_generators/element_types/process/caching/cache_read_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Caching::CacheWriteGenerator:
+  file: app/services/code_generators/element_types/process/caching/cache_write_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Communication::ApiCallGenerator:
+  file: app/services/code_generators/element_types/process/communication/api_call_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Communication::NotifyGenerator:
+  file: app/services/code_generators/element_types/process/communication/notify_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Communication::SendEmailGenerator:
+  file: app/services/code_generators/element_types/process/communication/send_email_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Communication::SendTemplateEmailGenerator:
+  file: app/services/code_generators/element_types/process/communication/send_template_email_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Communication::SendWebhookGenerator:
+  file: app/services/code_generators/element_types/process/communication/send_webhook_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Concurrency::AcquireLockGenerator:
+  file: app/services/code_generators/element_types/process/concurrency/acquire_lock_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Concurrency::ReleaseLockGenerator:
+  file: app/services/code_generators/element_types/process/concurrency/release_lock_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::AnyAllNoneCheckGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/any_all_none_check_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::AssignValueGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/assign_value_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::Base64EncodeDecodeGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/base64_encode_decode_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::CalculateGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/calculate_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::ChunkCollectionGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/chunk_collection_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::CoalesceValueGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/coalesce_value_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::CompareDataGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/compare_data_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::DateTimeCalcGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/date_time_calc_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::FilterCollectionGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/filter_collection_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::FindInCollectionGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/find_in_collection_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::FlattenCollectionGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/flatten_collection_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::FormatStringGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/format_string_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::GenerateIdGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/generate_id_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::GroupCollectionGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/group_collection_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::HashManipulateGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/hash_manipulate_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::LogGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/log_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::MapCollectionGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/map_collection_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::MapValueGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/map_value_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::MathOperationGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/math_operation_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::MergeDataGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/merge_data_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::ParseDataGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/parse_data_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::PartitionCollectionGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/partition_collection_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::PluckFieldsGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/pluck_fields_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::ReduceCollectionGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/reduce_collection_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::RegexExtractGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/regex_extract_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::SerializeDataGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/serialize_data_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::SortCollectionGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/sort_collection_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::StringManipulateGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/string_manipulate_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::TransformGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/transform_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::TypeCastGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/type_cast_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::UniqCollectionGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/uniq_collection_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::DataOperations::ZipCollectionsGenerator:
+  file: app/services/code_generators/element_types/process/data_operations/zip_collections_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::FileOperations::CompressFilesGenerator:
+  file: app/services/code_generators/element_types/process/file_operations/compress_files_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::FileOperations::DecompressFilesGenerator:
+  file: app/services/code_generators/element_types/process/file_operations/decompress_files_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::FileOperations::DownloadFileGenerator:
+  file: app/services/code_generators/element_types/process/file_operations/download_file_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::FileOperations::GenerateCsvGenerator:
+  file: app/services/code_generators/element_types/process/file_operations/generate_csv_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::FileOperations::GenerateFileGenerator:
+  file: app/services/code_generators/element_types/process/file_operations/generate_file_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::FileOperations::ParseCsvGenerator:
+  file: app/services/code_generators/element_types/process/file_operations/parse_csv_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::FileOperations::UploadFileGenerator:
+  file: app/services/code_generators/element_types/process/file_operations/upload_file_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::AggregateQueryGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/aggregate_query_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::BatchOperationGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/batch_operation_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::BulkImportGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/bulk_import_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::CheckExistenceGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/check_existence_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::CloneModelGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/clone_model_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::CountRecordsGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/count_records_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::DestroyModelGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/destroy_model_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::FindModelGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/find_model_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::NewModelGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/new_model_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::PluckFieldsGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/pluck_fields_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::QueryModelsGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/query_models_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::RawSqlQueryGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/raw_sql_query_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::SaveModelGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/save_model_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::SoftDeleteModelGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/soft_delete_model_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::TransitionStateGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/transition_state_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::UpdateModelGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/update_model_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ModelOperations::UpsertModelGenerator:
+  file: app/services/code_generators/element_types/process/model_operations/upsert_model_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Realtime::BroadcastGenerator:
+  file: app/services/code_generators/element_types/process/realtime/broadcast_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Realtime::PublishEventGenerator:
+  file: app/services/code_generators/element_types/process/realtime/publish_event_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Resilience::CircuitBreakerGenerator:
+  file: app/services/code_generators/element_types/process/resilience/circuit_breaker_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Resilience::IdempotencyCheckGenerator:
+  file: app/services/code_generators/element_types/process/resilience/idempotency_check_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Resilience::RateLimiterGenerator:
+  file: app/services/code_generators/element_types/process/resilience/rate_limiter_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Resilience::RetryWithBackoffGenerator:
+  file: app/services/code_generators/element_types/process/resilience/retry_with_backoff_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Response::RedirectResponseGenerator:
+  file: app/services/code_generators/element_types/process/response/redirect_response_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Response::RenderResponseGenerator:
+  file: app/services/code_generators/element_types/process/response/render_response_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::SchedulingTime::BusinessHoursCheckGenerator:
+  file: app/services/code_generators/element_types/process/scheduling_time/business_hours_check_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::SchedulingTime::DeadlineCheckGenerator:
+  file: app/services/code_generators/element_types/process/scheduling_time/deadline_check_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::SchedulingTime::TimezoneConvertGenerator:
+  file: app/services/code_generators/element_types/process/scheduling_time/timezone_convert_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Security::AuthenticateGenerator:
+  file: app/services/code_generators/element_types/process/security/authenticate_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Security::AuthorizeGenerator:
+  file: app/services/code_generators/element_types/process/security/authorize_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Security::DecryptDataGenerator:
+  file: app/services/code_generators/element_types/process/security/decrypt_data_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Security::EncryptDataGenerator:
+  file: app/services/code_generators/element_types/process/security/encrypt_data_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Security::GenerateTokenGenerator:
+  file: app/services/code_generators/element_types/process/security/generate_token_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Security::HashDataGenerator:
+  file: app/services/code_generators/element_types/process/security/hash_data_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Security::MaskDataGenerator:
+  file: app/services/code_generators/element_types/process/security/mask_data_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Security::SanitizeInputGenerator:
+  file: app/services/code_generators/element_types/process/security/sanitize_input_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Security::VerifyTokenGenerator:
+  file: app/services/code_generators/element_types/process/security/verify_token_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::ServiceInvocation::InvokeServiceGenerator:
+  file: app/services/code_generators/element_types/process/service_invocation/invoke_service_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Utility::AiInferenceGenerator:
+  file: app/services/code_generators/element_types/process/utility/ai_inference_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Utility::AuditLogGenerator:
+  file: app/services/code_generators/element_types/process/utility/audit_log_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Utility::BarcodeGenerateGenerator:
+  file: app/services/code_generators/element_types/process/utility/barcode_generate_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Utility::CurrencyConvertGenerator:
+  file: app/services/code_generators/element_types/process/utility/currency_convert_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Utility::GeolocationLookupGenerator:
+  file: app/services/code_generators/element_types/process/utility/geolocation_lookup_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Utility::I18nTranslateGenerator:
+  file: app/services/code_generators/element_types/process/utility/i18n_translate_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Utility::QrCodeGenerateGenerator:
+  file: app/services/code_generators/element_types/process/utility/qr_code_generate_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Utility::TemplateRenderGenerator:
+  file: app/services/code_generators/element_types/process/utility/template_render_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Validation::BuildContractGenerator:
+  file: app/services/code_generators/element_types/process/validation/build_contract_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Process::Validation::ValidateContractGenerator:
+  file: app/services/code_generators/element_types/process/validation/validate_contract_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Start::StartGenerator:
+  file: app/services/code_generators/element_types/start/start_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Subflow::SubflowGenerator:
+  file: app/services/code_generators/element_types/subflow/subflow_generator.rb
+  gaps: []
+CodeGenerators::ElementTypes::Timer::TimerGenerator:
+  file: app/services/code_generators/element_types/timer/timer_generator.rb
+  gaps: []

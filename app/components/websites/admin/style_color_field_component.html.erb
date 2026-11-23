@@ -1,0 +1,29 @@
+<fieldset class="min-w-0" data-style-field="<%= attribute %>">
+  <legend class="mb-2 text-xs font-medium text-text-secondary"><%= label %></legend>
+  <div class="flex flex-wrap items-center gap-2">
+    <label class="relative cursor-pointer" for="<%= input_id("default") %>" title="<%= t("website.admin.pages.style.default") %>">
+      <%= radio("", checked: default_checked?) %>
+      <span class="<%= Websites::Admin::StyleColorFieldComponent::SWATCH %> bg-[linear-gradient(135deg,transparent_45%,var(--color-danger)_45%,var(--color-danger)_55%,transparent_55%)] bg-surface" aria-hidden="true"></span>
+      <span class="<%= visually_hidden_class %>"><%= t("website.admin.pages.style.default") %></span>
+    </label>
+    <% choices.each do |choice| %>
+      <label class="relative cursor-pointer" for="<%= input_id(choice[:value]) %>" title="<%= choice[:label] %>">
+        <%= radio(choice[:value], checked: checked?(choice[:value])) %>
+        <span class="<%= Websites::Admin::StyleColorFieldComponent::SWATCH %>" style="background: <%= choice[:css] %>;" aria-hidden="true"></span>
+        <span class="<%= visually_hidden_class %>"><%= choice[:label] %></span>
+      </label>
+    <% end %>
+    <span class="relative inline-flex items-center">
+      <%= radio(custom_value, checked: custom?, data: { style_custom_radio: true }) %>
+      <label for="<%= input_id(custom_value) %>" class="<%= visually_hidden_class %>"><%= t("website.admin.pages.style.custom") %></label>
+      <input type="color"
+             value="<%= custom_value %>"
+             title="<%= t("website.admin.pages.style.custom") %>"
+             aria-label="<%= t("website.admin.pages.style.custom") %>"
+             data-style-custom-input
+             <% if custom? %>style="background: <%= custom_value %>;"<% end %>
+             data-action="input->website-builder#pickStyleColor"
+             class="<%= Websites::Admin::StyleColorFieldComponent::SWATCH %> cursor-pointer appearance-none border-0 bg-[conic-gradient(#ef4444,#f59e0b,#22c55e,#06b6d4,#6366f1,#d946ef,#ef4444)] p-0 [&::-moz-color-swatch]:hidden [&::-webkit-color-swatch]:hidden [&::-webkit-color-swatch-wrapper]:p-0">
+    </span>
+  </div>
+</fieldset>

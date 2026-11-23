@@ -1,0 +1,13 @@
+<%= form_with url: url, method: :get, local: true, class: "flex flex-wrap items-end gap-4" do |f| %>
+  <div>
+    <%= label_tag :since, t("admin_modules.emails.analytics.date_range.since"), class: "form-label mb-1" %>
+    <%= date_field_tag :since, since&.to_date, class: "input-field" %>
+  </div>
+
+  <div>
+    <%= label_tag :until, t("admin_modules.emails.analytics.date_range.until"), class: "form-label mb-1" %>
+    <%= date_field_tag :until, until_date&.to_date, class: "input-field" %>
+  </div>
+
+  <%= f.submit submit_label || t("admin_modules.emails.analytics.date_range.apply"), class: "btn btn-secondary btn-sm" %>
+<% end %>

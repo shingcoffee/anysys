@@ -1,0 +1,27 @@
+<%= content_tag(radio? ? :fieldset : :div, class: wrapper_classes, data: { invalid: invalid? ? true : nil }) do %>
+  <% if radio? %>
+    <legend class="block text-sm font-medium text-text-secondary break-words [overflow-wrap:anywhere]">
+      <%= field.label %><% if field.required %><span aria-hidden="true" class="ml-0.5 text-danger">*</span><% end %>
+    </legend>
+  <% else %>
+    <label for="<%= field_id %>" class="block text-sm font-medium text-text-secondary break-words [overflow-wrap:anywhere]">
+      <%= field.label %><% if field.required %><span aria-hidden="true" class="ml-0.5 text-danger">*</span><% end %>
+    </label>
+  <% end %>
+
+  <% unless cleared_value.nil? %>
+    <%= tag.input(type: "hidden", name: field_name, value: cleared_value, autocomplete: "off") %>
+  <% end %>
+  <%= render control %>
+
+  <% if field.help_text.present? %>
+    <p id="<%= help_id %>" class="text-sm text-text-muted break-words [overflow-wrap:anywhere]"><%= field.help_text %></p>
+  <% end %>
+  <% if invalid? %>
+    <ul id="<%= errors_id %>" class="space-y-1 text-sm text-danger break-words [overflow-wrap:anywhere]">
+      <% inline_errors.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>

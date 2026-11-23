@@ -1,0 +1,181 @@
+<%= error_summary(root: "sms_campaign") %>
+<% if @errors.any? && campaign.persisted? %><%= link_to ui("shared.reload_saved"), sms_path(:edit_campaign, campaign), class: "link" %><% end %>
+<%= form_with(**form_options) do |f| %>
+  <%= f.hidden_field :lock_version, value: form_value(:lock_version, campaign.lock_version) %>
+
+  <nav aria-label="<%= ui("campaigns.steps_label") %>" class="mb-8">
+    <ol class="flex w-full items-center">
+      <% STEPS.each_with_index do |key, idx| %>
+        <% number = idx + 1 %>
+        <% state = step_state(number) %>
+        <li class="flex items-center <%= idx < STEPS.length - 1 ? 'min-w-0 flex-1' : 'shrink-0' %>">
+          <div class="flex min-w-0 items-center gap-2"
+               data-sms-campaign-wizard-target="stepIndicator"
+               data-step-index="<%= number %>"
+               <%== state == :current ? 'aria-current="step"' : '' %>>
+            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-colors duration-200 <%= state == :upcoming ? 'bg-surface-active text-text-muted' : 'bg-accent text-white' %> <%= 'ring-4 ring-accent/20' if state == :current %>"
+                  data-sms-campaign-wizard-target="stepBadge"
+                  data-step-index="<%= number %>">
+              <span class="<%= 'hidden' if state == :done %>" data-sms-campaign-wizard-target="stepNumber" data-step-index="<%= number %>"><%= number %></span>
+              <svg data-sms-campaign-wizard-target="stepCheck" data-step-index="<%= number %>"
+                   class="<%= 'hidden' unless state == :done %> h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </span>
+            <span class="hidden truncate text-sm sm:inline <%= state == :current ? 'font-semibold text-accent' : 'font-medium text-text-muted' %>"
+                  data-sms-campaign-wizard-target="stepLabel"
+                  data-step-index="<%= number %>"><%= label_text("campaigns.steps", key) %></span>
+          </div>
+          <% if idx < STEPS.length - 1 %>
+            <div class="mx-3 h-0.5 flex-1 rounded-full transition-colors duration-200 <%= state == :done ? 'bg-accent' : 'bg-border' %>"
+                 data-sms-campaign-wizard-target="stepConnector"
+                 data-step-index="<%= number %>"></div>
+          <% end %>
+        </li>
+      <% end %>
+    </ol>
+  </nav>
+
+  <div class="card p-6 <%= 'hidden' unless step_state(1) == :current %>"
+       data-sms-campaign-wizard-target="step"
+       data-step="audience"
+       data-step-index="1"
+       aria-hidden="<%= step_state(1) == :current ? 'false' : 'true' %>">
+    <h2 class="mb-4 text-lg font-semibold text-text-primary"><%= label_text("campaigns.steps", "audience") %></h2>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <%= field(f, :name, required: true, maxlength: 200, data: { wizard_field: true, wizard_required_msg: t("admin_modules.emails.send_activities.wizard.errors.field_required") }) %>
+      <%= field(f, :segment_id, type: :select, options: [[ui("campaigns.all_contacts"), ""]] + @segments.map { |s| [s[:name], s[:id]] }, help: ui("campaigns.eligibility_help")) %>
+    </div>
+    <div class="mt-4 flex flex-wrap gap-2">
+      <%= link_to ui("campaigns.manage_contacts"), sms_path(:contacts), class: "btn btn-secondary" %>
+      <%= link_to ui("campaigns.manage_segments"), sms_path(:segments), class: "btn btn-secondary" %>
+    </div>
+    <% if @contacts.empty? %>
+      <p class="mt-4 text-text-secondary"><%= ui("campaigns.no_contacts") %></p>
+      <%= link_to ui("contacts.sync"), sms_path(:new_contacts_entity_sync), class: "link" %>
+    <% end %>
+  </div>
+
+  <div class="card p-6 <%= 'hidden' unless step_state(2) == :current %>"
+       data-sms-campaign-wizard-target="step"
+       data-step="content"
+       data-step-index="2"
+       aria-hidden="<%= step_state(2) == :current ? 'false' : 'true' %>">
+    <h2 class="mb-4 text-lg font-semibold text-text-primary"><%= label_text("campaigns.steps", "content") %></h2>
+    <%= field(f, :template_id, type: :select, options: [[ui("campaigns.choose_template"), ""]] + @templates.map { |template| [template[:label], template[:id]] }) %>
+    <% if @templates.empty? %>
+      <p class="mt-4 text-text-secondary"><%= ui("campaigns.no_templates") %></p>
+      <%= link_to ui("campaigns.sms_settings"), helpers.admin_module_config_path(customer_id, "sms"), class: "link" %>
+      <% if helpers.current_user&.owner? %><%= link_to ui("campaigns.platform_templates"), helpers.admin_maintenance_platform_module_settings_sms_templates_path(81721200), class: "link" %><% end %>
+    <% end %>
+    <% if selected_template %>
+      <dl class="mt-4 flex flex-col gap-2">
+        <%= fact(ui("campaigns.template_key"), selected_template[:key]) %>
+        <%= fact(ui("campaigns.required_vars"), selected_template[:required_vars].join(", ").presence || t("common.labels.none")) %>
+      </dl>
+    <% end %>
+    <div class="mt-4">
+      <%= field(f, :variable_map_json, type: :textarea, help: ui("campaigns.mapping_help"), maxlength: 16384, spellcheck: false) %>
+    </div>
+    <p class="mt-4 text-sm text-text-secondary"><%= ui("campaigns.allowed_fields") %></p>
+    <p class="mt-2 text-sm text-text-secondary"><%= ui("campaigns.mapping_example_help") %></p>
+    <pre class="mt-2 whitespace-pre-wrap break-words rounded-lg bg-surface-subtle p-4 text-sm [overflow-wrap:anywhere]"><%= mapping_example %></pre>
+  </div>
+
+  <div class="card p-6 <%= 'hidden' unless step_state(3) == :current %>"
+       data-sms-campaign-wizard-target="step"
+       data-step="schedule"
+       data-step-index="3"
+       aria-hidden="<%= step_state(3) == :current ? 'false' : 'true' %>">
+    <h2 class="mb-4 text-lg font-semibold text-text-primary"><%= label_text("campaigns.steps", "schedule") %></h2>
+    <fieldset class="flex flex-col gap-3">
+      <legend class="form-label"><%= ui("fields.send_timing") %></legend>
+      <div class="flex flex-wrap gap-4">
+        <% %w[immediate scheduled].each do |timing| %>
+          <div class="flex items-center gap-2">
+            <%= f.radio_button :send_timing, timing,
+                  checked: form_value(:send_timing, "immediate") == timing,
+                  data: { sms_campaign_wizard_target: "timingRadio", action: "change->sms-campaign-wizard#timingChanged" } %>
+            <%= f.label :send_timing, timing == "immediate" ? t("sms_campaign_http.send_timing.immediate") : ui("campaigns.schedule"), value: timing %>
+          </div>
+        <% end %>
+      </div>
+    </fieldset>
+    <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 <%= 'hidden' unless scheduled? %>" data-sms-campaign-wizard-target="scheduleFields">
+      <%= field(f, :scheduled_local, type: :datetime_local, help: ui("campaigns.scheduled_help"), data: { wizard_field: true, sms_campaign_wizard_target: "scheduledAt", wizard_required_msg: t("sms_campaign_ui.reasons.schedule_required") }) %>
+      <%= field(f, :timezone, help: ui("campaigns.timezone_help")) %>
+    </div>
+    <fieldset class="mt-4 flex flex-col gap-3">
+      <legend class="form-label"><%= ui("campaigns.quiet_hours") %></legend>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <%= field(f, :quiet_hours_start, type: :number, min: 0, max: 23) %>
+        <%= field(f, :quiet_hours_end, type: :number, min: 0, max: 23) %>
+      </div>
+      <p class="text-sm text-text-secondary"><%= ui("campaigns.quiet_help") %></p>
+    </fieldset>
+    <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+      <%= field(f, :frequency_window_hours, type: :number, min: 1, max: 168, help: ui("campaigns.frequency_help")) %>
+      <%= field(f, :send_rate_per_minute, type: :number, min: 1, max: 60, help: ui("campaigns.rate_help")) %>
+      <%= field(f, :deadline_hours, type: :number, min: 1, max: 168, help: ui("campaigns.deadline_help")) %>
+    </div>
+  </div>
+
+  <div class="card flex flex-col gap-6 p-6 <%= 'hidden' unless step_state(4) == :current %>"
+       data-sms-campaign-wizard-target="step"
+       data-step="review"
+       data-step-index="4"
+       aria-hidden="<%= step_state(4) == :current ? 'false' : 'true' %>">
+    <h2 class="text-lg font-semibold text-text-primary"><%= label_text("campaigns.steps", "review") %></h2>
+    <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div>
+        <dt class="form-label"><%= t("common.labels.name") %></dt>
+        <dd class="text-body text-text-primary" data-sms-campaign-wizard-target="reviewName"><%= review_name %></dd>
+      </div>
+      <div>
+        <dt class="form-label"><%= ui("fields.segment_id") %></dt>
+        <dd class="text-body text-text-primary" data-sms-campaign-wizard-target="reviewAudience"><%= review_audience %></dd>
+      </div>
+      <div>
+        <dt class="form-label"><%= ui("fields.template_id") %></dt>
+        <dd class="text-body text-text-primary" data-sms-campaign-wizard-target="reviewTemplate"><%= review_template %></dd>
+      </div>
+      <div>
+        <dt class="form-label"><%= ui("fields.send_timing") %></dt>
+        <dd class="text-body text-text-primary" data-sms-campaign-wizard-target="reviewSchedule"><%= review_schedule %></dd>
+      </div>
+    </dl>
+    <p class="text-text-secondary"><%= ui("campaigns.save_first") %></p>
+    <%= render Sms::Admin::AudienceSummaryComponent.new(preview: @preview) %>
+    <%= render Sms::Admin::CampaignPreviewComponent.new(preview: @preview, contacts: @contacts, selected_contact_id: helpers.params[:preview_contact_id]) %>
+  </div>
+
+  <div class="flex justify-between gap-3">
+    <div class="flex gap-3">
+      <%= link_to t("common.actions.cancel"), sms_path(:campaigns),
+            class: "btn btn-secondary #{'hidden' unless first_step?}",
+            data: { sms_campaign_wizard_target: "cancelButton" } %>
+      <button type="button" class="btn btn-secondary <%= 'hidden' if first_step? %>"
+              data-action="sms-campaign-wizard#previous"
+              data-sms-campaign-wizard-target="prevButton">
+        <%= t("common.actions.back") %>
+      </button>
+    </div>
+    <div class="flex flex-wrap justify-end gap-3">
+      <button type="button" class="btn btn-primary <%= 'hidden' if last_step? %>"
+              data-action="sms-campaign-wizard#next"
+              data-sms-campaign-wizard-target="nextButton">
+        <%= t("common.actions.continue") %>
+      </button>
+      <%= f.button ui("campaigns.preview"), type: :submit, name: nil, value: "preview",
+            formaction: preview_path, formmethod: "post", formnovalidate: true,
+            class: "btn btn-secondary #{'hidden' unless last_step?}",
+            data: { sms_campaign_wizard_target: "previewButton" } %>
+      <%= f.button ui("campaigns.save_draft"), type: :submit,
+            name: campaign.persisted? ? "_method" : nil,
+            value: campaign.persisted? ? "patch" : nil,
+            formaction: save_path, formmethod: "post",
+            class: "btn btn-primary #{'hidden' unless last_step?}",
+            data: { sms_campaign_wizard_target: "saveButton" } %>
+    </div>
+  </div>
+<% end %>

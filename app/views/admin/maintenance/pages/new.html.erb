@@ -1,0 +1,110 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: definition_resource_breadcrumbs(:pages, t("common.actions.new")),
+  title: t("maint_core.pages.new.title")
+) do %>
+<div data-controller="template-selector"
+     data-template-selector-customer-id-value="<%= current_customer_id %>"
+     data-template-selector-cards-url-value="<%= "#{admin_maintenance_template_picker_cards_path(current_customer_id)}?scope=all" %>">
+
+  <div class="card">
+    <%= form_with model: @page, url: admin_maintenance_pages_path(current_customer_id), local: true, class: "space-y-6 p-6" do |form| %>
+      <% if @page.errors.any? %>
+        <%= render "shared/form_errors", resource: @page %>
+      <% end %>
+
+      <div>
+        <label for="page_name" class="form-label form-label-required"><%= t("common.labels.name") %></label>
+        <%= form.text_field :name,
+            class: "input-field mt-1",
+            placeholder: t("maint_core.pages.new.name_placeholder"),
+            required: true %>
+      </div>
+
+      <div>
+        <label for="page_entity_id" class="form-label form-label-required"><%= t("maint_core.pages.new.bind_to_entity") %></label>
+        <%= form.select :entity_id,
+            options_from_collection_for_select(@entities, :id, :display_label, @page.entity_id),
+            { include_blank: t("maint_core.pages.new.entity_prompt") },
+            class: "input-field mt-1",
+            required: true,
+            data: { action: "change->template-selector#entityChanged", template_selector_target: "entitySelect" } %>
+        <p class="mt-1 text-caption">
+          <%= t("maint_core.pages.new.bind_hint") %>
+        </p>
+      </div>
+
+      <%# ── TEMPLATE SELECTION (modal + lazy load) ── %>
+      <%
+        category_counts = PageLayoutTemplates.category_counts
+        cards_url = "#{admin_maintenance_template_picker_cards_path(current_customer_id)}?scope=all"
+      %>
+      <div>
+        <label class="form-label"><%= t("maint_core.pages.new.choose_layout_template") %></label>
+        <p class="text-caption mt-0.5 mb-3">
+          <%= t("maint_core.pages.new.layout_template_hint") %>
+        </p>
+        <%= render PageBuilder::TemplatePickerComponent.new(
+          selected_template: nil,
+          category_counts: category_counts,
+          cards_url: cards_url,
+          field_name: "page[layout_template]",
+          field_value: "",
+          field_key: "",
+          confirm_label: t("maint_core.pages.new.use_template")
+        ) %>
+      </div>
+
+      <%# ── THEME SELECTOR ── hidden until template is selected %>
+      <div class="hidden" data-template-selector-target="themeSelector">
+        <label class="form-label mb-2"><%= t("maint_core.pages.new.choose_theme") %></label>
+        <p class="text-caption mb-3">
+          <%= t("maint_core.pages.new.theme_hint") %>
+        </p>
+
+        <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
+          <% ThemeResolver::THEME_PRESETS.each do |theme_key, preset| %>
+            <button type="button"
+                    class="relative flex flex-col items-center gap-2 p-3 border-2 rounded-lg transition-all cursor-pointer border-border-subtle hover:border-border-subtle/80"
+                    data-action="click->template-selector#selectTheme"
+                    data-theme-key="<%= theme_key %>"
+                    data-template-selector-target="themeOption">
+              <%# Checkmark %>
+              <div class="absolute top-1 right-1 hidden" data-theme-checkmark>
+                <svg class="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+              </div>
+
+              <%# Color preview circle %>
+              <div class="w-8 h-8 rounded-full bg-<%= preset['primary_color'] %>-500 ring-2 ring-<%= preset['primary_color'] %>-200"></div>
+
+              <%# Theme name %>
+              <span class="text-caption font-medium text-text-primary"><%= t("comp_page_builder.theme_panel.preset.#{theme_key}") %></span>
+            </button>
+          <% end %>
+        </div>
+      </div>
+
+      <%= form.hidden_field :theme_preset, data: { template_selector_target: "selectedTheme" } %>
+
+      <div>
+        <label for="page_description" class="form-label">
+          <%= t("common.labels.description") %> <span class="text-text-muted font-normal"><%= t("maint_core.pages.new.optional") %></span>
+        </label>
+        <%= form.text_area :description,
+            rows: 3,
+            class: "input-field mt-1 resize-none",
+            placeholder: t("maint_core.pages.new.description_placeholder") %>
+      </div>
+
+      <%= form.hidden_field :configuration %>
+
+      <div class="flex items-center justify-end gap-3 pt-6 border-t border-border-subtle">
+        <%= link_to t("common.actions.cancel"), admin_maintenance_pages_path(current_customer_id), class: "btn btn-secondary" %>
+        <%= form.submit t("maint_core.pages.new.create_page"), class: "btn btn-primary cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
+
+</div>
+<% end %>

@@ -1,0 +1,22 @@
+zh-CN:
+  code_generator_validation:
+    field:
+      required: "必须填写 %{name}"
+      one_of: "%{name} 必须是以下之一：%{allowed}"
+      min: "%{name} 必须大于或等于 %{min}"
+      max: "%{name} 必须小于或等于 %{max}"
+      invalid: "%{name} 无效"
+    invalid_configuration: "代码生成器配置无效：%{errors}"
+    loop_topology:
+      message: "%{element_id}：%{reason}（%{invalid}）"
+      loop_requires_body_and_exit: "循环必须同时具有一条循环体路径和一条退出路径"
+      loop_body_empty: "循环体为空"
+      loop_body_escape: "循环体不得直接通向退出节点，且必须回到循环头"
+      nested_loop: "不支持嵌套循环"
+      loop_body_external_entry: "不得从循环外部进入循环体"
+      overlapping_loops: "循环区域不得重叠"
+    download:
+      url_or_variable_required: "必须提供 url 或 urlVariable"
+      non_negative_integer: "%{field} 必须是非负整数"
+      max_size_chunked: "启用分块下载时必须指定 maxSizeBytes"
+      invalid_checksum: "validateChecksum 必须是十六进制摘要，或形如 '<algo>:<hex>'（algo 为 sha256 或 md5）"

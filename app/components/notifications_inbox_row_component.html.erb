@@ -1,0 +1,84 @@
+<div class="<%= row_classes %>"
+     <% if row_dom_id %>id="<%= row_dom_id %>"<% end %>
+     <% if announcement? %>
+       data-controller="text-expand"
+       data-action="click->text-expand#toggle keydown.enter->text-expand#toggle keydown.space->text-expand#toggle"
+     <% end %>>
+  <span class="<%= icon_well_classes %>" aria-hidden="true">
+    <% if support_ticket? %>
+      <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        <path d="M8 9h8"/>
+        <path d="M8 13h5"/>
+      </svg>
+    <% else %>
+      <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m3 11 18-5v12L3 14v-3z"/>
+        <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>
+      </svg>
+    <% end %>
+  </span>
+
+  <div class="min-w-0 flex-1">
+    <% row_inner = capture do %>
+      <span class="flex items-start gap-3">
+        <span class="min-w-0 flex-1">
+          <span class="<%= title_classes %>"
+                <% if announcement? %>data-text-expand-target="clamped" data-limit="<%= TITLE_LIMIT %>"<% end %>><%= title %></span>
+        </span>
+        <% if unread? %>
+          <span class="mt-1.5 size-2 shrink-0 rounded-full bg-accent ring-4 ring-accent/15" aria-hidden="true"></span>
+          <span class="sr-only"><%= t("chrome.notifications.unread") %></span>
+        <% end %>
+      </span>
+      <% if preview.present? %>
+        <span class="<%= preview_classes %>"
+              <% if announcement? %>data-text-expand-target="clamped" data-limit="<%= BODY_LIMIT %>"<% end %>><%= preview %></span>
+      <% end %>
+    <% end %>
+
+    <% if support_ticket? %>
+      <%= button_to support_ticket_read_path,
+            method: :post,
+            params: { item.mark_read_param => item.mark_read_value },
+            form: { data: { turbo: false } },
+            class: "w-full cursor-pointer text-left focus-visible:outline-none after:absolute after:inset-0 " \
+                   "focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-accent" do %>
+        <%= row_inner %>
+      <% end %>
+    <% else %>
+      <%= row_inner %>
+      <% if unread? %>
+        <%= form_with url: mark_read_path, method: :post, class: "hidden",
+              data: { text_expand_target: "markRead", turbo_stream: true } do %>
+          <%= hidden_field_tag item.mark_read_param, item.mark_read_value %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <div class="mt-1.5 flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[11px] leading-4 text-text-muted">
+      <span class="<%= kind_label_classes %>"><%= kind_label %></span>
+      <% if occurred_label.present? %>
+        <span aria-hidden="true">&middot;</span>
+        <time class="tabular-nums" datetime="<%= item.occurred_at.iso8601 %>"><%= occurred_label %></time>
+      <% end %>
+      <% if item.subtitle.present? %>
+        <span aria-hidden="true">&middot;</span>
+        <span class="min-w-0 max-w-[12rem] truncate"><%= item.subtitle %></span>
+      <% end %>
+      <% if learn_more? %>
+        <%= link_to learn_more_url,
+              target: "_blank",
+              rel: "noopener noreferrer",
+              data: { turbo: false },
+              class: "relative ml-auto inline-flex items-center gap-0.5 font-medium text-accent-text hover:underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm" do %>
+          <%= t("comp_platform.announcement_banner.learn_more") %>
+          <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 17 17 7"/>
+            <path d="M7 7h10v10"/>
+          </svg>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

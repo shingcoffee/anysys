@@ -1,0 +1,454 @@
+---
+en:
+  flowchart_actions:
+    invoke_service:
+      label: Invoke Service
+      description: Invoke an external or internal service
+      fields:
+        serviceClass:
+          label: Service Class
+          help: Allow-listed Ruby class invoked by this step.
+          placeholder: e.g., PaymentService or Payments::Processor
+        invocationStyle:
+          label: Invocation Style
+          help: How the class and method are called.
+          options:
+            call: Class.call(*args, **kwargs)
+            new_and_call: Class.new(*args, **kwargs).call
+            class_method: Class.<methodName>(*args, **kwargs)
+            instance_method: Class.new.<methodName>(*args, **kwargs)
+        methodName:
+          label: Method Name
+          help: Required for class_method and instance_method styles.
+          placeholder: required for class_method / instance_method
+        args:
+          label: Positional Args
+          help: Positional arguments passed to the invocation.
+          placeholder: arg name -> ctx variable holding value
+        kwargs:
+          label: Keyword Args
+          help: Keyword arguments passed to the invocation.
+          placeholder: kwarg name -> ctx variable holding value
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+          placeholder: e.g., service_result
+        passContext:
+          label: Pass Context
+          help: "Pass the run context as the ctx: keyword. The service must accept it."
+      errors:
+        invalid_class_name: "%{field} must be a valid Ruby class name"
+        not_allowlisted: "%{field} is not allowlisted"
+        active_record_class: "%{field} cannot be an ActiveRecord class"
+        invalid_method_name: "%{field} must be a valid Ruby method name"
+        forbidden_method: "%{field} cannot invoke %{method}"
+        invalid_keyword: "keyword argument name %{name} is not a valid identifier"
+        missing_call: "%{field} must define self.call(**kwargs)"
+    audit_log:
+      label: Audit Log
+      description: Write to audit log
+      fields:
+        eventType:
+          label: Event Type
+          help: Stable event name written on the audit event and log line.
+          placeholder: e.g., user.login, order.approved
+        resourceType:
+          label: Resource Type
+          help: Type of the resource this event refers to.
+          placeholder: e.g., Order, User
+        resourceId:
+          label: Resource ID (ctx key)
+          help: Context path holding the resource identifier.
+          placeholder: e.g., order_id
+        actorId:
+          label: Actor ID (ctx key)
+          help: Context path holding the actor identifier.
+          placeholder: e.g., acting_user_id
+        actorType:
+          label: Actor Type
+          help: Type of the actor (user, system, …).
+          placeholder: e.g., User, System
+        metadata:
+          label: Metadata
+          help: Extra key/value pairs attached to the audit event and log line.
+          placeholder: field -> ctx key or ctx.path
+        ipAddress:
+          label: IP Address (ctx key)
+          help: Context path holding the client IP.
+          placeholder: e.g., client_ip
+        userAgent:
+          label: User Agent (ctx key)
+          help: Context path holding the client user agent.
+          placeholder: e.g., client_agent
+        severity:
+          label: Severity
+          help: Severity stored on the audit event and used for the log line.
+          options:
+            debug: debug
+            info: info
+            warn: warn
+            error: error
+            critical: critical
+        outcome:
+          label: Audit outcome
+          help: Success or failure recorded on the audit event metadata.
+          options:
+            success: success
+            failure: failure
+        changesVariable:
+          label: Changes
+          help: Context path of a diff hash stored under metadata.changes.
+          placeholder: e.g., record_diff
+    ai_inference:
+      label: AI Inference
+      description: Run AI/ML inference
+      fields:
+        provider:
+          label: Provider
+          help: Remote inference vendor.
+          options:
+            openai: openai
+            anthropic: anthropic
+            cohere: cohere
+            ollama: ollama
+        model:
+          label: Model
+          help: Model identifier sent to the provider.
+          placeholder: e.g., gpt-4o, claude-4-sonnet
+        promptTemplate:
+          label: Prompt Template
+          help: Prompt text with {{ variable }} placeholders.
+          placeholder: Prompt text with {{ variable }} placeholders...
+        systemPrompt:
+          label: System Prompt
+          help: Optional system instructions.
+          placeholder: System instructions...
+        maxTokens:
+          label: Max Tokens
+          help: Maximum tokens requested from the provider.
+        temperature:
+          label: Temperature
+          help: Sampling temperature.
+          placeholder: 0 to 2
+        tools:
+          label: Tools
+          help: Function names advertised to the provider (no local execution).
+        outputFormat:
+          label: Output Format
+          help: How the model text is stored.
+          options:
+            text: text
+            json: json
+            structured: structured
+        jsonRepair:
+          label: JSON Repair
+          help: Strip markdown code fences before parsing JSON output.
+        onInvalidJson:
+          label: On Invalid JSON
+          help: What to do when JSON output cannot be parsed.
+          options:
+            fail: fail
+            as_text: as_text
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+      errors:
+        unsupported_provider: tools are not supported for this provider
+        invalid_tool_name: "tool name %{name} is not a valid identifier"
+    i18n_translate:
+      label: I18n Translate
+      description: Translate text using I18n
+      fields:
+        key:
+          label: Translation Key
+          help: I18n key to look up.
+          placeholder: e.g., notifications.new_orders
+        locale:
+          label: Locale
+          help: Locale to use. Leave blank for the request locale.
+          placeholder: e.g., I18n.locale, 'en', or ctx.user.locale
+        localeFrom:
+          label: Locale From
+          help: Context path of a locale that overrides the Locale field when set.
+          placeholder: e.g., locale
+        fallbackLocale:
+          label: Fallback Locale
+          help: Locale tried when the primary lookup is missing.
+          placeholder: locale to try if translation is missing, e.g., 'en'
+        interpolations:
+          label: Interpolations
+          help: Values substituted into the translation.
+          placeholder: name => value
+        scope:
+          label: Scope
+          help: Optional I18n scope.
+          placeholder: i18n scope, e.g., activerecord.models
+        default:
+          label: Default
+          help: Fallback text when the key is missing.
+          placeholder: fallback translation text
+        count:
+          label: Count
+          help: Pluralization count.
+          placeholder: pluralization count, e.g., ctx.items_count
+        raiseOnMissing:
+          label: Raise On Missing
+          help: Fail the step when the translation is missing.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+    currency_convert:
+      label: Currency Convert
+      description: Convert between currencies
+      fields:
+        amount:
+          label: Amount
+          help: Context path holding the amount.
+          placeholder: ctx key holding the amount
+        fromCurrency:
+          label: From Currency
+          help: Source currency code.
+          placeholder: e.g., USD
+        toCurrency:
+          label: To Currency
+          help: Target currency code.
+          placeholder: e.g., EUR
+        rateSource:
+          label: Rate Source
+          help: Where the exchange rate is read from.
+          options:
+            ctx: Rate from ctx (target rate)
+            ctx_key: Rate table from ctx (cross rate)
+            config: Static rate table
+            fixed: Fixed rate
+            external: External rate API
+        fixedRate:
+          label: Fixed Rate
+          help: Rate used when rateSource is fixed.
+          placeholder: e.g., 0.92
+        rounding:
+          label: Rounding
+          help: Rounding mode applied to the converted amount.
+          options:
+            half_up: half_up
+            half_even: half_even
+            floor: floor
+            ceiling: ceiling
+        precision:
+          label: Precision
+          help: Decimal places kept after rounding.
+          placeholder: decimal places
+        cacheRates:
+          label: Cache Rates
+          help: Cache successful external rates for this tenant.
+        ratesVariable:
+          label: Rates Variable
+          help: Context path holding a rates hash.
+          placeholder: "ctx key holding rates hash (default: exchange_rates)"
+        staticRates:
+          label: Static Rates
+          help: Inline rate table used when rateSource is config.
+          placeholder: "static rates hash, e.g. { USD: 1.0, EUR: 0.92 }"
+        rateApiUrl:
+          label: Rate Api Url
+          help: External rates endpoint.
+          placeholder: e.g., https://api.exchangerate.host/latest
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        fromCurrencyFrom:
+          label: From Currency Variable
+          help: Context path that overrides From Currency when set.
+          placeholder: e.g., source_currency
+        toCurrencyFrom:
+          label: To Currency Variable
+          help: Context path that overrides To Currency when set.
+          placeholder: e.g., target_currency
+        onMissingRate:
+          label: On Missing Rate
+          help: What to do when the exchange rate cannot be found.
+          options:
+            fail: fail
+            identity: identity
+      errors:
+        invalid_currency: "%{field} must be a 3-letter ISO currency code"
+    geolocation_lookup:
+      label: Geolocation Lookup
+      description: Look up geolocation data
+      fields:
+        mode:
+          label: Mode
+          help: ip_to_location or distance
+          placeholder: ip_to_location or distance
+          options:
+            ip_to_location: ip_to_location
+            distance: distance
+        sourceVariable:
+          label: Source
+          help: Context path this step reads.
+          placeholder: e.g., ip_address
+        otherVariable:
+          label: Other
+          help: Second coordinate used in distance mode.
+          placeholder: e.g., destination
+        provider:
+          label: Provider
+          help: Geocoding vendor.
+          options:
+            google: google
+            mapbox: mapbox
+        lookupKey:
+          label: Lookup Key
+          help: How the source value is interpreted.
+          options:
+            ip: ip
+            postal: postal
+            address: address
+            coords: coords
+        fieldsToReturn:
+          label: Fields To Return
+          help: Optional subset of location fields to keep.
+          placeholder: field name -> label
+        fallbackProvider:
+          label: Fallback Provider
+          help: Second vendor used when the primary lookup is empty.
+          options:
+            google: google
+            mapbox: mapbox
+        cacheResults:
+          label: Cache Results
+          help: Cache successful lookups for this tenant.
+        language:
+          label: Language
+          help: Language code sent to the geocoding vendor.
+          placeholder: e.g., en or zh-CN
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+    barcode_generate:
+      label: Barcode Generate
+      description: Generate barcode
+      fields:
+        sourceVariable:
+          label: Source
+          help: Context path holding the payload to encode.
+          placeholder: ctx key holding barcode data (e.g., sku)
+        format:
+          label: Barcode Format
+          help: Symbology, including QR.
+          options:
+            code128: Code128
+            code39: Code39
+            ean13: EAN-13
+            ean8: EAN-8
+            upca: UPC-A
+            itf: ITF
+            codabar: Codabar
+            qr: QR
+        width:
+          label: Width (xdim)
+          help: Module width in pixels.
+          placeholder: module width in pixels
+        height:
+          label: Height
+          help: Bar height in pixels.
+          placeholder: bar height in pixels
+        margin:
+          label: Margin
+          help: Quiet zone / margin in pixels.
+          placeholder: quiet zone / margin in pixels
+        outputFormat:
+          label: Output Format
+          help: Image encoding written to the result variable.
+          options:
+            png: PNG
+            svg: SVG
+            jpg: JPG
+            base64: Base64 (PNG)
+            ascii: ASCII
+        includeText:
+          label: Include Text
+          help: Draw a human-readable line (SVG only).
+        textFont:
+          label: Text Font
+          help: Font used for the human-readable line.
+          placeholder: e.g., Helvetica
+          options:
+            helvetica: Helvetica
+            arial: Arial
+            dejavusans: DejaVuSans
+            freesans: FreeSans
+        size:
+          label: Size
+          help: QR module size in pixels.
+          placeholder: module size (pixels per module)
+        errorCorrection:
+          label: Error Correction
+          help: QR error-correction level.
+          options:
+            l: L (Low ~7%)
+            m: M (Medium ~15%)
+            q: Q (Quartile ~25%)
+            h: H (High ~30%)
+        colorDark:
+          label: Dark Color
+          help: QR dark module color.
+          placeholder: "#000000"
+        colorLight:
+          label: Light Color
+          help: QR light module color.
+          placeholder: "#FFFFFF"
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+          placeholder: ctx key to store result
+    template_render:
+      label: Template Render
+      description: Render template with data
+      fields:
+        template:
+          label: Template
+          help: Liquid template with {{ variable }} placeholders.
+          placeholder: Hello {{ name }}
+        variables:
+          label: Variables
+          help: Extra bindings merged over the run context.
+          placeholder: name => ctx expression
+        strictVariables:
+          label: Strict Variables
+          help: Fail when a referenced variable is missing.
+        outputFormat:
+          label: Output Format
+          help: text keeps values as-is; html escapes interpolated values.
+          options:
+            text: text
+            html: html
+        trimWhitespace:
+          label: Trim Whitespace
+          help: Strip leading and trailing whitespace from the rendered result.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+          placeholder: e.g., rendered
+  flowchart_runtime:
+    errors:
+      invoke_service:
+        failed: The service could not be invoked (%{reason}).
+        rejected: The service refused the request.
+      ai_inference:
+        failed: The inference request failed (%{reason}).
+        empty: The model returned an empty response.
+        not_configured: No generation provider is configured.
+        unsupported_provider: The active generation provider cannot run this step.
+      i18n_translate:
+        failed: The translation could not be looked up (%{reason}).
+      currency_convert:
+        failed: The amount could not be converted (%{reason}).
+      geolocation_lookup:
+        failed: The location could not be resolved (%{reason}).
+        empty: No location was returned.
+        invalid_coordinates: Both points need a latitude and a longitude.
+      barcode_generate:
+        failed: The barcode could not be generated (%{reason}).
+      template_render:
+        failed: The template could not be rendered (%{reason}).

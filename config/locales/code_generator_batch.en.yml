@@ -1,0 +1,5 @@
+en:
+  code_generator_batch:
+    errors:
+      invalid_input: "%{field} must contain valid column predicates or assignments; blank rows, empty groups, unsupported operators, and malformed expressions are not allowed."
+      assignments_required: "fieldAssignments is required for update_all."

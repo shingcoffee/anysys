@@ -1,0 +1,24 @@
+{
+  "title": "Vocabulary",
+  "description": "Resolves registry-backed slots.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["color"],
+  "properties": {
+    "color": {
+      "type": "string",
+      "description": "A registry color.",
+      "x-vocabulary": "colors"
+    },
+    "optional_color": {
+      "type": ["string", "null"],
+      "description": "A nullable registry color.",
+      "x-vocabulary": "nullable_colors"
+    },
+    "limit": {
+      "type": "integer",
+      "description": "Upper bound from the registry.",
+      "x-vocabulary-max": "max_items"
+    }
+  }
+}

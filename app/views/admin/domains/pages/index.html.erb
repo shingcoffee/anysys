@@ -1,0 +1,20 @@
+<%= render Admin::Domains::BrowseComponent.new(
+      sections: @sections, section: @section, customer_id: current_customer.id
+    ) do %>
+  <%= render Admin::Pages::OpsTableComponent.new(
+        rows:        @rows,
+        pagination:  @pagination,
+        params:      page_list_params,
+        customer_id: current_customer.id,
+        base_path:   admin_domain_pages_path(current_customer.id, @section.key),
+        search:      { param: :q, placeholder: t("admin_misc.domains.pages.search_placeholder") },
+        filters:     @filters,
+        statuses:    @form_statuses,
+        empty_state: {
+          title:       t("admin_misc.domains.pages.empty_title"),
+          description: t("admin_misc.domains.pages.empty_description")
+        }
+      ) %>
+
+  <turbo-frame id="<%= Admin::Pages::PublishingPanelComponent::FRAME_ID %>"></turbo-frame>
+<% end %>

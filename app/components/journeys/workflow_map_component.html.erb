@@ -1,0 +1,29 @@
+<div class="border-t border-border-subtle px-4 py-4 sm:px-6" data-role="journey-workflow-map">
+  <h4 class="text-sm font-semibold text-text-primary"><%= t("journeys.admin.map.title") %></h4>
+  <p class="mt-1 max-w-prose text-xs text-text-muted"><%= t("journeys.admin.map.description") %></p>
+
+  <% if rows.empty? %>
+    <p class="mt-3 text-sm text-text-muted"><%= t("journeys.admin.map.empty") %></p>
+  <% else %>
+    <ol class="mt-3 space-y-2">
+      <% rows.each do |row| %>
+        <li class="grid grid-cols-1 items-center gap-2 rounded-lg border border-border-subtle bg-canvas p-3 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:gap-3"
+            aria-label="<%= connection_label(row) %>">
+          <% [row.from, nil, row.to].each do |journey| %>
+            <% if journey %>
+              <%= link_to edit_path(journey), class: "flex min-w-0 flex-col rounded-md border border-border-subtle bg-surface px-3 py-2 transition-base hover:border-border hover:bg-surface-hover", data: { turbo_frame: "_top" } do %>
+                <span class="truncate text-sm font-medium text-text-primary"><%= journey.name %></span>
+                <span class="truncate text-xs text-text-muted"><%= audiences(journey) %></span>
+              <% end %>
+            <% else %>
+              <span class="flex min-w-0 items-center gap-2 text-xs text-text-secondary sm:flex-col sm:gap-1 sm:text-center">
+                <svg class="size-4 shrink-0 rotate-90 text-text-muted sm:rotate-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="<%= Journeys::ListComponent::ICON %>" /></svg>
+                <span class="min-w-0 break-words sm:max-w-40"><%= row.records %></span>
+              </span>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
+    </ol>
+  <% end %>
+</div>

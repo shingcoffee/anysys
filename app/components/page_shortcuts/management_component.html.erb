@@ -1,0 +1,122 @@
+<%= render AdminPageComponent.new(
+      breadcrumbs: [
+        { label: t("admin_misc.maintenance.breadcrumb"), path: helpers.admin_maintenance_path(customer_id) },
+        { label: t("page_shortcuts.title") }
+      ],
+      title: t("page_shortcuts.title"),
+      description: t("page_shortcuts.description")
+    ) do %>
+  <div class="min-w-0 space-y-6">
+    <%= render CardComponent.new(padding: :none) do %>
+      <div id="shortcut-form" class="min-w-0 space-y-5 p-4 sm:p-6">
+        <div>
+          <h2 class="section-header"><%= t("page_shortcuts.#{editing_shortcut ? 'edit_heading' : 'add_heading'}") %></h2>
+          <p class="mt-1 text-sm text-text-secondary"><%= t("page_shortcuts.form_description") %></p>
+        </div>
+        <% if error_messages.any? %>
+          <div role="alert">
+            <%= render AlertComponent.new(message: safe_join(error_messages.map { |message| tag.span(message, class: "block") }), type: :error) %>
+          </div>
+        <% end %>
+        <%= form_with scope: :page_shortcut, url: form_path, method: editing_shortcut ? :patch : :post,
+                      local: true, data: { turbo: false }, html: { class: "space-y-5" } do |form| %>
+          <div class="grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2">
+            <div class="min-w-0 space-y-2">
+              <%= form.label :path, t("page_shortcuts.path"), for: "page-shortcut-path", class: "form-label" %>
+              <%= form.text_field :path, id: "page-shortcut-path", value: form_value(:path), required: true,
+                                  placeholder: t("page_shortcuts.path_placeholder"), class: "input-field min-h-11 w-full font-mono",
+                                  aria: field_aria(:path) %>
+              <p id="page-shortcut-path-hint" class="text-xs text-text-secondary"><%= t("page_shortcuts.path_hint") %></p>
+              <% if field_errors(:path).any? %>
+                <p id="page-shortcut-path-error" class="text-sm text-danger"><%= field_errors(:path).join(" · ") %></p>
+              <% end %>
+            </div>
+            <div class="min-w-0 space-y-2">
+              <%= form.label :target, t("page_shortcuts.destination"), for: "page-shortcut-target", class: "form-label" %>
+              <%= form.select :target, options_for_select(target_options, form_value(:target)),
+                              { include_blank: t("page_shortcuts.choose_destination") },
+                              { id: "page-shortcut-target", required: true, disabled: available_targets.empty?,
+                                class: "input-field min-h-11 w-full", aria: field_aria(:target) } %>
+              <p id="page-shortcut-target-hint" class="text-xs text-text-secondary"><%= t("page_shortcuts.destination_hint") %></p>
+              <% if field_errors(:target).any? %>
+                <p id="page-shortcut-target-error" class="text-sm text-danger"><%= field_errors(:target).join(" · ") %></p>
+              <% end %>
+            </div>
+          </div>
+          <% if available_targets.empty? %>
+            <p class="text-sm text-text-secondary"><%= t("page_shortcuts.no_targets") %></p>
+            <%= link_to t("page_shortcuts.publish_pages"), helpers.admin_maintenance_pages_path(customer_id), class: "inline-flex min-h-11 items-center text-accent-text underline" %>
+            <% if FeatureModules::Module.enabled?(key: "website", customer_id: customer_id) %>
+              <%= link_to t("page_shortcuts.publish_website"), helpers.admin_settings_modules_website_path(customer_id), class: "inline-flex min-h-11 items-center text-accent-text underline" %>
+            <% end %>
+          <% end %>
+          <div class="flex flex-col gap-3 sm:flex-row">
+            <%= render ButtonComponent.new(type: "submit", disabled: available_targets.empty?, class: "min-h-11 w-full sm:w-auto") do %>
+              <%= t(editing_shortcut ? "common.actions.save" : "page_shortcuts.add_heading") %>
+            <% end %>
+            <% if editing_shortcut %>
+              <%= render ButtonComponent.new(tag: :a, href: index_path, variant: :secondary, class: "min-h-11 w-full sm:w-auto", data: { turbo: false }) do %>
+                <%= t("common.actions.cancel") %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+    <%= render CardComponent.new(padding: :none) do %>
+      <div class="p-4 sm:p-6">
+        <h2 class="section-header"><%= t("page_shortcuts.saved_heading") %></h2>
+        <p class="mt-1 text-sm text-text-secondary"><%= t("page_shortcuts.remove_hint") %></p>
+      </div>
+      <% if shortcuts.empty? %>
+        <%= render EmptyStateComponent.new(title: t("page_shortcuts.empty_title"), description: t("page_shortcuts.automatic_hint")) %>
+      <% else %>
+        <table class="block w-full md:table md:table-fixed">
+          <caption class="sr-only"><%= t("page_shortcuts.saved_heading") %></caption>
+          <thead class="hidden bg-surface-hover md:table-header-group">
+            <tr>
+              <% %w[path destination availability actions].each do |column| %>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-text-secondary sm:px-6"><%= t("page_shortcuts.#{column}") %></th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody class="block divide-y divide-border-subtle md:table-row-group">
+            <% shortcuts.each do |shortcut| %>
+              <% live = available?(shortcut) %>
+              <tr class="block p-4 md:table-row md:p-0" data-shortcut-id="<%= shortcut.id %>">
+                <td class="block min-w-0 py-2 md:table-cell md:px-6 md:py-4">
+                  <span class="mb-1 block text-xs font-semibold text-text-secondary md:hidden"><%= t("page_shortcuts.path") %></span>
+                  <% if live %>
+                    <%= link_to public_path(shortcut), public_path(shortcut), class: "inline-flex min-h-11 items-center break-all font-mono text-sm text-accent-text underline", target: "_blank", rel: "noopener noreferrer" %>
+                  <% else %>
+                    <span class="break-all font-mono text-sm text-text-secondary"><%= public_path(shortcut) %></span>
+                  <% end %>
+                </td>
+                <td class="block break-words py-2 text-sm md:table-cell md:px-6 md:py-4">
+                  <span class="mb-1 block text-xs font-semibold text-text-secondary md:hidden"><%= t("page_shortcuts.destination") %></span>
+                  <%= destination_label(shortcut) %>
+                </td>
+                <td class="block py-2 md:table-cell md:px-6 md:py-4">
+                  <span class="mb-1 block text-xs font-semibold text-text-secondary md:hidden"><%= t("page_shortcuts.availability") %></span>
+                  <%= render BadgeComponent.new(variant: live ? :success : :default) do %>
+                    <%= t("page_shortcuts.#{live ? 'available' : 'unavailable'}") %>
+                  <% end %>
+                </td>
+                <td class="block py-2 md:table-cell md:px-6 md:py-4">
+                  <span class="mb-1 block text-xs font-semibold text-text-secondary md:hidden"><%= t("page_shortcuts.actions") %></span>
+                  <div class="flex flex-wrap gap-2">
+                    <%= link_to t("common.actions.edit"), edit_path(shortcut), class: "btn btn-secondary min-h-11", data: { turbo: false }, aria: { label: t("page_shortcuts.edit_label", path: shortcut.path) } %>
+                    <%= button_to t("page_shortcuts.remove"), record_path(shortcut), method: :delete,
+                                  class: "btn btn-danger min-h-11", form: { data: { turbo: false } },
+                                  aria: { label: t("page_shortcuts.remove_label", path: shortcut.path) } %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+      <p class="border-t border-border-subtle p-4 text-xs text-text-secondary sm:px-6"><%= t("page_shortcuts.automatic_hint") %></p>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,60 @@
+<div class="card">
+  <div class="px-5 py-4">
+    <h2 class="text-base font-semibold text-text-primary"><%= t("chrome.flowchart_info_card.header") %></h2>
+  </div>
+
+  <dl class="px-5 pb-5 space-y-4">
+    <div>
+      <dt class="text-caption text-text-muted"><%= t("common.labels.name") %></dt>
+      <dd class="mt-0.5 text-sm text-text-primary"><%= flowchart.name %></dd>
+    </div>
+
+    <div>
+      <dt class="text-caption text-text-muted"><%= t("chrome.flowchart_info_card.used_by_pages") %></dt>
+      <dd class="mt-1">
+        <% if pages.any? %>
+          <ul class="space-y-1" data-role="bound-pages">
+            <% pages.each do |page| %>
+              <li class="flex flex-wrap items-center gap-2 min-w-0">
+                <%= link_to page.name, page_path(page), class: "text-sm text-accent hover:underline truncate" %>
+                <% if page.entity %>
+                  <span class="text-xs text-text-muted truncate"><%= page.entity.display_label %></span>
+                <% end %>
+                <% unless page.launched? %>
+                  <%= render BadgeComponent.new(variant: :default, size: :sm) do %><%= t("maint_core.pages.show.not_launched") %><% end %>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="text-sm text-text-muted"><%= t("chrome.flowchart_info_card.no_pages") %></p>
+        <% end %>
+      </dd>
+    </div>
+
+    <div>
+      <dt class="text-caption text-text-muted"><%= t("chrome.flowchart_info_card.elements") %></dt>
+      <dd class="mt-0.5 text-sm text-text-primary">
+        <%= t("chrome.flowchart_info_card.elements_count", count: flowchart.elements.length) %>
+      </dd>
+    </div>
+
+    <% if flowchart.description.present? %>
+      <div>
+        <dt class="text-caption text-text-muted"><%= t("common.labels.description") %></dt>
+        <dd class="mt-0.5 text-sm text-text-primary"><%= flowchart.description %></dd>
+      </div>
+    <% end %>
+
+    <div class="pt-3 border-t border-border-subtle grid grid-cols-1 gap-3">
+      <div>
+        <dt class="text-caption text-text-muted"><%= t("common.labels.created_at") %></dt>
+        <dd class="mt-0.5 text-sm text-text-secondary"><%= format_datetime(flowchart.created_at) %></dd>
+      </div>
+      <div>
+        <dt class="text-caption text-text-muted"><%= t("chrome.labels.last_updated") %></dt>
+        <dd class="mt-0.5 text-sm text-text-secondary"><%= format_datetime(flowchart.updated_at) %></dd>
+      </div>
+    </div>
+  </dl>
+</div>

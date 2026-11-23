@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8"><title>sortable drag proof</title>
+<style>li{padding:12px;margin:4px;border:1px solid #ccc;list-style:none}.handle{cursor:grab}</style>
+</head><body>
+<ul id="list">
+  <li data-id="a"><span class="handle">⠿</span> A</li>
+  <li data-id="b"><span class="handle">⠿</span> B</li>
+  <li data-id="c"><span class="handle">⠿</span> C</li>
+</ul>
+<script type="module">
+  import Sortable from "/vendor/javascript/sortable.esm.js"
+  Sortable.create(document.getElementById("list"), { handle: ".handle", animation: 0 })
+  window.__order = () => [...document.querySelectorAll("#list li")].map(li => li.dataset.id).join("")
+</script>
+</body></html>

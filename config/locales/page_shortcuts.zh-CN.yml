@@ -1,0 +1,38 @@
+zh-CN:
+  page_shortcuts:
+    title: 页面快捷路径
+    description: 为网站页面或公开表单配置指定的访问地址。
+    manage: 管理页面快捷路径
+    add_heading: 添加快捷路径
+    edit_heading: 编辑快捷路径
+    form_description: 输入相对于当前客户的路径，并选择已发布的目标页面。
+    path: 路径
+    path_placeholder: /campaign/register
+    path_hint: 以斜杠开头，例如 /join 或 /campaign/register。根地址使用 /。
+    destination: 目标页面
+    destination_hint: 快捷路径仅可访问已发布的网站页面及已上线的公开页面。
+    choose_destination: 选择目标页面
+    no_targets: 暂无已发布的目标页面。请先发布网站页面，或上线公开表单。
+    publish_pages: 管理表单页面
+    publish_website: 管理网站发布
+    saved_heading: 已保存的快捷路径
+    availability: 访问状态
+    actions: 操作
+    available: 可访问
+    unavailable: 不可访问
+    unavailable_option: "%{destination}（不可访问）"
+    missing_destination: 目标页面已删除
+    untitled_destination: 未命名页面
+    destination_label: "%{type}：%{title}"
+    target_types:
+      website_page: 网站页面
+      public_page: 公开页面
+    remove: 移除
+    remove_hint: 移除快捷路径不会删除页面。
+    edit_label: "编辑快捷路径 %{path}"
+    remove_label: "移除快捷路径 %{path}"
+    empty_title: 暂无快捷路径
+    automatic_hint: 网站首页及内页的访问路径会自动生成。可添加快捷路径，配置其他指定地址。
+    flash:
+      saved: 快捷路径已保存。
+      deleted: 快捷路径已移除。

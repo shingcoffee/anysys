@@ -1,0 +1,36 @@
+<div class="space-y-3">
+  <% if error.present? %>
+    <div role="alert" class="rounded-lg border border-danger/20 bg-danger-subtle px-3 py-2.5 text-sm text-danger break-words"><%= error %></div>
+  <% elsif validation_errors.any? %>
+    <div role="alert" class="rounded-lg border border-danger/20 bg-danger-subtle px-3 py-2.5">
+      <p class="mb-1 text-xs font-semibold text-danger"><%= t("comp_platform.code_generators.detail.validation_errors") %></p>
+      <ul class="list-disc space-y-0.5 pl-5 text-sm text-danger">
+        <% validation_errors.each do |message| %>
+          <li class="break-words"><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% else %>
+    <dl class="grid gap-3 sm:grid-cols-2">
+      <% io_groups.each do |kind, keys| %>
+        <div class="min-w-0">
+          <dt class="text-[10px] font-semibold uppercase tracking-wide text-text-muted"><%= t("comp_platform.code_generators.detail.#{kind}") %></dt>
+          <dd class="mt-1 flex flex-wrap gap-1">
+            <% if keys.any? %>
+              <% keys.each do |key| %>
+                <span class="inline-flex items-center rounded border bg-surface px-1.5 py-0.5 font-mono text-[11px] <%= IO_TONES.fetch(kind) %>">ctx[:<%= key %>]</span>
+              <% end %>
+            <% else %>
+              <span class="text-xs italic text-text-muted"><%= t("comp_platform.code_generators.detail.none_detected_lower") %></span>
+            <% end %>
+          </dd>
+        </div>
+      <% end %>
+    </dl>
+    <% if code.present? %>
+      <%= render CodeBlockComponent.new(code: code, language: "ruby", filename: "generated_step.rb") %>
+    <% else %>
+      <p class="rounded-lg border border-border-subtle bg-canvas-elevated p-3 text-sm italic text-text-muted"><%= t("comp_platform.code_generators.detail.no_code_generated") %></p>
+    <% end %>
+  <% end %>
+</div>

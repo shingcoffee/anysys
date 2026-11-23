@@ -1,0 +1,48 @@
+<% if accent? %>
+  <label class="group/swatch flex min-w-14 cursor-pointer flex-col items-center gap-1.5" for="<%= input_options[:id] %>" data-theme-option="<%= token %>">
+    <%= tag.input(**input_options) %>
+    <span class="<%= swatch_class %>" aria-hidden="true">
+      <svg class="size-4 opacity-0 transition-opacity group-has-[:checked]/swatch:opacity-100" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.25 7.3a1 1 0 0 1-1.42 0l-3.75-3.775a1 1 0 1 1 1.42-1.41l3.04 3.062 6.54-6.585a1 1 0 0 1 1.414-.006Z" clip-rule="evenodd"/></svg>
+    </span>
+    <span class="text-xs text-text-secondary peer-checked:font-medium peer-checked:text-text-primary"><%= label %></span>
+  </label>
+<% else %>
+  <label class="relative block min-w-0 cursor-pointer" for="<%= input_options[:id] %>" data-theme-option="<%= token %>">
+    <%= tag.input(**input_options) %>
+    <span class="pointer-events-none absolute right-3.5 top-3.5 z-10 hidden size-4 items-center justify-center rounded-full bg-accent text-white shadow-xs peer-checked:flex" aria-hidden="true">
+      <svg class="size-2.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.25 7.3a1 1 0 0 1-1.42 0l-3.75-3.775a1 1 0 1 1 1.42-1.41l3.04 3.062 6.54-6.585a1 1 0 0 1 1.414-.006Z" clip-rule="evenodd"/></svg>
+    </span>
+    <span class="<%= Websites::Admin::ThemeOptionComponent::CARD_CLASS %>">
+      <% case token %>
+      <% when "appearance" %>
+        <span class="flex h-16 flex-col rounded-md p-2.5 ring-1 <%= dark? ? "bg-neutral-950 ring-white/10" : "bg-white ring-black/10" %>" aria-hidden="true">
+          <span class="block h-1.5 w-10 rounded-full <%= dark? ? "bg-white/90" : "bg-neutral-900/85" %>"></span>
+          <span class="mt-1.5 block h-1 w-16 max-w-full rounded-full <%= dark? ? "bg-white/30" : "bg-neutral-300" %>"></span>
+          <span class="mt-1 block h-1 w-12 max-w-full rounded-full <%= dark? ? "bg-white/30" : "bg-neutral-300" %>"></span>
+          <span class="mt-auto block h-2.5 w-8 rounded-full bg-accent"></span>
+        </span>
+      <% when "type" %>
+        <span class="flex h-16 items-center justify-center rounded-md bg-canvas-elevated ring-1 ring-border-subtle" aria-hidden="true">
+          <span class="<%= specimen_class %>" style="<%= specimen_style %>"><%= t("website.admin.settings.theme.specimen") %></span>
+        </span>
+      <% when "corners" %>
+        <span class="flex h-16 items-center justify-center rounded-md bg-canvas-elevated ring-1 ring-border-subtle" aria-hidden="true">
+          <span class="block h-9 w-14 border-2 border-text-secondary bg-surface <%= corner_class %>"></span>
+        </span>
+      <% when "neutral" %>
+        <span class="flex h-16 items-center justify-center gap-1.5 rounded-md bg-canvas-elevated ring-1 ring-border-subtle" aria-hidden="true">
+          <% neutral_swatches.each do |swatch| %>
+            <span class="block size-7 rounded-full ring-1 ring-black/10 <%= swatch %>"></span>
+          <% end %>
+        </span>
+      <% else %>
+        <span class="flex h-16 flex-col overflow-hidden rounded-md bg-canvas-elevated ring-1 ring-border-subtle <%= density_class %>" aria-hidden="true">
+          <% density_bars.times do %>
+            <span class="block h-2 w-full shrink-0 rounded-sm bg-border"></span>
+          <% end %>
+        </span>
+      <% end %>
+      <span class="px-0.5 pb-0.5 font-medium"><%= label %></span>
+    </span>
+  </label>
+<% end %>

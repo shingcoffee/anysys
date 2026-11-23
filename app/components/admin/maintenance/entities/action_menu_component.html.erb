@@ -1,0 +1,18 @@
+<details class="relative" data-controller="menu-placement" data-action="toggle->menu-placement#reposition">
+  <summary role="button" aria-label="<%= label %>" title="<%= label %>"
+           class="list-none cursor-pointer inline-flex size-8 items-center justify-center rounded-md text-text-secondary transition-base select-none hover:bg-surface-active hover:text-text-primary [&::-webkit-details-marker]:hidden">
+    <svg class="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <circle cx="12" cy="5" r="1.75"/><circle cx="12" cy="12" r="1.75"/><circle cx="12" cy="19" r="1.75"/>
+    </svg>
+  </summary>
+  <div class="absolute right-0 z-20 mt-1 min-w-[11rem] rounded-lg border border-border-subtle bg-canvas-elevated p-1 text-left shadow-md"
+       role="menu" data-menu-placement-target="panel">
+    <% items.each do |item| %>
+      <% if item == :separator %>
+        <div class="my-1 h-px bg-border-subtle" role="separator"></div>
+      <% else %>
+        <%= link_to item[:label], item[:path], **link_options(item) %>
+      <% end %>
+    <% end %>
+  </div>
+</details>

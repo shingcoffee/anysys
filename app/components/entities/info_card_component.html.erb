@@ -1,0 +1,88 @@
+<div class="card overflow-hidden">
+  <div class="px-5 py-3.5 border-b border-border-subtle">
+    <h2 class="text-sm font-medium text-text-primary"><%= t("comp_misc.entity_info.header") %></h2>
+  </div>
+
+  <dl class="px-5 py-4 flex flex-col gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <dt class="text-caption text-text-muted"><%= t("common.labels.name") %></dt>
+        <dd class="mt-0.5 flex items-center gap-2 min-w-0">
+          <div class="size-6 rounded-md flex-shrink-0 flex items-center justify-center
+                      <%= helpers.attribute_group_color_classes(entity.color.presence || 'slate', variant: :bar) %>">
+            <%= helpers.attribute_group_icon(
+                  entity.icon.presence || 'folder',
+                  css_class: "size-3.5 text-white"
+                ) %>
+          </div>
+          <span class="text-sm text-text-primary truncate"><%= entity.display_label %></span>
+        </dd>
+      </div>
+
+      <div>
+        <dt class="text-caption text-text-muted"><%= t("comp_misc.entity_info.kind") %></dt>
+        <dd class="mt-0.5">
+          <% if entity.bridge_entity? %>
+            <%= render BadgeComponent.new(variant: :primary, size: :sm) do %>
+              <%= t("comp_misc.entity_info.bridge") %>
+            <% end %>
+          <% else %>
+            <%= render BadgeComponent.new(variant: :default, size: :sm) do %>
+              <%= t("comp_misc.entity_info.standard") %>
+            <% end %>
+          <% end %>
+        </dd>
+      </div>
+    </div>
+
+    <% if (model = base_model) %>
+      <div>
+        <dt class="text-caption text-text-muted"><%= t("comp_misc.entity_info.extends") %></dt>
+        <dd class="mt-0.5 text-sm text-text-primary" data-role="base-model">
+          <%= model[:label] %>
+          <% if model[:module_key] %>
+            <span class="text-text-muted">(<%= model[:module_key] %>)</span>
+          <% end %>
+        </dd>
+      </div>
+    <% end %>
+
+    <div>
+      <dt class="text-caption text-text-muted"><%= t("comp_misc.entity_info.referenced_template") %></dt>
+      <% if ref_data && ref_data[:name] %>
+        <dd class="mt-0.5">
+          <%= link_to ref_data[:name],
+              helpers.admin_maintenance_entity_template_preview_path(customer_id, entity),
+              target: "_blank",
+              rel: "noopener noreferrer",
+              class: "text-sm text-accent hover:underline" %>
+          <% if ref_data[:description].present? %>
+            <p class="mt-0.5 text-caption text-text-muted"><%= ref_data[:description] %></p>
+          <% end %>
+        </dd>
+      <% elsif entity.referenced_template.present? %>
+        <dd class="mt-0.5 text-sm text-text-secondary"><%= entity.referenced_template.truncate(80) %></dd>
+      <% else %>
+        <dd class="mt-0.5 text-sm text-text-muted"><%= t("common.labels.none") %></dd>
+      <% end %>
+    </div>
+
+    <% if entity.description.present? %>
+      <div>
+        <dt class="text-caption text-text-muted"><%= t("common.labels.description") %></dt>
+        <dd class="mt-0.5 text-sm text-text-primary"><%= entity.description %></dd>
+      </div>
+    <% end %>
+
+    <div class="pt-3 border-t border-border-subtle grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div>
+        <dt class="text-caption text-text-muted"><%= t("common.labels.created_at") %></dt>
+        <dd class="mt-0.5 text-sm text-text-secondary"><%= helpers.format_datetime(entity.created_at) %></dd>
+      </div>
+      <div>
+        <dt class="text-caption text-text-muted"><%= t("comp_misc.entity_info.last_updated") %></dt>
+        <dd class="mt-0.5 text-sm text-text-secondary"><%= helpers.format_datetime(entity.updated_at) %></dd>
+      </div>
+    </div>
+  </dl>
+</div>

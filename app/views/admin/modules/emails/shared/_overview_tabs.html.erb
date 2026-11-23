@@ -1,0 +1,10 @@
+<%# app/views/admin/modules/emails/shared/_overview_tabs.html.erb %>
+<%
+  tabs = [
+    { label: t("feature_modules.email.tabs.dashboard"), path: admin_modules_emails_dashboard_path(current_customer.id), active: active_tab == :dashboard },
+    { label: t("feature_modules.email.tabs.reports"), path: admin_modules_emails_reports_path(current_customer.id), active: active_tab == :reports },
+    { label: t("feature_modules.email.tabs.deliverability"), path: admin_modules_emails_deliverability_index_path(current_customer.id), active: active_tab == :deliverability },
+    { label: t("feature_modules.email.tabs.engagement"), path: admin_modules_emails_engagement_index_path(current_customer.id), active: active_tab == :engagement }
+  ]
+%>
+<%= render Emails::TabsComponent.new(tabs: tabs) %>

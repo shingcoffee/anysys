@@ -1,0 +1,28 @@
+<% detail_path = admin_entity_entry_path(current_customer.id, @entity, @entry, anchor: Admin::Entities::AssociationSectionComponent.section_id(@association)) %>
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("admin_misc.domains.breadcrumb"), path: admin_domains_path(current_customer.id) },
+    { label: @entity.display_label, path: admin_entity_path(current_customer.id, @entity) },
+    { label: t("admin_misc.entities.entry_detail.title", id: @entry.id), path: detail_path },
+    { label: t("admin_misc.entities.association_entries.new_title", name: @association.label) }
+  ],
+  title: t("admin_misc.entities.association_entries.new_title", name: @association.label),
+  description: t("admin_misc.entities.association_entries.new_description", entity: @entity.display_label, id: @entry.id, name: @association.label),
+  icon_path: attribute_group_icon_path(@association.target.icon),
+  icon_class: "#{attribute_group_color_classes(@association.target.color.presence || 'slate', variant: :bar)} text-white",
+  wrap_title: true
+) do %>
+  <div class="card overflow-x-auto">
+    <div class="p-4 sm:p-6">
+      <div class="mx-auto max-w-4xl rounded-lg bg-surface p-4 shadow-lg sm:p-8">
+        <%= render Admin::Entities::AssociationEntriesFormComponent.new(
+          forms: @forms,
+          template_form: @template_form,
+          url: admin_entity_entry_association_entries_path(current_customer.id, @entity, @entry, @association.id),
+          cancel_path: detail_path,
+          errors: @errors || {}
+        ) %>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,171 @@
+<% builder_data = {
+     controller: "website-builder",
+     action: builder_actions,
+     website_builder_delete_confirm_value: t("website.admin.pages.edit.delete_section_confirm"),
+     website_builder_set_home_confirm_value: t("website.admin.pages.form.set_home_confirm"),
+     website_builder_structure_locked_value: structure_locked?,
+     website_builder_expand_all_value: t("website.admin.pages.edit.expand_all"),
+     website_builder_collapse_all_value: t("website.admin.pages.edit.collapse_all"),
+     website_builder_char_count_format_value: t("website.admin.pages.form.char_count_template"),
+     website_builder_reset_confirm_value: t("website.admin.pages.edit.reset_section_confirm"),
+     website_builder_upload_url_value: upload_url,
+     website_builder_upload_failed_value: t("website.errors.image_upload_failed"),
+     website_builder_uploading_value: t("website.admin.pages.form.image_uploading"),
+     website_builder_item_label_format_value: t("website.admin.pages.form.item_label_format"),
+     website_builder_item_action_format_value: t("website.admin.pages.form.item_action_format"),
+     website_builder_item_actions_value: {
+       up: t("website.admin.pages.index.move_up"), down: t("website.admin.pages.index.move_down"),
+       duplicate: t("website.admin.pages.edit.duplicate_item"), remove: t("common.actions.remove")
+     }.to_json,
+     website_builder_array_limit_format_value: t("website.admin.pages.form.array_limit_format"),
+     website_builder_image_load_failed_value: t("website.admin.pages.form.image_load_failed")
+   }.compact %>
+<% if embedded? %>
+<%= content_tag :div, class: "flex flex-col gap-4", data: builder_data do %>
+  <%= hidden_field_tag json_name, sections_json, data: { website_builder_target: "json" } %>
+  <%= render Websites::Admin::ComposerSectionsComponent.new(composer: self) %>
+<% end %>
+<% else %>
+<%= form_with url: form_url,
+              method: http_method,
+              scope: form_scope,
+              id: form_id,
+              class: form_class,
+              data: builder_data.merge(website_workspace: workspace? || nil).compact do |f| %>
+    <%= f.hidden_field :sections_json, value: sections_json, data: { website_builder_target: "json" } %>
+    <% if selected_layout_key.present? && !identity_only? && !layout_kind? %>
+      <%= f.hidden_field :layout_key, value: selected_layout_key %>
+    <% end %>
+
+  <% if errors_message.present? %>
+    <div class="<%= workspace? ? "px-4 pt-4 lg:px-6" : "" %>">
+      <%= render AlertComponent.new(message: errors_message, type: :error) %>
+    </div>
+  <% end %>
+
+  <% if identity_only? %>
+    <%= render Websites::Admin::NewPageComponent.new(composer: self, form: f) %>
+  <% else %>
+  <div class="<%= shell_class %>">
+    <% if workspace? %>
+      <div class="flex shrink-0 flex-wrap items-center gap-2 border-b border-border-subtle bg-surface px-5 py-2 sm:px-6 xl:hidden">
+        <div class="inline-flex rounded-lg bg-canvas p-0.5 ring-1 ring-border-subtle" role="tablist" aria-label="<%= t("website.admin.pages.edit.workspace_panes") %>">
+          <button type="button"
+                  id="website-workspace-tab-editor"
+                  role="tab"
+                  aria-controls="website-workspace-panel-editor"
+                  aria-selected="true"
+                  tabindex="0"
+                  data-website-builder-target="paneBtn"
+                  data-pane="editor"
+                  data-action="click->website-builder#setWorkspacePane keydown->website-builder#navigatePaneTabs"
+                  aria-pressed="true"
+                  class="<%= pane_btn_class %>">
+            <%= t("website.admin.pages.edit.workspace_edit") %>
+          </button>
+          <button type="button"
+                  id="website-workspace-tab-preview"
+                  role="tab"
+                  aria-controls="website-workspace-panel-preview"
+                  aria-selected="false"
+                  tabindex="-1"
+                  data-website-builder-target="paneBtn"
+                  data-pane="preview"
+                  data-action="click->website-builder#setWorkspacePane keydown->website-builder#navigatePaneTabs"
+                  aria-pressed="false"
+                  class="<%= pane_btn_class %>">
+            <%= t("website.admin.pages.edit.preview_label") %>
+          </button>
+        </div>
+        <%= render BadgeComponent.new(variant: :warning, size: :sm, class: "hidden", data: { website_builder_target: "unsaved" }) do %>
+          <%= t("website.admin.pages.edit.unsaved") %>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="<%= editor_pane_class %>" data-website-builder-target="editorPane"
+         <% if workspace? %>id="website-workspace-panel-editor" role="tabpanel" aria-labelledby="website-workspace-tab-editor"<% end %>>
+      <% if workspace? && show_sections? %>
+        <%= render Websites::Admin::ComposerSectionsComponent.new(composer: self) do |sections| %>
+          <% if show_identity? %>
+            <% sections.with_inspector_header do %>
+              <%= render Websites::Admin::PageIdentityComponent.new(composer: self, form: f) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <% if show_identity? %>
+          <%= render Websites::Admin::PageIdentityComponent.new(composer: self, form: f) %>
+        <% end %>
+        <% if show_sections? %>
+          <%= render Websites::Admin::ComposerSectionsComponent.new(composer: self) %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <% if show_preview? %>
+    <aside class="<%= preview_pane_class %>" data-website-builder-target="previewPane"
+           <% if workspace? %>id="website-workspace-panel-preview" role="tabpanel" aria-labelledby="website-workspace-tab-preview"<% end %>>
+      <div class="flex min-h-11 min-w-0 shrink-0 items-center gap-2 px-4 py-2">
+        <h2 class="<%= visually_hidden_class %>"><%= t("website.admin.pages.edit.preview_label") %></h2>
+        <p class="min-w-0 truncate font-mono text-xs text-text-tertiary" data-preview-address><%= preview_address %></p>
+        <%= render BadgeComponent.new(variant: :warning, size: :sm, class: "hidden", data: { website_builder_target: "unsaved" }) do %>
+          <%= t("website.admin.pages.edit.unsaved") %>
+        <% end %>
+        <% if preview? %>
+          <div class="ml-auto inline-flex rounded-lg bg-canvas-elevated p-0.5 ring-1 ring-border-subtle" role="group" aria-label="<%= t("website.admin.pages.edit.preview_viewport") %>">
+            <% preview_viewports.each do |viewport| %>
+              <button type="button"
+                      data-website-builder-target="viewportBtn"
+                      data-viewport="<%= viewport %>"
+                      data-action="click->website-builder#setPreviewViewport"
+                      aria-pressed="<%= viewport == "desktop" %>"
+                      aria-label="<%= t("website.admin.pages.edit.preview_#{viewport}") %>"
+                      class="<%= viewport_btn_class %>">
+                <% if viewport == "desktop" %>
+                  <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25h6M4.5 6.75A.75.75 0 015.25 6h13.5a.75.75 0 01.75.75v8.25a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V6.75z"/>
+                  </svg>
+                <% elsif viewport == "tablet" %>
+                  <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5h7.5A1.5 1.5 0 0117.25 6v12a1.5 1.5 0 01-1.5 1.5h-7.5A1.5 1.5 0 016.75 18V6A1.5 1.5 0 018.25 4.5zM12 17.25h.008v.008H12v-.008z"/>
+                  </svg>
+                <% else %>
+                  <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 3.75h6A1.5 1.5 0 0116.5 5.25v13.5A1.5 1.5 0 0115 20.25H9a1.5 1.5 0 01-1.5-1.5V5.25A1.5 1.5 0 019 3.75zM12 16.5h.008v.008H12V16.5z"/>
+                  </svg>
+                <% end %>
+                <span class="<%= visually_hidden_class %>"><%= t("website.admin.pages.edit.preview_#{viewport}") %></span>
+              </button>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+      <% if preview? %>
+        <div class="flex h-full min-h-0 flex-1 flex-col overflow-hidden px-4 pb-4 sm:px-6 sm:pb-6">
+          <div data-website-builder-target="previewStage"
+               data-viewport="desktop"
+               class="relative mx-auto flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden rounded-xl bg-white shadow-xs ring-1 ring-border-subtle">
+            <iframe data-website-builder-target="previewFrame"
+                    data-action="load->website-builder#previewLoaded"
+                    data-preview-src="<%= preview_url %>"
+                    data-draft-url="<%= preview_url %>"
+                    src="<%= preview_url %>"
+                    title="<%= t("website.admin.pages.edit.preview_label") %>"
+                    class="h-full w-full flex-1 bg-white <%= workspace? ? "min-h-0" : "min-h-[22rem] xl:min-h-[44rem]" %>"></iframe>
+            <div data-website-builder-target="previewLoading"
+                 class="hidden absolute inset-0 flex items-center justify-center bg-surface/80 text-sm text-text-tertiary">
+              <%= t("website.admin.pages.edit.preview_loading") %>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="m-4 flex min-h-[32rem] items-center justify-center rounded-lg border border-dashed border-border-subtle bg-surface text-sm text-text-tertiary xl:min-h-[44rem]">
+          <%= t("website.admin.pages.edit.preview_label") %>
+        </div>
+      <% end %>
+    </aside>
+    <% end %>
+  </div>
+  <% end %>
+<% end %>
+<% end %>

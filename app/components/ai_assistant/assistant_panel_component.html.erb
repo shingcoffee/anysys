@@ -1,0 +1,265 @@
+<%= tag.section(
+      class: "flex min-h-0 flex-1 flex-col overflow-hidden bg-surface",
+      aria: { labelledby: "ai-assistant-title" },
+      data: stimulus_data
+    ) do %>
+  <%# Thread traffic for this conversation. %>
+  <%= helpers.turbo_stream_from stream_name %>
+  <%# Mic transcripts and the chat sidebar, which outlive any one thread. %>
+  <%= helpers.turbo_stream_from user_stream_name %>
+
+  <header class="flex shrink-0 items-center gap-2 border-b border-border-subtle bg-surface px-4 py-2 sm:px-5">
+    <h2 id="ai-assistant-title" class="sr-only"><%= t("ai_assistant.assistant.title") %></h2>
+    <div id="<%= AiAssistant::Stream::STATUS_ID %>" class="flex min-w-0 flex-1 items-center" role="status" aria-live="polite"></div>
+    <% if regeneratable? %>
+      <%= render ButtonComponent.new(
+            variant: :ghost,
+            size: :sm,
+            type: :button,
+            class: "shrink-0 gap-1.5 text-text-muted",
+            title: t("ai_assistant.assistant.regenerate"),
+            data: { action: "click->ai-assistant#regenerate", "ai-assistant-target": "regenerateButton" }
+          ) do %>
+        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992V4.356m-4.992 4.992l3.181-3.183a8.25 8.25 0 00-13.803 3.7M4.031 9.865v4.99h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7" />
+        </svg>
+        <span class="hidden sm:inline"><%= t("ai_assistant.assistant.regenerate") %></span>
+        <span class="sr-only sm:hidden"><%= t("ai_assistant.assistant.regenerate") %></span>
+      <% end %>
+    <% end %>
+  </header>
+
+  <div class="relative min-h-0 flex-1">
+    <div class="h-full overflow-y-auto px-4 py-6 sm:px-6"
+         data-ai-assistant-target="thread"
+         <%# The gesture, not the scroll it produces: `scroll` is coalesced to
+             about one event a frame, so a fast stream can snap the viewport
+             back down before the reader's scroll is ever seen. %>
+         data-action="scroll->ai-assistant#threadScrolled wheel->ai-assistant#userScrolled touchstart->ai-assistant#userScrolled touchmove->ai-assistant#userScrolled">
+      <% if empty? %>
+        <div id="<%= AiAssistant::Stream::EMPTY_ID %>"
+             class="mx-auto flex min-h-full w-full max-w-2xl flex-col items-center justify-center px-1 py-4 text-center">
+          <span class="mb-4 flex size-12 items-center justify-center rounded-2xl bg-accent-subtle text-accent ring-1 ring-accent-muted/30" aria-hidden="true">
+            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
+            </svg>
+          </span>
+          <%# h3, not h1: the panel's own h2 sits above it in document order. %>
+          <h3 class="text-xl font-semibold tracking-tight text-text-primary sm:text-2xl"><%= greeting %></h3>
+          <p class="mt-2 max-w-md text-body-sm text-text-muted"><%= t("ai_assistant.assistant.how") %></p>
+
+          <p class="mt-6 text-label"><%= t("ai_assistant.assistant.try") %></p>
+          <%# The card count varies with flowchart visibility and the Website
+              module, so an odd trailing card spans the row instead of
+              leaving a hole beside it. %>
+          <div class="mt-2.5 grid w-full grid-cols-1 gap-2.5 sm:grid-cols-2">
+            <% prompt_cards.each do |card| %>
+              <button type="button"
+                      class="group flex items-start gap-3 rounded-2xl bg-canvas p-3.5 text-left shadow-xs sm:odd:last:col-span-2 ring-1 ring-border-subtle transition-base hover:bg-surface hover:shadow-md hover:ring-accent-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      data-prompt="<%= card.prompt %>"
+                      data-action="click->ai-assistant#usePrompt">
+                <span class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-surface text-text-tertiary transition-base group-hover:bg-accent-subtle group-hover:text-accent" aria-hidden="true">
+                  <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="<%= card.icon %>" />
+                  </svg>
+                </span>
+                <span class="min-w-0">
+                  <span class="block text-xs font-semibold uppercase tracking-[0.06em] text-text-tertiary transition-base group-hover:text-accent-text"><%= card.label %></span>
+                  <span class="mt-1 block text-sm leading-snug text-text-secondary"><%= card.prompt %></span>
+                </span>
+              </button>
+            <% end %>
+          </div>
+
+          <% if recent_chips.any? %>
+            <p class="mt-6 text-label"><%= t("ai_assistant.assistant.recent") %></p>
+            <div class="mt-2.5 flex w-full flex-wrap gap-2">
+              <% recent_chips.each do |chip| %>
+                <button type="button"
+                        class="min-h-9 rounded-full bg-surface px-3.5 py-1.5 text-left text-sm text-text-secondary ring-1 ring-border-subtle transition-base hover:bg-accent-subtle hover:text-accent hover:ring-accent-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent pointer-coarse:min-h-11"
+                        data-prompt="<%= chip.prompt %>"
+                        data-action="click->ai-assistant#usePrompt">
+                  <%= chip.label %>
+                </button>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="mx-auto flex w-full max-w-3xl flex-col gap-4 py-1">
+        <%# Only the turn list is a live region: announcing the whole scroll
+            container would re-read the starter prompts on every change. %>
+        <div id="<%= AiAssistant::Stream::THREAD_ID %>"
+             class="flex flex-col gap-4"
+             role="log"
+             aria-live="polite"
+             <%# additions only: an arriving turn is the announcement, and
+                 "text" would re-read a bubble whenever its contents are
+                 rewritten in place. %>
+             aria-relevant="additions"
+             aria-label="<%= t("ai_assistant.assistant.title") %>">
+          <% messages.each do |message| %>
+            <%# Only the newest pending proposal keeps its Apply button; an
+                older one renders read-only. %>
+            <%= render AiAssistant::MessageComponent.new(
+                  message: message,
+                  proposal_active: proposal_active?(message),
+                  questions_active: questions_active?(message)
+                ) %>
+          <% end %>
+        </div>
+        <%# Replaced by Stream.broadcast_draft_open while a turn is running. %>
+        <div id="<%= draft_id %>"></div>
+      </div>
+    </div>
+
+    <%# Offered instead of yanking the viewport when the reader has scrolled up. %>
+    <div class="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center">
+      <%= render ButtonComponent.new(
+            variant: :secondary,
+            size: :sm,
+            type: :button,
+            class: "pointer-events-auto hidden gap-1.5 !rounded-full shadow-float",
+            data: { action: "click->ai-assistant#jumpToLatest", "ai-assistant-target": "jumpButton" }
+          ) do %>
+        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
+        </svg>
+        <%= t("ai_assistant.assistant.jump_to_latest") %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="shrink-0 border-t border-border-subtle bg-canvas px-4 pb-4 pt-3 sm:px-6">
+    <div class="mx-auto w-full max-w-3xl">
+      <%# Its own label, not the attach button's: reusing that string would put
+          "Attach image" on the page even for a vendor with no image support. %>
+      <ul class="mb-2 flex flex-wrap gap-2"
+          data-ai-assistant-target="previews"
+          aria-label="<%= t("ai_assistant.assistant.attachments_list") %>"></ul>
+      <p id="<%= error_id %>"
+         class="mb-2 hidden text-caption text-danger"
+         data-ai-assistant-target="error"
+         <%# Polite by default — attachment validation and refusals must not cut
+             across a reply that is still arriving. The controller raises this
+             to assertive for the one failure that cannot wait, a lost
+             connection. %>
+         role="alert"
+         aria-live="polite"></p>
+
+      <div class="relative rounded-2xl bg-surface shadow-elevated ring-1 ring-border-subtle transition-base focus-within:ring-2 focus-within:ring-accent-muted">
+        <%# Suppressed on the whole menu, not just its rows: the padding and the
+            scrollbar are part of it too, and letting mousedown through there
+            blurs the composer and closes the menu mid-drag. %>
+        <div class="absolute bottom-full left-0 z-20 mb-2 hidden w-full overflow-hidden rounded-xl bg-surface shadow-float ring-1 ring-border-subtle"
+             data-ai-assistant-target="mentionMenu"
+             data-action="mousedown->ai-assistant#preventBlur pointerdown->ai-assistant#preventBlur"
+             id="<%= mention_menu_id %>"
+             role="listbox"
+             aria-label="<%= mention_hint %>">
+          <ul class="max-h-60 overflow-y-auto py-1" data-ai-assistant-target="mentionList" role="presentation"></ul>
+        </div>
+        <%= render SpeechToText::DictateFieldComponent.new(field_id: composer_id, layout: :composer,
+              destination: SpeechToText::Clip::DESTINATION_ASSISTANT, conversation_id: conversation_id) do |field| %>
+          <label class="sr-only" for="<%= composer_id %>"><%= t("ai_assistant.assistant.placeholder") %></label>
+          <%# role="combobox" is what makes aria-expanded / aria-controls /
+              aria-activedescendant valid on this element. %>
+          <textarea id="<%= composer_id %>"
+                    rows="1"
+                    role="combobox"
+                    aria-describedby="<%= hint_id %> <%= error_id %>"
+                    aria-controls="<%= mention_menu_id %>"
+                    aria-expanded="false"
+                    aria-autocomplete="list"
+                    aria-haspopup="listbox"
+                    <%= "disabled" if turns_exhausted? %>
+                    data-speech-to-text-target="field"
+                    data-ai-assistant-target="composer"
+                    data-action="keydown->ai-assistant#keydown input->ai-assistant#compose compositionend->ai-assistant#compose blur->ai-assistant#closeMentions"
+                    class="w-full max-h-40 min-h-11 resize-none border-0 bg-transparent px-4 pt-3.5 pb-1 text-sm leading-6 text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60"
+                    placeholder="<%= composer_placeholder %>"></textarea>
+          <% field.with_trailing_actions do %>
+            <% if attachments_allowed? %>
+              <input type="file"
+                     class="sr-only"
+                     accept="<%= attachment_rules.accept %>"
+                     multiple
+                     data-ai-assistant-target="images"
+                     data-action="change->ai-assistant#pickImages">
+              <%= render ButtonComponent.new(
+                    variant: :ghost,
+                    size: :sm,
+                    type: :button,
+                    class: "size-9 shrink-0 !rounded-full !p-0 text-text-muted pointer-coarse:size-11",
+                    title: t("ai_assistant.assistant.attach"),
+                    "aria-label": t("ai_assistant.assistant.attach"),
+                    data: { action: "click->ai-assistant#attach" }
+                  ) do %>
+                <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 8.25l-10.94 10.94a1.5 1.5 0 01-2.121-2.121l8.932-8.931" />
+                </svg>
+                <span class="sr-only"><%= t("ai_assistant.assistant.attach") %></span>
+              <% end %>
+            <% end %>
+            <%= render ButtonComponent.new(
+                  variant: :primary,
+                  size: :sm,
+                  type: :button,
+                  disabled: turns_exhausted?,
+                  class: "size-9 shrink-0 !rounded-full !p-0 pointer-coarse:size-11 disabled:cursor-not-allowed disabled:opacity-50",
+                  title: t("ai_assistant.assistant.send"),
+                  "aria-label": t("ai_assistant.assistant.send"),
+                  data: { action: "click->ai-assistant#send", "ai-assistant-target": "sendButton" }
+                ) do %>
+              <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5m0 0l-6 6m6-6l6 6" />
+              </svg>
+              <span class="sr-only"><%= t("ai_assistant.assistant.send") %></span>
+            <% end %>
+            <%= render ButtonComponent.new(
+                  variant: :secondary,
+                  size: :sm,
+                  type: :button,
+                  class: "hidden size-9 shrink-0 !rounded-full !p-0 pointer-coarse:size-11",
+                  title: t("ai_assistant.assistant.stop"),
+                  "aria-label": t("ai_assistant.assistant.stop"),
+                  data: { action: "click->ai-assistant#stop", "ai-assistant-target": "stopButton" }
+                ) do %>
+              <svg class="size-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <rect x="6" y="6" width="12" height="12" rx="1.5" />
+              </svg>
+              <span class="sr-only"><%= t("ai_assistant.assistant.stop") %></span>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="mt-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+        <p id="<%= hint_id %>" class="text-caption text-text-muted">
+          <%= t("ai_assistant.assistant.composer_hint") %>
+          <span class="hidden sm:inline"><%= mention_hint %></span>
+        </p>
+        <div class="flex items-center gap-3">
+          <p class="text-caption text-text-tertiary <%= "hidden" if turns_hint.nil? %>"
+             data-ai-assistant-target="turnsHint"
+             role="status"
+             aria-live="polite"><%= turns_hint %></p>
+          <%# The only other way out of a spent thread is the chat list, which is
+              behind a disclosure below xl — so the advice is repeated here as a
+              control. The list owns the write; this just asks it for one. %>
+          <%= render ButtonComponent.new(
+                variant: :secondary,
+                size: :sm,
+                type: :button,
+                class: "shrink-0 #{"hidden" unless turns_exhausted?}",
+                data: { action: "click->ai-assistant#newChat", "ai-assistant-target": "newChatButton" }
+              ) do %>
+            <%= t("ai_assistant.assistant.start_new_chat") %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div id="<%= AiAssistant::Stream::RUNNING_ID %>" data-ai-assistant-target="runningFlag" data-running="false" hidden></div>
+  </div>
+<% end %>

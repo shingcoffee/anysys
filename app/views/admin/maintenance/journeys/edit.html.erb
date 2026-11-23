@@ -1,0 +1,3 @@
+<%= render Journeys::EditorComponent.new(journey: @journey, customer_id: current_customer_id, catalog: @catalog,
+                                          domains: @domains, errors: @errors || [], preview_path: @preview_path,
+                                          submitted_steps: @submitted_steps, submitted_start: @submitted_start, readiness: @readiness) %>

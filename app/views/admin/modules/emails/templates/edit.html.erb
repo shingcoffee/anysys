@@ -1,0 +1,26 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "email",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.email.entries.content"), path: admin_modules_emails_templates_path(current_customer_id) },
+        { label: t("feature_modules.email.tabs.templates"), path: admin_modules_emails_templates_path(current_customer_id) },
+        { label: @template.name }
+      ],
+      title: t("admin_modules.emails.templates.edit.title"),
+      actions: [
+        { label: t("common.actions.delete"),
+          path: admin_modules_emails_template_path(current_customer_id, @template),
+          variant: :danger,
+          data: { turbo_method: :delete, turbo_confirm: t("admin_modules.emails.templates.edit.delete_confirm") } },
+        { label: t("common.actions.cancel"), path: admin_modules_emails_templates_path(current_customer_id), variant: :secondary },
+        { label: t("admin_modules.emails.templates.form.update_submit"), form: Emails::TemplateEditorComponent::FORM_ID, variant: :primary }
+      ]
+    ) do %>
+  <%= render Emails::TemplateEditorComponent.new(
+        template: @template,
+        url: admin_modules_emails_template_path(current_customer_id, @template),
+        method: :patch,
+        customer_id: current_customer_id,
+        test_recipient: current_user&.email
+      ) %>
+<% end %>

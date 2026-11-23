@@ -1,0 +1,29 @@
+<%= render AdminPageComponent.new(
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules"), path: admin_modules_path(current_customer_id) },
+        { label: t("chrome.sidebar.pages.website"), path: admin_modules_website_root_path(current_customer_id) },
+        { label: t("website.admin.pages.new.title") }
+      ],
+      title: t("website.admin.pages.new.title"),
+      description: t("website.admin.pages.new.description"),
+      actions: [
+        {
+          label: t("common.actions.cancel"),
+          path: admin_modules_website_root_path(current_customer_id),
+          variant: :secondary
+        },
+        {
+          label: t("common.actions.create"),
+          variant: :primary,
+          form: Websites::Admin::ComposerComponent::FORM_ID
+        }
+      ]
+    ) do %>
+    <%= render Websites::Admin::ComposerComponent.new(
+          page: @page,
+          form_url: admin_modules_website_pages_path(current_customer_id),
+          method: :post,
+          identity_only: true,
+          layouts: @layouts || Websites::Catalog.layouts
+        ) %>
+<% end %>

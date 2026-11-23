@@ -1,0 +1,157 @@
+<div data-controller="<%= catalog_root_controller %>" <% if has_methods? && has_providers? %>data-modal-dialog-open-value="<%= add_modal_open? %>"<% end %> class="flex min-w-0 flex-col gap-8 text-body">
+  <section id="billing-payment-methods" class="card min-w-0 overflow-hidden" aria-labelledby="billing-payment-methods-heading">
+    <header class="flex flex-col gap-3 border-b border-border-subtle px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <div class="min-w-0">
+        <h2 id="billing-payment-methods-heading" class="section-header"><%= t("settings_navigation.items.billing_payment_methods") %></h2>
+        <p class="mt-0.5 text-body-sm text-text-secondary"><%= t("settings_billing.payment_methods.saved_hint") %></p>
+      </div>
+      <% if has_methods? %>
+        <div class="flex shrink-0 flex-wrap items-center gap-2">
+          <%= link_to create_path, class: "btn btn-ghost btn-sm" do %>
+            <%= render Billing::Admin::IconComponent.new(name: :refresh, class_name: "size-4") %>
+            <%= t("settings_billing.payment_methods.refresh_status") %>
+          <% end %>
+          <% if has_providers? %>
+            <a href="#authorize-payment-method" data-action="click->modal-dialog#open:prevent" aria-haspopup="dialog" aria-controls="add-payment-method-dialog" class="btn btn-primary btn-sm">
+              <%= render Billing::Admin::IconComponent.new(name: :plus, class_name: "size-4") %>
+              <%= t("settings_billing.payment_methods.add") %>
+            </a>
+          <% end %>
+        </div>
+      <% end %>
+    </header>
+
+    <% method_row = ->(pm) { capture do %>
+      <% retry_auth = pm.status.in?(%w[failed removed]) && eligible_provider?(pm.provider) %>
+      <li data-payment-method-id="<%= pm.id %>" class="flex min-w-0 flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-6">
+        <div class="flex min-w-0 flex-1 items-start gap-4">
+          <span class="flex size-10 shrink-0 items-center justify-center rounded-lg <%= pm.status == 'active' ? provider_tile_class(pm.provider) : 'bg-surface-active text-text-muted' %>"><%= render Billing::Admin::IconComponent.new(name: :credit_card) %></span>
+          <div class="flex min-w-0 flex-1 flex-col gap-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <p class="font-medium text-text-primary"><%= humanized_provider(pm.provider) %></p>
+              <% if pm.is_default %>
+                <%= render BadgeComponent.new(variant: :primary, size: :sm) do %><%= t("comp_billing.payment_method.default_badge") %><% end %>
+              <% end %>
+              <% unless pm.status == "active" %>
+                <%= render BadgeComponent.new(variant: status_variant(pm.status), size: :sm) do %><%= status_label(pm.status) %><% end %>
+              <% end %>
+            </div>
+            <dl class="flex flex-wrap items-center gap-x-4 gap-y-0.5 text-body-sm">
+              <div class="flex min-w-0 items-center gap-1.5">
+                <dt class="text-text-tertiary"><%= t("comp_billing.payment_method.account") %></dt>
+                <dd class="break-all text-text-secondary"><%= pm.display_label.presence || t("common.labels.em_dash") %></dd>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <dt class="text-text-tertiary"><%= t("comp_billing.payment_method.authorized") %></dt>
+                <dd class="tabular-nums text-text-secondary"><%= formatted_authorized_at(pm) %></dd>
+              </div>
+            </dl>
+            <p class="flex items-start gap-1.5 text-caption <%= ready?(pm) ? 'text-success' : 'text-text-secondary' %>">
+              <%= render Billing::Admin::IconComponent.new(name: ready?(pm) ? :check_circle : :info, class_name: "mt-0.5 size-3.5") %>
+              <span><%= t(readiness_key(pm), currency: currency) %></span>
+            </p>
+            <% if pm.is_default %><p class="text-caption"><%= t("settings_billing.payment_methods.remove_default_hint") %></p><% end %>
+            <% if fact(pm, :revocation_state).to_s.in?(%w[pending failed]) %><p class="text-caption"><%= t("settings_billing.payment_methods.revocation_pending") %></p><% end %>
+          </div>
+        </div>
+        <% if actionable?(pm) || retry_auth %>
+          <div class="flex shrink-0 flex-wrap items-center gap-2 pl-14 sm:justify-end sm:pl-0">
+            <% if pm.status == "pending" %>
+              <%= link_to t("settings_billing.payment_methods.continue_authorization"), authorization_path(pm), class: "btn btn-primary btn-sm" %>
+            <% elsif retry_auth %>
+              <%= link_to t("settings_billing.payment_methods.retry_authorization"), "#authorize-payment-method", data: { action: "click->modal-dialog#open:prevent" }, class: "btn btn-secondary btn-sm" %>
+            <% end %>
+            <% if actionable?(pm) && !pm.is_default && ready?(pm) && fact(readiness(pm), :default_eligible) != false %>
+              <%= button_to t("comp_billing.payment_method.make_default"), make_default_path(pm), method: :patch, class: "btn btn-secondary btn-sm" %>
+            <% end %>
+            <% if actionable?(pm) %>
+              <%= button_to t("common.actions.remove"), destroy_path(pm), method: :delete,
+                            data: { payment_method_target: "removeButton", turbo_confirm: t("settings_billing.payment_methods.remove_confirm") }, class: "btn btn-ghost btn-sm text-danger hover:bg-danger-subtle hover:text-danger" %>
+            <% end %>
+          </div>
+        <% end %>
+      </li>
+    <% end } %>
+
+    <% if has_methods? %>
+      <% if active_methods.any? %>
+        <ul class="divide-y divide-border-subtle" role="list">
+          <% active_methods.each do |pm| %><%= method_row.call(pm) %><% end %>
+        </ul>
+      <% end %>
+      <% if inactive_methods.any? %>
+        <div class="<%= 'border-t border-border-subtle' if active_methods.any? %>">
+          <%= render Billing::Admin::DisclosureComponent.new(
+            id: "inactive-payment-methods",
+            title: t("settings_billing.payment_methods.other_methods"),
+            heading_tag: :h3,
+            heading_class: "text-body-sm font-medium text-text-secondary",
+            card: false,
+            bordered: false,
+            flush: true,
+            open: inactive_methods_open?
+          ) do |disclosure| %>
+            <% disclosure.with_summary do %>
+              <span class="rounded-full bg-surface-active px-2 py-0.5 text-caption font-medium tabular-nums text-text-secondary"><%= inactive_methods.size %></span>
+            <% end %>
+            <ul class="divide-y divide-border-subtle" role="list">
+              <% inactive_methods.each do |pm| %><%= method_row.call(pm) %><% end %>
+            </ul>
+          <% end %>
+        </div>
+      <% end %>
+      <% if no_ready_methods? %>
+        <div class="flex items-start gap-2 border-t border-warning/30 bg-warning-subtle px-5 py-3 text-body-sm text-text-primary sm:px-6" role="status">
+          <%= render Billing::Admin::IconComponent.new(name: :alert, class_name: "mt-0.5 size-4 text-warning") %>
+          <span><%= t("settings_billing.payment_methods.empty") %></span>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="flex flex-col items-center gap-4 px-6 py-12 text-center">
+        <span class="flex size-11 items-center justify-center rounded-full bg-surface-active text-text-secondary"><%= render Billing::Admin::IconComponent.new(name: :credit_card, class_name: "size-5") %></span>
+        <div class="flex max-w-md flex-col gap-1">
+          <% if has_providers? %>
+            <p class="font-medium text-text-primary"><%= t("settings_billing.payment_methods.all_empty") %></p>
+            <p class="text-body-sm text-text-secondary"><%= t("comp_billing.payment_method.empty_desc") %></p>
+          <% else %>
+            <p class="font-medium text-text-primary"><%= t("settings_billing.payment_methods.unavailable") %></p>
+            <p class="text-body-sm text-text-secondary"><%= t("comp_billing.payment_method.no_providers") %></p>
+          <% end %>
+        </div>
+        <% if has_providers? %>
+          <%= link_to "#authorize-payment-method", class: "btn btn-primary btn-sm" do %>
+            <%= render Billing::Admin::IconComponent.new(name: :plus, class_name: "size-4") %>
+            <%= t("settings_billing.payment_methods.add") %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+    <% if pagination %><div class="border-t border-border-subtle"><%= render ::Admin::PaginationComponent.new(pagination: pagination, page_path: page_path) %></div><% end %>
+  </section>
+
+  <% if has_providers? %>
+    <% authorization_body = capture do %>
+      <div class="flex flex-col gap-4">
+        <%= render Billing::Admin::PaymentAuthorizationComponent.new(available_providers: available_providers, provider_options: provider_options, currency: currency, authorization: authorization, request_key: request_key, customer_id: customer_id) %>
+        <p class="flex items-start gap-2 border-t border-border-subtle pt-4 text-caption">
+          <%= render Billing::Admin::IconComponent.new(name: :shield_check, class_name: "mt-0.5 size-4 text-success") %>
+          <span><%= t("comp_billing.payment_method.intro") %></span>
+        </p>
+      </div>
+    <% end %>
+    <% if has_methods? %>
+      <div id="authorize-payment-method">
+        <%= render ModalDialogComponent.new(id: "add-payment-method-dialog", title: t("comp_billing.payment_method.add_another"), description: t("settings_billing.payment_methods.authorization_hint")) do %>
+          <%= authorization_body %>
+        <% end %>
+      </div>
+    <% else %>
+      <%= render ::Admin::Settings::SectionComponent.new(
+        title: t("settings_billing.payment_methods.authorization"),
+        description: t("settings_billing.payment_methods.authorization_hint"), id: "authorize-payment-method"
+      ) do %>
+        <%= authorization_body %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

@@ -1,0 +1,19 @@
+<section class="border-y border-slate-200/70 bg-slate-50/70 py-12 lg:py-14">
+  <div class="<%= inner_measure_class %>">
+    <% if present_text?(prop('heading')) %><h2 class="text-center text-[14px] font-semibold uppercase tracking-[0.18em] text-slate-500"><%= prop('heading') %></h2><% end %>
+  </div>
+  <div class="relative mt-8 overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_12%,#000_88%,transparent)] motion-reduce:[mask-image:none]">
+    <div class="flex w-max gap-4 animate-marquee hover:[animation-play-state:paused] motion-reduce:w-full motion-reduce:animate-none motion-reduce:flex-wrap motion-reduce:justify-center">
+      <% 2.times do |run| %>
+        <ul class="flex shrink-0 gap-4 motion-reduce:w-full motion-reduce:shrink motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:px-5 <%= 'motion-reduce:hidden' if run.positive? %>" <% if run.positive? %>aria-hidden="true"<% end %>>
+          <% items.each_with_index do |item, index| %>
+            <li class="inline-flex items-center gap-3 whitespace-nowrap rounded-full border border-slate-200 bg-white px-5 py-3 text-[15px] font-semibold text-slate-700 shadow-sm">
+              <span class="<%= icon_tile_class(index, size: 'size-8') %> rounded-full shadow-md"><%= glyph(glyph_for(index), css_class: 'size-4') %></span>
+              <%= item['name'] %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</section>

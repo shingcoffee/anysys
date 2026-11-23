@@ -1,0 +1,6 @@
+<%= render Admin::Settings::PageComponent.new(customer_id: current_customer.id,
+  title: t("settings_navigation.items.roles_permissions"), description: t("settings_people.roles_description"),
+  actions: [{ label: t("admin_settings.authentication.roles.index.new_action"), path: new_admin_settings_modules_authentication_role_path(current_customer.id), variant: :primary, icon: :plus }]) do %>
+  <%= render Admin::Settings::Modules::Authentication::RolesTableComponent.new(rows: @rows, pagination: @pagination,
+    params: params.permit(:q, :sort, :dir, :page).to_h.symbolize_keys, customer: current_customer) %>
+<% end %>

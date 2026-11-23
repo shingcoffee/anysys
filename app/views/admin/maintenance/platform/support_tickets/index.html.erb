@@ -1,0 +1,22 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("maint_platform.support_tickets.breadcrumb.maintenance"), path: admin_maintenance_path(current_customer_id) },
+    { label: t("maint_platform.support_tickets.breadcrumb.support_tickets") }
+  ],
+  title: t("maint_platform.support_tickets.index.title"),
+  description: t("maint_platform.support_tickets.index.description")
+) do %>
+  <%= render AdminTableComponent.new(
+    rows:        @rows,
+    columns:     @columns,
+    pagination:  @pagination,
+    params:      params.permit(:q, :sort, :dir, :page, :status).to_h.symbolize_keys,
+    search:      { param: :q, placeholder: t("maint_platform.support_tickets.index.search_placeholder") },
+    filters:     @filters,
+    row_path:    ->(row) { admin_maintenance_platform_support_ticket_path(current_customer_id, row) },
+    empty_state: {
+      title: t("maint_platform.support_tickets.index.empty_title"),
+      description: t("maint_platform.support_tickets.index.empty_description")
+    }
+  ) %>
+<% end %>

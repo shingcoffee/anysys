@@ -1,0 +1,424 @@
+---
+en:
+  flowchart_actions:
+    string_manipulate:
+      label: String Manipulate
+      description: String manipulation operations
+      fields:
+        sourceVariable:
+          label: Source
+          help: Context path this step reads.
+          placeholder: e.g., text
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+          placeholder: e.g., text
+        operation:
+          label: Operation (single)
+          help: Single string operation to apply.
+          options:
+            split: split
+            join: join
+            strip: strip
+            pad_left: pad_left
+            pad_right: pad_right
+            truncate: truncate
+            upcase: upcase
+            downcase: downcase
+            capitalize: capitalize
+            camelize: camelize
+            underscore: underscore
+            reverse: reverse
+            replace: replace
+            gsub: gsub
+            unicode_normalize: unicode_normalize
+            html_escape: html_escape
+            html_unescape: html_unescape
+            base64_encode: base64_encode
+            base64_decode: base64_decode
+            squish: squish
+            titleize: titleize
+            parameterize: parameterize
+            transliterate: transliterate
+            mask_middle: mask_middle
+        operations:
+          label: Operations Pipeline
+          help: Ordered pipeline of string operations.
+          placeholder: "op -> arg (strip|upcase|downcase|capitalize|reverse|gsub:pat|repl|tr:from|to|truncate:N)"
+        regexEscape:
+          label: Regex Escape
+          help: Treat the gsub pattern as a literal string.
+        encoding:
+          label: Encoding
+          help: Force the source string into this encoding.
+          options:
+            utf8: utf8
+            ascii: ascii
+            latin1: latin1
+        delimiter:
+          label: Delimiter
+          help: Separator used by split and join.
+          placeholder: e.g., , (for split/join)
+        length:
+          label: Length
+          help: Pad or truncate length.
+          placeholder: e.g., 10 (pad/truncate length)
+        padChar:
+          label: Pad Char
+          help: Character used when padding.
+          placeholder: "e.g., ' ' (space)"
+        pattern:
+          label: Pattern
+          help: Search pattern for replace or gsub.
+          placeholder: "e.g., \\d+ (for replace/gsub)"
+        replacement:
+          label: Replacement
+          help: Replacement text for replace or gsub.
+          placeholder: e.g., X
+        urlSafe:
+          label: URL Safe
+          help: Use URL-safe Base64 alphabet.
+        stripPadding:
+          label: Strip Padding
+          help: Remove trailing Base64 padding.
+        inputEncoding:
+          label: Input Encoding
+          help: How to treat bytes before encoding.
+          options:
+            utf8: utf8
+            binary: binary
+        lineWidth:
+          label: Line Width
+          help: Wrap encoded output to this width (0 = none).
+          placeholder: "0 = single line; >0 to wrap (MIME-style)"
+      errors:
+        invalid_pipeline_op: "Invalid pipeline operation: %{name}"
+    regex_extract:
+      label: Regex Extract
+      description: Extract data using regex patterns
+      fields:
+        sourceVariable:
+          label: Source Variable
+          help: Context path this step reads.
+          placeholder: e.g., text
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+          placeholder: e.g., matches
+        pattern:
+          label: Pattern
+          help: Regular expression to apply.
+          placeholder: "e.g., (\\d+)"
+        operation:
+          label: Operation
+          help: Match, scan, test, or replace.
+          options:
+            match: match
+            scan: scan
+            test: test
+            replace: replace
+        flags:
+          label: Flags
+          help: Standard Ruby regexp flag.
+          options:
+            none: none
+            i: i
+            m: m
+            x: x
+        regexFlags:
+          label: Regex Flags
+          help: Combination of i, m, x, n.
+          placeholder: Combination of i, m, x, n
+        returnType:
+          label: Return Type
+          help: What to keep from the first match.
+          options:
+            first: first
+            all: all
+            named_hash: named_hash
+        captureGroup:
+          label: Capture Group
+          help: Group index (0 = whole match).
+          placeholder: e.g., 1 (0 = whole match)
+        replacement:
+          label: Replacement
+          help: Replacement text for replace.
+          placeholder: "e.g., [REDACTED]"
+        fallbackValue:
+          label: Fallback Value
+          help: "Ruby expression returned when no match (e.g., nil, {}, \"\")"
+          placeholder: "Ruby expression returned when no match (e.g., nil, {}, \"\")"
+      errors:
+        invalid_pattern: Invalid regex pattern
+    date_time_calc:
+      label: Date/Time Calc
+      description: Date and time calculations
+      fields:
+        operation:
+          label: Operation
+          help: Date/time calculation to perform.
+          options:
+            now: now
+            add: add
+            subtract: subtract
+            difference: difference
+            format: format
+            parse: parse
+            convert_timezone: convert_timezone
+            start_of: start_of
+            end_of: end_of
+            age: age
+            compare: compare
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+          placeholder: e.g., result
+        sourceVariable:
+          label: Source Variable
+          help: Context path holding the source time.
+          placeholder: e.g., start_date
+        endVariable:
+          label: End Variable
+          help: Context path holding the end time.
+          placeholder: e.g., end_date
+        amount:
+          label: Amount
+          help: How much to add or subtract.
+          placeholder: e.g., 30
+        unit:
+          label: Unit
+          help: Unit for add and subtract.
+          options:
+            seconds: seconds
+            minutes: minutes
+            hours: hours
+            days: days
+            weeks: weeks
+            months: months
+            years: years
+        formatString:
+          label: Format String
+          help: strftime pattern used by format.
+          placeholder: "e.g., %Y-%m-%d %H:%M"
+        inputFormat:
+          label: Input Format
+          help: "strftime pattern or 'iso'."
+          placeholder: "strftime pattern or 'iso'"
+        outputFormat:
+          label: Output Format
+          help: "strftime pattern or iso8601|rfc3339|unix|unix_ms"
+          placeholder: "strftime pattern or iso8601|rfc3339|unix|unix_ms"
+        businessDays:
+          label: Business Days Only
+          help: Skip weekends when adding or subtracting days.
+        timezoneAware:
+          label: Timezone Aware
+          help: Interpret times in a named zone.
+        timezone:
+          label: Timezone
+          help: IANA timezone name.
+          placeholder: e.g., Asia/Tokyo, UTC
+        dstPolicy:
+          label: DST Policy
+          help: How to shift across daylight-saving transitions.
+          options:
+            preserve_wall: preserve_wall
+            preserve_utc: preserve_utc
+        sourceTimezone:
+          label: Source Timezone
+          help: IANA identifier of the source clock.
+          placeholder: IANA identifier, e.g., UTC
+        targetTimezone:
+          label: Target Timezone
+          help: IANA identifier to convert into.
+          placeholder: IANA identifier, e.g., America/New_York
+        preserveLocalTime:
+          label: Preserve Local Time
+          help: Keep wall-clock fields and change the zone.
+        dstBehavior:
+          label: DST Behavior
+          help: How to resolve an ambiguous local time.
+          options:
+            raise_on_ambiguous: raise_on_ambiguous
+            prefer_earlier: prefer_earlier
+            prefer_later: prefer_later
+      errors:
+        invalid_format: "outputFormat must be a strftime pattern or one of: iso8601, rfc3339, unix, unix_ms"
+        invalid_timezone: "%{field} must be a valid IANA timezone"
+    math_operation:
+      label: Math Operation
+      description: Mathematical operations
+      fields:
+        operation:
+          label: Operation
+          help: Math operation to apply.
+          options:
+            add: add
+            subtract: subtract
+            multiply: multiply
+            divide: divide
+            modulo: modulo
+            power: power
+            min: min
+            max: max
+            abs: abs
+            floor: floor
+            ceil: ceil
+            round: round
+            sqrt: sqrt
+            random: random
+            percent: percent
+            clamp: clamp
+        sourceVariable:
+          label: Source
+          help: Context path this step reads.
+          placeholder: e.g., a
+        otherVariable:
+          label: Other
+          help: Second operand for binary operations.
+          placeholder: e.g., b
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+          placeholder: e.g., number
+        precision:
+          label: Precision
+          help: Decimal places
+          placeholder: Decimal places
+        roundingMode:
+          label: Rounding Mode
+          help: How the result is rounded when precision is set.
+          options:
+            half_up: half_up
+            half_even: half_even
+            floor: floor
+            ceiling: ceiling
+        divideByZero:
+          label: Divide By Zero
+          help: What to return when dividing by zero.
+          options:
+            raise: raise
+            nil: nil
+            zero: zero
+            infinity: infinity
+            nan: nan
+        minValue:
+          label: Min Value
+          help: Inclusive lower bound for random.
+        maxValue:
+          label: Max Value
+          help: Inclusive upper bound for random.
+      errors:
+        min_greater_than_max: "%{field} must be greater than or equal to the minimum"
+    serialize_data:
+      label: Serialize Data
+      description: Serialize data to format
+      fields:
+        sourceVariable:
+          label: Source Variable
+          help: Context path this step reads.
+          placeholder: e.g., data
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+          placeholder: e.g., serialized
+        format:
+          label: Format
+          help: Serialization format.
+          options:
+            json: json
+            xml: xml
+            yaml: yaml
+            msgpack: msgpack
+            csv: csv
+            toml: toml
+        pretty:
+          label: Pretty Print
+          help: Indent JSON output.
+        jsonMaxDepth:
+          label: JSON Max Depth
+          help: Maximum nesting (0 = default unlimited).
+          placeholder: 0 = default (unlimited)
+        includeRoot:
+          label: Include Root
+          help: Keep XML type attributes on the root.
+        rootElement:
+          label: Root Element
+          help: XML root element name.
+          placeholder: e.g., data
+        excludeNils:
+          label: Exclude Nils
+          help: Drop nil values before serializing.
+    parse_data:
+      label: Parse Data
+      description: Parse data from format
+      fields:
+        sourceVariable:
+          label: Source Variable
+          help: Context path this step reads.
+          placeholder: e.g., raw_data
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+          placeholder: e.g., data
+        format:
+          label: Format
+          help: Payload format to parse.
+          options:
+            json: json
+            csv: csv
+            xml: xml
+            yaml: yaml
+            toml: toml
+            properties: properties
+        csvHeaders:
+          label: CSV Headers
+          help: Treat the first row as column names.
+        csvDelimiter:
+          label: CSV Delimiter
+          help: Column separator.
+          placeholder: "e.g., , or ; or \\t"
+        quoteChar:
+          label: Quote Character
+          help: CSV quote character.
+          placeholder: e.g., " or '
+        skipRows:
+          label: Skip Rows
+          help: Skip first N rows
+          placeholder: Skip first N rows
+        encoding:
+          label: Encoding
+          help: Character encoding of the CSV text.
+          options:
+            utf_8: utf-8
+            utf_16: utf-16
+            ascii: ascii
+            iso_8859_1: iso-8859-1
+        colTypes:
+          label: Column Types
+          help: Cast named CSV columns.
+          placeholder: "column name -> string|integer|float|bool|date"
+        xmlRoot:
+          label: XML Root
+          help: Optional XML root key to unwrap.
+          placeholder: e.g., root (optional)
+        strictMode:
+          label: Strict Mode
+          help: Raise on parse error instead of failing the step.
+        symbolizeKeys:
+          label: Symbolize Keys
+          help: Convert hash keys to symbols.
+  flowchart_runtime:
+    errors:
+      string_manipulate:
+        failed: "Could not manipulate the string (%{reason})."
+      regex_extract:
+        failed: "Could not apply the regular expression (%{reason})."
+      date_time_calc:
+        failed: "Could not calculate the date or time (%{reason})."
+      math_operation:
+        failed: "Could not complete the math operation (%{reason})."
+      serialize_data:
+        failed: "Could not serialize the data (%{reason})."
+      parse_data:
+        failed: "Could not parse the data (%{reason})."

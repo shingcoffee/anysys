@@ -1,0 +1,87 @@
+zh-CN:
+  billing_mailer:
+    collection_blocked:
+      subject: "发票 %{number} 收款受阻"
+      body: "发票 %{number} 需要支持计费币种的可用付款方式。请查看收款状态：%{url}"
+    collection_exhausted:
+      subject: "发票 %{number} 自动重试已结束"
+      body: "发票 %{number} 的自动收款重试已结束。请查看经授权的恢复选项：%{url}"
+    collection_authorized:
+      subject: "发票 %{number} 收款授权已变更"
+      body: "平台所有者已变更发票 %{number} 的收款授权，已出具的财务条款不变。请查看发票：%{url}"
+    settlement_review:
+      subject: "发票 %{number} 需要核对结算"
+      body: "已记录发票 %{number} 的付款，其对关联订阅权益的影响需由平台核对。请检查发票和付款记录：%{url}"
+    shell:
+      brand: "Anysys"
+      footer: "此邮件由 Anysys 发送。这是一封账单通知，请勿直接回复。"
+
+    invoice_issued:
+      subject: "发票 %{number} 已开具 — %{amount}"
+      preheader: "发票 %{number} 已开具，请查收。"
+      heading: "发票"
+      title: "您的发票已就绪"
+      intro: "已向您的 Anysys 账户开具下方发票，请于到期日之前完成付款。"
+      label_invoice_number: "发票编号"
+      label_plan: "套餐"
+      label_period: "周期"
+      label_amount_due: "应付金额"
+      label_due_date: "到期日"
+      outro: "请登录账户查看明细并下载发票副本。"
+
+    payment_succeeded:
+      subject: "已收到发票 %{number} 的付款"
+      preheader: "已收到发票 %{number} 的付款。"
+      heading: "付款成功"
+      title: "付款已入账"
+      intro: "您的付款已应用于下方发票。"
+      label_invoice_number: "发票编号"
+      label_amount_paid: "已付金额"
+      label_paid_at: "付款时间"
+      outro: "收据已保存在您的账户中。"
+
+    payment_failed:
+      subject: "发票 %{number} 付款失败 — 第 %{attempt} 次尝试"
+      preheader: "发票 %{number} 扣款未成功。"
+      heading: "付款失败"
+      title: "此次扣款未能完成"
+      intro: "本次扣款未成功。请及时更新付款方式，以免服务中断。"
+      label_invoice_number: "发票编号"
+      label_amount_due: "应付金额"
+      label_attempt: "收款失败次数"
+      label_next_attempt: "下次尝试"
+      next_attempt_scheduled: "已安排"
+      outro: "请检查账单收款状态和付款方式。更新付款方式不会自动结清账单。"
+
+    trial_ending:
+      price: "%{amount} %{currency} / %{interval}"
+      subject: "您的试用将于 %{date} 结束"
+      preheader: "免费试用将于 %{date} 结束。"
+      heading: "试用即将结束"
+      title: "试用即将到期"
+      intro: "试用结束后，除非您先行取消，否则订阅将按常规费率继续。"
+      label_plan: "套餐"
+      label_trial_ends: "试用结束"
+      label_price_after_trial: "试用后价格"
+      outro: "请登录以在试用结束前管理或取消订阅。"
+
+    subscription_cancelled:
+      subject: "订阅已取消"
+      preheader: "您的 Anysys 订阅已取消。"
+      heading: "订阅已取消"
+      title: "此订阅已取消"
+      intro: "下方服务结束日期为订阅记录的结束时间。取消不会免除未结清账单或退还已收款项；付费权益结束后适用免费套餐的有限额度。"
+      label_plan: "套餐"
+      label_cancelled_at: "取消时间"
+      label_service_ends: "服务结束"
+      outro: "如非本人操作，请登录并联系支持团队。"
+
+    subscription_past_due:
+      subject: "订阅付款逾期 — 需要处理"
+      preheader: "订阅付款已逾期，请尽快处理。"
+      heading: "付款逾期"
+      title: "此订阅需要处理"
+      intro: "付款已逾期。请尽快更新付款方式，以保持服务正常。"
+      label_plan: "套餐"
+      label_status: "状态"
+      outro: "已购买权益按保存的宽限期规则执行，之后适用免费套餐的有限额度；现有记录仍可查看。"

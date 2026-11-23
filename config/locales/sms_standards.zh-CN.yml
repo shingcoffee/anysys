@@ -1,0 +1,15 @@
+zh-CN:
+  sms_standards:
+    validation:
+      phone: "请输入有效的电话号码；国际号码须以 + 或 00 开头"
+      template_key: "须为小写字母、数字或下划线组成的字符串，且不超过 %{limit} 字节"
+      idempotency_key: "须为字符串，且不超过 %{limit} 字节"
+      vars: "须为对象，最多包含 %{count_limit} 个不重复的字符串键；值须为非空字符串或有限数值，单值不超过 %{value_limit} 字节，JSON 总大小不超过 %{total_limit} 字节"
+    errors:
+      malformed_response: "短信服务商返回无效响应，无法确认是否受理"
+      query_failed: "短信状态查询失败"
+      invalid_signature: "Twilio 回调签名无效"
+      invalid_receipt: "短信回执格式无效"
+      invalid_phone: "电话号码无效"
+      invalid_text: "短信正文须为有效的 UTF-8 字符串"
+      invalid_segment_limits: "短信分段容量须为不小于 2 的正整数"

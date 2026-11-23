@@ -1,0 +1,31 @@
+en:
+  website:
+    platform:
+      preview:
+        badge: "Preview"
+        back: "Back to catalog"
+        pages: "Preview pages"
+        open: "Preview"
+      catalog:
+        filter:
+          all: "All"
+          category: "Category"
+          family: "Family"
+          count: "%{count}"
+        families:
+          standalone: "Standalone"
+        chips:
+          pages: "%{count} pages"
+          sections: "%{count} sections"
+          more: "+%{count}"
+        empty:
+          layouts_title: "No layouts"
+          layouts_description: "No layouts match this family. Try another filter or create a new layout."
+          skeletons_title: "No skeletons"
+          skeletons_description: "No skeletons match this category. Try another filter."
+        back: "Back to catalog"
+        theme:
+          swatches: "Theme"
+      skeletons:
+        form:
+          page_index: "Page %{index}"

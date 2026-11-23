@@ -1,0 +1,22 @@
+en:
+  code_generator_validation:
+    invalid_configuration: "Invalid generator configuration: %{errors}"
+    field:
+      required: "%{name} is required"
+      one_of: "%{name} must be one of: %{allowed}"
+      min: "%{name} must be >= %{min}"
+      max: "%{name} must be <= %{max}"
+      invalid: "%{name} is invalid"
+    loop_topology:
+      message: "%{element_id}: %{reason} (%{invalid})"
+      loop_requires_body_and_exit: "Loop requires one body path and one exit"
+      loop_body_empty: "Loop body is empty"
+      loop_body_escape: "Loop body escapes to the exit or does not return to the header"
+      nested_loop: "Nested loops are not supported"
+      loop_body_external_entry: "Loop body cannot be entered from outside the loop"
+      overlapping_loops: "Loop regions cannot overlap"
+    download:
+      url_or_variable_required: "Either url or urlVariable is required"
+      non_negative_integer: "%{field} must be a non-negative integer"
+      max_size_chunked: "maxSizeBytes is required when chunked is true"
+      invalid_checksum: "validateChecksum must be a hex digest or '<algo>:<hex>' where algo is sha256 or md5"

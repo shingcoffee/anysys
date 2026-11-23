@@ -1,0 +1,82 @@
+en:
+  flowchart_actions:
+    shared:
+      none: None
+    categories:
+      model: Records
+      validation: Validation
+      data: Data
+      communication: Communication
+      security: Security
+      background: Background
+      file: File
+      caching: Caching
+      concurrency: Concurrency
+      resilience: Resilience
+      scheduling: Scheduling
+      payments: Payments
+      outcome: Submission outcome
+      service: Service
+      utility: Utility
+      workflow: Workflow
+      finance: Finance
+      realtime: Realtime
+      response: Response
+    phase3_fixture:
+      label: Phase 3 fixture
+      description: Wave 1 ported fixture covering every control.
+      fields:
+        predicate:
+          label: Predicate
+          help: Ruby expression evaluated per item.
+        label:
+          label: Label
+          help: Display label for the total.
+        message:
+          label: Message
+          help: Liquid template rendered for the step.
+        operation:
+          label: Operation
+          help: Aggregation to compute.
+          options:
+            sum: Sum
+            avg: Average
+        skipNil:
+          label: Skip nil
+          help: Ignore nil values in the collection.
+        limit:
+          label: Limit
+          help: Maximum number of items to read.
+        rate:
+          label: Rate
+          help: Multiplier applied to the total.
+        tags:
+          label: Tags
+          help: Labels attached to the result.
+        aliases:
+          label: Aliases
+          help: Alternate names for source paths.
+        filter:
+          label: Filter
+          help: Condition group applied before aggregation.
+        amountField:
+          label: Amount field
+          help: Bound-entity attribute that holds the amount.
+        templateId:
+          label: Email template
+          help: Template sent when the step runs.
+        title:
+          label: Title
+          help: Localized title shown to the submitter.
+        rateSource:
+          label: Rate source
+          help: Where the conversion rate comes from.
+          options:
+            fixed: Fixed
+            live: Live
+        fixedRate:
+          label: Fixed rate
+          help: Rate used when the source is fixed.
+        idempotencyKey:
+          label: Idempotency key
+          help: Key that makes a retry safe to repeat.

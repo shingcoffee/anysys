@@ -1,0 +1,101 @@
+<%= form_with url: form_url,
+              method: :patch,
+              scope: :website_skeleton,
+              id: form_id,
+              class: "flex flex-col gap-6" do %>
+  <section class="card p-5 flex flex-col gap-4" aria-labelledby="website-skeleton-identity-heading">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+      <h2 id="website-skeleton-identity-heading" class="text-md font-semibold leading-snug tracking-tight text-text-primary"><%= t("website.platform.skeletons.form.identity") %></h2>
+      <div class="flex flex-wrap items-center gap-2">
+        <%= render BadgeComponent.new(variant: :info, size: :sm) do %>
+          <%= category_label %>
+        <% end %>
+        <% if (credit = inspired_by_credit) %>
+          <p class="text-xs italic leading-4 text-text-secondary"><%= credit %></p>
+        <% end %>
+      </div>
+    </div>
+    <%= hidden_field_tag "website_skeleton[key]", skeleton.key %>
+    <div class="flex flex-col gap-1">
+      <label class="form-label form-label-required" for="website_skeleton_name"><%= t("website.platform.skeletons.form.name") %></label>
+      <input type="text" id="website_skeleton_name" name="website_skeleton[name]" value="<%= skeleton.name %>" required class="input-field">
+    </div>
+    <div class="flex flex-col gap-1">
+      <label class="form-label" for="website_skeleton_description"><%= t("website.platform.skeletons.form.description") %></label>
+      <textarea id="website_skeleton_description" name="website_skeleton[description]" rows="2" class="input-field"><%= skeleton.description %></textarea>
+    </div>
+    <div class="flex flex-col gap-1">
+      <label class="form-label" for="website_skeleton_theme_key"><%= t("website.admin.pages.form.theme") %></label>
+      <%= select_tag "website_skeleton[theme_key]", options_for_select(theme_options, skeleton.try(:theme_key).to_s),
+            id: "website_skeleton_theme_key", class: "input-field h-10", aria: { describedby: "website_skeleton_theme_key_hint" } %>
+      <p id="website_skeleton_theme_key_hint" class="text-sm text-text-tertiary"><%= t("website.platform.skeletons.form.theme_hint") %></p>
+    </div>
+  </section>
+
+  <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div class="min-w-0">
+        <h2 class="text-md font-semibold leading-snug tracking-tight text-text-primary"><%= t("website.platform.skeletons.form.pages") %></h2>
+        <p class="mt-1 text-sm font-normal leading-snug text-text-secondary"><%= t("website.platform.skeletons.form.pages_hint") %></p>
+      </div>
+      <%= render ButtonComponent.new(variant: :secondary, size: :sm, tag: :button, type: :submit, name: "add_page", value: "1") do %>
+        <%= t("website.platform.skeletons.form.add_page") %>
+      <% end %>
+    </div>
+
+    <% pages.each_with_index do |page, index| %>
+      <% draft = draft_for(page) %>
+      <% prefix = "website_skeleton[pages][#{index}]" %>
+      <article class="card p-5 flex flex-col gap-4" data-skeleton-page="<%= index %>">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div class="flex flex-wrap items-center gap-2">
+            <%= render BadgeComponent.new(variant: :default, size: :sm) do %>
+              <%= t("website.platform.skeletons.form.page_index", index: index + 1) %>
+            <% end %>
+            <h3 class="text-md font-semibold leading-snug tracking-tight text-text-primary"><%= draft.title.presence || t("website.admin.pages.new.title") %></h3>
+          </div>
+          <% unless draft.home? %>
+            <%= render ButtonComponent.new(variant: :ghost, size: :sm, tag: :button, type: :submit, name: "remove_page", value: index, class: "text-danger") do %>
+              <%= t("common.actions.delete") %>
+            <% end %>
+          <% end %>
+        </div>
+        <input type="hidden" name="<%= prefix %>[role]" value="<%= page.stringify_keys["role"] %>">
+        <input type="hidden" name="<%= prefix %>[home]" value="<%= draft.home? ? "1" : "0" %>">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="form-label" for="skeleton_page_<%= index %>_title"><%= t("website.admin.pages.form.title") %></label>
+            <input type="text" id="skeleton_page_<%= index %>_title" name="<%= prefix %>[title]" value="<%= draft.title %>" required class="input-field">
+          </div>
+          <div class="flex flex-col gap-1">
+            <label class="form-label" for="skeleton_page_<%= index %>_slug"><%= t("website.admin.pages.form.slug") %></label>
+            <input type="text" id="skeleton_page_<%= index %>_slug" name="<%= prefix %>[slug]" value="<%= draft.slug %>" <%= "disabled" if draft.home? %> class="input-field font-mono">
+            <% if draft.home? %>
+              <input type="hidden" name="<%= prefix %>[slug]" value="">
+            <% end %>
+          </div>
+          <div class="flex flex-col gap-1 sm:col-span-2">
+            <label class="form-label" for="skeleton_page_<%= index %>_layout"><%= t("website.admin.pages.form.layout") %></label>
+            <select id="skeleton_page_<%= index %>_layout" name="<%= prefix %>[layout_key]" class="input-field">
+              <% layout_options.each do |name, key| %>
+                <option value="<%= key %>" <%= "selected" if key.to_s == draft.layout_key.to_s %>><%= name %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+        <label class="flex items-start gap-2 text-body-sm text-text-primary">
+          <input type="hidden" name="<%= prefix %>[nav_visible]" value="0">
+          <input type="checkbox" name="<%= prefix %>[nav_visible]" value="1" class="mt-0.5 h-4 w-4 rounded border-border-strong text-accent focus:ring-accent" <%= "checked" if draft.nav_visible? %>>
+          <span><%= t("website.admin.pages.form.nav_visible") %></span>
+        </label>
+        <%= render Websites::Admin::ComposerComponent.new(
+              page: draft,
+              embedded: true,
+              sections_only: true,
+              structure_locked: false,
+              json_name: "#{prefix}[sections_json]"
+            ) %>
+      </article>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,23 @@
+# config/flowchart_validation.yml
+# Context keys that are implicitly available without requiring an upstream output.
+# These are typically provided by the runtime before flowchart execution begins.
+
+implicit_context_keys:
+  - bound_entity
+  - customer_id
+  - params
+  - current_user
+  - current_customer
+  - authentication
+  - current_user_id
+  - current_user_role
+  - audience
+  - device_type
+  - request_ip
+  - user_agent
+  - locale
+  - request_id
+  - flowchart_id
+  - model
+  - writable_slugs
+  - association_params

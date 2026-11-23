@@ -1,0 +1,42 @@
+<section class="<%= padding_class %>">
+  <div class="<%= inner_measure_class %> flex flex-col <%= gap_class %>">
+    <%= header(kicker: prop("kicker"), heading: prop("heading"), subhead: prop("subhead"), align: :center) %>
+    <% if table? %>
+      <div class="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
+        <div class="relative min-w-[36rem] overflow-hidden rounded-3xl <%= card_border_class %>">
+          <table class="w-full table-fixed border-collapse text-left">
+            <thead class="<%= head_band_class %>">
+              <tr>
+                <th scope="col" class="w-[34%] px-5 py-5 md:px-8 md:py-6"><span class="sr-only"><%= public_label("feature") %></span></th>
+                <% columns.each do |column| %>
+                  <th <%= el_attrs("column_#{column[:number]}", class: "px-3 py-5 text-center align-bottom text-site-md leading-tight md:py-6 md:text-site-xl #{headline_font_class}", scope: "col") %>><%= column[:name] %></th>
+                <% end %>
+              </tr>
+            </thead>
+            <tbody>
+              <% rows.each do |row| %>
+                <tr <%= item_attrs("rows", framed: true, class: "border-t #{hairline_class}") %>>
+                  <th <%= el_attrs("rows.title", class: "px-5 py-4 text-site-base font-medium leading-snug md:px-8 md:py-5 md:text-site-md", scope: "row") %>><%= row["title"] %></th>
+                  <% columns.each do |column| %>
+                    <% value = cell(row, column) %>
+                    <td class="px-3 py-4 text-center align-middle md:py-5">
+                      <% if value == :included %>
+                        <svg class="mx-auto size-5 <%= theme.kicker_class %>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+                        <span class="sr-only"><%= public_label("included") %></span>
+                      <% elsif value == :excluded %>
+                        <span class="mx-auto block h-px w-4 bg-current opacity-25" aria-hidden="true"></span>
+                        <span class="sr-only"><%= public_label("not_included") %></span>
+                      <% else %>
+                        <span <%= el_attrs("rows.value_#{column[:number]}", class: "text-pretty text-site-sm tabular-nums md:text-site-base #{body_text_class}") %>><%= value %></span>
+                      <% end %>
+                    </td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>

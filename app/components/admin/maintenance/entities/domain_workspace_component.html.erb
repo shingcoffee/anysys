@@ -1,0 +1,269 @@
+<% if no_domains? %>
+  <div class="card" data-role="no-domains">
+    <%= render EmptyStateComponent.new(
+          title: t("maint_core.entity_domains.workspace.no_domains_title"),
+          description: t("maint_core.entity_domains.workspace.no_domains_description"),
+          icon_path: DOMAIN_ICON,
+          action_path: new_domain_path,
+          action_text: t("maint_core.entity_domains.index.new_domain")
+        ) %>
+  </div>
+<% else %>
+  <turbo-frame id="<%= frame_id %>" data-turbo-action="advance">
+    <div class="grid min-w-0 gap-4 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-6" data-entity-domains>
+      <nav aria-label="<%= t("maint_core.entity_domains.index.navigator_label") %>" class="min-w-0">
+        <div class="card sticky top-4 hidden p-2 lg:block">
+          <p class="flex items-center justify-between px-2.5 pb-2 pt-1.5 text-xs font-semibold uppercase tracking-wide text-text-muted">
+            <span><%= t("maint_core.entity_domains.index.domains_heading") %></span>
+            <span class="tabular-nums"><%= domain_sections.size %></span>
+          </p>
+          <ul class="space-y-0.5">
+            <% rail_sections.each do |section| %>
+              <li>
+                <%= link_to rail_path(section),
+                      class: ["flex min-h-12 items-center gap-2.5 rounded-md px-2.5 py-2 transition-base",
+                              active?(section) ? "bg-surface-active" : "hover:bg-surface-hover"],
+                      aria: { current: (active?(section) ? "page" : nil) },
+                      data: { entity_domain_key: key(section) } do %>
+                  <span class="size-2.5 shrink-0 rounded-full <%= dot_class(section) %>" aria-hidden="true"></span>
+                  <span class="min-w-0 flex-1">
+                    <span class="block truncate text-sm <%= active?(section) ? "font-semibold text-text-primary" : "font-medium text-text-secondary" %>"><%= title(section) %></span>
+                    <span class="block truncate text-xs tabular-nums text-text-muted"><%= rail_meta(section) %></span>
+                  </span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+          <div class="mt-2 border-t border-border-subtle pt-2">
+            <%= link_to new_domain_path, class: "flex min-h-9 items-center gap-2 rounded-md px-2.5 text-sm font-medium text-accent-text transition-base hover:bg-surface-hover",
+                        data: { turbo_frame: "_top" } do %>
+              <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="<%= AdminPageComponent::ICONS[:plus] %>"/>
+              </svg>
+              <%= t("maint_core.entity_domains.index.new_domain") %>
+            <% end %>
+          </div>
+        </div>
+
+        <ul class="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 lg:hidden">
+          <% rail_sections.each do |section| %>
+            <li class="shrink-0">
+              <%= link_to rail_path(section),
+                    class: ["inline-flex min-h-10 items-center gap-2 rounded-full border px-3.5 text-sm transition-base",
+                            active?(section) ? "border-accent bg-accent-subtle font-medium text-accent-text" : "border-border-subtle bg-surface text-text-secondary hover:bg-surface-hover"],
+                    aria: { current: (active?(section) ? "page" : nil) } do %>
+                <span class="size-2 rounded-full <%= dot_class(section) %>" aria-hidden="true"></span>
+                <span class="whitespace-nowrap"><%= title(section) %></span>
+                <span class="text-xs tabular-nums text-text-muted"><%= section.items.size %></span>
+              <% end %>
+            </li>
+          <% end %>
+          <li class="shrink-0">
+            <%= link_to new_domain_path, class: "inline-flex min-h-10 items-center gap-1.5 rounded-full border border-dashed border-border px-3.5 text-sm font-medium text-accent-text hover:bg-surface-hover",
+                        data: { turbo_frame: "_top" } do %>
+              <svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="<%= AdminPageComponent::ICONS[:plus] %>"/>
+              </svg>
+              <span class="whitespace-nowrap"><%= t("maint_core.entity_domains.index.new_domain") %></span>
+            <% end %>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="min-w-0 space-y-4">
+        <% if current.nil? %>
+          <div class="card">
+            <%= render EmptyStateComponent.new(
+                  title: t("maint_core.entity_domains.index.domain_missing"),
+                  description: t("maint_core.entity_domains.index.domain_missing_hint"),
+                  action_path: filter_path(domain_id: nil, q: nil, kind: nil),
+                  action_text: t("maint_core.nav.entities")
+                ) %>
+          </div>
+        <% else %>
+          <section class="card p-4 sm:p-5" aria-labelledby="entity-domain-title" data-role="domain-header">
+            <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+              <div class="flex min-w-0 items-start gap-3.5">
+                <% if domain %>
+                  <span class="flex size-11 shrink-0 items-center justify-center rounded-xl ring-1 <%= tile_class %>" aria-hidden="true">
+                    <svg class="size-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="<%= DOMAIN_ICON %>"/>
+                    </svg>
+                  </span>
+                <% else %>
+                  <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-warning-subtle text-warning ring-1 ring-warning/20" aria-hidden="true">
+                    <svg class="size-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="<%= EntitiesContributor::ICONS[:ungrouped] %>"/>
+                    </svg>
+                  </span>
+                <% end %>
+                <div class="min-w-0">
+                  <h2 id="entity-domain-title" class="truncate text-lg font-semibold tracking-tight text-text-primary"><%= title(current) %></h2>
+                  <% if domain %>
+                    <p class="mt-0.5 text-sm <%= domain.description.present? ? "text-text-secondary" : "text-text-muted" %>">
+                      <%= domain.description.presence || t("maint_core.entity_domains.workspace.no_description") %>
+                    </p>
+                    <ul class="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs tabular-nums text-text-muted">
+                      <% stats.each do |stat| %>
+                        <li><%= stat %></li>
+                      <% end %>
+                    </ul>
+                  <% else %>
+                    <p class="mt-0.5 text-sm text-text-secondary"><%= t("maint_core.entity_domains.workspace.not_in_domain_hint") %></p>
+                  <% end %>
+                </div>
+              </div>
+              <% if domain %>
+                <div class="grid grid-cols-2 gap-2 md:flex md:shrink-0 md:items-center md:justify-end">
+                  <%= render Admin::Maintenance::Entities::DomainDeleteDialogComponent.new(domain: domain, customer_id: customer_id) %>
+                  <%= link_to t("maint_core.entity_domains.index.edit_domain"), edit_domain_path,
+                              class: "btn btn-secondary min-h-9 justify-center px-3 text-[13px]", data: { turbo_frame: "_top" } %>
+                  <%= link_to new_entity_path, class: "btn btn-primary order-first col-span-2 min-h-9 justify-center gap-1.5 px-3 text-[13px] md:order-none", data: { turbo_frame: "_top" } do %>
+                    <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="<%= AdminPageComponent::ICONS[:plus] %>"/>
+                    </svg>
+                    <%= t("maint_core.entities.index.new_entity") %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </section>
+
+          <section class="card min-w-0 overflow-hidden" data-controller="admin-table" aria-labelledby="entity-domain-entities-title" data-role="domain-entities">
+            <header class="flex flex-col gap-3 border-b border-border-subtle px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <h3 id="entity-domain-entities-title" class="flex items-center gap-2 text-sm font-semibold text-text-primary">
+                <%= t("maint_core.nav.entities") %>
+                <span class="rounded-full bg-surface-active px-2 py-0.5 text-xs font-medium tabular-nums text-text-secondary"><%= entities.size %></span>
+              </h3>
+              <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <form method="get" action="<%= filter_path(q: nil) %>" role="search" class="relative w-full sm:w-56 lg:w-64">
+                  <% { domain_id: key(current), kind: kind }.compact.each do |name, value| %>
+                    <input type="hidden" name="<%= name %>" value="<%= value %>">
+                  <% end %>
+                  <svg class="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/>
+                  </svg>
+                  <label for="entity-domains-search" class="sr-only"><%= t("maint_core.entity_domains.workspace.search_label", name: title(current)) %></label>
+                  <input type="search" id="entity-domains-search" name="q" value="<%= query %>"
+                         placeholder="<%= t("maint_core.entities.index.search_placeholder") %>"
+                         data-admin-table-target="searchInput" data-action="input->admin-table#debounceSubmit"
+                         class="input-field min-h-9 w-full pl-9">
+                </form>
+                <div class="inline-flex rounded-lg border border-border-subtle p-0.5" role="group" aria-label="<%= t("common.labels.kind") %>">
+                  <% kind_filters.each do |filter| %>
+                    <%= link_to filter[:label], filter[:path],
+                          class: ["inline-flex min-h-8 flex-1 items-center justify-center rounded-md px-2.5 text-[13px] font-medium transition-base sm:flex-none",
+                                  filter[:active] ? "bg-surface-active text-text-primary" : "text-text-secondary hover:text-text-primary"],
+                          aria: { current: (filter[:active] ? "true" : nil) } %>
+                  <% end %>
+                </div>
+              </div>
+            </header>
+
+            <% if entities.empty? %>
+              <% if filtered? %>
+                <%= render EmptyStateComponent.new(
+                      title: t("maint_core.entity_domains.index.no_matches"),
+                      description: t("chrome.admin_table.no_matches_hint"),
+                      action_path: filter_path(q: nil, kind: nil),
+                      action_text: t("maint_core.entity_domains.index.clear_filters")
+                    ) %>
+              <% else %>
+                <div class="px-4 py-8 text-center sm:px-6">
+                  <p class="text-sm font-medium text-text-primary"><%= t("maint_core.entity_domains.index.empty_domain") %></p>
+                  <% if domain %>
+                    <p class="mt-1 text-sm text-text-muted"><%= t("maint_core.entity_domains.workspace.empty_entities_hint") %></p>
+                    <%= link_to t("maint_core.entities.index.new_entity"), new_entity_path,
+                                class: "btn btn-secondary mt-4 min-h-9 px-3 text-[13px]", data: { turbo_frame: "_top" } %>
+                  <% end %>
+                </div>
+              <% end %>
+            <% else %>
+              <table class="block w-full text-sm md:table md:table-fixed">
+                <caption class="sr-only"><%= t("maint_core.nav.entities") %></caption>
+                <thead class="table-header hidden md:table-header-group">
+                  <tr>
+                    <th scope="col" class="px-4 py-3 text-left font-semibold"><%= t("maint_core.entity_domains.index.columns.entity") %></th>
+                    <th scope="col" class="w-28 px-4 py-3 text-left font-semibold"><%= t("common.labels.kind") %></th>
+                    <th scope="col" class="w-28 px-4 py-3 text-right font-semibold"><%= t("common.labels.attributes") %></th>
+                    <th scope="col" class="w-24 px-4 py-3 text-left font-semibold"><%= t("maint_core.entity_domains.index.columns.version") %></th>
+                    <th scope="col" class="w-36 px-4 py-3 text-left font-semibold"><%= t("common.labels.updated_at") %></th>
+                    <th scope="col" class="w-28 px-4 py-3"><span class="sr-only"><%= t("common.labels.actions") %></span></th>
+                  </tr>
+                </thead>
+                <tbody class="block md:table-row-group">
+                  <% entities.each do |entity| %>
+                    <% variant, kind_label = kind_badge(entity) %>
+                    <tr class="flex items-start gap-3 border-t border-border-subtle px-4 py-3 transition-base first:border-t-0 hover:bg-surface-hover/50 md:table-row md:p-0" data-entity-id="<%= entity.id %>">
+                      <td class="min-w-0 flex-1 md:table-cell md:px-4 md:py-3">
+                        <div class="flex min-w-0 items-center gap-3">
+                          <span class="flex size-8 shrink-0 items-center justify-center rounded-lg <%= entity_tile_class(entity) %>" aria-hidden="true">
+                            <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="<%= AdminTableComponent::LEADING_ICONS[:document] %>"/>
+                            </svg>
+                          </span>
+                          <span class="min-w-0">
+                            <span class="flex min-w-0 items-center gap-2">
+                              <%= link_to entity.display_label, entity_path(entity), class: "truncate font-medium text-text-primary hover:underline", data: { turbo_frame: "_top" } %>
+                              <% if entity.shared? %>
+                                <%= render BadgeComponent.new(variant: :default, size: :sm, class: "shrink-0") do %><%= t("common.labels.shared") %><% end %>
+                              <% end %>
+                            </span>
+                            <span class="block truncate text-xs text-text-muted"><%= subtitle(entity) %></span>
+                            <span class="mt-1.5 flex flex-wrap items-center gap-1.5 text-xs text-text-muted md:hidden">
+                              <%= render BadgeComponent.new(variant: variant, size: :sm) do %><%= kind_label %><% end %>
+                              <span class="tabular-nums"><%= t("maint_core.entity_domains.index.attribute_count", count: attributes_count(entity)) %> · <%= version_label(entity) %></span>
+                            </span>
+                          </span>
+                        </div>
+                      </td>
+                      <td class="hidden px-4 py-3 md:table-cell">
+                        <%= render BadgeComponent.new(variant: variant, size: :sm) do %><%= kind_label %><% end %>
+                      </td>
+                      <td class="hidden px-4 py-3 text-right tabular-nums text-text-secondary md:table-cell"><%= attributes_count(entity) %></td>
+                      <td class="hidden px-4 py-3 tabular-nums text-text-secondary md:table-cell"><%= version_label(entity) %></td>
+                      <td class="hidden px-4 py-3 text-text-secondary md:table-cell">
+                        <time datetime="<%= entity.updated_at.iso8601 %>" title="<%= updated_exact(entity) %>" class="whitespace-nowrap"><%= updated_text(entity) %></time>
+                      </td>
+                      <td class="shrink-0 md:table-cell md:px-4 md:py-3">
+                        <div class="flex items-center justify-end gap-1">
+                          <%= link_to t("common.actions.edit"), edit_entity_path(entity),
+                                      class: "btn btn-ghost min-h-8 px-2.5 py-1 text-[13px]", data: { turbo_frame: "_top" },
+                                      aria: { label: t("maint_core.entity_domains.index.edit_label", name: entity.display_label) } %>
+                          <%= render Admin::Maintenance::Entities::ActionMenuComponent.new(items: entity_menu(entity)) %>
+                        </div>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% end %>
+          </section>
+
+          <% if domain %>
+            <section class="card min-w-0 overflow-hidden" aria-labelledby="entity-domain-journeys-title" data-role="domain-journeys">
+              <header class="flex flex-col gap-3 border-b border-border-subtle px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+                <h3 id="entity-domain-journeys-title" class="flex items-center gap-2 text-sm font-semibold text-text-primary">
+                  <%= t("journeys.admin.title") %>
+                  <span class="rounded-full bg-surface-active px-2 py-0.5 text-xs font-medium tabular-nums text-text-secondary"><%= journeys_for(current).size %></span>
+                </h3>
+                <div class="flex items-center gap-2">
+                  <%= link_to t("journeys.admin.generate"), generate_journey_path,
+                              class: "btn btn-ghost min-h-8 flex-1 justify-center px-2.5 text-[13px] sm:flex-none", data: { turbo_frame: "_top" } %>
+                  <%= link_to new_journey_path, class: "btn btn-secondary min-h-8 flex-1 justify-center gap-1.5 px-2.5 text-[13px] sm:flex-none", data: { turbo_frame: "_top" } do %>
+                    <svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="<%= AdminPageComponent::ICONS[:plus] %>"/>
+                    </svg>
+                    <%= t("journeys.admin.new") %>
+                  <% end %>
+                </div>
+              </header>
+              <%= render Journeys::ListComponent.new(journeys: journeys_for(current), customer_id: customer_id) %>
+              <%= render Journeys::WorkflowMapComponent.new(journeys: journeys_for(current), customer_id: customer_id) %>
+            </section>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </turbo-frame>
+<% end %>

@@ -1,0 +1,37 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "email",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.email.entries.audience"), path: admin_modules_emails_lists_path(current_customer_id) },
+        { label: t("feature_modules.email.tabs.lists") }
+      ],
+      title: t("feature_modules.email.tabs.lists"),
+      description: t("admin_modules.emails.lists.index.description"),
+      actions: [
+        {
+          label: t("admin_modules.emails.lists.actions.new_list"),
+          path: new_admin_modules_emails_list_path(current_customer_id),
+          variant: :primary,
+          icon: :plus
+        }
+      ]
+    ) do %>
+  <%= render "admin/modules/emails/shared/audience_tabs", active_tab: :lists %>
+  <%= render AdminTableComponent.new(
+        rows:       @rows,
+        columns:    @columns,
+        pagination: @pagination,
+        params:     params.permit(:q, :sort, :dir, :page, :per_page, :list_type).to_h.symbolize_keys,
+        search:     { param: :q, placeholder: t("admin_modules.emails.lists.index.search_placeholder") },
+        filters:    @table_filters,
+        base_path:  admin_modules_emails_lists_path(current_customer_id),
+        row_path:   ->(l) { admin_modules_emails_list_path(current_customer_id, l) },
+        row_actions: @row_actions,
+        empty_state: {
+          title: t("admin_modules.emails.lists.index.empty_title"),
+          description: t("admin_modules.emails.lists.index.empty_description"),
+          action_path: new_admin_modules_emails_list_path(current_customer_id),
+          action_text: t("admin_modules.emails.lists.actions.new_list")
+        }
+      ) %>
+<% end %>

@@ -1,0 +1,25 @@
+<details class="relative" data-controller="menu-placement" data-action="toggle->menu-placement#reposition">
+  <summary role="button"
+           aria-label="<%= t("common.actions.more") %>"
+           title="<%= t("common.actions.more") %>"
+           class="list-none cursor-pointer inline-flex items-center justify-center size-8 rounded-md text-text-secondary hover:text-text-primary hover:bg-surface-active open:bg-surface-active transition-base select-none [&::-webkit-details-marker]:hidden">
+    <svg class="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <circle cx="12" cy="5" r="1.75"/><circle cx="12" cy="12" r="1.75"/><circle cx="12" cy="19" r="1.75"/>
+    </svg>
+  </summary>
+  <div class="absolute right-0 z-20 mt-1 min-w-[12rem] rounded-lg border border-border-subtle bg-canvas-elevated p-1 shadow-md text-left"
+       role="menu"
+       data-menu-placement-target="panel">
+    <%= menu_link t("admin_misc.pages.manage_access"), manage_path, :manage, data: { turbo_frame: publishing_frame } %>
+    <div class="my-1 h-px bg-border-subtle" role="separator"></div>
+    <%= menu_link t("maint_core.pages.preview"), preview_path, :preview, **new_tab_attributes %>
+    <div class="my-1 h-px bg-border-subtle" role="separator"></div>
+    <% if page.launched? %>
+      <%= menu_link t("admin_misc.pages.take_offline"), launch_path, :offline, tone: :danger,
+            data: { turbo_method: :delete, turbo_frame: "_top" } %>
+    <% else %>
+      <%= menu_link t("admin_misc.pages.launch"), launch_path, :launch,
+            data: { turbo_method: :post, turbo_frame: "_top" } %>
+    <% end %>
+  </div>
+</details>

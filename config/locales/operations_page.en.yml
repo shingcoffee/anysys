@@ -1,0 +1,8 @@
+en:
+  operations:
+    violations:
+      page:
+        not_found: "No page with the action key %{key} is visible to the %{audience} audience."
+        processing_refused: "%{page} cannot use the form processing %{name}: %{errors}"
+      processing:
+        not_found: "This workspace has no form processing named %{name}."

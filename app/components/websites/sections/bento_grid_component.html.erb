@@ -1,0 +1,37 @@
+<section class="<%= padding_class %>">
+  <div class="<%= inner_measure_class %> flex flex-col <%= gap_class %>">
+    <%= header(kicker: prop("kicker"), heading: prop("heading")) %>
+    <div class="grid grid-cols-1 gap-4 md:grid-flow-dense md:grid-cols-6 md:gap-5">
+      <% cells.each_with_index do |cell, index| %>
+        <% if hero?(cell) %>
+          <article <%= item_attrs("cells", framed: true, class: "#{span_class(cell, index)} group relative isolate flex min-h-[26rem] flex-col overflow-hidden rounded-3xl bg-neutral-900 text-white md:min-h-[34rem]") %>>
+            <%= render_media(cell["image_url"], alt: cell["title"].to_s, css_class: "absolute inset-0 -z-10 size-full object-cover transition duration-700 ease-out group-hover:scale-[1.03]", appearance: "dark") %>
+            <div class="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+            <div class="mt-auto flex flex-col gap-3 p-7 md:p-10">
+              <% if present_text?(cell["title"]) %>
+                <h3 <%= el_attrs("cells.title", class: "break-words text-site-3xl leading-tight md:text-site-4xl #{headline_font_class}") %>><%= cell["title"] %></h3>
+              <% end %>
+              <% if present_text?(cell["body"]) %>
+                <p <%= el_attrs("cells.body", class: "max-w-md text-pretty text-site-base leading-relaxed text-white/75 md:text-site-md") %>><%= cell["body"] %></p>
+              <% end %>
+            </div>
+          </article>
+        <% else %>
+          <article <%= item_attrs("cells", framed: true, class: "#{span_class(cell, index)} #{card_border_class} group flex flex-col overflow-hidden rounded-3xl") %>>
+            <div class="relative <%= wide?(index) ? "h-52 md:h-60" : "h-48" %> overflow-hidden">
+              <%= render_media(cell["image_url"], alt: cell["title"].to_s, css_class: "absolute inset-0 size-full object-cover transition duration-700 ease-out group-hover:scale-[1.03]") %>
+            </div>
+            <div class="flex flex-col gap-2 p-6 md:p-7">
+              <% if present_text?(cell["title"]) %>
+                <h3 <%= el_attrs("cells.title", class: card_title_class) %>><%= cell["title"] %></h3>
+              <% end %>
+              <% if present_text?(cell["body"]) %>
+                <p <%= el_attrs("cells.body", class: "text-pretty text-site-md leading-relaxed md:text-site-lg #{muted_class}") %>><%= cell["body"] %></p>
+              <% end %>
+            </div>
+          </article>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>

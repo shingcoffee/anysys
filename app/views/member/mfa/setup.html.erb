@@ -1,0 +1,79 @@
+<% content_for :title, t("member.mfa.setup.title") %>
+<% content_for :member_nav, "security" %>
+<% chrome = member_chrome %>
+
+<%= render Member::PageLayoutComponent.new do |c| %>
+  <% c.with_primary do %>
+    <%= render Member::PageHeaderComponent.new(
+          title:    t("member.mfa.setup.header_title"),
+          subtitle: t("member.mfa.setup.header_subtitle"),
+          eyebrow:  { label: t("member.mfa.setup.back_to_security"), path: member_security_path(current_user.customer_id) }
+        ) %>
+
+    <div class="space-y-5">
+      <%= render Member::PageSectionComponent.new do %>
+        <div class="flex items-start gap-4">
+          <span class="<%= chrome.avatar_class %> size-9 shrink-0 text-site-sm">1</span>
+          <div class="min-w-0 flex-1">
+            <h3 class="<%= chrome.section_title_class %>"><%= t("member.mfa.setup.step1_title") %></h3>
+            <p class="mt-2 <%= chrome.body_copy_class %>"><%= t("member.mfa.setup.step1_hint") %></p>
+
+            <div class="mt-6 flex flex-col items-center gap-5">
+              <% if @qr_code %>
+                <div class="<%= chrome.card_class(:compact) %> max-w-full">
+                  <div class="max-w-full h-auto [&>svg]:max-w-full [&>svg]:h-auto"><%= @qr_code.html_safe %></div>
+                </div>
+              <% end %>
+
+              <div class="flex flex-col items-center gap-2">
+                <p class="text-site-xs <%= chrome.muted_class %>"><%= t("member.mfa.setup.manual_secret_html") %></p>
+                <code class="<%= chrome.code_class %>"><%= current_user.otp_secret %></code>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <%= render Member::PageSectionComponent.new do %>
+        <div class="flex items-start gap-4">
+          <span class="<%= chrome.avatar_class %> size-9 shrink-0 text-site-sm">2</span>
+          <div class="min-w-0 flex-1">
+            <h3 class="<%= chrome.section_title_class %>"><%= t("member.mfa.setup.step2_title") %></h3>
+            <p class="mt-2 <%= chrome.body_copy_class %>"><%= t("member.mfa.setup.step2_hint") %></p>
+
+            <%= form_tag setup_member_security_mfa_path(current_user.customer_id),
+                         method: :post, class: "mt-6 space-y-5" do %>
+              <div>
+                <label for="code" class="<%= chrome.form_label_class %>"><%= t("member.common.verification_code") %></label>
+                <input type="text" name="code" id="code"
+                       autofocus autocomplete="one-time-code" inputmode="numeric"
+                       pattern="[0-9]*" maxlength="6"
+                       class="<%= "#{chrome.input_class} text-center font-mono tracking-[0.4em] text-site-2xl" %>">
+              </div>
+              <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                <%= link_to t("common.actions.cancel"), member_security_path(current_user.customer_id),
+                      class: chrome.secondary_button_class %>
+                <button type="submit" class="<%= chrome.primary_button_class %>"><%= t("member.mfa.setup.submit") %></button>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% c.with_aside do %>
+    <%= render Member::PageSectionComponent.new(title: t("member.mfa.setup.need_help")) do %>
+      <p class="<%= chrome.body_copy_class %>"><%= t("member.mfa.setup.need_help_body") %></p>
+    <% end %>
+
+    <%= render Member::PageSectionComponent.new(title: t("member.mfa.setup.authenticator_apps")) do %>
+      <ul class="space-y-2 <%= chrome.body_copy_class %>">
+        <li><%= t("member.mfa.setup.apps.google") %></li>
+        <li><%= t("member.mfa.setup.apps.authy") %></li>
+        <li><%= t("member.mfa.setup.apps.one_password") %></li>
+        <li><%= t("member.mfa.setup.apps.microsoft") %></li>
+      </ul>
+    <% end %>
+  <% end %>
+<% end %>

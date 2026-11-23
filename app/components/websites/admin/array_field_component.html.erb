@@ -1,0 +1,38 @@
+<div data-array="<%= field[:key] %>" data-min="<%= field[:min] %>" data-max="<%= field[:max] %>"
+     <% if workspace? %>data-array-kind="<%= field[:key] %>" data-item-title-key="<%= title_key %>"<% end %>
+     class="flex min-w-0 flex-col <%= workspace? ? 'gap-2' : 'gap-3' %><%= ' group/design' if design %>">
+  <%= render Websites::Admin::FieldHeaderComponent.new(design: design) do |header| %>
+    <% if workspace? %>
+      <% header.with_aside do %>
+        <button type="button" data-add-item data-action="click->website-builder#addItem" <%= 'disabled' if items.size >= field[:max] %>
+                class="btn btn-ghost h-7 gap-1 px-2 text-accent hover:bg-accent-subtle hover:text-accent disabled:cursor-not-allowed disabled:opacity-30 pointer-coarse:h-9">
+          <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"/></svg>
+          <%= add_label %>
+        </button>
+      <% end %>
+    <% end %>
+    <h4 class="<%= workspace? ? 'truncate text-sm font-medium text-text-primary' : 'section-header mb-0' %>">
+      <%= t(Websites::Admin::SectionEditorComponent::FIELD_LABEL_KEYS.fetch(field[:key])) %>
+      <% if workspace? %><span data-array-count class="text-caption ml-1 tabular-nums"><%= items.size %></span><% end %>
+    </h4>
+  <% end %>
+  <% if design %>
+    <%= render design %>
+  <% end %>
+  <% if workspace? %>
+    <p data-array-limit role="status" aria-live="polite" class="<%= visually_hidden_class %>"><%= t('website.admin.pages.form.array_limit_format').gsub('{count}', items.size.to_s).gsub('{max}', field[:max].to_s) %></p>
+  <% end %>
+  <div data-array-list class="flex min-w-0 flex-col <%= workspace? ? 'gap-2' : 'gap-3' %>">
+    <% items.each_with_index do |item, index| %>
+      <%= render item_component(item, index: index) %>
+    <% end %>
+  </div>
+  <template data-item-template>
+    <%= render item_component({}, index: 0, template: true) %>
+  </template>
+  <% unless workspace? %>
+    <%= render ButtonComponent.new(variant: :secondary, size: :sm, disabled: items.size >= field[:max], data: { add_item: true, action: 'click->website-builder#addItem' }) do %>
+      <%= add_label %>
+    <% end %>
+  <% end %>
+</div>

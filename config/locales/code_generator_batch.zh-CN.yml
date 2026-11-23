@@ -1,0 +1,5 @@
+zh-CN:
+  code_generator_batch:
+    errors:
+      invalid_input: "%{field} 必须包含有效的列筛选条件或赋值；不允许空行、空条件组、不支持的运算符或格式错误的表达式。"
+      assignments_required: "使用 update_all 时必须提供 fieldAssignments。"

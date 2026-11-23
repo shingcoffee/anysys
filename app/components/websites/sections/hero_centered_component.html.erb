@@ -1,0 +1,35 @@
+<section class="relative isolate overflow-hidden <%= spacing_class(hero_padding_class) %>">
+  <div class="pointer-events-none absolute inset-0 -z-10 bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_at_top,black_30%,transparent_70%)] <%= grid_line_class %>" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute left-1/2 top-0 -z-10 h-[28rem] w-[56rem] max-w-[140%] -translate-x-1/2 -translate-y-1/3 rounded-full blur-3xl <%= theme.glow_class %>" aria-hidden="true"></div>
+
+  <div class="<%= inner_measure_class %> flex flex-col items-center gap-6 text-center md:gap-8">
+    <% if present_text?(prop("eyebrow")) %>
+      <p <%= el_attrs("eyebrow", class: "inline-flex items-center gap-2 rounded-full px-3 py-1 text-site-xs font-medium ring-1 ring-inset #{theme.dark? ? "ring-white/10 bg-white/[0.04] text-neutral-200" : "ring-neutral-900/10 bg-white text-neutral-700"}") %>>
+        <span class="size-1.5 rounded-full <%= theme.accent_dot_class %>" aria-hidden="true"></span>
+        <%= prop("eyebrow") %>
+      </p>
+    <% end %>
+    <% if present_text?(prop("headline")) %>
+      <h1 <%= el_attrs("headline", class: "mx-auto text-balance break-words leading-[1.04] #{hero_heading_class} #{headline_font_class}") %>><%= prop("headline") %></h1>
+    <% end %>
+    <% if present_text?(prop("subhead")) %>
+      <p <%= el_attrs("subhead", class: "mx-auto max-w-2xl #{subhead_class}") %>><%= prop("subhead") %></p>
+    <% end %>
+    <div class="flex w-full justify-center pt-2"><%= buttons(align: :center) %></div>
+  </div>
+
+  <% if media_visible? %>
+    <div class="<%= inner_measure_class %> mt-16 md:mt-20">
+      <div class="overflow-hidden rounded-2xl md:rounded-3xl <%= frame_class %>">
+        <div class="flex h-9 items-center gap-1.5 border-b px-4 <%= frame_chrome_class %>" aria-hidden="true">
+          <span class="size-2.5 rounded-full <%= chrome_dot_class %>"></span>
+          <span class="size-2.5 rounded-full <%= chrome_dot_class %>"></span>
+          <span class="size-2.5 rounded-full <%= chrome_dot_class %>"></span>
+        </div>
+        <div class="relative aspect-[16/10]">
+          <%= render_media(props["image_url"], alt: prop("headline"), css_class: "absolute inset-0 size-full object-cover", eager: true) %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</section>

@@ -1,0 +1,100 @@
+zh-CN:
+  website:
+    themes:
+      linen:
+        name: "亚麻"
+        description: "暖象牙底色、金色点缀与经典衬线，适合历久弥新的品牌。"
+      porcelain:
+        name: "瓷白"
+        description: "暖白底配静雅画廊衬线，让作品本身说话。"
+      meridian:
+        name: "子午"
+        description: "冷灰底配利落靛蓝，适合软件与专业服务。"
+      glacier:
+        name: "冰川"
+        description: "冷调中性色配清爽青绿，沉稳精准、以产品为先。"
+      midnight:
+        name: "午夜"
+        description: "深海军蓝深色模式，天蓝色点亮重点。"
+      aurora:
+        name: "极光"
+        description: "深色、圆润、紫光映衬，适合发布会与活动。"
+      monochrome:
+        name: "黑白"
+        description: "墨黑、粗黑体与锐利直角，纯粹的对比。"
+      obsidian:
+        name: "黑曜石"
+        description: "深色版黑白主题：冷峻、技术感、杂志气质。"
+      noir:
+        name: "暗影"
+        description: "电影感深色，搭配高对比展示衬线。"
+      broadsheet:
+        name: "大报"
+        description: "纸色底配报刊衬线，适合新闻与长文。"
+      almanac:
+        name: "年鉴"
+        description: "书卷气衬线配铜色点缀，适合期刊与随笔。"
+      gilded:
+        name: "鎏金"
+        description: "深色典雅、金色描边，适合餐旅与高端品牌。"
+      terracotta:
+        name: "陶土"
+        description: "日晒铜色配经典衬线，适合餐饮与手作。"
+      ember:
+        name: "余烬"
+        description: "粗黑体配烘焙般的铜色暖意。"
+      riviera:
+        name: "海岸"
+        description: "典雅衬线配海青色点缀，适合旅行与休闲。"
+      coral:
+        name: "珊瑚"
+        description: "亲和的几何无衬线、玫红点缀与圆角。"
+      blossom:
+        name: "花漾"
+        description: "柔和玫红配典雅衬线，适合美业、花艺与婚礼。"
+      sage:
+        name: "鼠尾草"
+        description: "沉静森林绿、暖调中性色与圆润造型。"
+      sandstone:
+        name: "砂岩"
+        description: "暖调中性色上的大地金，配现代几何无衬线。"
+      orchard:
+        name: "果园"
+        description: "橄榄绿配展示衬线，适合天然有机品牌。"
+      academy:
+        name: "学院"
+        description: "绯红配经典衬线，适合学校与机构。"
+      prism:
+        name: "棱镜"
+        description: "鲜明梅紫配现代无衬线，适合创意活动。"
+      exhibit:
+        name: "展陈"
+        description: "个性粗黑体与锐利墨色，适合作品集与场馆。"
+      pulse:
+        name: "脉动"
+        description: "深色、张扬、绯红，适合体育、音乐与媒体。"
+      stage:
+        name: "舞台"
+        description: "深梅紫聚光，适合会议与演出。"
+      nightshift:
+        name: "夜班"
+        description: "深色模式配森林绿活力，适合健身与科技。"
+      canopy:
+        name: "林冠"
+        description: "深林深色模式配展示衬线，适合户外品牌。"
+    fonts:
+      inter: "Inter"
+      newsreader: "Newsreader"
+      fraunces: "Fraunces"
+      playfair: "Playfair Display"
+      source_sans: "Source Sans 3"
+      space_grotesk: "Space Grotesk"
+      dm_sans: "DM Sans"
+      outfit: "Outfit"
+      cormorant: "Cormorant Garamond"
+      jost: "Jost"
+      instrument_serif: "Instrument Serif"
+      instrument_sans: "Instrument Sans"
+      plex_sans: "IBM Plex Sans"
+      plex_mono: "IBM Plex Mono"
+      bricolage: "Bricolage Grotesque"

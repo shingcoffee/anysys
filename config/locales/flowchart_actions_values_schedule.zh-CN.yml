@@ -1,0 +1,292 @@
+zh-CN:
+  flowchart_actions:
+    validate_value:
+      label: 校验值
+      description: 按业务格式校验单个值，并可输出规范化结果
+      fields:
+        sourceVariable:
+          label: 来源
+          help: 待校验值在上下文中的路径。
+        rule:
+          label: 规则
+          help: 要检查的业务格式。
+          options:
+            email: 电子邮箱
+            phone: 电话号码
+            url: 网址
+            uuid: UUID
+            regex: 正则
+            length: 长度
+            range: 数值范围
+            in_list: 列表内
+            luhn: Luhn 校验
+            iban: IBAN
+            cn_resident_id: 身份证号
+            postal_code: 邮政编码
+            ip_address: IP 地址
+            date: 日期
+            date_range: 日期范围
+            cn_mobile: 中国手机号
+            required: 必填
+        phoneCountry:
+          label: 电话国家
+          help: 国内号码使用的 ISO 两位国家代码。留空则必须是国际号码。
+          placeholder: 例如 US（留空表示国际号码）
+        pattern:
+          label: 模式
+          help: 值必须匹配的 Ruby 正则表达式。
+          placeholder: 例如 \\A\\d+\\z
+        minLength:
+          label: 最小长度
+          help: 允许的最短字符串长度。
+        maxLength:
+          label: 最大长度
+          help: 允许的最长字符串长度。
+        minValue:
+          label: 最小值
+          help: 允许的最小数值。留空表示不限下限。
+        maxValue:
+          label: 最大值
+          help: 允许的最大数值。留空表示不限上限。
+        allowedValues:
+          label: 允许值
+          help: 来源必须匹配的取值列表。
+        caseSensitive:
+          label: 区分大小写
+          help: 与列表比较时是否区分字母大小写。
+        postalCountry:
+          label: 邮政国家
+          help: 用于匹配邮编格式的国家。
+          placeholder: 例如 US 或 CN
+        urlSchemes:
+          label: URL 协议
+          help: 允许的 URL 协议，如 https、http。
+        dateFormat:
+          label: 日期格式
+          help: 解析日期所用的 strptime 模式。
+          placeholder: "%Y-%m-%d"
+        minDate:
+          label: 最早日期
+          help: 含当日的下限，填 YYYY-MM-DD、today 或 tomorrow。
+          placeholder: today 或 2026-01-01
+        maxDate:
+          label: 最晚日期
+          help: 含当日的上限，填 YYYY-MM-DD、today 或 tomorrow。
+          placeholder: "2026-12-31"
+        ipVersion:
+          label: IP 版本
+          help: 要求 IPv4、IPv6，或二者皆可。
+          options:
+            any: 任意
+            v4: IPv4
+            v6: IPv6
+        allowBlank:
+          label: 允许空白
+          help: 将空白来源视为通过。
+        onInvalid:
+          label: 校验失败时
+          help: 使步骤失败，或仅将结果标志设为 false。
+          options:
+            fail: 失败
+            flag: 仅标记
+        errorField:
+          label: 错误字段
+          help: 写入错误详情的表单字段名，便于高亮对应输入。
+          placeholder: 例如 email
+        message:
+          label: 提示文案
+          help: 自定义多语言错误。留空则使用该规则的默认文案。
+        resultVar:
+          label: 将结果保存为
+          help: 校验通过时设为 true 的上下文变量。
+        normalizedVar:
+          label: 将规范化值保存为
+          help: 校验通过时写入规范值的上下文变量。
+      errors:
+        invalid_phone_country: "%{field} 必须为空或 ISO 两位国家代码"
+        invalid_pattern: "%{field} 必须是合法的正则表达式"
+        range_bound_required: 请至少设置 minValue 或 maxValue
+        min_greater_than_max: "%{field} 必须大于或等于下限"
+        empty_list: "%{field} 必须至少包含一项"
+        unsupported_postal_country: "%{field} 必须是受支持的邮编国家"
+        invalid_date_bound: "%{field} 必须是 YYYY-MM-DD、today 或 tomorrow"
+    format_value:
+      label: 格式化值
+      description: 面向模板、文档与消息的本地化展示格式
+      fields:
+        sourceVariable:
+          label: 来源
+          help: 待格式化值在上下文中的路径。
+        formatType:
+          label: 格式类型
+          help: 如何展示该值。
+          options:
+            number: 数字
+            currency: 货币
+            percentage: 百分比
+            delimited: 千分位数字
+            human_size: 可读容量
+            human_number: 可读数字
+            phone: 电话
+            date: 日期
+            datetime: 日期时间
+        locale:
+          label: 语言区域
+          help: 数字与日期所用的区域。留空则使用本次运行的区域。
+          placeholder: 例如 en 或 zh-CN
+        precision:
+          label: 精度
+          help: 小数位数（可读格式为有效数字）。
+        currencyUnit:
+          label: 货币单位
+          help: 货币符号或代码。留空则使用区域默认值。
+          placeholder: 例如 $ 或 ¥
+        delimiter:
+          label: 千分位符
+          help: 千分位分隔符。留空则使用区域默认值。
+          placeholder: 例如 , 或 .
+        separator:
+          label: 小数点
+          help: 小数分隔符。留空则使用区域默认值。
+          placeholder: 例如 . 或 ,
+        stripInsignificantZeros:
+          label: 去掉多余零
+          help: 去掉小数部分末尾的无效零。
+        phoneCountry:
+          label: 电话国家
+          help: 解析国内号码所用的 ISO 两位国家代码。
+          placeholder: 例如 US（留空表示国际号码）
+        phoneStyle:
+          label: 电话样式
+          help: 有效电话号码的展示方式。
+          options:
+            international: 国际
+            national: 国内
+            e164: E.164
+        dateStyle:
+          label: 日期样式
+          help: 内置或自定义日期格式。
+          options:
+            default: 默认
+            short: 短格式
+            long: 长格式
+            iso8601: ISO 8601
+            custom: 自定义
+        customFormat:
+          label: 自定义格式
+          help: 日期样式为自定义时使用的 strftime 模式。
+          placeholder: "%Y-%m-%d %H:%M"
+        timezone:
+          label: 时区
+          help: 日期时间所用的 IANA 时区。留空则使用运行时区。
+          placeholder: 例如 UTC 或 Asia/Shanghai
+        fallbackValue:
+          label: 回退值
+          help: 来源为空或无法格式化时写入的文本。
+          placeholder: 例如 —
+        resultVar:
+          label: 将结果保存为
+          help: 接收格式化文本的上下文变量。
+      errors:
+        invalid_timezone: "%{field} 必须是合法的 IANA 时区"
+        invalid_phone_country: "%{field} 必须为空或 ISO 两位国家代码"
+    next_occurrence:
+      label: 下次发生时间
+      description: 根据重复规则计算下次运行、续期或到期时间
+      fields:
+        frequency:
+          label: 频率
+          help: 序列的重复方式。
+          options:
+            daily: 每天
+            weekly: 每周
+            monthly: 每月
+            yearly: 每年
+            cron: Cron
+        interval:
+          label: 间隔
+          help: 每 N 个周期重复一次（Cron 不使用）。
+        startVariable:
+          label: 序列起点
+          help: 序列锚点在上下文中的路径。留空则使用当前时间。
+        fromVariable:
+          label: 起始之后
+          help: 结果必须严格晚于该时间。留空则使用当前时间。
+        weekdays:
+          label: 星期
+          help: 星期取值 mon..sun。留空则使用起点所在星期。
+        dayOfMonth:
+          label: 月中日期
+          help: 0 表示起点日期，-1 表示月末，1–31 表示固定日。
+        monthEndPolicy:
+          label: 月末策略
+          help: 当月天数不足时，取当月最后一天或跳过该月。
+          options:
+            clamp: 取月末
+            skip: 跳过
+        cronExpression:
+          label: Cron 表达式
+          help: 频率为 Cron 时使用的五段或六段表达式。
+          placeholder: 例如 0 9 * * *
+        timeOfDay:
+          label: 时刻
+          help: "应用于日历结果的 HH:MM。留空则保留起点时刻。"
+          placeholder: HH:MM
+        timezone:
+          label: 时区
+          help: 序列使用的 IANA 时区。
+          placeholder: 例如 UTC
+        businessDayAdjust:
+          label: 工作日调整
+          help: 将周末结果调整到前一个或后一个工作日。
+          options:
+            none: 不调整
+            next_business_day: 下一工作日
+            previous_business_day: 上一工作日
+        returns:
+          label: 返回
+          help: 返回下一次，或即将到来的一组时间。
+          options:
+            first: 下一次
+            list: 列表
+        count:
+          label: 数量
+          help: 返回为列表时要给出的次数。
+        untilVariable:
+          label: 截止
+          help: 超过该时间后不再返回结果。
+        resultVar:
+          label: 将结果保存为
+          help: 接收下一次时间或时间列表的上下文变量。
+      errors:
+        invalid_timezone: "%{field} 必须是合法的 IANA 时区"
+        invalid_cron: "%{field} 必须是合法的 Cron 表达式"
+        invalid_time_of_day: "%{field} 必须为空或 HH:MM"
+        invalid_weekday: "%{field} 的取值必须是 mon、tue、wed、thu、fri、sat 或 sun"
+  flowchart_runtime:
+    errors:
+      validate_value:
+        failed: "无法校验该值（%{reason}）。"
+        email: 请输入有效的电子邮箱。
+        phone: 请输入有效的电话号码。
+        url: 请输入有效的网址。
+        uuid: 请输入有效的 UUID。
+        regex: 该值不符合要求的模式。
+        length: 该值长度不在允许范围内。
+        range: 该值不在允许的数值范围内。
+        in_list: 该值不在允许列表中。
+        luhn: 请输入通过 Luhn 校验的号码。
+        iban: 请输入有效的 IBAN。
+        cn_resident_id: 请输入有效的身份证号。
+        postal_code: 请输入有效的邮政编码。
+        ip_address: 请输入有效的 IP 地址。
+        date: 请输入有效的日期。
+        date_range: 请输入允许范围内的日期。
+        cn_mobile: 请输入有效的中国手机号。
+        required: 此项为必填。
+      format_value:
+        failed: "无法格式化该值（%{reason}）。"
+      next_occurrence:
+        failed: "无法计算下一次发生时间（%{reason}）。"
+        invalid_anchor: 序列起点、起始之后或截止时间无效。
+        no_occurrence: 在给定时间之后没有符合条件的发生时间。

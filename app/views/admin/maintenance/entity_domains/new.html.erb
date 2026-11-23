@@ -1,0 +1,7 @@
+<%= render AdminPageComponent.new(
+      breadcrumbs: definition_resource_breadcrumbs(:entities, t("maint_core.entity_domains.new.title")),
+      title: t("maint_core.entity_domains.new.title"),
+      description: t("maint_core.entity_domains.new.summary")
+    ) do %>
+  <%= render Admin::Maintenance::Entities::EntityDomainFormComponent.new(domain: @domain, customer_id: current_customer_id) %>
+<% end %>

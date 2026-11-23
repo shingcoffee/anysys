@@ -1,0 +1,6 @@
+en:
+  custom_domains:
+    errors:
+      invalid_domain: "Enter an exact domain without a scheme, port or path."
+      cname_unverified: "The domain must have a direct CNAME to anysys.net. Check DNS configuration and try saving again."
+      domain_taken: "This domain is already assigned to a customer."

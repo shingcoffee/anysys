@@ -1,0 +1,257 @@
+{
+  "title": "Start sub-system build",
+  "description": "The requirements brief for one working sub-system, worked out from real-world scenarios and the admin's answers. A background build designs the business flows from it, then the entities, a page for every journey step, the processing each submit needs, and launches the journeys.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "domain",
+    "summary",
+    "people",
+    "scenarios"
+  ],
+  "properties": {
+    "domain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "description": "The business area. An existing domain of the same name is reused.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Name of the business area, for example Venue Bookings."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "One sentence on what the area covers."
+        }
+      }
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1500,
+      "description": "What the sub-system does for the organisation and what the admin asked for, in a short paragraph."
+    },
+    "people": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "description": "Every kind of person who takes part: staff, the people the domain serves, visitors.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "audience"
+        ],
+        "description": "One kind of person.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60,
+            "description": "What they are called, for example Member or Bookings staff."
+          },
+          "audience": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "member",
+              "public"
+            ],
+            "description": "How they use the system.",
+            "x-enum-descriptions": {
+              "admin": "Staff of the organisation, working on everyone's records.",
+              "member": "People the domain serves who sign in to their own records.",
+              "public": "People the domain serves who never sign in, or visitors before they sign up."
+            }
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 300,
+            "description": "What they do in the scenarios."
+          },
+          "sign_in": {
+            "type": "string",
+            "enum": [
+              "none",
+              "self_signup",
+              "staff_created",
+              "both"
+            ],
+            "default": "none",
+            "description": "For the people the domain serves: whether they sign in and how their accounts are made. Only what the admin confirmed; logins can't be undone.",
+            "x-enum-descriptions": {
+              "none": "They never sign in; staff keep their records.",
+              "self_signup": "They sign themselves up on a public page.",
+              "staff_created": "Staff create their accounts when adding them.",
+              "both": "They sign themselves up, and staff can also create accounts."
+            }
+          }
+        }
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "description": "The real-world use cases the sub-system must handle, each with what can go wrong.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "actor",
+          "steps"
+        ],
+        "description": "One real-world use case.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "description": "Short name, for example Member books a venue."
+          },
+          "actor": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60,
+            "description": "Who starts it, as named in people."
+          },
+          "steps": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10,
+            "description": "The normal path, in order, including what staff do in between.",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200,
+              "description": "One step of the normal path."
+            }
+          },
+          "exceptions": {
+            "type": "array",
+            "maxItems": 6,
+            "default": [],
+            "description": "What can go wrong and how the system responds, such as no seats left, a duplicate request or a failed payment.",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200,
+              "description": "One exception and its handling."
+            }
+          }
+        }
+      }
+    },
+    "rules": {
+      "type": "array",
+      "maxItems": 15,
+      "default": [],
+      "description": "Business rules: limits, calculations, statuses, who may do what.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 300,
+        "description": "One business rule in plain words."
+      }
+    },
+    "values": {
+      "type": "array",
+      "maxItems": 10,
+      "default": [],
+      "description": "Values the admin gave, such as email recipients or web addresses, copied exactly. Never invent one, and never include a password, token or secret.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "label",
+          "value"
+        ],
+        "description": "One value the admin gave.",
+        "properties": {
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "description": "What the value is, for example Bookings team email."
+          },
+          "value": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "description": "The value exactly as the admin wrote it."
+          }
+        }
+      }
+    },
+    "not_covered": {
+      "type": "array",
+      "maxItems": 10,
+      "default": [],
+      "description": "What the platform cannot do or the admin left out, such as reminders sent later or steps that need a password, token or secret.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 300,
+        "description": "One thing that is not covered."
+      }
+    }
+  },
+  "examples": [
+    {
+      "domain": {
+        "name": "Venue Bookings",
+        "description": "Members book the club's venues; staff approve; members pay."
+      },
+      "summary": "Members sign up, request a venue for a date and pay once staff approve. Staff review each request and approve or decline it.",
+      "people": [
+        {
+          "name": "Bookings staff",
+          "audience": "admin",
+          "description": "Review and approve booking requests."
+        },
+        {
+          "name": "Member",
+          "audience": "member",
+          "description": "Requests and pays for bookings.",
+          "sign_in": "self_signup"
+        }
+      ],
+      "scenarios": [
+        {
+          "name": "Member books a venue",
+          "actor": "Member",
+          "steps": [
+            "Signs up",
+            "Picks a venue, a date and the number of guests",
+            "Staff approve or decline the request",
+            "Pays the venue's daily rate once approved"
+          ],
+          "exceptions": [
+            "More guests than the venue holds: the request is refused",
+            "Payment fails: the booking stays approved and can be paid again"
+          ]
+        }
+      ],
+      "rules": [
+        "A booking's total is the venue's daily rate."
+      ],
+      "values": [
+        {
+          "label": "Bookings team email",
+          "value": "bookings@club.example"
+        }
+      ],
+      "not_covered": [
+        "Reminder emails before the booking date"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+<%= render Billing::Admin::PlatformPageComponent.new(
+  customer_id: current_customer_id,
+  section: :coupons,
+  crumbs: [{ label: @coupon.code }],
+  title: @coupon.name,
+  description: t("maint_platform.billing.coupons.show.description"),
+  actions: [
+    { label: t("common.actions.edit"),
+      path: edit_admin_maintenance_platform_billing_coupon_path(current_customer_id, @coupon),
+      variant: :primary, icon: :edit }
+  ]
+) do %>
+  <div class="max-w-4xl space-y-6">
+    <section class="card overflow-hidden">
+      <div class="flex flex-col gap-5 p-5 sm:flex-row sm:items-start sm:justify-between sm:p-6">
+        <div class="min-w-0">
+          <p class="text-title tabular-nums">
+            <% if @coupon.discount_type == "percent" %>
+              <%= @coupon.percent_off %>%
+            <% else %>
+              <%= Billing::CurrencyResolver.format(@coupon.amount_off_cents, @coupon.currency.presence || "CNY") %>
+            <% end %>
+          </p>
+          <p class="mt-1 text-body-sm text-text-secondary">
+            <%= t("comp_billing.coupon_table.durations.#{@coupon.duration}") %>
+            <% if @coupon.duration == "repeating" %>
+              (<%= t("maint_platform.billing.coupons.show.cycles", count: @coupon.duration_in_cycles) %>)
+            <% end %>
+          </p>
+        </div>
+        <div class="flex min-w-0 flex-wrap items-center gap-2">
+          <span class="inline-flex items-center gap-1.5 rounded-md border border-dashed border-accent-muted bg-accent-subtle px-2.5 py-1 font-mono text-body-sm font-medium text-accent-text break-all">
+            <%= render Billing::Admin::IconComponent.new(name: :tag, class_name: "h-4 w-4") %>
+            <%= @coupon.code %>
+          </span>
+          <%= render BadgeComponent.new(variant: @coupon.active? ? :success : :default, size: :sm) do %>
+            <%= @coupon.active? ? t("common.status.active") : t("common.status.inactive") %>
+          <% end %>
+          <%= render BadgeComponent.new(variant: @coupon.redeemable? ? :success : :default, size: :sm) do %>
+            <%= t("maint_platform.billing.coupons.show.redeemable_now") %>
+            <%= @coupon.redeemable? ? t("common.labels.yes") : t("common.labels.no") %>
+          <% end %>
+        </div>
+      </div>
+    </section>
+
+    <%= render ::Admin::Settings::SectionComponent.new(title: t("maint_platform.billing.coupons.show.details")) do %>
+      <%= render Billing::Admin::DetailListComponent.new do |list| %>
+        <% list.with_row(label: t("maint_platform.billing.coupons.show.code"), mono: true) { @coupon.code } %>
+        <% list.with_row(label: t("maint_platform.billing.coupons.show.discount_type")) do %>
+          <%= t("comp_billing.coupon_form.discount_types.#{@coupon.discount_type}") %>
+        <% end %>
+        <% list.with_row(label: t("maint_platform.billing.coupons.show.discount_value")) do %>
+          <span class="tabular-nums">
+            <% if @coupon.discount_type == "percent" %>
+              <%= @coupon.percent_off %>%
+            <% else %>
+              <%= Billing::CurrencyResolver.format(@coupon.amount_off_cents, @coupon.currency.presence || "CNY") %>
+            <% end %>
+          </span>
+        <% end %>
+        <% list.with_row(label: t("maint_platform.billing.coupons.show.duration")) do %>
+          <%= t("comp_billing.coupon_table.durations.#{@coupon.duration}") %>
+          <% if @coupon.duration == "repeating" %>
+            (<%= t("maint_platform.billing.coupons.show.cycles", count: @coupon.duration_in_cycles) %>)
+          <% end %>
+        <% end %>
+        <% list.with_row(label: t("maint_platform.billing.coupons.show.redemptions")) do %>
+          <span class="tabular-nums">
+            <%= @coupon.times_redeemed %><% if @coupon.max_redemptions %> / <%= @coupon.max_redemptions %><% end %>
+          </span>
+        <% end %>
+        <% list.with_row(label: t("maint_platform.billing.coupons.show.expires_at")) do %>
+          <span class="tabular-nums">
+            <%= @coupon.redeem_by.present? ? l(@coupon.redeem_by, format: :long) : t("maint_platform.billing.coupons.show.never") %>
+          </span>
+        <% end %>
+        <% list.with_row(label: t("common.labels.status")) do %>
+          <%= render BadgeComponent.new(variant: @coupon.active? ? :success : :default, size: :sm) do %>
+            <%= @coupon.active? ? t("common.status.active") : t("common.status.inactive") %>
+          <% end %>
+        <% end %>
+        <% list.with_row(label: t("maint_platform.billing.coupons.show.redeemable_now")) do %>
+          <%= render BadgeComponent.new(variant: @coupon.redeemable? ? :success : :default, size: :sm) do %>
+            <%= @coupon.redeemable? ? t("common.labels.yes") : t("common.labels.no") %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

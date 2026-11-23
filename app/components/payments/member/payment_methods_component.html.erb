@@ -1,0 +1,111 @@
+<%# ── Saved cards list ──────────────────────────────────────────────────── %>
+<div class="space-y-6">
+  <% if any_cards? %>
+    <section aria-label="<%= t("comp_payments.member.payment_methods.saved_cards_aria") %>">
+      <ul class="overflow-hidden rounded-2xl ring-1 ring-inset <%= chrome.theme.dark? ? "ring-white/[0.08]" : "ring-neutral-900/[0.07]" %> <%= chrome.table_divide_class %>" role="list">
+        <% payment_methods.each do |pm| %>
+          <li class="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:gap-4">
+
+            <%# ── Card icon ─────────────────────────────────────────────── %>
+            <span class="<%= chrome.icon_well_class %>"
+                  aria-hidden="true">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+              </svg>
+            </span>
+
+            <%# ── Card meta ─────────────────────────────────────────────── %>
+            <div class="flex-1 min-w-0">
+              <p class="flex flex-wrap items-center gap-2 text-site-sm font-medium">
+                <%= pm.display_label %>
+                <% if pm.is_default %>
+                  <span class="badge badge-success text-[11px] leading-none px-2 py-0.5"
+                        aria-label="<%= t("comp_payments.member.payment_methods.default_aria") %>"><%= t("comp_payments.shared.default_badge") %></span>
+                <% end %>
+              </p>
+              <p class="mt-0.5 text-site-xs <%= chrome.muted_class %>">
+                <%= t("comp_payments.member.payment_methods.expires_prefix") %><%= expiry_label(pm) %>
+              </p>
+            </div>
+
+            <%# ── Remove action ─────────────────────────────────────────── %>
+            <% destroy_url = destroy_url_for(pm) %>
+            <% if destroy_url.present? %>
+              <%= form_with url: destroy_url, method: :delete,
+                            class: "shrink-0",
+                            data: { turbo_confirm: t("comp_payments.member.payment_methods.remove_confirm") } do |f| %>
+                <%= f.button t("common.actions.remove"),
+                             type: "submit",
+                             class: chrome.danger_link_class %>
+              <% end %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+  <% else %>
+    <%# ── Empty state ──────────────────────────────────────────────────── %>
+    <section data-member-card class="<%= chrome.card_class %> text-center" aria-label="<%= t("comp_payments.member.payment_methods.no_cards") %>">
+      <span class="<%= chrome.icon_well_class %> mx-auto mb-4"
+            aria-hidden="true">
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+        </svg>
+      </span>
+      <h2 class="<%= chrome.section_title_class %>"><%= t("comp_payments.member.payment_methods.no_cards") %></h2>
+      <p class="mx-auto mt-2 max-w-xs <%= chrome.body_copy_class %>">
+        <%= t("comp_payments.member.payment_methods.no_cards_hint") %>
+      </p>
+    </section>
+  <% end %>
+
+  <%# ── Add card panel ───────────────────────────────────────────────────── %>
+  <section data-member-card class="<%= chrome.card_class %>" aria-label="<%= t("comp_payments.member.payment_methods.add_card_aria") %>">
+    <h2 class="mb-6 <%= chrome.section_title_class %>"><%= t("comp_payments.member.payment_methods.add_card_title") %></h2>
+
+    <% if stripe_configured? %>
+      <%# Stripe Element wrapper — `payments--stripe-card` Stimulus controller %>
+      <%# Data attributes the controller reads:
+          - publishableKeyValue  → loads Stripe.js with this key
+          - setupIntentUrlValue  → POSTs to obtain a SetupIntent client_secret
+          - createUrlValue       → POSTs { payment_method_id } after confirmation
+      %>
+      <div data-controller="payments--stripe-card"
+           data-payments--stripe-card-publishable-key-value="<%= publishable_key %>"
+           data-payments--stripe-card-setup-intent-url-value="<%= setup_intent_url %>"
+           data-payments--stripe-card-create-url-value="<%= create_url %>"
+           data-payments--stripe-card-unavailable-text-value="<%= t("comp_payments.shared.stripe_unavailable") %>"
+           data-payments--stripe-card-unexpected-error-value="<%= t("comp_payments.stripe.unexpected_error") %>"
+           data-payments--stripe-card-setup-intent-failed-value="<%= t("comp_payments.stripe.setup_intent_failed") %>"
+           data-payments--stripe-card-missing-client-secret-value="<%= t("comp_payments.stripe.missing_client_secret") %>"
+           data-payments--stripe-card-missing-payment-method-value="<%= t("comp_payments.stripe.missing_payment_method") %>"
+           data-payments--stripe-card-server-error-value="<%= t("comp_payments.stripe.server_error") %>"
+           data-payments--stripe-card-processing-text-value="<%= t("comp_payments.stripe.processing") %>">
+
+        <%# Stripe Payment Element mounts here %>
+        <div data-payments--stripe-card-target="element"
+             class="min-h-12 rounded-xl p-4 ring-1 ring-inset <%= chrome.theme.dark? ? "bg-white/[0.04] ring-white/15" : "bg-white ring-neutral-900/10" %>">
+        </div>
+
+        <%# Inline error region %>
+        <p data-payments--stripe-card-target="error"
+           class="mt-2 text-sm text-red-600 hidden"
+           aria-live="polite"></p>
+
+        <div class="mt-4 flex justify-end">
+          <button type="button"
+                  data-action="click->payments--stripe-card#submit"
+                  class="<%= chrome.primary_button_class %>">
+            <%= t("comp_payments.member.payment_methods.save_card") %>
+          </button>
+        </div>
+      </div>
+    <% else %>
+      <p class="<%= chrome.body_copy_class %>">
+        <%= t("comp_payments.member.payment_methods.not_configured") %>
+      </p>
+    <% end %>
+  </section>
+</div>

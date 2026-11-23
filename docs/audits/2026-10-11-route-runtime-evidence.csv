@@ -1,0 +1,93 @@
+route_ids,verbs,run,spec,scope
+R001,GET,C554,spec/requests/page_shortcuts_spec.rb:285-297,Bare health GET; boot response only
+R004 R006 R657 R658 R659,GET|HEAD,C554,spec/requests/page_shortcuts_spec.rb:42-282,Explicitly exercised root and glob destinations; HEAD empty body; representative mappings only
+R008,GET,C554,spec/requests/page_shortcuts_spec.rb:57-77,Anonymous Home fallback and signed-in redirect
+R019 R021,POST,C554,spec/requests/formatted_webhook_routes_spec.rb,Bare/json/xml routing and rejection; dispatcher/provider seams mocked
+R058,GET,C554,spec/requests/public_pages_tenant_audience_spec.rb,Canonical render; tenant-bound fields/options/composite data and viewer guards
+R059,POST,C554,spec/requests/public_pages_tenant_audience_spec.rb,Canonical submission filtering/persistence/handoff; synthetic stored activity
+R660 R661,POST,C554,spec/requests/page_shortcuts_spec.rb:331-437,Root/glob submission; identity/locale/CSRF checks; synthetic stored activity
+R095,PATCH,C554,spec/requests/admin/pages_route_audit_spec.rb:16-68,Atomic publication/reactivation and invalid selection outcomes
+R096 R097,GET,C554,spec/requests/admin/pages_route_audit_spec.rb:70-138,Formatted uncategorized and effective-override entity lists
+R184,GET,C554,spec/requests/core_route_audit_spec.rb:64-67,Owner cross-tenant customer-profile read
+R304,GET,C554,spec/requests/core_route_audit_spec.rb:25-35,Formatted shared constant collection scope
+R305 R328,POST,C554,spec/requests/core_route_audit_spec.rb:13-23,Formatted platform constant/entity creation and NULL ownership
+R392,PATCH,C554,spec/requests/core_route_audit_spec.rb:54-62,Nested customer restoration with outer platform identity
+R395,DELETE,C554,spec/requests/admin/maintenance/platform/core_mutations_route_audit_spec.rb:99-110,Purge failure response; domain Result mocked; not a successful physical purge
+R421,PATCH,C554,spec/requests/admin/maintenance/platform/core_mutations_route_audit_spec.rb:10-84,Module prevalidation/rollback/provision-before-enable; provisioning failure injected
+R513,PATCH,C554,spec/requests/admin/maintenance/platform/core_mutations_route_audit_spec.rb:86-97,Malformed industry replacement refusal and preserved mappings
+R638,GET,C554,spec/requests/public_pages_tenant_audience_spec.rb:59-69,Own member profile confirms retained authenticated actor
+R646,GET,C554,spec/requests/core_route_audit_spec.rb:104-123,Same-tenant admin member-page preview and foreign-owner rejection
+R010,GET,A280,spec/requests/oauth/pkce_flow_spec.rb:68-213,Authorize protocol/browser-session/MFA entry
+R011,DELETE,A280,spec/requests/oauth/pkce_flow_spec.rb:274-351,Registered destination denial and invalid-request refusal
+R012,POST,A280,spec/requests/oauth/pkce_flow_spec.rb:214-273,Consent protocol and locked issuance
+R013 R014,POST,A280,spec/requests/oauth/pkce_flow_spec.rb,PKCE exchange/refresh/revoke and structured errors
+R016 R017,GET,A280,spec/requests/oauth/pkce_flow_spec.rb,Discovery and Bearer userinfo; not native/introspection
+R026,GET,A52,spec/requests/authentication/sessions_spec.rb:19-35,Sign-in form response
+R027,POST,A52,spec/requests/authentication/sessions_spec.rb,Password sign-in and browser tracking
+R028,DELETE,A52,spec/requests/authentication/sessions_spec.rb:224-238,Sign-out cleanup
+R029 R030,GET,A280,spec/requests/authentication/passwords_spec.rb,Reset issuance/edit forms and effective token-owner gates
+R031,PATCH,A280,spec/requests/authentication/passwords_spec.rb,Payload-token reset and controlled errors; PUT not certified
+R033,POST,A280,spec/requests/authentication/passwords_spec.rb,Uniform issuance/throttling and invalid inputs
+R045 R047,GET,A280,spec/requests/authentication/registrations_spec.rb,Tenant signup and session-scoped account forms
+R046,POST,A280,spec/requests/authentication/registrations_spec.rb,Signup/role/quota/credential branches
+R048,PATCH,A280,spec/requests/authentication/registrations_spec.rb,Session-owned credential edit and Lockable re-auth; PUT not certified
+R082,GET,A52,spec/requests/oauth/bearer_authenticatable_spec.rb,Entity-definition Bearer principal; tracking/cookie/tenant/role checks
+R539 R541 R542 R543,GET,A280,spec/requests/authentication/admin/users_spec.rb,User index/show/new/edit and target guards
+R540,POST,A280,spec/requests/authentication/admin/users_spec.rb,Admin user creation and accepted member quota
+R544,PATCH,A280,spec/requests/authentication/admin/users_spec.rb,User/role update and credential/owner guards; PUT not certified
+R636,GET,A280,spec/requests/authentication/admin/users_spec.rb:95-102,Roleless landing refusal only; not all dashboard journeys
+R644,GET,A280,spec/system/member/security_spec.rb,RackTest security render/password link; MFA-on fixture bypasses enforce_mfa; no browser MFA journey
+R024,GET,M388,spec/requests/emails/unsubscribes_spec.rb,Signed unsubscribe confirmation and malformed envelope refusal
+R025,POST,M388,spec/requests/emails/unsubscribes_spec.rb,Token-authorized suppression and replay behavior
+R549,PUT,M388,spec/requests/admin/modules/emails/template_versions_spec.rb,Live head application and disabled-module/tenant/default checks
+R550 R552 R553,GET,M388,spec/requests/admin/modules/emails/template_versions_spec.rb,Version index/show/edit and line/tenant scope
+R551,POST,M388,spec/requests/admin/modules/emails/template_versions_spec.rb,Restore-as-new; scalar/lineage persistence
+R554,DELETE,M388,spec/requests/admin/modules/emails/template_versions_spec.rb,Nondefault deletion/default refusal and lineage nullification
+R555 R567,PATCH,M388,spec/requests/admin/modules/emails/templates_spec.rb,Template status/update and controlled invalid input
+R556 R562 R564 R565 R566,GET,M388,spec/requests/admin/modules/emails/templates_spec.rb,Index/new/edit/show/GET preview; tenant-filtered CID preview
+R559 R561 R563,POST,M388,spec/requests/admin/modules/emails/templates_spec.rb,Duplicate/collection preview/create; test_send and member POST preview not certified
+R569,DELETE,M388,spec/requests/admin/modules/emails/templates_spec.rb,Deletion restrictions and tenant scope
+R583 R585 R586 R587,GET,M388,spec/requests/admin/modules/emails/lists_spec.rb,Audience-list index/new/edit/show
+R582 R584,POST,M388,spec/requests/admin/modules/emails/lists_spec.rb,Preview/create; malformed rule/container rejection
+R588,PATCH,M388,spec/requests/admin/modules/emails/lists_spec.rb,Omission preservation and tenant-scoped membership replacement
+R590,DELETE,M388,spec/requests/admin/modules/emails/lists_spec.rb,List delete/restrictions/foreign scope
+R018,PATCH,W572,spec/requests/websites/home_site_localization_spec.rb:39-53,Locale switch exercised by website localization; not every Referer branch
+R060 R062,GET,W572,spec/requests/websites/public_pages_spec.rb,Published URL-tenant website reads and public visitor guards
+R061,GET|HEAD,W572,spec/requests/websites/media_spec.rb,Real Disk media serving; classified raster/MIME/size/tenant/missing-byte refusals
+R153,GET,W572,spec/requests/websites/admin_pages_spec.rb,Website settings root alias
+R154,GET,W572,spec/requests/websites/admin_settings_spec.rb,Website site settings read
+R155,PATCH,W572,spec/requests/websites/admin_settings_spec.rb,Site publication/theme/settings writes
+R157,POST,W572,spec/requests/websites/admin_settings_spec.rb,Skeleton replacement and confirmation boundary
+R464 R467,GET,W572,spec/requests/websites/platform_skeletons_spec.rb;spec/requests/websites/platform_layouts_spec.rb,Platform skeleton/layout galleries; no catalog write certification
+R612 R618 R619,GET,W572,spec/requests/websites/admin_pages_spec.rb,Website module root/new/edit with tenant/layout/localization checks
+R613,GET,W572,spec/requests/websites/home_site_preview_spec.rb,Read-only existing-page preview
+R614 R617,POST,W572,spec/requests/websites/admin_pages_spec.rb;spec/requests/websites/home_site_preview_spec.rb,Unsaved preview/create; structural and tenant boundaries
+R620,PATCH,W572,spec/requests/websites/admin_pages_spec.rb,Page props/publication update; locked structure preservation
+R622,DELETE,W572,spec/requests/websites/admin_pages_spec.rb,Page deletion/home protection
+R623,POST,W572,spec/requests/websites/media_spec.rb,Actual upload and authoritative website classification
+R113,POST,P549,spec/requests/admin/settings/modules/payments/merchant_accounts_spec.rb,Connection response taxonomy; PSP network mocked
+R114 R116 R117,GET,P549,spec/requests/admin/settings/modules/payments/merchant_accounts_spec.rb,Merchant gallery/new redirect/edit
+R115,POST,P549,spec/requests/admin/settings/modules/payments/merchant_accounts_spec.rb,Selected-provider account creation and invalid shape
+R118,PATCH,P549,spec/requests/admin/settings/modules/payments/merchant_accounts_spec.rb,Typed/vendor slices and actual provider/mode identity; PUT not certified
+R066 R068,GET,P549,spec/requests/payments/checkouts_spec.rb,Checkout/status responses and record/token scope; PSP calls mocked
+R067,POST,P549,spec/requests/payments/checkouts_spec.rb,Pre-intent consent/default provider/handoff/order binding; PSP calls mocked
+R019,POST,P549,spec/requests/payments/webhooks_stripe_spec.rb,Official signature and pinned operation routing fixtures; live delivery not certified
+R083 R086,GET,AI1666,spec/requests/admin/assistant/messages_spec.rb;spec/requests/admin/assistant/transcriptions_spec.rb,Bearer messages/owned clip polling and terminal serialization
+R084 R085 R624,POST,AI1666,spec/requests/admin/assistant/messages_spec.rb;spec/requests/admin/assistant/transcriptions_spec.rb;spec/requests/admin/modules/ai_assistant/transcriptions_spec.rb,Message/dictation enqueue and failure/thread binding; queue/vendor seams controlled
+R158 R160,GET,BA375,spec/requests/admin/settings/billing/presentation_spec.rb;spec/requests/admin/settings/billing/subscriptions_spec.rb,Read-only preview/logical current/history and accepted terms
+R161,PATCH,BA375,spec/requests/admin/settings/billing/subscriptions_spec.rb;spec/requests/admin/settings/billing/presentation_spec.rb,Subscribe/change/reenrollment and invalid form; no live provider journey
+R163,DELETE,BA375,spec/requests/admin/settings/modules/billing/cancellations_spec.rb,Resume scheduled cancellation and domain refusal
+R164 R165,POST,BA375,spec/requests/admin/settings/modules/billing/cancellations_spec.rb;spec/requests/admin/settings/modules/billing/coupon_redemptions_spec.rb,Period-end cancellation/coupon orchestration and tenant scope
+R176,GET,BA375,spec/requests/admin/settings/billing/presentation_spec.rb,Invoice detail/recovery descriptor/filter/readiness display; provider readiness mocked
+R473 R475 R476 R477,GET,BA375,spec/requests/admin/maintenance/platform/billing/plans_spec.rb,Owner plan index/show/new/edit
+R474,POST,BA375,spec/requests/admin/maintenance/platform/billing/plans_spec.rb,Plan and limits atomic create/form retention
+R478,PATCH,BA375,spec/requests/admin/maintenance/platform/billing/plans_spec.rb,Plan/limits update and immutable referenced identity
+R480,DELETE,BA375,spec/requests/admin/maintenance/platform/billing/plans_spec.rb,Catalog archive and retained history
+R481,GET,BA375,spec/requests/admin/maintenance/platform/billing/countable_items_spec.rb,Read-only enforceable countable catalog
+R482,PATCH,BA375,spec/requests/admin/maintenance/platform/billing/countable_items_spec.rb,Atomic countable policy and invalid input
+R484 R486 R487 R488,GET,BA375,spec/requests/admin/maintenance/platform/billing/coupons_spec.rb,Owner coupon index/show/new/edit and localized facts
+R485,POST,BA375,spec/requests/admin/maintenance/platform/billing/coupons_spec.rb,Coupon validated creation/form retention
+R489,PATCH,BA375,spec/requests/admin/maintenance/platform/billing/coupons_spec.rb,Coupon update/identity validation
+R491,DELETE,BA375,spec/requests/admin/maintenance/platform/billing/coupons_spec.rb,Coupon archive and retained history
+R493 R494 R499,GET,BA375,spec/requests/admin/maintenance/platform/billing/presentation_spec.rb,Subscription list/detail and invoice-detail collection facts
+R495 R497,POST,BA375,spec/requests/admin/maintenance/platform/billing/presentation_spec.rb:119-143,Rejected settlement/override presentation only; domain Results mocked

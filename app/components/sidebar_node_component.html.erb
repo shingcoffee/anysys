@@ -1,0 +1,67 @@
+<% icon = capture do %>
+  <% if icon_tile? %>
+    <span class="flex <%= tile_size_classes %> shrink-0 items-center justify-center rounded-md <%= tile_classes %>" aria-hidden="true" data-role="tile">
+      <% if node.icon.present? %>
+        <svg class="<%= depth.zero? ? "size-3.5" : "size-3" %>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="<%= depth.zero? ? "1.75" : "2" %>">
+          <path stroke-linecap="round" stroke-linejoin="round" d="<%= node.icon %>" />
+        </svg>
+      <% else %>
+        <span class="text-[10px] font-semibold leading-none"><%= node.monogram %></span>
+      <% end %>
+    </span>
+  <% elsif icon_glyph? %>
+    <svg class="size-[18px] flex-shrink-0 <%= active? ? 'text-accent' : 'text-text-muted group-hover:text-text-tertiary' %> transition-base" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="<%= node.icon %>" />
+    </svg>
+  <% end %>
+<% end %>
+<% badge = capture do %>
+  <% if count_badge? %>
+    <span class="<%= count_classes %>"><%= node.badge[:label] %></span>
+  <% elsif node.badge %>
+    <span class="badge <%= active? ? 'badge-accent' : 'badge-default' %> text-[10px]">
+      <%= node.badge[:label] %>
+    </span>
+  <% end %>
+<% end %>
+<%= tag.li(**li_attributes) do %>
+  <% if node.children.any? %>
+    <details class="group/nav" <%= "open" if open? %> <% if details_target? %>data-list-filter-target="details"<% end %>>
+      <summary class="list-none cursor-pointer <%= row_classes %>">
+        <%= icon %>
+        <% if node.link? %>
+          <%= link_to node.label, node.path,
+                class: "#{truncate_label? ? 'min-w-0 truncate' : 'truncate'} flex-1 hover:underline decoration-border underline-offset-2",
+                title: label_title,
+                aria: ({ current: "page" } if active?),
+                data: mobile? ? { action: "click->drawer#close" } : {} %>
+        <% else %>
+          <%= tag.span(node.label, class: label_classes, title: label_title) %>
+        <% end %>
+        <%= badge %>
+        <svg class="<%= soft? ? 'size-3.5' : 'size-4' %> flex-shrink-0 text-text-muted transition-transform duration-200 group-open/nav:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </summary>
+      <ul class="<%= sub_list_classes %>">
+        <% node.children.each do |child| %>
+          <%= render SidebarNodeComponent.new(node: child, current_path: current_path, depth: depth + 1, mobile: mobile?, filterable: filterable?, selected_key: @selected_key) %>
+        <% end %>
+      </ul>
+    </details>
+  <% elsif node.link? %>
+    <%= link_to node.path,
+          class: row_classes,
+          title: label_title,
+          aria: ({ current: "page" } if active?),
+          data: mobile? ? { action: "click->drawer#close" } : {} do %>
+      <%= icon %>
+      <span class="<%= label_classes %>"><%= node.label %></span>
+      <%= badge %>
+    <% end %>
+  <% else %>
+    <div class="flex items-center px-3 pt-5 pb-2 <%= indent_class %>">
+      <span class="stat-label"><%= node.label %></span>
+    </div>
+  <% end %>
+<% end %>

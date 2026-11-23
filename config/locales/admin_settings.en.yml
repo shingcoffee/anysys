@@ -1,0 +1,354 @@
+en:
+  admin_settings:
+    errors:
+      validations:
+        subject_required_for_type: "must be present for %{subject_type}"
+        subject_forbidden_for_type: "must be blank for %{subject_type}"
+        role_customer_mismatch: "must belong to the same customer as the user"
+        role_owner_reserved: "owner is reserved for the platform owner account"
+        invalid_surface: "is not a valid surface for this customer"
+        visible_keys_max: "must contain at most %{count} entries"
+        provider_not_available: "is not an available payment provider"
+        plan_not_active: "must resolve to an active plan"
+        plan_interval_mismatch: "must use the same billing interval as the current plan"
+        dunning_schedule_positive: "must contain only positive day offsets"
+        coupon_not_found: "not found"
+        coupon_not_redeemable: "is not redeemable"
+        coupon_currency: "does not apply to this currency"
+        billing_request_key: "must be a valid billing request UUID"
+        change_requires_active_subscription: "requires an active or trialing subscription"
+        default_plan_must_be_free: "must be active, free in both currencies, and have no trial"
+        default_plan_required: "must retain a valid free default plan"
+        free_limits_required: "must specify finite nonnegative limits for every enforced resource"
+        countable_item_invalid: "must include a label, a whole-number position, and a period of total or monthly"
+        catalog_terms_immutable: "cannot change accepted price or interval terms; create a new offering"
+        dunning_schedule_order: "must contain strictly increasing, unique positive whole-day offsets, or be blank"
+        coupon_fixed_currency: "must be USD or CNY for a fixed discount"
+        code_immutable: "cannot be changed after creation"
+        limit_invalid: "must be blank, -1, or a nonnegative whole number for a supported resource"
+        currency_not_supported: "must be a supported billing currency"
+        row_action_invalid: "The row action needs an action key and a target field."
+
+    breadcrumbs:
+      settings:          "Settings"
+      billing:           "Billing"
+      invoices:          "Invoices"
+      payment_methods:   "Payment Methods"
+      subscription_plan: "Subscription Plan"
+      authentication:    "Authentication"
+      member:            "Member"
+      roles:             "Roles"
+      grants:            "Grants"
+      draft:             "Draft"
+      email:             "Email"
+      template_tokens: "Template tokens"
+      captcha:           "Captcha"
+      website:           "Website"
+
+    index:
+      title:                   "Settings"
+      subtitle:                "Configure modules and preferences for your organization"
+
+    catalog:
+      empty_title: "No settings yet"
+      empty_description: "Settings appear here as you enable modules for this organization."
+      groups:
+        members: "Control the member portal and what members can see."
+        billing: "Review your plan, payment methods, and invoices."
+      cards:
+        overview: "Browse every setting for this organization."
+        member: "Choose what members see and how it is labelled."
+        subscription: "Compare plans and change your subscription."
+        payment_methods: "Add, default, or remove collection methods."
+        invoices: "View and download invoices for this organization."
+      modules:
+        fallback: "Configure %{name} for this organization."
+        authentication: "Sign-up, password reset, roles, and user assignments."
+        payment: "Merchant accounts and default payment gateways."
+        email: "Daily send cap and template tokens."
+        sms: "Daily send cap for outbound SMS."
+        captcha: "Where captcha challenges appear for this organization."
+        ai_assistant: "Tenant defaults for the AI assistant."
+        website: "Site identity, theme, and the public introduction website."
+
+    members:
+      title:         "Member surfaces"
+      subtitle_html: "Choose what your members see and how it's labelled."
+
+    member:
+      sources:
+        builtin:
+          name: "Built-in"
+          description: "Always-visible member pages."
+        modules:
+          description: "Read-only surfaces shipped by feature modules."
+        entities:
+          description: "Surfaces auto-generated from custom entity schemas."
+        pages:
+          name: "Pages"
+          description: "Launched pages members can open."
+
+    flash:
+      default_gateways:
+        updated:          "Default gateway updated."
+      merchant_accounts:
+        auto_provisioned: "Gateway accounts are provisioned automatically. Configure them using the tiles below."
+        updated:          "Gateway updated."
+        not_platform_available: "This payment gateway is not available on the platform."
+      role_grants:
+        updated:          "Grants updated."
+        update_failed:    "Could not update grants."
+      user_role_assignments:
+        assigned:         "Roles assigned."
+        assign_failed:    "Could not assign roles."
+        removed:          "Role removed."
+      roles:
+        created:          "Role created."
+        updated:          "Role updated."
+        destroyed:        "Role destroyed."
+        destroy_failed:   "Role cannot be destroyed."
+      email_template_tokens:
+        created:          "Template token created."
+        updated:          "Template token updated."
+        destroyed:        "Template token deleted."
+        destroy_failed:   "Template token could not be deleted."
+      sign_up:
+        enabled:          "Self sign-up enabled."
+        disabled:         "Self sign-up disabled."
+      forget_password:
+        enabled:          "Forget password enabled."
+        disabled:         "Forget password disabled."
+      member_sources:
+        saved:            "Saved."
+      member_surfaces:
+        saved:            "Surface saved."
+      members:
+        saved:            "Member surface settings saved."
+      billing:
+        no_active_subscription: "No active subscription found."
+        command_invalid: "This action is not available in the current billing state."
+        invalid_filters: "Some billing filters were invalid. Review the corrected filters."
+        collection:
+          succeeded: "Invoice payment completed."
+          pending: "Invoice payment is processing. Check its status before retrying."
+          requires_action: "Complete authentication for the existing invoice payment."
+          pending_manual: "The invoice awaits manual settlement; no gateway charge was made."
+          retry_scheduled: "Payment failed. A retry is scheduled according to the invoice's saved policy."
+          exhausted: "Automatic payment retries have ended. Review the invoice for recovery options."
+          skipped: "Collection was not attempted in the current invoice state."
+          blocked: "Resolve the invoice's payment or authorization issue before collecting."
+        reasons:
+          validation_failed: "Review the billing form fields."
+          billing_request_key: "The billing request key is invalid. Reload the page before starting a new request."
+          pending_change_exists: "Resolve or cancel the existing plan change before choosing another plan."
+          request_key_used: "This request key belongs to an existing request and cannot start another one."
+          plan_not_active: "This plan is not available for new requests."
+          currency_not_supported: "This stored billing currency is not supported for plan changes."
+          change_requires_active_subscription: "Recover the current subscription before requesting a plan change."
+          cancellation_scheduled: "Keep the subscription before requesting another plan change."
+          renewal_due: "Resolve the renewal invoice before changing plans."
+          resume_blocked: "Only a scheduled cancellation can be undone. Payment recovery is handled through invoices."
+          plan_change_not_found: "There is no outstanding plan change to cancel."
+          collection_in_flight: "Resolve the existing payment attempt before changing this billing record."
+          in_flight: "Payment is already processing. Check its status before retrying."
+          concurrent_collection: "An existing collection request is processing."
+          request_expired: "This payment request has expired. Contact the platform administrator about outstanding debt."
+          provider_unavailable: "This provider is unavailable for the current billing currency and credential mode."
+          no_payment_method: "Authorize a ready payment method for the invoice currency."
+          method_inactive: "The selected payment method is not active."
+          mandate_inactive: "The linked authorization is not active."
+          mandate_incomplete: "Provider authorization has not been verified for collection."
+          currency_mismatch: "The payment method or coupon does not support this billing currency."
+          account_mismatch: "The linked provider account cannot be used for this billing record."
+          tenant_mismatch: "This billing record does not belong to the current customer."
+          reauthorization_required: "Authorize a method that supports this invoice's amount and billing interval."
+          authorization_failed: "Billing payment authorization could not be completed. Try again."
+          authorization_unknown: "Authorization is awaiting verified provider confirmation."
+          authorization_unavailable: "Provider authorization could not be checked yet. Try again later."
+          authorization_revoked: "The provider has revoked this authorization."
+          authorization_action_invalid: "The provider did not return a usable authorization action."
+          method_removed: "This payment method has been removed and cannot be reactivated."
+          invalid_return_url: "The authorization return address could not be validated."
+          admin_required: "A customer administrator is required for billing authorization."
+          owner_required: "Only the platform owner can perform this settlement action."
+          settlement_reference_required: "Enter a settlement reference before recording manual payment."
+          invoice_not_issued: "Finalize the invoice before recording settlement."
+          invoice_not_payable: "This invoice cannot be settled in its current state."
+          payment_mismatch: "The payment does not match this invoice's saved identity, amount or currency."
+          invalid_settlement_source: "The settlement source is invalid."
+          invalid_collection_authorization: "Choose a valid collection mode and explain the authorization."
+          not_zero_invoice: "Only a zero-total invoice can be settled without payment."
+          default_plan_required: "Keep a valid finite free default plan before archiving this plan."
+          fallback_configuration_invalid: "Free-plan limits are unavailable. Contact the platform administrator."
+          already_applied: "This subscription already has an accepted coupon."
+          not_redeemable: "This coupon is not available for redemption."
+          subscription_ended: "This subscription has ended. New enrollment is required for paid service."
+          settlement_after_expiry: "Payment was recorded after request expiry and requires platform review."
+          duplicate_capture: "An additional captured payment requires platform reconciliation."
+          void_capture: "Payment was captured for a void invoice and requires platform review."
+          stale_intent: "Payment is recorded, but its billing request requires platform review."
+          stale_initial: "The initial payment no longer matches the accepted subscription period."
+          stale_plan_change: "The plan-change payment no longer matches the current subscription period."
+          stale_renewal: "The renewal payment no longer matches the current subscription boundary."
+          settlement_identity_mismatch: "Settlement identity requires platform review."
+          plan_change_ended: "The associated plan change has ended. Payment requires platform review."
+          cancellation_boundary: "Payment at the cancellation boundary requires platform review."
+          unknown_invoice_purpose: "The invoice purpose requires platform review."
+          not_submitted: "Collection was blocked before provider submission."
+          one_time_charge_failed: "The one-time payment could not be completed. Choose a provider and try again."
+          payment_not_found: "No active one-time payment attempt was found for this invoice."
+      cancellations:
+        scheduled:        "Your subscription has been scheduled for cancellation."
+        resumed:          "Your subscription has been resumed."
+        unchanged: "The subscription's cancellation state is unchanged."
+      coupon_redemptions:
+        not_found:        "Coupon code not found."
+        not_redeemable:   "Coupon is not redeemable."
+        currency_mismatch: "This coupon does not apply to your billing currency."
+        already_applied:  "This subscription already has a coupon applied."
+        once_elapsed:     "This one-time coupon can only be applied before the first invoice."
+        applied:          "Coupon '%{code}' applied successfully."
+      payment_methods:
+        revocation_pending: "Payment method removed locally. Provider cleanup is pending."
+        authorized:       "Payment method authorized successfully."
+        pending_authorization: "Payment method saved. Complete provider authorization before it can collect."
+        removed:          "Payment method removed."
+        default_updated:  "Default payment method updated."
+        provider_unavailable: "provider '%{provider}' is not available for billing"
+      subscriptions:
+        plan_change_scheduled: "Your plan change is scheduled for %{date}."
+        plan_change_pending: "Your plan change is waiting for invoice settlement."
+        plan_change_cancelled: "The outstanding plan change has been cancelled."
+        pending_change_exists: "Resolve or cancel the existing plan change before choosing another plan."
+        subscription_pending: "Your subscription request awaits initial invoice payment. Finite free limits apply until settlement."
+        unchanged: "Your subscription is unchanged."
+        subscribed:       "You are now subscribed to %{name}."
+        plan_changed:     "Your plan has been changed to %{name}."
+        plan_change_not_collected: "The plan was not changed because the proration invoice could not be collected."
+
+    billing:
+      invoices:
+        show:
+          title:         "Invoice %{number}"
+          description:   "Invoice details and line items."
+          back_link:     "All invoices"
+          download_link: "Download / Print"
+        download:
+          title:       "Invoice %{number}"
+          description: "Printable invoice view."
+          number_line: "Invoice #%{number}"
+          total_line:  "Total: %{amount}"
+      subscriptions:
+        title:       "Subscription Plans"
+        description: "Compare what each plan includes and switch whenever your needs change."
+
+    authentication:
+      forget_password:
+        title:         "Forget password"
+        description:   "Allow users to recover their account by requesting a password-reset email. The user must click the link in the email to set a new password."
+        status_header: "Status"
+        enable_label:  "Enable forget password"
+        caption_html:  "When disabled, the request form, the email-link reset endpoint, and the\n            \"Forgot password?\" link on the sign-in page all show a \"Password reset is\n            currently disabled\" page."
+      sign_up:
+        title:         "Sign up"
+        description:   "Allow visitors to self-register a member account. New accounts must confirm their email by clicking a link before they can sign in."
+        status_header: "Status"
+        enable_label:  "Enable self sign-up"
+        caption_html:  "When disabled, the sign-up form, the confirmation link in pending emails,\n            and the resend-confirmation panel all show a \"Sign-up is currently disabled\"\n            page."
+      roles:
+        index:
+          title:             "Roles"
+          description:       "Define role-based access for this tenant."
+          new_action:        "New Role"
+          search_placeholder: "Search roles…"
+          action_grants:     "Grants"
+          delete_confirm:    'Delete role "%{name}"?'
+          empty_title:       "No roles yet"
+          empty_description: "Create the first custom role for this tenant."
+          empty_action:      "Create First Role"
+        new:
+          title:         "New role"
+          subtitle_html: "Define a custom role and assign grants once it's created."
+        edit:
+          title:         "Edit role"
+          subtitle_html: "Update the role's name and description. Key cannot be changed."
+        show:
+          manage_grants:          "Manage grants"
+          details_header:         "Details"
+          key_label:              "Key"
+          system_badge:           "System (locked)"
+          custom_badge:           "Custom"
+          usage_header:           "Usage"
+          users_assigned_label:   "Users assigned"
+          grants_configured_label: "Grants configured"
+        grants:
+          heading:          "Grants — %{name}"
+          default_subtitle: "Toggle the resources and actions this role can perform."
+          back_to_role:     "Back to role"
+      user_role_assignments:
+        title:             "User role assignments"
+        description:       "Assign one or more roles to each user. System roles are marked."
+        empty_title:       "No users yet"
+        empty_description: "Add users from the Users page before assigning roles."
+
+    emails:
+      template_tokens:
+        index:
+          title:             "Template tokens"
+          description:       "Platform tokens are shared across tenants. Add custom tokens bound to your entity attributes."
+          new_action:        "New token"
+          platform_heading:  "Platform tokens"
+          platform_hint:     "Read-only. Insert these from the template builder."
+          custom_heading:    "Custom tokens"
+          custom_hint:       "Bound each token to an attribute on a customer entity. Recipient values resolve when user linkage is available."
+          empty_title:       "No custom tokens yet"
+          empty_description: "Create a token that maps to an entity attribute."
+          empty_action:      "Create token"
+          delete_confirm:    'Delete token "%{name}"?'
+          columns:
+            label:     "Label"
+            source:    "Source"
+            entity:    "Entity"
+            attribute: "Attribute"
+        new:
+          title:       "New template token"
+          description: "Choose an entity attribute and a label for the insert picker."
+        edit:
+          title:       "Edit template token"
+          description: "Update the label or entity attribute binding."
+        form:
+          label:              "Label"
+          label_placeholder:  "e.g. Membership tier"
+          entity:             "Entity"
+          entity_blank:       "Select an entity"
+          attribute:          "Attribute"
+          attribute_blank:    "Select an attribute"
+          attribute_hint:     "Only attributes from the selected entity's definition are allowed."
+          create_submit:      "Create token"
+          update_submit:      "Update token"
+
+    access_points:
+      groups:
+        admin_routes: "Admin Routes"
+        modules: "Modules"
+        platform: "Platform"
+        pages: "Pages (all)"
+        entities: "Entities (all)"
+        pages_instances: "Specific pages"
+        entities_instances: "Specific entities"
+      route_groups:
+        admin: "Admin"
+        maintenance: "Maintenance"
+        platform: "Platform"
+        settings: "Settings"
+        misc: "Other"
+        settings_module: "%{name} settings"
+      pages_all: "All pages"
+      pages_all_description: "Grant covers every Page record for this customer."
+      entities_all: "All entities"
+      entities_all_description: "Grant covers every Entity record for this customer."
+      platform:
+        customers: "Platform: Customers"
+        module_settings: "Platform: Module Settings"
+        industry_templates: "Platform: Industry Templates"
+        code_generators: "Platform: Code Generators"

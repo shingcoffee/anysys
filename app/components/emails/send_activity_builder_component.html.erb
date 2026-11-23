@@ -1,0 +1,90 @@
+<%= form_with model: @send_activity, scope: :email_send_activity, url: @url, method: @method, local: true,
+      class: "flex flex-col gap-6",
+      data: {
+        controller: "email-send-activity-wizard",
+        email_send_activity_wizard_current_step_value: 1,
+        email_send_activity_wizard_total_steps_value: STEPS.length,
+        email_send_activity_wizard_field_required_msg_value: t("admin_modules.emails.send_activities.wizard.errors.field_required"),
+        email_send_activity_wizard_timing_required_msg_value: t("admin_modules.emails.send_activities.wizard.errors.timing_required"),
+        email_send_activity_wizard_send_now_label_value: t("admin_modules.emails.send_activities.review.send_now"),
+        email_send_activity_wizard_em_dash_value: t("common.labels.em_dash"),
+        email_send_activity_wizard_lists_url_value: lists_json_url,
+        email_send_activity_wizard_templates_url_value: templates_json_url,
+        email_send_activity_wizard_select_list_blank_value: t("admin_modules.emails.send_activities.form.select_list"),
+        email_send_activity_wizard_select_template_blank_value: t("admin_modules.emails.send_activities.form.select_template"),
+        email_send_activity_wizard_refresh_lists_error_value: t("admin_modules.emails.send_activities.form.refresh_lists_error"),
+        email_send_activity_wizard_refresh_templates_error_value: t("admin_modules.emails.send_activities.form.refresh_templates_error"),
+        email_send_activity_wizard_max_lists_value: Emails::SendActivities::SendActivity::MAX_EMAIL_LISTS,
+        email_send_activity_wizard_lists_too_many_msg_value: t("admin_modules.emails.send_activities.wizard.errors.lists_too_many", max: Emails::SendActivities::SendActivity::MAX_EMAIL_LISTS),
+        email_send_activity_wizard_add_list_label_value: t("admin_modules.emails.send_activities.form.add_list"),
+        email_send_activity_wizard_remove_list_label_value: t("admin_modules.emails.send_activities.form.remove_list")
+      } do |f| %>
+
+  <% if @send_activity.errors.any? %>
+    <%= render "shared/form_errors", resource: @send_activity %>
+  <% end %>
+
+  <nav aria-label="<%= t("admin_modules.emails.send_activities.wizard.progress_label") %>" class="mb-8">
+    <ol class="flex items-center w-full">
+      <% STEPS.each_with_index do |key, idx| %>
+        <li class="flex items-center <%= idx < STEPS.length - 1 ? 'flex-1 min-w-0' : 'shrink-0' %>">
+          <div class="flex items-center gap-2 min-w-0"
+               data-email-send-activity-wizard-target="stepIndicator"
+               data-step-index="<%= idx + 1 %>">
+            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-colors duration-200 bg-surface-active text-text-muted"
+                  data-email-send-activity-wizard-target="stepBadge"
+                  data-step-index="<%= idx + 1 %>">
+              <span data-email-send-activity-wizard-target="stepNumber" data-step-index="<%= idx + 1 %>"><%= idx + 1 %></span>
+              <svg data-email-send-activity-wizard-target="stepCheck" data-step-index="<%= idx + 1 %>"
+                   class="hidden h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </span>
+            <span class="hidden sm:inline text-sm font-medium text-text-muted truncate"
+                  data-email-send-activity-wizard-target="stepLabel"
+                  data-step-index="<%= idx + 1 %>"><%= step_label(key) %></span>
+          </div>
+          <% if idx < STEPS.length - 1 %>
+            <div class="mx-3 h-0.5 flex-1 rounded-full bg-border transition-colors duration-200"
+                 data-email-send-activity-wizard-target="stepConnector"
+                 data-step-index="<%= idx + 1 %>"></div>
+          <% end %>
+        </li>
+      <% end %>
+    </ol>
+  </nav>
+
+  <% STEPS.each_with_index do |key, idx| %>
+    <div class="card p-6 <%= 'hidden' unless idx.zero? %>"
+         data-email-send-activity-wizard-target="step"
+         data-step="<%= key %>"
+         data-step-index="<%= idx + 1 %>">
+      <h2 class="text-lg font-semibold text-text-primary mb-4"><%= step_label(key) %></h2>
+    <%= render "admin/modules/emails/send_activities/wizard_step_#{key}",
+          f: f, lists: @lists, templates: @templates, send_activity: @send_activity,
+          new_list_url: new_list_url, new_template_url: new_template_url %>
+    </div>
+  <% end %>
+
+  <div class="flex justify-between gap-3">
+    <div>
+      <%= link_to t("common.actions.cancel"), cancel_url,
+            class: "btn btn-secondary",
+            data: { email_send_activity_wizard_target: "cancelButton" } %>
+      <button type="button" class="btn btn-secondary hidden"
+              data-action="email-send-activity-wizard#previous"
+              data-email-send-activity-wizard-target="prevButton">
+        <%= t("common.actions.back") %>
+      </button>
+    </div>
+    <div>
+      <button type="button" class="btn btn-primary"
+              data-action="email-send-activity-wizard#next"
+              data-email-send-activity-wizard-target="nextButton">
+        <%= t("common.actions.continue") %>
+      </button>
+      <%= f.submit submit_label, class: "btn btn-primary hidden",
+            data: { email_send_activity_wizard_target: "submitButton" } %>
+    </div>
+  </div>
+<% end %>

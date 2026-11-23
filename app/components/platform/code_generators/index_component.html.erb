@@ -1,0 +1,29 @@
+<div class="h-full flex flex-col bg-canvas">
+  <%= render Platform::CodeGenerators::IndexToolbarComponent.new(
+    customer_id: @customer_id,
+    total_count: @total_count
+  ) %>
+
+  <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+    <aside class="flex-shrink-0">
+      <%= render Platform::CodeGenerators::SidebarComponent.new(
+        sidebar_data: @sidebar_data,
+        customer_id: @customer_id,
+        search_index: @search_index || [],
+        active_category: @category,
+        active_element_type: @element_type,
+        total_count: @total_count
+      ) %>
+    </aside>
+
+    <main class="flex-1 min-w-0 overflow-y-auto bg-canvas">
+      <%= render Platform::CodeGenerators::CardGridComponent.new(
+        generators: @filtered_generators,
+        customer_id: @customer_id,
+        category_label: category_label,
+        category_icon: category_icon,
+        category_count: category_count
+      ) %>
+    </main>
+  </div>
+</div>

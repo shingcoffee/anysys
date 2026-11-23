@@ -1,0 +1,12 @@
+<section class="<%= spacing_class(strip_padding) %>">
+  <div class="<%= inner_measure_class %>">
+    <dl class="<%= grid_class %> gap-y-10 border-y py-10 md:py-14 <%= hairline_class %>">
+      <% items.each_with_index do |item, index| %>
+        <div <%= item_attrs("items", class: "flex flex-col gap-2 px-2 text-center md:px-6 #{"md:border-l #{hairline_class}" unless index.zero?}") %>>
+          <dt <%= el_attrs("items.label", class: "order-last text-site-sm #{muted_class}") %>><%= item["label"] %></dt>
+          <dd <%= el_attrs("items.value", class: "break-words text-balance text-site-4xl tabular-nums leading-none md:text-site-6xl #{headline_font_class}") %>><%= item["value"] %></dd>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+</section>

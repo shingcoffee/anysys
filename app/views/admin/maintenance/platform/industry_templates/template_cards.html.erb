@@ -1,0 +1,193 @@
+<% associated = @templates.select { |t| @mapped_keys.include?(t[:key]) } %>
+<% available = @templates.reject { |t| @mapped_keys.include?(t[:key]) } %>
+
+<div class="mx-5 mb-4 rounded-xl border border-border-subtle bg-surface shadow-sm overflow-hidden"
+     data-controller="industry-template-panel"
+     data-industry-template-panel-industry-value="<%= @industry %>"
+     data-industry-template-panel-base-url-value="<%= @base_url %>"
+     data-industry-template-panel-mapped-keys-value="<%= @mapped_keys.to_json %>">
+
+  <%# ── PANEL HEADER ── %>
+  <div class="px-5 py-4 bg-canvas-elevated border-b border-border-subtle">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-surface-active">
+          <svg class="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+          </svg>
+        </div>
+        <div>
+          <h4 class="text-body-sm font-semibold text-text-primary">
+            <%= t("maint_platform.industry_templates.cards.template_associations") %>
+          </h4>
+          <p class="text-caption">
+            <span class="font-semibold text-accent" data-industry-template-panel-target="mappedCount"><%= @mapped_keys.size %></span>
+            <%= t("maint_platform.industry_templates.cards.templates_associated", count: @total_templates) %>
+          </p>
+        </div>
+      </div>
+      <a href="<%= @base_url %>/<%= @industry %>/edit"
+         class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-accent bg-surface border border-border-subtle rounded-lg hover:bg-surface-active transition-colors">
+        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        </svg>
+        <%= t("maint_platform.industry_templates.cards.bulk_edit") %>
+      </a>
+    </div>
+  </div>
+
+  <%# ── SEARCH & FILTER ── %>
+  <div class="px-5 pt-4 pb-2 bg-canvas-elevated border-b border-border-subtle">
+    <%# Search input %>
+    <div class="mb-3">
+      <div class="relative">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <svg class="w-4 h-4 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <input type="text"
+               class="input-field pl-10 pr-10"
+               placeholder="<%= t("maint_platform.industry_templates.cards.search_placeholder") %>"
+               data-action="input->industry-template-panel#searchTemplates"
+               data-industry-template-panel-target="searchInput">
+        <button type="button"
+                class="absolute inset-y-0 right-0 flex items-center pr-3 text-text-muted hover:text-text-secondary transition-colors hidden"
+                data-action="click->industry-template-panel#clearSearch"
+                data-industry-template-panel-target="searchClear"
+                title="<%= t("maint_platform.industry_templates.cards.clear_search") %>">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <%# Category navigation %>
+    <%= render "shared/category_tabs", controller_name: "industry-template-panel", category_counts: @category_counts %>
+
+    <%# Search results count %>
+    <div class="hidden mb-2 text-body-sm text-text-muted" data-industry-template-panel-target="searchResultsCount">
+      <span data-industry-template-panel-target="searchResultsNumber">0</span> <%= t("maint_platform.industry_templates.cards.templates_found") %>
+    </div>
+  </div>
+
+  <%# ── TEMPLATE CARDS ── %>
+  <div class="px-5 py-4 max-h-[36rem] overflow-y-auto" data-industry-template-panel-target="scrollContainer">
+
+    <%# Associated templates section %>
+    <div data-industry-template-panel-target="associatedSection" class="<%= 'hidden' if associated.empty? %>">
+      <div class="flex items-center gap-2 mb-3">
+        <div class="flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-accent" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          <span class="text-xs font-semibold text-accent uppercase tracking-wider"><%= t("maint_platform.industry_templates.cards.associated") %></span>
+          <span class="text-xs font-medium text-text-muted" data-industry-template-panel-target="associatedCount"><%= associated.size %></span>
+        </div>
+        <div class="flex-1 border-t border-border-subtle"></div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-5"
+           data-industry-template-panel-target="associatedContainer">
+        <% associated.each do |template| %>
+          <%= render PageBuilder::TemplateCardComponent.new(
+            template: template,
+            selected: true,
+            controller_name: "industry-template-panel"
+          ) %>
+        <% end %>
+      </div>
+    </div>
+
+    <%# Available templates section %>
+    <div data-industry-template-panel-target="availableSection" class="<%= 'hidden' if available.empty? %>">
+      <div class="flex items-center gap-2 mb-3">
+        <div class="flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          <span class="text-xs font-semibold text-text-muted uppercase tracking-wider"><%= t("maint_platform.industry_templates.cards.available") %></span>
+          <span class="text-xs font-medium text-text-muted" data-industry-template-panel-target="availableCount"><%= available.size %></span>
+        </div>
+        <div class="flex-1 border-t border-border-subtle"></div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3"
+           data-industry-template-panel-target="availableContainer">
+        <% available.each do |template| %>
+          <%= render PageBuilder::TemplateCardComponent.new(
+            template: template,
+            selected: false,
+            controller_name: "industry-template-panel"
+          ) %>
+        <% end %>
+      </div>
+    </div>
+
+    <%# No results message %>
+    <div class="hidden text-center py-12" data-industry-template-panel-target="noResults">
+      <svg class="w-16 h-16 mx-auto text-text-muted mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <h3 class="text-body-sm font-medium text-text-primary mb-1"><%= t("maint_platform.industry_templates.cards.no_templates_found") %></h3>
+      <p class="text-caption"><%= t("maint_platform.industry_templates.cards.no_templates_hint") %></p>
+    </div>
+  </div>
+
+  <%# ── PREVIEW ZOOM MODAL ── %>
+  <div class="hidden fixed inset-0 z-50 overflow-y-auto"
+       data-industry-template-panel-target="previewModal"
+       data-action="click->industry-template-panel#closePreviewModalOnBackdrop">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+      <div class="fixed inset-0 transition-opacity bg-text-primary/60" aria-hidden="true"></div>
+
+      <div class="relative inline-block w-full max-w-6xl overflow-hidden text-left align-middle transition-all transform bg-surface rounded-lg shadow-xl">
+        <%# Modal header %>
+        <div class="card-header">
+          <div class="flex items-start justify-between">
+            <div class="flex-1 min-w-0 mr-4">
+              <h3 class="section-header" data-industry-template-panel-target="previewModalName">
+                <%= t("maint_platform.industry_templates.cards.preview_title") %>
+              </h3>
+              <p class="mt-1 text-caption" data-industry-template-panel-target="previewModalDescription">
+                <%= t("maint_platform.industry_templates.cards.preview_description") %>
+              </p>
+            </div>
+            <div class="flex items-center gap-2">
+              <div data-industry-template-panel-target="previewModalCategory">
+                <%= render BadgeComponent.new(variant: :default, size: :sm) do %><%= t("maint_platform.industry_templates.cards.preview_category") %><% end %>
+              </div>
+              <div data-industry-template-panel-target="previewModalTheme">
+                <%= render BadgeComponent.new(variant: :primary, size: :sm) do %><%= t("maint_platform.industry_templates.cards.preview_theme") %><% end %>
+              </div>
+              <button type="button"
+                      class="inline-flex items-center justify-center w-8 h-8 text-text-muted transition-colors rounded-lg hover:text-text-secondary hover:bg-surface-active focus:outline-none"
+                      data-action="click->industry-template-panel#closePreviewModal">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <%# Modal preview content %>
+        <div class="px-6 py-6 bg-canvas-elevated">
+          <div class="overflow-hidden bg-surface border border-border-subtle rounded-lg shadow-sm">
+            <div class="p-8 min-h-[500px]" data-industry-template-panel-target="previewModalContent">
+            </div>
+          </div>
+        </div>
+
+        <%# Modal footer %>
+        <div class="px-6 py-4 bg-canvas-elevated border-t border-border-subtle">
+          <div class="flex justify-end gap-3">
+            <%= render ButtonComponent.new(variant: :secondary, tag: :button, type: "button",
+                data: { action: "click->industry-template-panel#closePreviewModal" }) do %>
+              <%= t("common.actions.close") %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

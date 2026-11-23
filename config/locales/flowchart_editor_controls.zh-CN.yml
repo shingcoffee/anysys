@@ -1,0 +1,16 @@
+zh-CN:
+  maint_core:
+    flowcharts:
+      editor:
+        property_editor:
+          none_option_label: "无"
+          add_row_label: "添加行"
+          remove_row_title: "删除"
+          search_placeholder: "搜索…"
+          locale_en_label: "英文"
+          locale_zh_cn_label: "中文"
+          reference_loading_label: "加载中…"
+          reference_empty_label: "无匹配项"
+          reference_error_label: "无法加载选项"
+          reference_placeholder: "请选择…"
+          default_placeholder_format: "默认：{value}"

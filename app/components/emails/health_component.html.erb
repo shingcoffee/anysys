@@ -1,0 +1,81 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "email",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.email.entries.analytics"), path: helpers.admin_modules_emails_dashboard_path(helpers.current_customer_id) },
+        { label: t("feature_modules.email.tabs.health") }
+      ],
+      title: t("feature_modules.email.tabs.health"),
+      description: t("admin_modules.emails.analytics.health.description")
+    ) do %>
+  <%= render "admin/modules/emails/shared/analytics_tabs", active_tab: :health %>
+
+  <div class="mb-6">
+    <%= render Emails::DateRangePickerComponent.new(url: url, since: since, until_date: until_date) %>
+  </div>
+
+  <div class="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+    <% %i[bounced complained suppressed failed].each do |key| %>
+      <%= render Emails::MetricCardComponent.new(
+            label: t("admin_modules.emails.analytics.deliverability.stats.#{key}"),
+            value: number_with_delimiter(health[:totals][key]),
+            tone: key
+          ) %>
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+    <section>
+      <h3 class="text-lg font-medium text-text-primary mb-4"><%= t("admin_modules.emails.analytics.deliverability.by_failure_code") %></h3>
+      <% if empty?(health[:failure_breakdown]) %>
+        <p class="text-text-muted"><%= t("admin_modules.emails.analytics.deliverability.empty_failure_breakdown") %></p>
+      <% else %>
+        <% health[:failure_breakdown].each do |code, count| %>
+          <div class="flex justify-between border-b border-border-subtle py-2 text-sm"><span class="font-mono"><%= code %></span><span><%= number_with_delimiter(count) %></span></div>
+        <% end %>
+      <% end %>
+    </section>
+
+    <section>
+      <h3 class="text-lg font-medium text-text-primary mb-4"><%= t("admin_modules.emails.analytics.engagement.top_links") %></h3>
+      <% if empty?(health[:top_links]) %>
+        <p class="text-text-muted"><%= t("admin_modules.emails.analytics.engagement.empty_top_links") %></p>
+      <% else %>
+        <% health[:top_links].each do |link, count| %>
+          <div class="flex justify-between gap-4 border-b border-border-subtle py-2 text-sm"><span class="break-all"><%= link %></span><span><%= number_with_delimiter(count) %></span></div>
+        <% end %>
+      <% end %>
+    </section>
+
+    <section>
+      <h3 class="text-lg font-medium text-text-primary mb-4"><%= t("admin_modules.emails.analytics.deliverability.recent_suppressions") %></h3>
+      <% if empty?(health[:suppressions]) %>
+        <p class="text-text-muted"><%= t("admin_modules.emails.analytics.deliverability.empty_suppressions") %></p>
+      <% else %>
+        <% health[:suppressions].each do |suppression| %>
+          <div class="flex justify-between gap-4 border-b border-border-subtle py-2 text-sm"><span><%= suppression.email %></span><span><%= suppression.reason %></span></div>
+        <% end %>
+      <% end %>
+    </section>
+
+    <section>
+      <h3 class="text-lg font-medium text-text-primary mb-4"><%= t("admin_modules.emails.analytics.engagement.devices_heading") %></h3>
+      <% if empty?(health[:devices]) %>
+        <p class="text-text-muted"><%= t("admin_modules.emails.analytics.engagement.empty_devices") %></p>
+      <% else %>
+        <% health[:devices].each do |device, count| %>
+          <div class="flex justify-between border-b border-border-subtle py-2 text-sm"><span><%= t("admin_modules.emails.analytics.engagement.devices.#{device}") %></span><span><%= number_with_delimiter(count) %></span></div>
+        <% end %>
+      <% end %>
+    </section>
+  </div>
+
+  <div>
+    <h3 class="text-lg font-medium text-text-primary mb-4"><%= t("admin_modules.emails.analytics.engagement.opens_by_day") %></h3>
+    <% if empty?(health[:opens_by_day]) %>
+      <p class="text-text-muted"><%= t("admin_modules.emails.analytics.engagement.empty_opens_by_day") %></p>
+    <% else %>
+      <%= render Emails::SparklineComponent.new(values: sparkline_values, tone: "info") %>
+    <% end %>
+  </div>
+<% end %>

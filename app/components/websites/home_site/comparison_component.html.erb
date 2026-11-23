@@ -1,0 +1,42 @@
+<section class="<%= section_class %> <%= padding_class %>">
+  <div class="<%= inner_measure_class %>">
+    <%= section_intro(align: :center) %>
+    <div class="mx-auto mt-14 max-w-5xl overflow-x-auto rounded-[2rem] border border-slate-200/80 bg-white shadow-2xl shadow-violet-900/10 lg:mt-16">
+      <table class="w-full <%= table_width_class %> border-collapse text-left">
+        <thead>
+          <tr>
+            <th scope="col" class="w-[34%] px-4 py-6 sm:w-[40%] sm:px-8"><span class="sr-only"><%= t('website.public.comparison.feature') %></span></th>
+            <% columns.each do |column| %>
+              <th scope="col" class="px-2 py-6 text-center sm:px-6 <%= 'bg-gradient-to-b from-violet-50 to-violet-50/40' if lead?(column) %>">
+                <% if lead?(column) %>
+                  <span class="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 px-3 py-1.5 text-[13px] font-bold text-white shadow-lg shadow-violet-500/30 sm:px-4 sm:text-[15px]"><span class="hidden sm:inline-flex"><%= render Branding::SapphireLogoComponent.new(size: "h-4", css_class: "shrink-0 brightness-0 invert", decorative: true) %></span><%= column[:name] %></span>
+                <% else %>
+                  <span class="text-[13px] font-semibold text-slate-500 sm:text-[15px]"><%= column[:name] %></span>
+                <% end %>
+              </th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <% rows.each do |row| %>
+            <tr class="border-t border-slate-100">
+              <th scope="row" class="px-4 py-5 text-[14px] font-semibold text-slate-900 sm:px-8 sm:text-[16px]"><%= row['title'] %></th>
+              <% columns.each do |column| %>
+                <td class="px-2 py-5 text-center sm:px-6 <%= 'bg-violet-50/40' if lead?(column) %>">
+                  <span class="inline-flex flex-col items-center gap-1.5 text-[13px] font-medium sm:flex-row sm:gap-2 sm:text-[14px] <%= positive?(row, column) ? 'text-slate-900' : 'text-slate-400' %>">
+                    <% if positive?(row, column) %>
+                      <span class="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white shadow-md shadow-emerald-500/30"><%= check_icon(css_class: 'size-3.5') %></span>
+                    <% else %>
+                      <span class="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-400" aria-hidden="true"><svg aria-hidden="true" focusable="false" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" class="size-3"><path d="M5 10h10" stroke-linecap="round" /></svg></span>
+                    <% end %>
+                    <% if present_text?(cell_text(row, column)) %><span class="min-w-0 text-center [overflow-wrap:normal] sm:text-left"><%= cell_text(row, column) %></span><% else %><span class="sr-only"><%= t(positive?(row, column) ? 'website.public.comparison.included' : 'website.public.comparison.not_included') %></span><% end %>
+                  </span>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

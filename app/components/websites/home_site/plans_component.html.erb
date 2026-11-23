@@ -1,0 +1,32 @@
+<section class="<%= section_class %>">
+  <div class="<%= inner_measure_class %>">
+    <% if [prop('kicker'), prop('heading'), prop('subhead')].any? { |value| present_text?(value) } %>
+      <div class="mb-10"><%= section_intro(align: :center, tone: overlap? ? :dark : :light, heading_class: "min-w-0 text-[24px] leading-tight font-bold #{overlap? ? 'text-white' : 'text-slate-950'} lg:text-[28px] #{tracking_class}") %></div>
+    <% end %>
+    <% if tiers.any? %>
+      <div class="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+        <% tiers.each do |tier| %>
+          <div class="<%= tier_frame_class(tier) %>"><article class="<%= tier_class(tier) %>">
+            <% if featured?(tier) %><span class="<%= featured_badge_class %>"><%= sparkle_icon(css_class: 'size-3') %><%= featured_label %></span><% end %>
+            <% if present_text?(tier['name']) %><h3 class="min-w-0 max-w-full text-[18px] leading-7 font-bold <%= tier_heading_class(tier) %>"><%= tier['name'] %></h3><% end %>
+            <div class="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1">
+              <% if present_text?(tier['price']) %><p class="min-w-0 text-[48px] leading-none font-bold tabular-nums <%= tier_heading_class(tier) %> <%= tracking_class %>"><%= tier['price'] %></p><% end %>
+              <% if present_text?(tier['cadence']) %><p class="text-[14px] leading-5 <%= tier_body_class(tier) %>"><%= tier['cadence'] %></p><% end %>
+            </div>
+            <% if present_text?(tier['body']) %><p class="min-w-0 text-[15px] leading-6 lg:min-h-12 <%= tier_body_class(tier) %>"><%= tier['body'] %></p><% end %>
+            <% if present_text?(tier['button_label']) %>
+              <div class="min-w-0"><%= action(tier['button_label'], tier['button_href'], css_class: tier_button_class(tier), arrow: featured?(tier)) %></div>
+            <% end %>
+            <% if features(tier).any? %>
+              <ul class="min-w-0 space-y-3 border-t pt-5 text-[14px] leading-5 <%= feature_border_class(tier) %>">
+                <% features(tier).each do |feature| %>
+                  <li class="flex min-w-0 items-start gap-3 <%= tier_body_class(tier) %>"><span class="inline-flex size-5 shrink-0 items-center justify-center rounded-full <%= feature_icon_class(tier) %>"><%= check_icon(css_class: 'size-3') %></span><span class="min-w-0"><%= feature %></span></li>
+                <% end %>
+              </ul>
+            <% end %>
+          </article></div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</section>

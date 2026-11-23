@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <title><%= t("public_views.layouts.preview.title", name: @page.name) %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-50 min-h-screen">
+    <% unless @embedded_preview %>
+      <!-- Preview Header -->
+      <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 py-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mr-3">
+                <%= t("public_views.layouts.preview.badge") %>
+              </span>
+              <span class="text-sm font-medium text-gray-900"><%= @page.name %></span>
+            </div>
+            <%= link_to edit_admin_maintenance_page_path(current_customer_id, @original_page_id || @page), class: "btn btn-secondary" do %>
+              <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              <%= t("public_views.layouts.preview.back_to_editor") %>
+            <% end %>
+          </div>
+        </div>
+      </header>
+    <% end %>
+
+    <!-- Preview Content -->
+    <main class="max-w-4xl mx-auto px-4 <%= @embedded_preview ? "py-4" : "py-8" %>">
+      <%= yield %>
+    </main>
+  </body>
+</html>

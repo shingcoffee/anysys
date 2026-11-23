@@ -1,0 +1,333 @@
+zh-CN:
+  flowchart_actions:
+    assign_value:
+      label: 赋值
+      description: 将值写入上下文变量
+      fields:
+        valueType:
+          label: 值类型
+          help: 写入结果变量的值种类。
+          options:
+            string: 字符串
+            integer: 整数
+            float: 浮点数
+            boolean: 布尔
+            array: 数组
+            hash: 哈希
+            expression: 表达式
+            "null": 空值
+            ctx_ref: 上下文引用
+            random: 随机值
+            first_present: 首个有效值
+        valueExpression:
+          label: 值表达式
+          help: 求值后写入结果的 Ruby 表达式。
+        stringValue:
+          label: 字符串值
+          help: 写入结果的字面字符串。
+        integerValue:
+          label: 整数值
+          help: 写入结果的字面整数。
+        floatValue:
+          label: 浮点值
+          help: 写入结果的字面数字。
+        booleanValue:
+          label: 布尔值
+          help: 写入结果的 true 或 false。
+        arrayValue:
+          label: 数组值
+          help: 写入结果的字面列表。
+        hashValue:
+          label: 哈希值
+          help: 写入结果的字面键值对。
+        ctxRefVariable:
+          label: 上下文引用变量
+          help: 被复制的现有上下文路径。
+        randomType:
+          label: 随机类型
+          help: 生成的随机值种类。
+          options:
+            uuid: uuid
+            hex: hex
+            int: int
+            float: float
+        randomLength:
+          label: 随机长度
+          help: 十六进制为字节数；整数为上限。
+        candidates:
+          label: 候选路径
+          help: 按顺序尝试的上下文路径，取首个有效值。
+        literalCandidates:
+          label: 字面候选
+          help: 上下文路径都无效后使用的字面回退值。
+        predicate:
+          label: 判定条件
+          help: 选取首个有效值时，何种情况视为缺失。
+          options:
+            nil: 空引用
+            blank: 空白
+            false_or_nil: 假值或空引用
+        blankDefinition:
+          label: 空白定义
+          help: 判定“空白”的规则。
+          options:
+            nil: 空引用
+            empty: 空集合
+            whitespace: 空白字符
+    calculate:
+      label: 计算
+      description: 对集合做汇总计算
+      fields:
+        operation:
+          label: 运算
+          help: 对集合应用的聚合方式。
+          options:
+            sum: 求和
+            count: 计数
+            avg: 平均值
+            min: 最小值
+            max: 最大值
+            product: 乘积
+            concat: 拼接
+            custom: 自定义
+        fieldName:
+          label: 字段
+          help: 求和、平均、最小值、最大值、乘积或拼接时读取的条目字段。
+        separator:
+          label: 分隔符
+          help: 拼接字段值时插入的字符串。
+        customExpression:
+          label: 自定义表达式
+          help: 运算为自定义时，针对 _collection 求值的 Ruby 表达式。
+        emptyCollectionDefault:
+          label: 空集合默认值
+          help: 集合为空时返回的值。
+        emptyCollectionBehavior:
+          label: 空集合行为
+          help: 未设置默认值且集合为空时的回退。
+          options:
+            zero: 零
+            nil: 空值
+        ignoreNils:
+          label: 忽略空值
+          help: 汇总前去掉空条目。
+        nullFilter:
+          label: 去除空值
+          help: 与“忽略空值”相同，聚合前剔除空条目。
+        precision:
+          label: 精度
+          help: 平均值或结果的小数位数。
+        roundingMode:
+          label: 舍入模式
+          help: 设置精度后的舍入方式。
+          options:
+            half_up: 四舍五入
+            half_even: 银行家舍入
+            floor: 向下取整
+            ceiling: 向上取整
+    filter_collection:
+      label: 筛选集合
+      description: 按条件筛选集合中的条目
+      fields:
+        returns:
+          label: 返回内容
+          help: 本步骤从筛选结果中写入的内容。
+          options:
+            items: 条目
+            split: 拆分
+            first: 首条
+            last: 末条
+            index: 下标
+            count: 数量
+            any: 任一满足
+            all: 全部满足
+            none: 均不满足
+        rejectedVar:
+          label: 未匹配保存为
+          help: 返回拆分时，未通过谓词的条目写入此变量。
+        filterMode:
+          label: 筛选模式
+          help: 使用单字段条件还是条件列表。
+          options:
+            single: 单条件
+            multi: 多条件
+        filterField:
+          label: 筛选字段
+          help: 谓词要比较的条目字段。
+        filterOperator:
+          label: 筛选运算符
+          help: 与筛选值比较时使用的运算。
+          options:
+            eq: 等于
+            ne: 不等于
+            gt: 大于
+            lt: 小于
+            gte: 大于等于
+            lte: 小于等于
+            includes: 包含
+            blank: 空白
+            present: 有值
+        filterValue:
+          label: 筛选值
+          help: 与字段比较的值。
+        conditions:
+          label: 条件
+          help: 由条件运算符连接的 {field, operator, value} 列表。
+        conditionOperator:
+          label: 条件运算符
+          help: 多条条件的连接方式。
+          options:
+            and: 与
+            or: 或
+        rejectMode:
+          label: 反向筛选
+          help: 保留未通过谓词的条目，而不是通过的条目。
+        nilHandling:
+          label: 空值处理
+          help: 谓词如何对待空条目。
+          options:
+            include: 纳入
+            exclude: 排除
+            treat_as_false: 视为不匹配
+        secondaryFilter:
+          label: 附加筛选
+          help: 与字段条件以“与”连接的额外 Ruby 谓词。
+        defaultValue:
+          label: 默认值
+          help: 首条、末条或下标未找到时写入的值。
+        limit:
+          label: 条数上限
+          help: 最多保留的匹配条目数（拆分时同样限制未匹配侧）。0 表示不限制。
+    collection_manipulate:
+      label: 集合处理
+      description: 对集合做映射、抽取、分组、排序、去重、分块、扁平化或拉链
+      fields:
+        operation:
+          label: 操作
+          help: 改写集合的方式。
+          options:
+            map: 映射
+            pluck: 抽取
+            group: 分组
+            sort: 排序
+            unique: 去重
+            chunk: 分块
+            flatten: 扁平化
+            zip: 拉链
+        sources:
+          label: 来源列表
+          help: 参与拉链的各集合上下文路径。
+        fieldMappings:
+          label: 字段映射
+          help: 每个条目的源字段路径到目标键。
+        keyFormat:
+          label: 键格式
+          help: 映射后的键使用符号还是字符串。
+          options:
+            symbol: 符号
+            string: 字符串
+        compactResult:
+          label: 压缩结果
+          help: 从映射结果中去掉空条目。
+        preserveNilElements:
+          label: 保留空条目
+          help: 源中的空条目在映射结果中仍为空。
+        fields:
+          label: 字段
+          help: 从每条抽取的字段路径，可带别名。
+        flattenSingle:
+          label: 单字段扁平化
+          help: 只选一个字段时直接返回该字段值。
+        includeSourceIndex:
+          label: 包含源下标
+          help: 为每条抽取结果写入 source_index。
+        groupField:
+          label: 分组字段
+          help: 用作分组键的条目字段。
+        groupByExpression:
+          label: 分组表达式
+          help: 计算每条分组键的 Ruby 表达式。
+        includeCount:
+          label: 包含计数
+          help: 每组存为条目列表加数量。
+        sortGroups:
+          label: 分组排序
+          help: 分组哈希中键的顺序。
+          options:
+            none: 不排序
+            key_asc: 键升序
+            key_desc: 键降序
+            count_asc: 数量升序
+            count_desc: 数量降序
+        sortField:
+          label: 排序字段
+          help: 用于排序的条目字段。
+        sortDirection:
+          label: 排序方向
+          help: 升序或降序。
+          options:
+            asc: 升序
+            desc: 降序
+        nullsFirst:
+          label: 空值在前
+          help: 排序字段为空的条目排在最前。
+        uniqField:
+          label: 去重字段
+          help: 用于判断重复的条目字段；留空则比较整条。
+        keepStrategy:
+          label: 保留策略
+          help: 重复时保留哪一条。
+          options:
+            first: 首条
+            last: 末条
+        chunkMode:
+          label: 分块模式
+          help: 将集合切成块的方式。
+          options:
+            size: 按数量
+            predicate: 按谓词
+            field: 按字段
+        chunkSize:
+          label: 块大小
+          help: 按数量分块时每块的条数。
+        includeRemainder:
+          label: 包含剩余项
+          help: 按数量分块时，保留最后不足一整块的条目。
+        chunkPredicate:
+          label: 分块谓词
+          help: 针对相邻条目 a、b 的表达式，成立时开始新块。
+        chunkField:
+          label: 分块字段
+          help: 该字段值连续相同的条目留在同一块。
+        depth:
+          label: 深度
+          help: 扁平化的层数（0 表示不限）。
+        removeNilElements:
+          label: 移除空元素
+          help: 扁平化后去掉空值。
+        zipStrategy:
+          label: 拉链策略
+          help: 不同长度集合如何对齐。
+          options:
+            strict: 严格等长
+            longest: 按最长
+            shortest: 按最短
+        resultShape:
+          label: 结果形态
+          help: 每行拉链结果是元组还是哈希。
+          options:
+            tuples: 元组
+            hashes: 哈希
+        fillValue:
+          label: 填充值
+          help: 策略为按最长时，补齐较短集合所用的值。
+  flowchart_runtime:
+    errors:
+      assign_value:
+        blank: 没有取到有效值的候选。
+      calculate:
+        empty: 集合为空。
+      filter_collection:
+        invalid: 无法筛选该集合。
+      collection_manipulate:
+        failed: "集合操作失败（%{reason}）"

@@ -1,0 +1,30 @@
+<% if input_only %>
+  <label for="<%= field_id %>" data-toggle-switch class="relative inline-flex min-h-11 items-center cursor-pointer">
+    <%= tag.input(**input_attributes.merge(type: "checkbox", value: "1", checked: checked?, class: "sr-only peer")) %>
+    <span aria-hidden="true" class="relative h-6 w-11 rounded-full bg-surface-active transition-colors peer-checked:bg-accent peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2 after:absolute after:left-0.5 after:top-0.5 after:size-5 after:rounded-full after:bg-white after:transition-transform after:content-[''] peer-checked:after:translate-x-5 <%= 'ring-1 ring-danger' if html_attributes.dig(:aria, :invalid) == 'true' %>"></span>
+  </label>
+<% else %>
+<div class="<%= wrapper_classes %>">
+  <div class="flex items-center justify-between">
+    <div class="flex-1">
+      <label for="<%= field_id %>" class="text-sm font-medium text-gray-700 cursor-pointer">
+        <%= label %>
+        <%= required_indicator %>
+      </label>
+      <% if description.present? %>
+        <p class="text-sm text-gray-500"><%= description %></p>
+      <% end %>
+    </div>
+
+    <label data-toggle-switch class="relative inline-flex items-center cursor-pointer">
+      <input type="checkbox"
+             name="<%= field_name %>"
+             id="<%= field_id %>"
+             <%= 'checked' if checked? %>
+             <%= 'required' if required %>
+             class="sr-only peer">
+      <div class="<%= toggle_track_classes %>"></div>
+    </label>
+  </div>
+</div>
+<% end %>

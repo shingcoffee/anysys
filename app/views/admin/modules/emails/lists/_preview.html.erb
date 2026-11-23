@@ -1,0 +1,26 @@
+<turbo-frame id="email_list_preview">
+  <% if @preview_error.present? %>
+    <p class="text-body text-danger" role="alert"><%= @preview_error %></p>
+  <% else %>
+    <div class="flex flex-col gap-3" data-email-list-preview-root>
+      <p class="text-caption text-text-muted"><%= t("admin_modules.emails.lists.preview.match_count", count: @match_count.to_i) %></p>
+
+      <%= render AdminTableComponent.new(
+            rows:       @rows,
+            columns:    @columns,
+            pagination: @pagination,
+            params:     params.permit(:page, :per_page, :sort, :dir).to_h.symbolize_keys,
+            frame_id:   "email_list_preview_table",
+            base_path:  preview_admin_modules_emails_lists_path(current_customer_id),
+            empty_state: {
+              title: t("admin_modules.emails.lists.preview.empty_title"),
+              description: t("admin_modules.emails.lists.preview.empty_description")
+            }
+          ) %>
+      <%# Hidden copy of rules used for this result — Stimulus re-POSTs on pagination %>
+      <input type="hidden"
+             data-email-list-form-target="previewRules"
+             value="<%= ERB::Util.html_escape(@preview_rules_json) %>">
+    </div>
+  <% end %>
+</turbo-frame>

@@ -1,0 +1,24 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "authentication",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("admin_modules.nav.authentication") },
+        { label: t("admin_modules.authentication.events.index.breadcrumb") }
+      ],
+      title: t("admin_modules.authentication.events.index.title"),
+      description: t("admin_modules.authentication.events.index.description"),
+      actions: []
+    ) do %>
+  <%= render AdminTableComponent.new(
+    rows:       @rows,
+    columns:    @columns,
+    pagination: @pagination,
+    params:     params.permit(:q, :sort, :dir, :page, :event, :window).to_h.symbolize_keys,
+    search:     { param: :q, placeholder: t("admin_modules.authentication.events.index.search_placeholder") },
+    filters:    @filters,
+    empty_state: {
+      title:       t("admin_modules.authentication.events.index.empty_title"),
+      description: t("admin_modules.authentication.events.index.empty_description")
+    }
+  ) %>
+<% end %>

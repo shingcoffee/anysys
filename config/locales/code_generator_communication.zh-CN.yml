@@ -1,0 +1,13 @@
+zh-CN:
+  code_generator_communication:
+    notification_subject: 通知
+    incompatible_mailer_arguments: 自定义邮件方法必须支持所配置的邮件关键字参数
+    invalid_recipients: 至少需要一个有效的收件人邮箱地址
+    invalid_headers: 邮件头必须是不含换行的有效字段名与字段值
+    invalid_attachments: 附件必须以文件名为键，对应文件内容或有效的 Mail 附件选项
+    mailer_class_allowlist: "mailerClass 必须是以下之一：%{allowed}"
+    mailer_action_invalid: mailerAction 必须是合法的方法名
+    attachments_shape: "attachments 必须是 { filename, value } 数组，或“filename => 表达式”形式的哈希"
+    headers_shape: "headers 必须是 { key, value } 数组，或“邮件头 => 值”形式的哈希"
+    mailer_class_not_allowlisted: mailerClass 不在允许列表中
+    mailer_action_not_valid: mailerAction 无效

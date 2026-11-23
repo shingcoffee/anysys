@@ -1,0 +1,14 @@
+<div class="flex min-h-0 overflow-hidden bg-slate-950 <%= height_class %>"
+     data-controller="source-editor"
+     data-action="keydown@window->source-editor#save">
+  <div data-source-editor-target="gutter" aria-hidden="true"
+       class="w-12 shrink-0 select-none overflow-hidden whitespace-pre border-r border-slate-800 bg-slate-900 py-4 pr-3 text-right font-mono text-[13px] leading-6 text-slate-500"><%= initial_line_numbers %></div>
+  <textarea id="<%= id %>"
+            name="<%= name %>"
+            aria-label="<%= label %>"
+            data-source-editor-target="input"
+            data-code-editor-target="editor"
+            data-action="input->source-editor#refresh scroll->source-editor#sync keydown->source-editor#keydown"
+            wrap="off" spellcheck="false" autocapitalize="off" autocomplete="off"
+            class="h-full min-w-0 flex-1 resize-none overflow-auto whitespace-pre border-0 bg-transparent p-4 font-mono text-[13px] leading-6 text-slate-100 caret-sky-400 [tab-size:2] focus:outline-none focus:ring-0"><%= value %></textarea>
+</div>

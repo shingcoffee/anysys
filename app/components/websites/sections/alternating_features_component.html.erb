@@ -1,0 +1,23 @@
+<section class="<%= padding_class %>">
+  <div class="<%= inner_measure_class %> flex flex-col <%= gap_class %>">
+    <%= header(kicker: prop("kicker"), heading: prop("heading")) %>
+    <div class="flex flex-col gap-14 md:gap-20 lg:gap-24">
+      <% items.each_with_index do |item, index| %>
+        <article <%= item_attrs("items", class: "grid min-w-0 items-center gap-8 md:grid-cols-12 md:gap-10 lg:gap-14") %>>
+          <div class="relative aspect-[4/3] md:aspect-[16/10] md:col-span-7 <%= image_order_class(index) %> <%= image_frame_class %>">
+            <%= render_media(item["image_url"], alt: item["title"].to_s, css_class: "absolute inset-0 size-full object-cover") %>
+          </div>
+          <div class="flex flex-col gap-4 md:col-span-5 md:gap-5 md:py-2 <%= copy_order_class(index) %>">
+            <p class="text-site-sm tabular-nums <%= theme.kicker_class %>"><%= format("%02d", index + 1) %></p>
+            <% if present_text?(item["title"]) %>
+              <h3 <%= el_attrs("items.title", class: "text-balance break-words text-site-2xl leading-tight md:text-site-4xl #{headline_font_class}") %>><%= item["title"] %></h3>
+            <% end %>
+            <% if present_text?(item["body"]) %>
+              <p <%= el_attrs("items.body", class: "#{body_class} #{body_text_class}") %>><%= item["body"] %></p>
+            <% end %>
+          </div>
+        </article>
+      <% end %>
+    </div>
+  </div>
+</section>

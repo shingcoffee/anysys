@@ -1,0 +1,6 @@
+<%= render Emails::HealthComponent.new(
+      health: @health,
+      since: @since,
+      until_date: @until_date,
+      url: admin_modules_emails_health_index_path(current_customer)
+    ) %>

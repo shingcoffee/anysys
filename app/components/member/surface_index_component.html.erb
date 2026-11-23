@@ -1,0 +1,24 @@
+<%= render Member::PageHeaderComponent.new(
+      title:    surface.index.title,
+      subtitle: surface.index.subtitle,
+      meta:     (page_meta.count.positive? ? { label: t("member.surface_index.total_count", count: page_meta.count), tone: :default } : nil)
+    ) %>
+
+<% if records.empty? %>
+  <%= render Member::EmptyStateComponent.new(**surface.index.empty_state) %>
+<% else %>
+  <%= render Member::PageSectionComponent.new(density: :flush) do %>
+    <%= render Member::IndexTableComponent.new(
+          records:    records,
+          columns:    surface.index.columns,
+          row_path:   row_path,
+          row_action: row_action,
+          customer:   customer
+        ) %>
+  <% end %>
+
+  <%= render Member::PaginationComponent.new(
+        pagy:      page_meta,
+        base_path: base_path
+      ) %>
+<% end %>

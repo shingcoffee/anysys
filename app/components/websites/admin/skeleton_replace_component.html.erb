@@ -1,0 +1,91 @@
+<%= render Websites::Admin::SettingsSectionComponent.new(
+      id: "website-settings-skeleton",
+      heading: t("website_settings.starter.heading"),
+      description: t("website_settings.starter.description"),
+      data: { skeleton_replace: "true" }
+    ) do %>
+  <% current = current_entry %>
+  <div class="flex min-w-0 flex-col gap-4 rounded-lg bg-canvas-elevated p-3 ring-1 ring-border-subtle sm:flex-row sm:items-center" data-current-starter="<%= current_key %>">
+    <% if current %>
+      <div class="w-full shrink-0 overflow-hidden rounded-md ring-1 ring-border-subtle sm:w-64">
+        <%= render Websites::Admin::CatalogThumbnailComponent.new(
+              sections: current[:home_sections],
+              theme: preview_theme(current[:key]),
+              frame_class: "aspect-[16/10]"
+            ) %>
+      </div>
+    <% end %>
+    <div class="min-w-0 flex-1 px-1 sm:px-0">
+      <div class="flex flex-wrap items-center gap-2">
+        <p class="text-sm font-semibold text-text-primary"><%= current_caption %></p>
+        <% if current %>
+          <%= render BadgeComponent.new(variant: :default, size: :sm) do %>
+            <%= category_label(current[:category]) %>
+          <% end %>
+        <% end %>
+      </div>
+      <% if current && current[:description].present? %>
+        <p class="mt-1 break-words text-sm leading-normal text-text-secondary"><%= current[:description] %></p>
+      <% end %>
+    </div>
+  </div>
+
+  <details class="group/starters mt-5">
+    <summary class="btn btn-secondary min-h-10 w-fit cursor-pointer list-none gap-2 px-3.5 py-2 text-sm [&::-webkit-details-marker]:hidden">
+      <svg class="size-4 text-text-tertiary transition-transform group-open/starters:rotate-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 0 1 .02-1.06L11.168 10 7.23 6.29a.75.75 0 1 1 1.04-1.08l4.5 4.25a.75.75 0 0 1 0 1.08l-4.5 4.25a.75.75 0 0 1-1.06-.02Z" clip-rule="evenodd"/></svg>
+      <%= t("website_settings.starter.browse") %>
+    </summary>
+
+    <div class="mt-4 flex gap-3 rounded-lg border border-warning/30 bg-warning-subtle px-4 py-3 text-sm" id="website-replacement-consequences">
+      <svg class="mt-0.5 size-5 shrink-0 text-warning" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 5Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd"/></svg>
+      <div class="min-w-0 text-text-secondary">
+        <p class="font-medium text-text-primary"><%= t("website_settings.starter.consequences") %></p>
+        <ul class="mt-1.5 list-disc space-y-1 pl-4">
+          <li><%= t("website_settings.starter.deletes_pages") %></li>
+          <li><%= t("website_settings.starter.resets_appearance") %></li>
+          <li><%= t("website_settings.starter.unpublished_pages") %></li>
+        </ul>
+        <p class="mt-2"><%= t("website_settings.starter.unsaved_changes") %></p>
+      </div>
+    </div>
+
+    <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-3">
+      <% entries.each do |entry| %>
+        <article class="<%= card_class(entry) %>" data-skeleton-key="<%= entry[:key] %>">
+          <div class="relative border-b border-border-subtle">
+            <%= render Websites::Admin::CatalogThumbnailComponent.new(
+                  sections: entry[:home_sections],
+                  theme: preview_theme(entry[:key]),
+                  frame_class: "aspect-[16/10]"
+                ) %>
+            <% if current?(entry[:key]) %>
+              <%= render BadgeComponent.new(variant: :primary, size: :sm, class: "absolute left-2.5 top-9 z-20 shadow-xs") do %>
+                <%= t("website.admin.settings.skeleton.current_badge") %>
+              <% end %>
+            <% end %>
+          </div>
+          <div class="flex min-w-0 flex-1 flex-col gap-1.5 px-4 py-3.5">
+            <div class="flex min-w-0 items-baseline justify-between gap-2">
+              <h3 class="min-w-0 break-words text-sm font-semibold text-text-primary" data-starter-name="true"><%= entry[:name] %></h3>
+              <span class="shrink-0 text-xs text-text-tertiary"><%= category_label(entry[:category]) %></span>
+            </div>
+            <% if entry[:description].present? %>
+              <p class="line-clamp-2 break-words text-sm leading-snug text-text-secondary"><%= entry[:description] %></p>
+            <% end %>
+            <% if entry[:pages].any? %>
+              <p class="break-words text-xs leading-normal text-text-tertiary"><%= t("website_settings.starter.pages", pages: entry[:pages].to_sentence) %></p>
+            <% end %>
+
+            <%= form_with url: replace_url, method: :post, html: { class: "mt-auto pt-3", aria: { describedby: "website-replacement-consequences" } },
+                          data: { turbo_confirm: confirm_message(entry[:key]) } do %>
+              <input type="hidden" name="skeleton_key" value="<%= entry[:key] %>">
+              <%= render ButtonComponent.new(variant: :danger, size: :sm, tag: :button, type: :submit, class: "min-h-10 whitespace-normal", aria: { label: t("website_settings.starter.replace_named", name: entry[:name]) }) do %>
+                <%= t("website_settings.starter.replace") %>
+              <% end %>
+            <% end %>
+          </div>
+        </article>
+      <% end %>
+    </div>
+  </details>
+<% end %>

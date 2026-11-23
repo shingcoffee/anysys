@@ -1,0 +1,25 @@
+<li class="overflow-hidden rounded-lg border bg-surface <%= form.errors.any? ? 'border-danger' : 'border-border-subtle' %>" data-association-rows-target="row">
+  <div class="flex items-center gap-3 border-b border-border-subtle px-4 py-2.5 sm:px-5">
+    <h3 class="min-w-0 flex-1 text-sm font-semibold text-text-primary" data-association-rows-target="heading"><%= heading %></h3>
+    <button type="button" class="icon-button -mr-1.5 <%= 'hidden' unless removable? %>"
+            aria-label="<%= t("admin_misc.entities.association_entries.remove_row") %>"
+            title="<%= t("admin_misc.entities.association_entries.remove_row") %>"
+            data-association-rows-target="remove"
+            data-action="association-rows#remove">
+      <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <% if row_errors.any? %>
+    <ul class="mx-4 mt-4 space-y-1 rounded-md bg-danger-subtle px-3 py-2 text-sm text-danger break-words [overflow-wrap:anywhere] sm:mx-5">
+      <% row_errors.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+  <div class="grid grid-cols-1 gap-x-4 gap-y-5 p-4 sm:p-5 md:grid-cols-2">
+    <% fields.each do |field| %>
+      <%= render Admin::Entities::EntryFieldComponent.new(field: field, value: form.value_for(field.slug), errors: form.errors_for(field.slug),
+                                                          quick_add: quick_adds[field.slug], id_prefix: id_prefix, name_prefix: name_prefix) %>
+    <% end %>
+  </div>
+</li>

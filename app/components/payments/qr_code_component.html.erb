@@ -1,0 +1,13 @@
+<section class="mx-auto w-full max-w-md bg-white border border-gray-200 rounded-md p-6 text-center"
+         data-controller="payments--qr-poll"
+         data-payments--qr-poll-status-url-value="<%= helpers.payment_status_path(customer_id: helpers.params[:customer_id], id: payment.out_trade_no) %>"
+         data-payments--qr-poll-result-url-value="<%= helpers.payment_result_path(customer_id: helpers.params[:customer_id], payment_id: payment.out_trade_no) %>"
+         data-payments--qr-poll-status-prefix-value="<%= t("comp_payments.result.status_prefix") %>"
+         data-payments--qr-poll-status-labels-value="<%= status_labels_json %>">
+  <h2 class="text-base font-semibold text-gray-900"><%= t("comp_payments.qr.title") %></h2>
+  <p class="mt-1 text-xs text-gray-500"><%= t("comp_payments.qr.instruction", provider: qr_provider_label) %></p>
+  <div class="mt-4 inline-block rounded-md bg-gray-50 p-4 border border-gray-200">
+    <div class="h-56 w-56 [&>svg]:h-full [&>svg]:w-full"><%= qr_svg %></div>
+  </div>
+  <p class="mt-4 text-[13px] text-gray-500" data-payments--qr-poll-target="status"><%= t("comp_payments.shared.waiting") %></p>
+</section>

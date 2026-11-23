@@ -1,0 +1,40 @@
+<section class="bg-white <%= padding_class %>">
+  <div class="<%= inner_measure_class %>">
+    <% if contact? %>
+      <% routes = contact_routes %>
+      <div class="min-w-0 w-full max-w-3xl">
+        <% if present_text?(prop('headline')) %><h2 class="<%= section_heading_class %>"><%= prop('headline') %></h2><% end %>
+        <% if present_text?(prop('body')) %><p class="mt-4 whitespace-pre-line <%= subhead_class %>"><%= prop('body') %></p><% end %>
+      </div>
+      <% if routes.any? %>
+        <div class="mt-10 grid min-w-0 grid-cols-1 items-stretch gap-5 <%= route_grid_class(routes.size) %>">
+          <% routes.each do |route| %>
+            <%= link_to route[:href], class: route_class(route) do %>
+              <% if route[:workspace] %><%= aurora(intensity: :soft) %><% end %>
+              <span aria-hidden="true" class="<%= icon_tile_class(route_index(route)) %> mb-6"><%= glyph(ROUTE_GLYPHS.fetch(route[:kind]), css_class: 'size-6') %></span>
+              <h3 class="min-w-0 text-[22px] font-bold leading-7 <%= route[:workspace] ? 'text-white' : 'text-slate-950' %> <%= tracking_class %>"><%= route[:label] %></h3>
+              <p class="mt-2 text-[16px] leading-[26px] <%= route[:workspace] ? 'text-slate-300' : 'text-slate-600' %>"><%= route[:description] %></p>
+              <span aria-hidden="true" class="mt-auto flex justify-end pt-6 <%= route[:workspace] ? 'text-fuchsia-300' : 'text-violet-600' %>"><%= arrow_icon %></span>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="relative isolate overflow-hidden rounded-[2.5rem] bg-slate-950 px-6 py-16 text-center text-white shadow-2xl shadow-violet-950/30 sm:px-12 lg:py-24">
+        <%= aurora %>
+        <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 -z-10 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-fuchsia-300/70 to-transparent"></div>
+        <div class="mx-auto flex min-w-0 max-w-3xl flex-col items-center gap-6">
+          <span aria-hidden="true" class="inline-flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 via-fuchsia-500 to-sky-500 text-white shadow-2xl shadow-fuchsia-500/40"><%= sparkle_icon(css_class: 'size-7') %></span>
+          <% if present_text?(prop('headline')) %><h2 class="min-w-0 text-[32px] leading-[1.1] font-bold text-balance text-white sm:text-[44px] lg:text-[56px] <%= tracking_class %>"><%= prop('headline') %></h2><% end %>
+          <% if present_text?(prop('body')) %><p class="min-w-0 whitespace-pre-line text-[18px] leading-8 text-slate-300 lg:text-[20px]"><%= prop('body') %></p><% end %>
+          <% if present_text?(prop('button_label')) %>
+            <div class="mt-2 flex w-full justify-center sm:w-auto"><%= action(prop('button_label'), props['button_href'], css_class: closing_button_class, arrow: true) %></div>
+          <% end %>
+          <ul class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[14px] leading-5 text-slate-400">
+            <% trust_items.each do |item| %><li class="inline-flex items-center gap-2"><span class="text-emerald-300"><%= check_icon(css_class: 'size-4') %></span><%= item %></li><% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>

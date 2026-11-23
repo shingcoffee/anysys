@@ -1,0 +1,8 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: definition_resource_breadcrumbs(:constants, t("common.actions.new")),
+  title: t("maint_core.constants.new.title"),
+  description: t("maint_core.constants.new.subtitle"),
+  width: :narrow
+) do %>
+  <%= render "admin/maintenance/constants/form", constant: @constant %>
+<% end %>

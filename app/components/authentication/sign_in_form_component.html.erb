@@ -1,0 +1,58 @@
+<div class="flex flex-col gap-7">
+  <%= form_with model: resource, scope: :user, url: user_session_path, local: true,
+        data: { turbo: false }, html: { class: "flex flex-col gap-5" } do |f| %>
+
+    <% if resource.errors.any? %>
+      <div class="rounded-lg border border-danger/20 bg-danger-subtle px-3.5 py-2.5">
+        <p class="text-sm text-danger"><%= resource.errors.full_messages.first %></p>
+      </div>
+    <% end %>
+
+    <div class="flex flex-col gap-2">
+      <%= f.label :email, class: "form-label mb-0" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input-member min-h-11" %>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <div class="flex items-center justify-between gap-3">
+        <%= f.label :password, class: "form-label mb-0" %>
+        <% if show_forgot_password %>
+          <%= link_to t("auth.sessions.forgot_password"),
+                new_user_password_path,
+                class: "text-sm text-text-secondary underline-offset-4 hover:text-member-accent-text hover:underline" %>
+        <% end %>
+      </div>
+      <%= f.password_field :password, autocomplete: "current-password", class: "input-member min-h-11" %>
+    </div>
+
+    <label class="inline-flex items-center gap-2 text-sm text-text-secondary">
+      <%= f.check_box :remember_me, class: "size-4 rounded border-border accent-member-accent" %>
+      <%= t("auth.sessions.remember_me") %>
+    </label>
+
+    <div class="flex flex-col gap-4">
+      <%= f.submit t("auth.sessions.submit"), class: "btn-member min-h-11 w-full" %>
+
+      <div class="flex items-center gap-3" role="separator" aria-label="<%= t("auth.sessions.or") %>">
+        <span class="h-px flex-1 bg-border-subtle"></span>
+        <span class="text-xs font-medium uppercase tracking-wide text-text-tertiary"><%= t("auth.sessions.or") %></span>
+        <span class="h-px flex-1 bg-border-subtle"></span>
+      </div>
+
+      <%# Same form action as Sign in. Rails 8 per-form CSRF tokens are bound to
+          the form action, so a formaction to /auth/sign_in_link is rejected. %>
+      <%= button_tag t("auth.sessions.email_sign_in_link"),
+            type: "submit",
+            name: "intent",
+            value: "sign_in_link",
+            class: "btn-member-secondary min-h-11 w-full" %>
+    </div>
+  <% end %>
+
+  <% if show_customer_signup && Authentication::PlatformSettings.customer_signup_enabled? %>
+    <p class="border-t border-border-subtle pt-5 text-center text-sm">
+      <%= link_to t("auth.sessions.create_account_link"), new_customer_registration_path,
+            class: "font-medium text-member-accent-text underline-offset-4 hover:underline" %>
+    </p>
+  <% end %>
+</div>

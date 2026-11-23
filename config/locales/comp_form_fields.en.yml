@@ -1,0 +1,27 @@
+en:
+  comp_form_fields:
+    file_upload:
+      click_to_upload: "Click to upload"
+      or_drag_and_drop: " or drag and drop"
+      any_file_type: "Any file type"
+      up_to: "up to %{size}"
+      files_suffix: " files"
+      current_files: "Current: %{names}"
+      keep_current_hint: "Leave empty to keep the current file; uploading replaces it."
+    image:
+      no_url: "No image URL provided"
+    video:
+      no_url: "No video URL provided"
+    rating:
+      value_of: "%{value} of %{max}"
+      not_rated: "Not rated"
+    wizard:
+      steps_aria: "Form steps"
+      previous: "← Previous"
+      next: "Next →"
+      step_counter: "Step 1 of %{total}"
+      default_step_name: "Step %{number}"
+      step_of_format: "Step {current} of {total}"
+      field_required_msg: "This field is required"
+    select:
+      blank_option: "Select..."

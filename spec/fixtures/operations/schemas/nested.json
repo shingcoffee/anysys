@@ -1,0 +1,54 @@
+{
+  "title": "Nested",
+  "description": "Exercises nested anyOf and if-then failures.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["payload"],
+  "properties": {
+    "payload": {
+      "description": "A tagged payload.",
+      "anyOf": [
+        {
+          "type": "object",
+          "description": "Numeric branch.",
+          "additionalProperties": false,
+          "required": ["kind", "n"],
+          "properties": {
+            "kind": { "type": "string", "const": "number", "description": "Numeric tag." },
+            "n": { "type": "integer", "description": "An integer value." }
+          }
+        },
+        {
+          "type": "object",
+          "description": "Text branch.",
+          "additionalProperties": false,
+          "required": ["kind", "s"],
+          "properties": {
+            "kind": { "type": "string", "const": "text", "description": "Text tag." },
+            "s": { "type": "string", "description": "A text value." }
+          }
+        }
+      ]
+    },
+    "mode": {
+      "type": "string",
+      "description": "Selects a conditional rule."
+    },
+    "count": {
+      "description": "Required integer when mode is numbered."
+    }
+  },
+  "allOf": [
+    {
+      "description": "When mode is numbered, count must be an integer.",
+      "if": {
+        "properties": { "mode": { "const": "numbered" } },
+        "required": ["mode"]
+      },
+      "then": {
+        "properties": { "count": { "type": "integer" } },
+        "required": ["count"]
+      }
+    }
+  ]
+}

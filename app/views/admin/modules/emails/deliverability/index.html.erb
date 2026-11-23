@@ -1,0 +1,7 @@
+<%= render Emails::DeliverabilityComponent.new(
+      since: @since,
+      until_date: @until_date,
+      totals: @totals,
+      failure_breakdown: @failure_breakdown,
+      suppressions: @suppressions
+    ) %>

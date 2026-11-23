@@ -1,0 +1,87 @@
+<%# scope forces the param key to :email_list. %>
+<%= form_with model: list, scope: :email_list, url: url, method: method, local: true,
+              class: "flex flex-col gap-6",
+              data: {
+                controller: "email-list-form",
+                action: "click->email-list-form#interceptPreviewNav",
+                email_list_form_list_type_value: list.list_type.presence || "dynamic",
+                email_list_form_preview_url_value: preview_admin_modules_emails_lists_path(current_customer_id),
+                email_list_form_loading_label_value: t("common.status.loading")
+              } do |f| %>
+  <% if list.errors.any? %>
+    <%= render "shared/form_errors", resource: list %>
+  <% end %>
+
+  <div>
+    <%= f.label :name, t("common.labels.name"), class: "form-label form-label-required" %>
+    <%= f.text_field :name, required: true, class: "input-field mt-1" %>
+  </div>
+
+  <div>
+    <%= f.label :description, t("common.labels.description"), class: "form-label" %>
+    <%= f.text_area :description, rows: 2, class: "input-field mt-1" %>
+  </div>
+
+  <div>
+    <%= f.label :list_type, t("common.labels.type"), class: "form-label form-label-required" %>
+    <%= f.select :list_type,
+                 Emails::Audience::List::LIST_TYPES.map { |lt| [t("admin_modules.emails.lists.form.types.#{lt}"), lt] },
+                 {},
+                 required: true,
+                 class: "input-field mt-1",
+                 data: { action: "change->email-list-form#toggle" } %>
+
+    <div class="mt-4 <%= "hidden" unless list.static? %>" data-email-list-form-target="panel" data-list-type="static">
+      <%= label_tag :email_list_static_emails, t("admin_modules.emails.lists.form.static_emails"), class: "form-label" %>
+      <%= text_area_tag :email_list_static_emails,
+                        list.static? ? list.users.order(:email).pluck(:email).join("\n") : "",
+                        rows: 6,
+                        class: "input-field mt-1 font-mono text-sm",
+                        placeholder: t("admin_modules.emails.lists.form.static_emails_placeholder") %>
+      <p class="text-caption text-text-muted mt-1"><%= t("admin_modules.emails.lists.form.static_emails_hint") %></p>
+    </div>
+
+    <div class="mt-4 <%= "hidden" if list.static? %>" data-email-list-form-target="panel" data-list-type="dynamic">
+      <label class="form-label"><%= t("admin_modules.emails.lists.form.audience_segment") %></label>
+      <p class="text-caption text-text-muted mt-1"><%= t("admin_modules.emails.lists.form.audience_segment_hint") %></p>
+      <div class="mt-2">
+        <%= render Emails::Audience::SegmentBuilderComponent.new(list: list, preview: true) %>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-end gap-3">
+    <%= link_to t("common.actions.cancel"), admin_modules_emails_lists_path(current_customer_id), class: "btn btn-secondary" %>
+    <%= f.submit (list.persisted? ? t("common.actions.update") : t("common.actions.create")), class: "btn btn-primary" %>
+  </div>
+
+  <div data-email-list-form-target="previewModal"
+       class="hidden fixed inset-0 z-50 overflow-hidden"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="email-list-preview-title">
+    <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-[3px]"
+         data-action="click->email-list-form#closePreview"
+         aria-hidden="true"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4 sm:p-6">
+      <div class="relative flex w-full max-w-4xl max-h-[85vh] flex-col overflow-hidden rounded-2xl bg-surface shadow-float ring-1 ring-black/5">
+        <header class="flex items-start justify-between gap-4 border-b border-border-subtle px-5 py-4 shrink-0">
+          <h3 id="email-list-preview-title" class="text-heading"><%= t("admin_modules.emails.lists.preview.heading") %></h3>
+          <button type="button"
+                  class="icon-button shrink-0"
+                  data-action="email-list-form#closePreview"
+                  aria-label="<%= t("common.actions.close") %>">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </header>
+        <div class="min-h-0 flex-1 overflow-y-auto p-4 sm:p-5">
+          <%= turbo_frame_tag "email_list_preview", data: { email_list_form_target: "previewFrame" } do %>
+            <p class="text-caption text-text-muted"><%= t("admin_modules.emails.lists.preview.hint") %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

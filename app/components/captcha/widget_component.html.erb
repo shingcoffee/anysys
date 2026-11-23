@@ -1,0 +1,11 @@
+<div class="my-4"
+     data-controller="<%= stimulus_controller %>"
+     <% data_attrs.each do |k, v| %>data-<%= k %>="<%= v %>" <% end %>>
+  <div class="min-h-[44px]" data-<%= stimulus_controller %>-target="mount">
+    <p class="text-sm text-gray-500"><%= t("captcha.widget.loading") %></p>
+  </div>
+  <input type="hidden" name="captcha_verify_param" value="" data-<%= stimulus_controller %>-target="input">
+  <% if show_hint? %>
+    <p class="text-xs text-gray-400 mt-1"><%= t("captcha.widget.submit_disabled_hint") %></p>
+  <% end %>
+</div>

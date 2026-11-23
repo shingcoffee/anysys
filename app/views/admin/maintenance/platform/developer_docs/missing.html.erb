@@ -1,0 +1,9 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("developer_docs.breadcrumb.maintenance"), path: admin_maintenance_path(current_customer_id) },
+    { label: t("developer_docs.breadcrumb.reference"), path: admin_maintenance_platform_developer_docs_path(current_customer_id) }
+  ],
+  title: t("developer_docs.missing_title"),
+  description: t("developer_docs.missing_body"),
+  width: "full"
+) %>

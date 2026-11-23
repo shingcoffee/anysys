@@ -1,0 +1,9 @@
+<% config = variant_config %>
+<div class="p-4 rounded-xl border shadow-sm <%= config[:bg] %> <%= config[:border] %>">
+  <div class="flex items-start gap-3">
+    <svg class="w-5 h-5 flex-shrink-0 mt-0.5 <%= config[:icon_color] %>" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <%= icon_svg.html_safe %>
+    </svg>
+    <p class="text-sm leading-relaxed <%= config[:text] %>"><%= content_text %></p>
+  </div>
+</div>

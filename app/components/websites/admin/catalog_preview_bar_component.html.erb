@@ -1,0 +1,22 @@
+<div class="sticky top-0 z-50 border-b border-white/10 bg-neutral-950 font-sans text-white antialiased">
+  <div class="flex min-h-12 flex-wrap items-center gap-x-4 gap-y-2 px-3 py-2 sm:px-5">
+    <a href="<%= back_path %>" class="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md px-2 text-sm text-white/70 transition-colors hover:bg-white/10 hover:text-white">
+      <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 0 1-.02 1.06L8.832 10l3.938 3.71a.75.75 0 1 1-1.04 1.08l-4.5-4.25a.75.75 0 0 1 0-1.08l4.5-4.25a.75.75 0 0 1 1.06.02Z" clip-rule="evenodd"/></svg>
+      <span class="hidden sm:inline"><%= t("website.platform.preview.back") %></span>
+    </a>
+    <div class="flex min-w-0 items-center gap-2">
+      <span class="rounded bg-amber-400/15 px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-amber-300"><%= t("website.platform.preview.badge") %></span>
+      <span class="truncate text-sm font-semibold"><%= name %></span>
+    </div>
+    <% if page_switcher? %>
+      <nav class="order-last -mx-1 flex w-full min-w-0 gap-1 overflow-x-auto px-1 [scrollbar-width:none] md:order-none md:mx-0 md:w-auto md:flex-1 md:justify-center" aria-label="<%= t("website.platform.preview.pages") %>">
+        <% pages.each do |page| %>
+          <a href="<%= page_href(page) %>" class="<%= page_link_class(page) %>" <% if current?(page) %>aria-current="page"<% end %>><%= page["title"] %></a>
+        <% end %>
+      </nav>
+    <% end %>
+    <a href="<%= edit_path %>" class="ml-auto inline-flex h-8 shrink-0 items-center rounded-md bg-white px-3 text-sm font-medium text-neutral-950 transition-colors hover:bg-neutral-200">
+      <%= t("common.actions.edit") %>
+    </a>
+  </div>
+</div>

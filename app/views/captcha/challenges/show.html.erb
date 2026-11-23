@@ -1,0 +1,6 @@
+<%= render Captcha::ChallengeComponent.new(
+      return_to: @return_to,
+      configured: @configured,
+      fail_closed: @fail_closed,
+      captcha_failed: @captcha_failed
+    ) %>

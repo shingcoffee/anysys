@@ -1,0 +1,5 @@
+<%= render Admin::Settings::PageComponent.new(customer_id: current_customer.id,
+  title: t("admin_settings.authentication.roles.new.title"), description: t("settings_people.role_form_description"),
+  breadcrumbs: [{ label: t("settings_navigation.items.roles_permissions"), path: admin_settings_modules_authentication_roles_path(current_customer.id) }]) do %>
+  <%= render Admin::Settings::Modules::Authentication::RoleFormComponent.new(role: @role, customer: current_customer) %>
+<% end %>

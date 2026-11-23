@@ -1,0 +1,19 @@
+<div class="flex flex-col items-center gap-3 px-4 py-10 text-center"
+     role="status"
+     data-module-settings-empty-section="true">
+  <div class="flex size-12 items-center justify-center rounded-xl bg-surface-active text-text-muted" aria-hidden="true">
+    <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+    </svg>
+  </div>
+  <div class="flex max-w-md flex-col gap-1">
+    <h3 class="text-base font-semibold text-text-primary"><%= title %></h3>
+    <p class="text-sm text-text-muted"><%= description %></p>
+  </div>
+  <% if action? %>
+    <%= render ButtonComponent.new(variant: :primary, size: :sm, tag: :a, href: action_path) do %>
+      <%= action_label %>
+    <% end %>
+  <% end %>
+</div>

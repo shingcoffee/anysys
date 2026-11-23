@@ -1,0 +1,20 @@
+<%= render Member::AuthShellComponent.new(
+      customer: nil,
+      title: t("oauth.authorize.handoff.title"),
+      subtitle: t("oauth.authorize.handoff.subtitle")
+    ) do %>
+  <div data-controller="oauth-native-handoff"
+       data-oauth-native-handoff-url-value="<%= redirect_uri %>"
+       data-turbo="false">
+    <div class="mb-8">
+      <h2 class="text-subtitle mb-1"><%= t("oauth.authorize.handoff.heading") %></h2>
+      <p class="text-body-sm"><%= t("oauth.authorize.handoff.body") %></p>
+    </div>
+    <%# rel=noreferrer: the href carries the authorization code, which must not
+        leak into a Referer header. %>
+    <%= link_to t("oauth.authorize.handoff.continue"), redirect_uri,
+          class: "btn-member w-full justify-center",
+          rel: "noreferrer",
+          data: { turbo: false } %>
+  </div>
+<% end %>

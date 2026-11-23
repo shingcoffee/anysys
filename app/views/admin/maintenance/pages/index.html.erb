@@ -1,0 +1,55 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: definition_resource_breadcrumbs(:pages),
+  title: t("maint_core.nav.pages"),
+  description: t("maint_core.pages.index.description"),
+  actions: [
+    ({ label: t("page_shortcuts.manage"), path: admin_maintenance_page_shortcuts_path(current_customer_id), variant: :secondary } unless shared_resources_mode?),
+    { label: t("maint_core.nav.trash"), path: trash_admin_maintenance_pages_path(current_customer_id), variant: :ghost, icon: :trash },
+    { label: t("maint_core.pages.index.new_page"), path: new_admin_maintenance_page_path(current_customer_id), variant: :primary, icon: :plus }
+  ].compact
+) do %>
+  <%= tag.div(data: {
+        controller: "versions",
+        "versions-customer-id-value": current_customer_id,
+        "versions-resource-value": "pages"
+      }.merge(versions_i18n_data)) do %>
+    <%= render AdminTableComponent.new(
+      rows:        @rows,
+      columns:     @columns,
+      pagination:  @pagination,
+      params:      params.permit(:q, :sort, :dir, :page).to_h.symbolize_keys,
+      search:      { param: :q, placeholder: t("maint_core.pages.index.search_placeholder") },
+      row_path:    ->(p) { admin_maintenance_page_path(current_customer_id, p) },
+      row_actions: ->(p) {
+        actions = [
+          { label: t("maint_core.nav.versions"), path: "#",
+            data: { turbo: "false", action: "versions#open",
+                    "versions-id-param": p.id,
+                    "versions-name-param": p.name } }
+        ]
+        if p.customer_owned? || shared_resources_mode? || p.shared?
+          actions << { label: t("common.actions.edit"), path: edit_admin_maintenance_page_path(current_customer_id, p) }
+        end
+        if can_copy_definition?(p)
+          actions << { label: t("common.actions.copy"), path: admin_maintenance_page_copy_path(current_customer_id, p) }
+        end
+        actions << { label: t("maint_core.pages.preview"), path: admin_maintenance_page_preview_path(current_customer_id, p),
+                     data: { turbo_frame: "_top" } }
+        if can_destroy_definition?(p)
+          actions << { label: t("common.actions.delete"), path: admin_maintenance_page_path(current_customer_id, p),
+                       method: :delete,
+                       data: { turbo_confirm: t("maint_core.pages.index.delete_confirm", name: p.name) } }
+        end
+        actions
+      },
+      empty_state: {
+        title: t("maint_core.pages.index.empty_title"),
+        description: t("maint_core.pages.index.empty_description"),
+        action_path: new_admin_maintenance_page_path(current_customer_id),
+        action_text: t("maint_core.pages.index.empty_action")
+      }
+    ) %>
+
+    <%= render VersionsModalComponent.new %>
+  <% end %>
+<% end %>

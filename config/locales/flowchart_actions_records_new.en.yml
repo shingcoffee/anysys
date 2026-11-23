@@ -1,0 +1,241 @@
+en:
+  flowchart_actions:
+    set_record_fields:
+      label: Set record fields
+      description: Write attributes on a loaded record without saving it.
+      fields:
+        modelVariable:
+          label: Record
+          help: Context path of the record to update.
+        assignments:
+          label: Assignments
+          help: Bound-entity attributes mapped to Ruby expressions.
+        writeMode:
+          label: Write mode
+          help: Overwrite every mapped field, or fill only fields that are empty.
+          options:
+            overwrite: Overwrite
+            only_blank: Only blank
+        skipNilValues:
+          label: Skip nil values
+          help: Leave a field unchanged when the assigned expression is nil.
+    load_current_user:
+      label: Load current user
+      description: Load the signed-in user for this customer as a read-only hash.
+      fields:
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        required:
+          label: Required
+          help: Fail when no signed-in user belongs to this customer.
+    related_record:
+      label: Related record
+      description: Find, create, or update a record linked through an association.
+      fields:
+        association:
+          label: Association
+          help: Association of the bound entity to follow.
+        operation:
+          label: Operation
+          help: Find an existing related record, create one, or update one.
+          options:
+            find: Find
+            create: Create
+            update: Update
+            list: List
+            count: Count
+        modelVariable:
+          label: Record
+          help: Context path of the source record.
+        conditions:
+          label: Conditions
+          help: Extra filters applied when finding the related record.
+        assignments:
+          label: Assignments
+          help: Target-entity attributes mapped to Ruby expressions.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        onNotFound:
+          label: When not found
+          help: Return nil, or fail the step, when no related row matches.
+          options:
+            "nil": Return nil
+            fail: Fail
+        limit:
+          label: Limit
+          help: Maximum related rows to return (1–1000).
+        orderBy:
+          label: Order by
+          help: Attribute or column to sort the related rows by.
+        orderDirection:
+          label: Order direction
+          help: Sort the related rows ascending or descending.
+          options:
+            asc: Ascending
+            desc: Descending
+      errors:
+        unsafe_column: "%{column} is not a safe column name"
+    referenced_record:
+      label: Referenced record
+      description: Load, or update, the record a reference field points at, such as a row's parent record.
+      fields:
+        modelVariable:
+          label: Record
+          help: Context path of the record that holds the reference.
+        field:
+          label: Reference field
+          help: Reference field on that record, such as product.
+        operation:
+          label: Operation
+          help: Load the referenced record, or update it and save.
+          options:
+            find: Find
+            update: Update
+        assignments:
+          label: Assignments
+          help: Referenced-entity attributes mapped to Ruby expressions.
+        onNotFound:
+          label: When not found
+          help: Return nil, or fail the step, when the field is blank or the record is gone.
+          options:
+            "nil": Return nil
+            fail: Fail
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+      errors:
+        not_a_reference: "%{attribute} is not a reference field of %{entity}"
+    child_records:
+      label: Child records
+      description: Find, list, count, or create the records of another entity whose reference field points at a loaded record, such as an order's lines.
+      fields:
+        entity:
+          label: Child entity
+          help: Entity whose records point at the record, such as Order line.
+        field:
+          label: Reference field
+          help: Reference field on the child entity that points at the record. Leave blank when it has only one.
+        modelVariable:
+          label: Record
+          help: Context path of the record the child records point at.
+        operation:
+          label: Operation
+          help: List, find, or count the child records, or create one pointing at the record.
+          options:
+            list: List
+            find: Find
+            count: Count
+            create: Create
+        conditions:
+          label: Conditions
+          help: Extra filters on the child records.
+        assignments:
+          label: Assignments
+          help: Child-entity attributes mapped to Ruby expressions.
+        onNotFound:
+          label: When not found
+          help: Return nil, or fail the step, when no child record matches.
+          options:
+            "nil": Return nil
+            fail: Fail
+        limit:
+          label: Limit
+          help: Maximum child records to return (1–1000).
+        orderBy:
+          label: Order by
+          help: Attribute or column to sort the child records by.
+        orderDirection:
+          label: Order direction
+          help: Sort the child records ascending or descending.
+          options:
+            asc: Ascending
+            desc: Descending
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+      errors:
+        unknown_entity: "There is no entity named %{entity}"
+        not_a_reference: "%{attribute} is not a reference field of %{entity}"
+        not_pointing_at: "%{entity} has no reference field pointing at %{target}, or has several and none is named"
+        unsafe_column: "%{column} is not a safe column name"
+    adjust_number:
+      label: Adjust a number
+      description: Add to or take from a number field on a record and save it, such as taking booked places from those left.
+      fields:
+        modelVariable:
+          label: Record
+          help: Context path of the record to change.
+        field:
+          label: Number field
+          help: Number field to change, such as stock.
+        direction:
+          label: Change
+          help: Take the amount away from the number, or add it.
+          options:
+            subtract: Take away
+            add: Add
+        amount:
+          label: Amount
+          help: Ruby expression for how much to take away or add, such as the ordered quantity.
+        minimum:
+          label: Lowest allowed
+          help: Ruby expression for the lowest value allowed, such as 0. Going lower refuses the submission.
+        maximum:
+          label: Highest allowed
+          help: Ruby expression for the highest value allowed. Going higher refuses the submission.
+        message:
+          label: Refusal message
+          help: Shown when the change is refused. The named placeholder available is the amount still allowed.
+        errorField:
+          label: Form field
+          help: Form field the refusal is shown on, such as quantity.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+    read_setting:
+      label: Read a Constant
+      description: Read a Constant's options or the label for a value, using this customer's override when present.
+      fields:
+        constant:
+          label: Constant
+          help: Constant whose options this step reads.
+        returns:
+          label: Returns
+          help: Return the option list or the label for one value.
+          options:
+            options: Options
+            label: Label
+        value:
+          label: Value
+          help: Expression for the option value whose label is returned.
+        defaultValue:
+          label: Default value
+          help: Expression returned when the option value is not in the list.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+  flowchart_runtime:
+    errors:
+      load_current_user:
+        not_signed_in: You must be signed in to continue.
+      related_record:
+        not_found: Related record was not found.
+        failed: Could not load the related record (%{reason}).
+      referenced_record:
+        not_found: The referenced record was not found.
+        failed: Could not load the referenced record (%{reason}).
+      child_records:
+        not_found: No matching child record was found.
+        failed: Could not load the child records (%{reason}).
+      adjust_number:
+        below_minimum: Only %{available} left.
+        above_maximum: Only %{available} more can be added.
+        failed: Could not change the number (%{reason}).
+        busy: This record is being updated. Try again.
+      read_setting:
+        failed: Could not read the constant (%{reason}).
+      set_record_fields:
+        missing_record: No record was loaded to update.
+        failed: Could not write the record fields (%{reason}).

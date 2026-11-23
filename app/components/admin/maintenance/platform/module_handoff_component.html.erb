@@ -1,0 +1,65 @@
+<div class="flex flex-col gap-5 px-4 py-5 sm:px-6" data-module-handoff="true">
+  <div>
+    <h3 class="text-sm font-medium text-text-primary"><%= t("comp_admin.module_handoff.integration_contract") %></h3>
+    <p class="mt-1 text-sm text-text-muted"><%= t("comp_admin.module_handoff.subtitle") %></p>
+  </div>
+
+  <dl class="grid grid-cols-1 overflow-hidden rounded-lg border border-border-subtle sm:grid-cols-2">
+    <div class="min-w-0 px-4 py-3">
+      <dt class="text-caption"><%= t("comp_admin.module_handoff.entry_path") %></dt>
+      <dd class="mt-1">
+        <% if entry_path.present? %>
+          <span class="text-code text-mono break-all"><%= entry_path %></span>
+        <% else %>
+          <span class="text-sm text-text-muted"><%= t("comp_admin.module_handoff.not_declared") %></span>
+        <% end %>
+      </dd>
+    </div>
+    <div class="min-w-0 border-t border-border-subtle px-4 py-3 sm:border-l sm:border-t-0">
+      <dt class="text-caption"><%= t("comp_admin.module_handoff.default_exit") %></dt>
+      <dd class="mt-1 break-words text-sm text-text-primary">
+        <%= default_exit_summary || t("comp_admin.module_handoff.default_exit_fallback") %>
+      </dd>
+    </div>
+  </dl>
+
+  <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+    <% contract_groups.each do |group| %>
+      <section class="min-w-0" data-module-handoff-fields="<%= group[:key] %>">
+        <div class="mb-2 flex items-baseline justify-between gap-3">
+          <h4 class="min-w-0 text-sm font-medium text-text-primary">
+            <%= group[:title] %>
+            <span class="font-normal text-text-muted"><%= group[:note] %></span>
+          </h4>
+          <span class="shrink-0 text-caption"><%= t("comp_admin.module_handoff.field_count", count: group[:fields].size) %></span>
+        </div>
+        <% if group[:fields].any? %>
+          <ul class="divide-y divide-border-subtle rounded-lg border border-border-subtle">
+            <% group[:fields].each do |field| %>
+              <li class="flex items-start justify-between gap-3 px-4 py-2.5">
+                <div class="min-w-0">
+                  <span class="block break-all text-mono text-sm text-text-primary"><%= field.name %></span>
+                  <% if field.constraint.present? %>
+                    <span class="block text-xs text-text-muted"><%= field.constraint %></span>
+                  <% end %>
+                </div>
+                <div class="flex shrink-0 items-center gap-1.5">
+                  <% if group[:key] == :input %>
+                    <% if field.required? %>
+                      <%= render BadgeComponent.new(variant: :warning, size: :sm) do %><%= t("common.labels.required") %><% end %>
+                    <% else %>
+                      <%= render BadgeComponent.new(variant: :default, size: :sm) do %><%= t("common.labels.optional") %><% end %>
+                    <% end %>
+                  <% end %>
+                  <span class="text-code text-mono"><%= field.type %></span>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="rounded-lg border border-dashed border-border px-4 py-3 text-sm text-text-muted"><%= group[:empty] %></p>
+        <% end %>
+      </section>
+    <% end %>
+  </div>
+</div>

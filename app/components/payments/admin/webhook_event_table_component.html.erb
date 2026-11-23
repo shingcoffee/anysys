@@ -1,0 +1,80 @@
+<% if events.empty? %>
+  <%= render Admin::Maintenance::Platform::ModuleSettings::EmptySectionComponent.new(
+        title: t("comp_payments.webhook_events.empty"),
+        description: t("comp_payments.webhook_events.empty_description")
+      ) %>
+<% else %>
+  <%= render Admin::Maintenance::Platform::ModuleSettings::SectionCardComponent.new(
+        title: t("comp_payments.webhook_events.table_title"),
+        description: t("comp_payments.webhook_events.table_subtitle")
+      ) do %>
+    <%= render Admin::Maintenance::Platform::ModuleSettings::ResponsiveCollectionComponent.new(
+          label: t("maint_platform.module_settings.collections.webhook_events"),
+          columns: [
+            t("comp_payments.webhook_events.headers.provider"),
+            t("comp_payments.webhook_events.headers.event_type"),
+            t("comp_payments.webhook_events.headers.merchant"),
+            t("common.labels.status"),
+            t("comp_payments.webhook_events.headers.created_at"),
+            t("comp_payments.webhook_events.headers.processed_at"),
+            t("common.labels.actions")
+          ],
+          desktop_grid_class: "lg:grid-cols-[8rem_minmax(12rem,1.4fr)_minmax(10rem,1fr)_7rem_9rem_9rem_7rem]"
+        ) do %>
+      <div class="divide-y divide-border-subtle">
+        <% events.each do |event| %>
+          <article class="grid grid-cols-1 gap-3 px-4 py-4 lg:grid-cols-[8rem_minmax(12rem,1.4fr)_minmax(10rem,1fr)_7rem_9rem_9rem_7rem] lg:items-center lg:gap-4"
+                   role="row"
+                   data-responsive-collection-record="<%= event.id %>">
+            <div class="min-w-0" role="cell">
+              <span class="mb-1 block text-xs font-medium text-text-muted lg:hidden"
+                    data-responsive-collection-mobile-label><%= t("comp_payments.webhook_events.headers.provider") %></span>
+              <p class="truncate text-sm font-semibold text-text-primary"><%= provider_label(event.provider) %></p>
+            </div>
+            <div class="min-w-0" role="cell">
+              <span class="mb-1 block text-xs font-medium text-text-muted lg:hidden"
+                    data-responsive-collection-mobile-label><%= t("comp_payments.webhook_events.headers.event_type") %></span>
+              <p class="break-words text-sm text-text-primary"><%= event.event_type.presence || t("common.labels.em_dash") %></p>
+            </div>
+            <div class="min-w-0" role="cell">
+              <span class="mb-1 block text-xs font-medium text-text-muted lg:hidden"
+                    data-responsive-collection-mobile-label><%= t("comp_payments.webhook_events.headers.merchant") %></span>
+              <p class="break-all text-sm tabular-nums text-text-secondary"><%= event.signing_merchant_id.presence || t("comp_payments.webhook_events.merchant_unknown") %></p>
+            </div>
+            <div role="cell">
+              <span class="mb-1 block text-xs font-medium text-text-muted lg:hidden"
+                    data-responsive-collection-mobile-label><%= t("common.labels.status") %></span>
+              <%= render BadgeComponent.new(variant: status_variant(event.status), size: :sm) do %>
+                <%= status_label(event.status) %>
+              <% end %>
+            </div>
+            <div role="cell">
+              <span class="mb-1 block text-xs font-medium text-text-muted lg:hidden"
+                    data-responsive-collection-mobile-label><%= t("comp_payments.webhook_events.headers.created_at") %></span>
+              <p class="text-sm tabular-nums text-text-secondary"><%= event.created_at.present? ? l(event.created_at, format: :long) : t("common.labels.em_dash") %></p>
+            </div>
+            <div role="cell">
+              <span class="mb-1 block text-xs font-medium text-text-muted lg:hidden"
+                    data-responsive-collection-mobile-label><%= t("comp_payments.webhook_events.headers.processed_at") %></span>
+              <p class="text-sm tabular-nums text-text-secondary"><%= event.processed_at.present? ? l(event.processed_at, format: :long) : t("common.labels.em_dash") %></p>
+            </div>
+            <div class="lg:flex lg:justify-end" role="cell">
+              <% if redrivable?(event) %>
+                <%= form_with url: helpers.redrive_admin_maintenance_platform_module_settings_payment_webhook_event_path(
+                      customer_id: helpers.params[:customer_id], id: event.id
+                    ), method: :post, local: true, class: "w-full lg:w-auto" do %>
+                  <%= render ButtonComponent.new(
+                        variant: :secondary, size: :sm, tag: :button,
+                        type: :submit, full_width: true
+                      ) do %>
+                    <%= t("comp_payments.webhook_events.redrive") %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </div>
+          </article>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

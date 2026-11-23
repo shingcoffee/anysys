@@ -1,0 +1,47 @@
+<div class="card overflow-hidden">
+  <div class="px-5 py-3.5 border-b border-border-subtle flex items-center justify-between gap-2">
+    <h2 class="text-sm font-medium text-text-primary"><%= t("chrome.page_info_card.header") %></h2>
+    <%= render BadgeComponent.new(variant: :default, size: :sm) do %>
+      <%= t("chrome.page_info_card.fields_count", count: page.fields.length) %>
+    <% end %>
+  </div>
+
+  <dl class="px-5 py-4 flex flex-col gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <dt class="text-caption text-text-muted"><%= t("common.labels.name") %></dt>
+        <dd class="mt-0.5 text-sm text-text-primary"><%= page.name %></dd>
+      </div>
+
+      <div>
+        <dt class="text-caption text-text-muted"><%= t("chrome.labels.bound_entity") %></dt>
+        <dd class="mt-0.5">
+          <% if page.entity %>
+            <%= link_to page.entity.display_label, entity_link_path,
+                class: "text-sm text-accent hover:underline" %>
+          <% else %>
+            <span class="text-sm text-text-muted"><%= t("chrome.page_info_card.standalone") %></span>
+          <% end %>
+        </dd>
+      </div>
+    </div>
+
+    <% if page.description.present? %>
+      <div>
+        <dt class="text-caption text-text-muted"><%= t("common.labels.description") %></dt>
+        <dd class="mt-0.5 text-sm text-text-primary"><%= page.description %></dd>
+      </div>
+    <% end %>
+
+    <div class="pt-3 border-t border-border-subtle grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div>
+        <dt class="text-caption text-text-muted"><%= t("common.labels.created_at") %></dt>
+        <dd class="mt-0.5 text-sm text-text-secondary"><%= format_datetime(page.created_at) %></dd>
+      </div>
+      <div>
+        <dt class="text-caption text-text-muted"><%= t("chrome.labels.last_updated") %></dt>
+        <dd class="mt-0.5 text-sm text-text-secondary"><%= format_datetime(page.updated_at) %></dd>
+      </div>
+    </div>
+  </dl>
+</div>

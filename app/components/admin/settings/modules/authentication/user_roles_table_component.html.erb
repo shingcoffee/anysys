@@ -1,0 +1,57 @@
+<div class="card min-w-0 overflow-hidden">
+  <table class="w-full divide-y divide-border-subtle block md:table">
+    <thead class="table-header hidden md:table-header-group">
+      <tr>
+        <th scope="col" class="px-4 py-3 text-left"><%= t("comp_admin.user_roles_table.user") %></th>
+        <th scope="col" class="px-4 py-3 text-left"><%= t("comp_admin.user_roles_table.email") %></th>
+        <th scope="col" class="px-4 py-3 text-left"><%= t("comp_admin.user_roles_table.roles") %></th>
+        <th scope="col" class="px-4 py-3 text-right"><%= t("common.labels.actions") %></th>
+      </tr>
+    </thead>
+    <tbody class="bg-surface divide-y divide-border-subtle block md:table-row-group">
+      <% users.each do |u| %>
+        <tr class="block py-4 md:table-row md:py-0">
+          <td class="block px-4 py-2 md:table-cell md:py-4">
+            <span class="text-sm font-medium text-text-primary"><%= u.display_name %></span>
+          </td>
+          <td class="block px-4 py-2 md:table-cell md:py-4">
+            <span class="text-sm text-text-secondary break-all"><%= u.email %></span>
+          </td>
+          <td class="block px-4 py-2 md:table-cell md:py-4">
+            <% if u.roles.any? %>
+              <div class="flex flex-wrap gap-1.5">
+                <% u.roles.each do |r| %>
+                  <%= render BadgeComponent.new(variant: r.system? ? :primary : :default, size: :sm) do %><%= Admin::Settings::RolePresenter.new(r).name %><% end %>
+                <% end %>
+              </div>
+            <% else %>
+              <span class="text-caption"><%= t("comp_admin.user_roles_table.no_roles") %></span>
+            <% end %>
+          </td>
+          <td class="block px-4 py-2 md:table-cell md:py-4 md:text-right">
+            <button type="button"
+                    data-controller="user-role-dialog"
+                    data-user-role-dialog-user-id-value="<%= u.id %>"
+                    data-user-role-dialog-user-name-value="<%= u.display_name %>"
+                    data-user-role-dialog-current-role-ids-value="<%= u.roles.pluck(:id).to_json %>"
+                    data-user-role-dialog-roles-value="<%= role_options.to_json %>"
+                    data-user-role-dialog-submit-url-value="<%= helpers.admin_settings_modules_authentication_user_role_assignments_path(customer.id) %>"
+                    data-user-role-dialog-system-badge-label-value="<%= t("settings_people.built_in_role") %>"
+                    data-user-role-dialog-dialog-title-label-value="<%= t("settings_people.edit_access") %>"
+                    data-user-role-dialog-no-roles-defined-label-value="<%= t("comp_admin.user_roles_table.no_roles_defined") %>"
+                    data-user-role-dialog-cancel-label-value="<%= t("common.actions.cancel") %>"
+                    data-user-role-dialog-save-label-value="<%= t("common.actions.save") %>"
+                    data-user-role-dialog-save-failed-format-value="<%= t("comp_admin.user_roles_table.save_failed_format") %>"
+                    data-action="click->user-role-dialog#open"
+                    class="btn btn-secondary btn-sm">
+              <svg class="w-3.5 h-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              <%= t("settings_people.edit_access") %>
+            </button>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

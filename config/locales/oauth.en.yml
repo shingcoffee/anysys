@@ -1,0 +1,12 @@
+en:
+  oauth:
+    authorize:
+      error:
+        title: "Could not authorize the desktop app."
+        subtitle: "The authorization request was invalid. Return to the app and try signing in again."
+      handoff:
+        title: "You're signed in."
+        subtitle: "Return to the desktop app to finish."
+        heading: "Opening the desktop app"
+        body: "This window can be closed after the app opens. If nothing happens, use the button below."
+        continue: "Open the desktop app"

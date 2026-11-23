@@ -1,0 +1,132 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "email",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.email.entries.analytics"), path: helpers.admin_modules_emails_dashboard_path(helpers.current_customer_id) },
+        { label: t("feature_modules.email.tabs.engagement") }
+      ],
+      title: t("admin_modules.emails.analytics.engagement.title"),
+      description: t("admin_modules.emails.analytics.engagement.description")
+    ) do %>
+
+  <%= render "admin/modules/emails/shared/overview_tabs", active_tab: :engagement %>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+    <div>
+      <h3 class="text-lg font-medium text-text-primary mb-4"><%= t("admin_modules.emails.analytics.engagement.top_links") %></h3>
+      <% if empty?(top_links) %>
+        <div class="bg-surface card p-6 text-center">
+          <p class="text-text-muted"><%= t("admin_modules.emails.analytics.engagement.empty_top_links") %></p>
+        </div>
+      <% else %>
+        <div class="bg-surface card overflow-hidden">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-border-subtle">
+                <th class="p-3 text-sm font-medium text-text-muted"><%= t("admin_modules.emails.analytics.engagement.url") %></th>
+                <th class="p-3 text-sm font-medium text-text-muted text-right"><%= t("admin_modules.emails.analytics.engagement.clicks") %></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle">
+              <% top_links.each do |url, count| %>
+                <tr>
+                  <td class="p-3 text-sm text-text-primary break-all"><%= url %></td>
+                  <td class="p-3 text-sm text-text-primary text-right"><%= number_with_delimiter(count) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+    </div>
+
+    <div>
+      <h3 class="text-lg font-medium text-text-primary mb-4"><%= t("admin_modules.emails.analytics.engagement.devices_heading") %></h3>
+      <% if empty?(devices) %>
+        <div class="bg-surface card p-6 text-center">
+          <p class="text-text-muted"><%= t("admin_modules.emails.analytics.engagement.empty_devices") %></p>
+        </div>
+      <% else %>
+        <div class="bg-surface card overflow-hidden">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-border-subtle">
+                <th class="p-3 text-sm font-medium text-text-muted"><%= t("admin_modules.emails.analytics.engagement.device") %></th>
+                <th class="p-3 text-sm font-medium text-text-muted text-right"><%= t("admin_modules.emails.analytics.engagement.opens") %></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle">
+              <% devices.each do |device, count| %>
+                <tr>
+                  <td class="p-3 text-sm text-text-primary"><%= t("admin_modules.emails.analytics.engagement.devices.#{device}") %></td>
+                  <td class="p-3 text-sm text-text-primary text-right"><%= number_with_delimiter(count) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div>
+      <h3 class="text-lg font-medium text-text-primary mb-4"><%= t("admin_modules.emails.analytics.engagement.opens_by_hour") %></h3>
+      <% if empty?(opens_by_hour) %>
+        <div class="bg-surface card p-6 text-center">
+          <p class="text-text-muted"><%= t("admin_modules.emails.analytics.engagement.empty_opens_by_hour") %></p>
+        </div>
+      <% else %>
+        <div class="bg-surface card overflow-hidden">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-border-subtle">
+                <th class="p-3 text-sm font-medium text-text-muted"><%= t("admin_modules.emails.analytics.engagement.hour") %></th>
+                <th class="p-3 text-sm font-medium text-text-muted text-right"><%= t("admin_modules.emails.analytics.engagement.opens") %></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle">
+              <% opens_by_hour.sort.each do |hour, count| %>
+                <tr>
+                  <td class="p-3 text-sm text-text-primary"><%= "%02d:00" % hour %></td>
+                  <td class="p-3 text-sm text-text-primary text-right"><%= number_with_delimiter(count) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+    </div>
+
+    <div>
+      <h3 class="text-lg font-medium text-text-primary mb-4"><%= t("admin_modules.emails.analytics.engagement.opens_by_day") %></h3>
+      <% if empty?(opens_by_day) %>
+        <div class="bg-surface card p-6 text-center">
+          <p class="text-text-muted"><%= t("admin_modules.emails.analytics.engagement.empty_opens_by_day") %></p>
+        </div>
+      <% else %>
+        <div class="bg-surface card p-4 mb-4">
+          <%= render Emails::SparklineComponent.new(values: sparkline_values, tone: "info") %>
+        </div>
+        <div class="bg-surface card overflow-hidden">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-border-subtle">
+                <th class="p-3 text-sm font-medium text-text-muted"><%= t("admin_modules.emails.analytics.engagement.day") %></th>
+                <th class="p-3 text-sm font-medium text-text-muted text-right"><%= t("admin_modules.emails.analytics.engagement.opens") %></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle">
+              <% opens_by_day.sort_by { |day, _| day.to_s }.each do |day, count| %>
+                <tr>
+                  <td class="p-3 text-sm text-text-primary"><%= l(day, format: :default) %></td>
+                  <td class="p-3 text-sm text-text-primary text-right"><%= number_with_delimiter(count) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,6 @@
+<%= render BadgeComponent.new(variant: badge_variant, size: :sm,
+                              aria: { label: t("comp_payments.status_badge.aria_status", label: label) }) do %>
+  <span class="inline-block w-1.5 h-1.5 rounded-full mr-1
+               <%= state == :active ? 'bg-success' : state == :needs_setup ? 'bg-warning' : 'bg-text-secondary' %>"></span>
+  <%= label %>
+<% end %>

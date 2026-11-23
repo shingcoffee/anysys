@@ -1,0 +1,8 @@
+<span id="<%= dom_id %>"
+      data-notifications-menu-target="badge"
+      <% if unread? %>
+        data-badge-count="<%= count %>"
+        class="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 bg-danger text-white text-[10px] font-semibold leading-none tabular-nums"
+      <% else %>
+        class="absolute -top-0.5 -right-0.5 hidden h-4 min-w-4 items-center justify-center rounded-full px-1 bg-danger text-white text-[10px] font-semibold leading-none tabular-nums"
+      <% end %>><% if unread? %><%= label %><% end %></span>

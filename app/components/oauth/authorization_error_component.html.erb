@@ -1,0 +1,7 @@
+<%= render Member::AuthShellComponent.new(
+      customer: nil,
+      title: t("oauth.authorize.error.title"),
+      subtitle: t("oauth.authorize.error.subtitle")
+    ) do %>
+  <p class="text-sm text-foreground" role="alert"><%= error_description %></p>
+<% end %>

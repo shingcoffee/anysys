@@ -1,0 +1,7 @@
+<%= form_with url: action, method: :post, local: true, multipart: true, class: "min-w-0 space-y-6", data: form_data do %>
+  <div class="min-w-0">
+    <%= content %>
+  </div>
+
+  <%= render Admin::Entities::EntryActionsComponent.new(submit_label: submit_label, submitting_label: submitting_label, dismiss_action: dismiss_action, cancel_path: cancel_path, extra_action: extra_action) %>
+<% end %>

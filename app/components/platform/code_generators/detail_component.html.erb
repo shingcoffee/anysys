@@ -1,0 +1,139 @@
+<div class="<%= helpers.container_width_class(:full) %> space-y-5 py-8 lg:py-10">
+  <section class="card p-4 sm:p-5" aria-labelledby="generator-summary-title">
+    <div class="flex flex-wrap items-center gap-2">
+      <h1 id="generator-summary-title" class="break-all font-mono text-base font-semibold text-text-primary sm:text-lg"><%= generator_name %></h1>
+      <% if metadata[:version].present? %>
+        <%= render BadgeComponent.new(size: :sm) do %><%= t("comp_platform.code_generators.version_badge", version: metadata[:version]) %><% end %>
+      <% end %>
+      <%= render BadgeComponent.new(variant: :primary, size: :sm) do %><%= kind_label %><% end %>
+      <% if category_label %>
+        <%= render BadgeComponent.new(variant: :info, size: :sm) do %><%= category_label %><% end %>
+      <% end %>
+    </div>
+    <% if metadata[:description].present? %>
+      <p class="mt-2 max-w-3xl text-body-sm text-text-secondary"><%= metadata[:description] %></p>
+    <% end %>
+
+    <dl class="mt-4 grid gap-4 border-t border-border-subtle pt-4 text-xs sm:grid-cols-2 lg:grid-cols-4">
+      <div class="min-w-0">
+        <dt class="text-[10px] font-semibold uppercase tracking-wide text-text-muted"><%= t("comp_platform.code_generators.detail.file") %></dt>
+        <dd class="mt-1 break-all font-mono text-text-secondary"><%= file_path %></dd>
+      </div>
+      <% io.each do |kind, keys| %>
+        <div class="min-w-0">
+          <dt class="text-[10px] font-semibold uppercase tracking-wide text-text-muted"><%= t("comp_platform.code_generators.detail.#{kind}") %></dt>
+          <dd class="mt-1 flex flex-wrap gap-1">
+            <% if keys.any? %>
+              <% keys.each do |key| %>
+                <span class="inline-flex items-center rounded border border-border-subtle bg-surface px-1.5 py-0.5 font-mono text-[11px] text-text-primary">ctx[:<%= key %>]</span>
+              <% end %>
+            <% else %>
+              <span class="italic text-text-muted"><%= t("comp_platform.code_generators.detail.none_detected") %></span>
+            <% end %>
+          </dd>
+        </div>
+      <% end %>
+      <div class="min-w-0">
+        <dt class="text-[10px] font-semibold uppercase tracking-wide text-text-muted"><%= t("comp_platform.code_generators.detail.aliases") %></dt>
+        <dd class="mt-1 flex flex-wrap gap-1">
+          <% if aliases.any? %>
+            <% aliases.each do |name| %>
+              <span class="inline-flex items-center rounded border border-border-subtle bg-surface px-1.5 py-0.5 font-mono text-[11px] text-text-primary"><%= name %></span>
+            <% end %>
+          <% else %>
+            <span class="text-text-muted"><%= t("comp_platform.code_generators.empty_value") %></span>
+          <% end %>
+        </dd>
+      </div>
+      <% if dependencies.any? %>
+        <div class="min-w-0 sm:col-span-2 lg:col-span-4">
+          <dt class="text-[10px] font-semibold uppercase tracking-wide text-text-muted"><%= t("comp_platform.code_generators.detail.deps") %></dt>
+          <dd class="mt-1 flex flex-wrap gap-1">
+            <% dependencies.each do |dependency| %>
+              <span class="inline-flex items-center rounded border border-border-subtle bg-surface px-1.5 py-0.5 font-mono text-[11px] text-text-primary"><%= dependency %></span>
+            <% end %>
+          </dd>
+        </div>
+      <% end %>
+    </dl>
+  </section>
+
+  <div data-controller="tabs"
+       data-tabs-active-value="playground"
+       data-tabs-active-class="<%= TAB_ACTIVE %>"
+       data-tabs-inactive-class="<%= TAB_INACTIVE %>">
+    <div role="tablist" aria-label="<%= t("comp_platform.code_generators.detail.tabs_label") %>" class="flex gap-1 overflow-x-auto border-b border-border-subtle">
+      <% tabs.each_with_index do |tab, index| %>
+        <button type="button"
+                role="tab"
+                id="generator-tab-<%= tab[:id] %>"
+                aria-controls="generator-panel-<%= tab[:id] %>"
+                aria-selected="<%= index.zero? %>"
+                data-tabs-target="tab"
+                data-tabs-id="<%= tab[:id] %>"
+                data-action="click->tabs#select"
+                class="<%= tab_classes(index.zero?) %>">
+          <%= tab[:label] %>
+          <% if tab[:meta] %>
+            <span class="rounded-full bg-surface-active px-1.5 text-[10px] font-medium text-text-muted"><%= tab[:meta] %></span>
+          <% end %>
+        </button>
+      <% end %>
+    </div>
+
+    <section id="generator-panel-playground" role="tabpanel" aria-labelledby="generator-tab-playground"
+             data-tabs-target="panel" data-tabs-id="playground" class="pt-4">
+      <div class="grid gap-4 lg:grid-cols-5"
+           data-controller="generator-test-runner"
+           data-generator-test-runner-url-value="<%= test_run_path %>"
+           data-generator-test-runner-sample-value="<%= sample_json %>"
+           data-generator-test-runner-request-failed-format-value="<%= t("comp_platform.code_generators.detail.request_failed_format") %>">
+        <div class="card flex min-w-0 flex-col overflow-hidden lg:col-span-2">
+          <div class="flex items-center justify-between gap-2 border-b border-border-subtle px-4 py-2.5">
+            <label for="generator-playground-config" class="section-header"><%= t("comp_platform.code_generators.detail.config_json") %></label>
+            <button type="button" data-action="generator-test-runner#reset"
+                    class="rounded-md px-2 py-1 text-xs font-medium text-text-muted transition-colors hover:bg-surface-active hover:text-text-primary">
+              <%= t("comp_platform.code_generators.detail.reset_sample") %>
+            </button>
+          </div>
+          <textarea id="generator-playground-config"
+                    data-generator-test-runner-target="config"
+                    data-action="keydown.ctrl+enter->generator-test-runner#run keydown.meta+enter->generator-test-runner#run"
+                    rows="14" spellcheck="false" autocomplete="off"
+                    class="min-h-[14rem] flex-1 resize-y border-0 bg-transparent p-4 font-mono text-xs leading-5 text-text-primary focus:ring-0"><%= sample_json %></textarea>
+          <div class="flex flex-wrap items-center justify-between gap-2 border-t border-border-subtle px-4 py-2.5">
+            <span class="text-caption"><%= t("comp_platform.code_generators.detail.run_shortcut") %></span>
+            <button type="button"
+                    data-generator-test-runner-target="runButton"
+                    data-action="generator-test-runner#run"
+                    class="btn btn-primary text-xs">
+              <svg data-generator-test-runner-target="spinner" class="hidden h-3.5 w-3.5 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+              <%= t("comp_platform.code_generators.detail.run_test") %>
+            </button>
+          </div>
+        </div>
+        <div class="min-w-0 lg:col-span-3" data-generator-test-runner-target="result" aria-live="polite">
+          <%= render Platform::CodeGenerators::PlaygroundResultComponent.new(**run) %>
+        </div>
+      </div>
+    </section>
+
+    <section id="generator-panel-schema" role="tabpanel" aria-labelledby="generator-tab-schema"
+             data-tabs-target="panel" data-tabs-id="schema" class="hidden pt-4">
+      <%= render Platform::CodeGenerators::SchemaTableComponent.new(fields: schema_fields) %>
+    </section>
+
+    <section id="generator-panel-source" role="tabpanel" aria-labelledby="generator-tab-source"
+             data-tabs-target="panel" data-tabs-id="source" class="hidden space-y-3 pt-4">
+      <div class="flex justify-end">
+        <%= render ButtonComponent.new(tag: :a, variant: :secondary, size: :sm, href: edit_path) do %>
+          <%= t("comp_platform.code_generators.detail.edit_source") %>
+        <% end %>
+      </div>
+      <%= render CodeBlockComponent.new(code: source_code, language: "ruby", filename: ::File.basename(file_path)) %>
+    </section>
+  </div>
+</div>

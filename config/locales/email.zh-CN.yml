@@ -1,0 +1,76 @@
+zh-CN:
+  activerecord:
+    models:
+      "emails/send_activities/send_activity":
+        one: "发送活动"
+        other: "发送活动"
+  feature_modules:
+    email:
+      tabs:
+        reports: "报告"
+        deliverability: "送达率"
+        engagement: "互动率"
+  email:
+    credentials:
+      password: "密码"
+      webhook_secret: "Webhook 密钥"
+      errors:
+        incomplete: "请先完善凭据信息，再启用该凭据。"
+    providers:
+      errors:
+        unsupported_campaign: "所选邮件服务商（%{provider}）不支持带一键退订功能的营销邮件。"
+        unsupported_message: "所选邮件服务商（%{provider}）不支持此邮件的收件人设置、回复地址或内嵌附件。"
+      smtp:
+        name: "SMTP（自建 MTA）"
+        credentials:
+          password: "密码"
+      ses:
+        name: "AWS SES"
+        credentials:
+          password: "Secret Access Key"
+        fields:
+          access_key_id: "Access Key ID"
+          region: "地域"
+          from_email: "发件邮箱"
+          sns_topic_arn: "SNS 主题 ARN"
+      aliyun:
+        name: "阿里云邮件推送"
+        credentials:
+          password: "AccessKey Secret"
+        fields:
+          access_key_id: "AccessKey ID"
+          region: "地域"
+          from_email: "发件邮箱"
+          from_alias: "发件人别名"
+    preview:
+      title: "实时预览"
+      hint: "预览渲染后的主题、HTML 和纯文本。"
+      load_button: "加载预览"
+      new_tab: "新标签页"
+      tab_html: "HTML"
+      tab_text: "纯文本"
+      empty_placeholder: "点击“加载预览”开始渲染。"
+    template_tokens:
+      unknown_label: "变量"
+      unknown_platform_label: "其他字段：%{label}"
+      platform:
+        unsubscribe_url: "退订链接"
+        authentication_user:
+          first_name: "收件人名"
+          last_name: "收件人姓"
+        authentication_event:
+          id: "身份验证事件 ID"
+        authentication_trusted_device:
+          id: "受信任设备 ID"
+        payments_dispute:
+          provider: "支付争议服务商"
+          psp_dispute_id: "支付争议服务商争议 ID"
+          raw: "支付争议原始数据"
+      errors:
+        unknown_attribute: "不是所选实体上的属性"
+        entity_not_accessible: "必须属于当前客户或为共享实体"
+        platform_readonly: "平台变量不可修改。"
+  admin_modules:
+      emails:
+        placeholders:
+          coming_in_phase: "将在第 %{phase} 阶段推出。"

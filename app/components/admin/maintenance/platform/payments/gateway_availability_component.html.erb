@@ -1,0 +1,33 @@
+<%= render Admin::Maintenance::Platform::ModuleSettings::SectionCardComponent.new(
+      title: t("maint_platform.module_settings.show.payment.title"),
+      description: t("maint_platform.module_settings.show.payment.subtitle"),
+      action: capture { content_tag(:span, summary, class: "text-caption") }
+    ) do %>
+  <% if gateways.any? %>
+    <div class="divide-y divide-border-subtle" data-payment-gateway-list="true">
+      <% gateways.each do |gateway, platform_gateway| %>
+        <%= render Admin::Maintenance::Platform::ModuleSettings::SettingRowComponent.new(
+              label: gateway.display_name,
+              description: flows(gateway).join(" · ").presence
+            ) do |row| %>
+          <div class="flex w-full items-center justify-between gap-3 sm:w-auto sm:justify-end">
+            <span class="text-code text-mono"><%= gateway.key %></span>
+            <%= render Admin::Maintenance::Platform::ModuleToggleComponent.new(
+                  url: toggle_path(gateway.key),
+                  field: "available",
+                  on: platform_gateway.available?,
+                  aria_label: t("maint_platform.module_settings.show.payment.gateway_available_label", gateway: gateway.display_name),
+                  html_attributes: row.control_html_attributes,
+                  show_label: false
+                ) %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <%= render Admin::Maintenance::Platform::ModuleSettings::EmptySectionComponent.new(
+          title: t("maint_platform.module_settings.show.payment.empty_title"),
+          description: t("maint_platform.module_settings.show.payment.empty_description")
+        ) %>
+  <% end %>
+<% end %>

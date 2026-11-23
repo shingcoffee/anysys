@@ -1,0 +1,86 @@
+---
+en:
+  flowchart_elements:
+    chrome:
+      label:
+        label: Label
+    shared:
+      none: None
+      errors:
+        required: "%{field} is required"
+        unknown_field: "%{field} is not a recognized setting"
+        unknown_reference: "%{field} does not match a known %{source}"
+        not_in_list: "%{field} must be one of: %{allowed}"
+        invalid_expression: "%{field} must be a single safe Ruby expression"
+        not_one_statement: "%{field} must be exactly one statement"
+        invalid_conditions: "%{field} must be a condition group"
+    start:
+      label: Start
+      defaultLabel: Start
+    end:
+      label: End
+      defaultLabel: End
+      fields:
+        responseType:
+          label: Response Type
+          help: Whether this flowchart returns a value.
+          options:
+            none: Nothing
+            value: Return a value
+        returnValue:
+          label: Return Value
+          help: The value this flowchart returns. Use a context path such as ctx.result.
+          placeholder: ctx.result
+    process:
+      label: Process
+      defaultLabel: Process
+    decision:
+      label: Decision
+      defaultLabel: Decision
+    loop:
+      label: Loop
+      defaultLabel: Loop
+    subflow:
+      label: Subflow
+      defaultLabel: Subflow
+      fields:
+        flowchartId:
+          label: Flowchart
+          help: Launched flowchart to run. The flowchart being edited is not listed.
+        inputVariables:
+          label: Inputs
+          help: Name a value the subflow reads, and where it comes from here. Leave empty when the names already match.
+      errors:
+        self_reference: Flowchart cannot target itself
+        duplicate_input: "%{field} names %{value} more than once"
+        invalid_identifier: "%{field} must be a valid identifier"
+        reserved_name: "%{field} cannot be %{value}"
+        invalid_mapping: "%{field} must be a list of key/value pairs"
+    connection:
+      fields:
+        label:
+          label: Label
+          help: Name shown on the connection.
+        description:
+          help: Optional notes for this connection.
+    template_labels:
+      start: Start
+      end: End
+      new_model: New Model
+      build_contract: Build Contract
+      validate: Validate
+      validate_contract: Validate
+      save_model: Save Model
+      find_model: Find Model
+      destroy_model: Destroy Model
+    trace:
+      start: Start
+      success: Success
+      failure: Failure
+      collect_errors: Collect Errors
+      errors:
+        no_activity_code: "No activity code generated"
+        failed_to_build: "Failed to build activity class"
+        execution_failed: "Execution failed"
+        timed_out: "Execution timed out after %{seconds} seconds"
+        must_regenerate: "Activity must be regenerated"

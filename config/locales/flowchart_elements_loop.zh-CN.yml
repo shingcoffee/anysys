@@ -1,0 +1,50 @@
+zh-CN:
+  flowchart_elements:
+    loop:
+      fields:
+        loopType:
+          label: 循环类型
+          help: 按条件反复执行，或逐项遍历列表。
+          options:
+            while: 条件为真时重复
+            for_each: 逐项遍历
+        runOnceFirst:
+          label: 先执行一次再检查
+          help: 在第一次检查条件之前先执行循环体。
+        condition:
+          label: 条件
+          help: 条件为真时继续循环。
+        collection:
+          label: 集合
+          help: 要遍历的列表在上下文中的路径。
+          placeholder: items
+        itemVariable:
+          label: 项名称
+          help: 绑定当前项的上下文名称。
+          placeholder: item
+        maxIterations:
+          label: 最大循环次数
+          help: 循环在达到该次数后仍未结束时，本次运行将失败（1–10,000）。
+          placeholder: "100"
+        stopWhen:
+          label: 提前停止条件
+          help: 该条件为真时成功离开循环。
+        skipWhen:
+          label: 跳过该项的条件
+          help: 跳过当前项并继续下一项。
+        indexVariable:
+          label: 下标名称
+          help: 绑定当前项下标的上下文名称，从 0 起算。
+          placeholder: index
+        collectInto:
+          label: 将处理过的项收集到
+          help: 用于存放已处理项的上下文名称。
+          placeholder: results
+      errors:
+        reserved_header_local: "%{field} 不能使用 %{name}，该名称已保留给循环头"
+        colliding_loop_variables: "itemVariable 与 indexVariable 不能相同"
+        invalid_identifier: "%{field} 必须是合法标识符路径"
+        out_of_range: "%{field} 必须介于 %{min} 和 %{max} 之间"
+        invalid_integer: "%{field} 必须是整数"
+        not_boolean: "%{field} 必须是 true 或 false"
+        reserved_name: "%{field} 不能使用 %{value}"

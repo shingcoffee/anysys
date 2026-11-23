@@ -1,0 +1,100 @@
+<div class="card min-w-0 max-w-full overflow-hidden">
+  <div class="border-b border-border-subtle px-4 py-3 sm:px-5">
+    <%= render Billing::Admin::HistoryFiltersComponent.new(
+      action: history_path, filters: permitted_filters, query_key: "comp_billing.history.subscription_query",
+      statuses: %w[pending trialing active past_due paused cancelled expired],
+      status_prefix: "comp_billing.subscription_summary.statuses", tenant_filter: platform?, compact: true
+    ) %>
+  </div>
+
+  <% if subscriptions.empty? %>
+    <%= render Billing::Admin::EmptyStateComponent.new(icon: :calendar, title: t(empty_key)) do |empty| %>
+      <% if filtered? %>
+        <% empty.with_action { link_to t("common.actions.reset"), history_path, class: "btn btn-secondary btn-sm" } %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <ul class="divide-y divide-border-subtle lg:hidden" role="list">
+      <% subscriptions.each do |sub| %>
+        <li class="min-w-0 px-4 py-4">
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <p class="font-medium text-text-primary break-words"><%= snapshot_name(sub) %></p>
+              <p class="mt-0.5 text-caption"><%= interval_label(sub.interval) %></p>
+            </div>
+            <p class="shrink-0 font-semibold text-text-primary tabular-nums"><%= format_amount(sub.amount_cents, sub.currency) %></p>
+          </div>
+          <div class="mt-1.5 flex flex-wrap items-center gap-2">
+            <%= render BadgeComponent.new(variant: status_variant(sub.status), size: :sm) do %><%= status_label(sub.status) %><% end %>
+            <% if cancelling?(sub) %><span class="text-body-sm text-text-secondary"><%= t("comp_billing.plan_comparison.cancelling_badge") %></span><% end %>
+            <% if pending_change?(sub) %><span class="text-body-sm text-text-secondary"><%= t("settings_billing.subscription.scheduled_or_pending") %></span><% end %>
+          </div>
+          <dl class="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-body-sm">
+            <% if platform? %>
+              <div class="flex gap-1.5">
+                <dt class="text-text-tertiary"><%= t("comp_billing.subscriptions_table.customer") %></dt>
+                <dd class="text-text-secondary tabular-nums"><%= sub.customer_id %><% if customer_name(sub) %> <span class="text-text-tertiary"><%= customer_name(sub) %></span><% end %></dd>
+              </div>
+            <% end %>
+            <div class="flex gap-1.5">
+              <dt class="text-text-tertiary"><%= t("comp_billing.subscriptions_table.period_end") %></dt>
+              <dd class="text-text-secondary tabular-nums"><%= date_label(sub.current_period_end) %></dd>
+            </div>
+          </dl>
+          <% if platform? %>
+            <div class="mt-3">
+              <%= link_to t("common.actions.view"), subscription_path(sub), class: "btn btn-ghost btn-sm w-full sm:w-auto" %>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+
+    <div class="hidden max-w-full overflow-x-auto lg:block" role="region" aria-label="<%= t('comp_billing.subscriptions_table.subscriptions_heading') %>" tabindex="0">
+      <table class="min-w-full divide-y divide-border-subtle">
+        <caption class="<%= visually_hidden_class %>"><%= t("comp_billing.subscriptions_table.subscriptions_heading") %></caption>
+        <thead class="table-header">
+          <tr>
+            <% headers.each do |header| %>
+              <th scope="col" class="px-4 py-3 <%= header[:align] == :right ? 'text-right' : 'text-left' %>"><%= header[:label] %></th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-border-subtle">
+          <% subscriptions.each do |sub| %>
+            <tr class="table-row">
+              <% if platform? %>
+                <td class="px-4 py-3.5">
+                  <p class="tabular-nums text-text-primary"><%= sub.customer_id %></p>
+                  <% if customer_name(sub) %><p class="mt-0.5 text-caption break-words"><%= customer_name(sub) %></p><% end %>
+                </td>
+              <% end %>
+              <th scope="row" class="px-4 py-3.5 text-left">
+                <p class="font-medium text-text-primary break-words"><%= snapshot_name(sub) %></p>
+                <p class="mt-0.5 text-caption"><%= interval_label(sub.interval) %></p>
+              </th>
+              <td class="whitespace-nowrap px-4 py-3.5 text-right font-semibold text-text-primary tabular-nums"><%= format_amount(sub.amount_cents, sub.currency) %></td>
+              <td class="whitespace-nowrap px-4 py-3.5 text-body-sm text-text-secondary tabular-nums"><%= date_label(sub.current_period_end) %></td>
+              <td class="px-4 py-3.5">
+                <div class="flex flex-col items-start gap-1">
+                  <%= render BadgeComponent.new(variant: status_variant(sub.status), size: :sm) do %><%= status_label(sub.status) %><% end %>
+                  <% if cancelling?(sub) %><span class="text-caption"><%= t("comp_billing.plan_comparison.cancelling_badge") %></span><% end %>
+                  <% if pending_change?(sub) %><span class="text-caption"><%= t("settings_billing.subscription.scheduled_or_pending") %></span><% end %>
+                </div>
+              </td>
+              <td class="px-4 py-3.5">
+                <% if platform? %>
+                  <div class="flex justify-end">
+                    <%= link_to t("common.actions.view"), subscription_path(sub), class: "btn btn-ghost btn-sm" %>
+                  </div>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+  <% if pagination %><%= render ::Admin::PaginationComponent.new(pagination: pagination, page_path: pagination_path) %><% end %>
+</div>

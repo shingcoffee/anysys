@@ -1,0 +1,41 @@
+en:
+  sms:
+    statuses:
+      queued: "Queued"
+      expired: "Expired"
+    errors:
+      module_disabled: "SMS module is disabled for this customer."
+      idempotency_conflict: "This idempotency key was already used for a different SMS request."
+      key_invalid: "SMS keys must be nonblank strings of at most 128 bytes."
+      recipient_invalid: "To is invalid"
+      vars_invalid: "SMS variables must be an object with unique keys and string or numeric values."
+      expiry_invalid: "SMS expiry must be a Time."
+      snapshot_invalid: "The recorded SMS template snapshot is invalid."
+      enqueue_rejected: "SMS delivery enqueue rejected"
+      rate_limited: "rate limited on %{window} window"
+    credentials:
+      access_key_id: "Access Key ID"
+      access_key_secret: "Access Key Secret"
+      errors:
+        incomplete: "Complete the credential before activating it."
+    adapters:
+      aliyun:
+        name: "Aliyun SMS"
+        credentials:
+          access_key_id: "Access Key ID"
+          access_key_secret: "Access Key Secret"
+        fields:
+          sign_name: "Sign name"
+          region: "Region"
+      twilio:
+        name: "Twilio"
+        credentials:
+          access_key_id: "Account SID"
+          access_key_secret: "Auth Token"
+        fields:
+          messaging_service_sid: "Messaging Service SID"
+          from: "From number"
+    failures:
+      delivery_failed: "delivery failed"
+      send_never_confirmed: "send never confirmed by vendor"
+      send_failed: "SMS send failed"

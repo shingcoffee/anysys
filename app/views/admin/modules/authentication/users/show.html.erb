@@ -1,0 +1,7 @@
+<%= render Admin::Modules::Authentication::UserShowComponent.new(
+      user: @user,
+      trusted_devices: @trusted_devices,
+      viewer: current_user,
+      profile_sections: @profile_sections,
+      customer_id: current_customer_id
+    ) %>

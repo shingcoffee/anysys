@@ -1,0 +1,65 @@
+<%= render CardComponent.new(padding: :none) do %>
+  <%= form_with model: domain, scope: :entity_domain, url: form_url, method: form_method, local: true,
+                data: { turbo: false }, html: { class: "min-w-0 divide-y divide-border-subtle" } do |form| %>
+    <div class="space-y-5 p-4 sm:p-6">
+      <div>
+        <h2 class="section-header"><%= t("maint_core.entity_domains.form.details") %></h2>
+        <p class="mt-1 text-sm text-text-secondary"><%= t("maint_core.entity_domains.form.details_hint") %></p>
+      </div>
+
+      <% if base_errors.any? %>
+        <div role="alert">
+          <%= render AlertComponent.new(message: safe_join(base_errors.map { |message| tag.span(message, class: "block") }), type: :error) %>
+        </div>
+      <% end %>
+
+      <div class="grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2">
+        <div class="min-w-0 space-y-2">
+          <%= form.label :name, t("maint_core.entity_domains.form.name"), for: "entity-domain-name", class: "form-label" %>
+          <%= form.text_field :name, id: "entity-domain-name", required: true, maxlength: 100,
+                              placeholder: t("maint_core.entity_domains.form.name_placeholder"),
+                              class: "input-field min-h-11 w-full", aria: field_aria(:name) %>
+          <p id="entity-domain-name-hint" class="text-xs text-text-secondary"><%= t("maint_core.entity_domains.form.name_hint") %></p>
+          <% if field_errors(:name).any? %>
+            <p id="entity-domain-name-error" class="text-sm text-danger"><%= field_errors(:name).join(" · ") %></p>
+          <% end %>
+        </div>
+
+        <fieldset class="min-w-0 space-y-2">
+          <legend class="form-label"><%= t("maint_core.entity_domains.form.color") %></legend>
+          <div class="flex flex-wrap gap-2">
+            <% colors.each do |color| %>
+              <label class="relative inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border border-border-subtle px-3 text-sm text-text-secondary transition-base hover:bg-surface-hover has-[:checked]:border-accent has-[:checked]:text-text-primary has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent">
+                <%= form.radio_button :color, color, checked: color == current_color, class: "sr-only" %>
+                <span class="size-3 rounded-full <%= dot_class(color) %>" aria-hidden="true"></span>
+                <%= color_label(color) %>
+              </label>
+            <% end %>
+          </div>
+          <% if field_errors(:color).any? %>
+            <p class="text-sm text-danger"><%= field_errors(:color).join(" · ") %></p>
+          <% end %>
+        </fieldset>
+
+        <div class="min-w-0 space-y-2 md:col-span-2">
+          <%= form.label :description, t("maint_core.entity_domains.form.description"), for: "entity-domain-description", class: "form-label" %>
+          <%= form.text_area :description, id: "entity-domain-description", rows: 2, maxlength: 500,
+                             placeholder: t("maint_core.entity_domains.form.description_placeholder"),
+                             class: "input-field w-full", aria: field_aria(:description, hint: false) %>
+          <% if field_errors(:description).any? %>
+            <p id="entity-domain-description-error" class="text-sm text-danger"><%= field_errors(:description).join(" · ") %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-3 p-4 sm:flex-row sm:p-6">
+      <%= render ButtonComponent.new(type: "submit", class: "min-h-11 w-full justify-center sm:w-auto") do %>
+        <%= submit_label %>
+      <% end %>
+      <%= render ButtonComponent.new(tag: :a, href: cancel_path, variant: :secondary, class: "min-h-11 w-full justify-center sm:w-auto") do %>
+        <%= t("common.actions.cancel") %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

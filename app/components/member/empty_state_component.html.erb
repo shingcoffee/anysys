@@ -1,0 +1,12 @@
+<section data-member-card class="<%= chrome.card_class %> px-6 py-16 text-center">
+  <span data-icon="<%= icon %>" class="<%= chrome.icon_well_class %> mx-auto mb-5">
+    <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="<%= icon_path %>"/>
+    </svg>
+  </span>
+  <h2 class="<%= chrome.section_title_class %>"><%= headline %></h2>
+  <p class="mx-auto mt-3 max-w-sm <%= chrome.body_copy_class %>"><%= body %></p>
+  <% if cta? %>
+    <%= link_to cta_label, cta_path, class: "#{chrome.primary_button_class} mt-8" %>
+  <% end %>
+</section>

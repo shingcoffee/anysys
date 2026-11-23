@@ -1,0 +1,28 @@
+en:
+  flowchart_actions:
+    build_contract:
+      label: Build Contract
+      description: Build the Reform contract wrapping the primary entity model
+      fields:
+        contractClass:
+          label: Contract Class
+          help: Ruby class used to wrap the model for validation.
+          placeholder: e.g., EntityEntryContract
+        modelVariable:
+          label: Model Variable
+          help: Context path of the record the contract wraps.
+      errors:
+        invalid_class_name: "%{field} must be a valid Ruby class name"
+    validate_contract:
+      label: Validate
+      description: Validate the Reform contract against ctx[:params]
+      fields:
+        onInvalid:
+          label: When invalid
+          help: Fail the step, or keep going so a later Decision can branch on the valid flag.
+          options:
+            fail: Fail
+            continue: Continue
+        validVar:
+          label: Save valid flag as
+          help: Variable set to true when the contract accepts the params.

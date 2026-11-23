@@ -1,0 +1,20 @@
+<section class="<%= padding_class %>">
+  <figure class="<%= inner_measure_class %> flex flex-col items-center text-center">
+    <span class="mb-4 block h-12 font-serif text-site-7xl leading-none md:mb-6 md:h-16 md:text-site-8xl <%= theme.kicker_class %>" aria-hidden="true">&ldquo;</span>
+    <% if present_text?(prop("quote")) %>
+      <blockquote class="max-w-4xl">
+        <p <%= el_attrs("quote", class: "text-balance break-words text-site-2xl leading-snug sm:text-site-3xl md:text-site-5xl md:leading-[1.15] #{headline_font_class}") %>><%= prop("quote") %></p>
+      </blockquote>
+    <% end %>
+    <% if present_text?(prop("attribution")) || present_text?(prop("role")) %>
+      <figcaption class="mt-10 flex flex-col items-center gap-1 text-site-sm md:mt-12">
+        <% if present_text?(prop("attribution")) %>
+          <span <%= el_attrs("attribution", class: "font-medium") %>><%= prop("attribution") %></span>
+        <% end %>
+        <% if present_text?(prop("role")) %>
+          <span <%= el_attrs("role", class: muted_class) %>><%= prop("role") %></span>
+        <% end %>
+      </figcaption>
+    <% end %>
+  </figure>
+</section>

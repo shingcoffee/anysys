@@ -1,0 +1,28 @@
+<div class="flex w-full max-w-3xl flex-col gap-6">
+  <%= render FormErrorsComponent.new(resource: role) %>
+  <%= form_with model: role, url: form_url, method: role.persisted? ? :patch : :post, local: true, class: "w-full" do |f| %>
+    <%= render Admin::Settings::SectionComponent.new(flush: true) do %>
+      <div class="divide-y divide-border-subtle">
+        <%= render Admin::Settings::SettingRowComponent.new(label: t("common.labels.name"), label_for: "role_name", required: true) do %>
+          <%= f.text_field :name, id: "role_name", autofocus: !role.persisted?, placeholder: t("comp_admin.role_form.name_placeholder"), class: "input-field w-full sm:w-72" %>
+        <% end %>
+        <%= render Admin::Settings::SettingRowComponent.new(
+              label: t("settings_people.role_identifier"),
+              description: t("settings_people.identifier_hint"),
+              label_for: "role_key",
+              required: !role.persisted?
+            ) do %>
+          <%= f.text_field :key, id: "role_key", disabled: role.persisted?, placeholder: t("comp_admin.role_form.key_placeholder"),
+                class: "input-field w-full sm:w-72 #{'cursor-not-allowed opacity-60' if role.persisted?}" %>
+        <% end %>
+        <%= render Admin::Settings::SettingRowComponent.new(label: t("common.labels.description"), label_for: "role_description") do %>
+          <%= f.text_area :description, id: "role_description", rows: 3, placeholder: t("comp_admin.role_form.description_placeholder"), class: "input-field w-full sm:w-80" %>
+        <% end %>
+      </div>
+      <div class="flex flex-wrap justify-end gap-3 border-t border-border-subtle bg-canvas-elevated px-4 py-3 sm:px-6">
+        <%= link_to t("common.actions.cancel"), helpers.admin_settings_modules_authentication_roles_path(customer.id), class: "btn btn-secondary" %>
+        <%= f.submit submit_label, class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

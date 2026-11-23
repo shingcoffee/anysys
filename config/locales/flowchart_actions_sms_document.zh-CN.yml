@@ -1,0 +1,88 @@
+---
+zh-CN:
+  flowchart_actions:
+    send_sms:
+      label: 发送短信
+      description: 使用已审核的短信模板发送短信。
+      fields:
+        templateKey:
+          label: 模板
+          help: 为本客户发送的已审核短信模板。
+          placeholder: 例如 verify_code
+        to:
+          label: 收件人
+          help: 收件人手机号码所在的上下文路径。
+        vars:
+          label: 模板变量
+          help: 代入模板的变量值。
+        idempotencyKey:
+          label: 幂等键
+          help: 相同键的发送会去重。
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+    generate_document:
+      label: 生成文档
+      description: 根据标题、正文和可选表格生成 PDF 文档。
+      fields:
+        title:
+          label: 标题
+          help: 文档标题。Liquid 占位符从运行上下文解析。
+          placeholder: 例如 Invoice {{ name }}
+        body:
+          label: 正文
+          help: 正文段落。以 ## 开头的行会作为标题。
+          placeholder: Hello {{ name }}
+        sourceVariable:
+          label: 表格数据
+          help: 可选表格行所在的上下文路径。
+          placeholder: 例如 rows
+        columns:
+          label: 表格列
+          help: 列标题映射到行字段。
+        pageSize:
+          label: 页面尺寸
+          help: 生成 PDF 的纸张尺寸。
+          options:
+            a4: A4
+            letter: Letter
+            legal: Legal
+        orientation:
+          label: 方向
+          help: 纵向或横向页面布局。
+          options:
+            portrait: 纵向
+            landscape: 横向
+        header:
+          label: 页眉
+          help: 可选，绘制在每页顶部。Liquid 占位符从运行上下文解析。
+        footer:
+          label: 页脚
+          help: 可选，绘制在每页底部。Liquid 占位符从运行上下文解析。
+        pageNumbers:
+          label: 页码
+          help: 在每页打印页码。
+        filename:
+          label: 文件名
+          help: 生成的 PDF 在存储中使用的文件名。
+          placeholder: 例如 document.pdf
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+  flowchart_runtime:
+    errors:
+      send_sms:
+        suppressed: 该号码已退订短信。
+        quota: 已超出短信发送额度，发送被拒绝。
+        invalid_number: 收件人手机号码无效。
+        template_missing: 未找到该短信模板，或模板未启用。
+        invalid_vars: 短信模板变量无效。
+        credentials_missing: 尚未配置短信凭证。
+        module_disabled: 该客户未启用短信功能。
+        idempotency_conflict: 该短信幂等键已用于另一请求。
+        marketing_ineligible: 该收件人不符合营销短信发送条件。
+        provider_code_missing: 当前通道没有对应的短信模板编码。
+        api_error: 短信网关拒绝了此次发送。
+        failed: "短信未能发送（%{reason}）。"
+      generate_document:
+        failed: "文档未能生成（%{reason}）。"

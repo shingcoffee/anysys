@@ -1,0 +1,123 @@
+<div class="min-w-0 space-y-6">
+  <% if in_trash? %>
+    <div class="flex items-start gap-3 rounded-lg border border-warning/20 bg-warning-subtle p-4" role="status">
+      <svg class="mt-0.5 size-5 shrink-0 text-warning" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+      </svg>
+      <p class="text-sm text-warning"><%= t("maint_platform.customers.show.in_trash") %></p>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 items-start gap-6 xl:grid-cols-3">
+    <div class="min-w-0 space-y-6 xl:col-span-2">
+      <section class="card overflow-hidden" aria-labelledby="customer-organization-title">
+        <div class="card-header">
+          <h2 id="customer-organization-title" class="section-header"><%= t("chrome.customer_form.sections.organization") %></h2>
+          <p class="mt-1 text-body-sm"><%= t("chrome.customer_form.sections.organization_hint") %></p>
+        </div>
+        <div class="p-4 sm:p-6">
+          <dl class="grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
+            <div class="min-w-0 sm:col-span-2">
+              <dt class="text-label"><%= t("chrome.customer_form.organization_name") %></dt>
+              <dd class="mt-1.5 break-words text-sm text-text-primary [overflow-wrap:anywhere]"><%= customer.name %></dd>
+            </div>
+            <div class="min-w-0 sm:col-span-2">
+              <dt class="text-label"><%= t("chrome.customer_form.domain") %></dt>
+              <dd class="mt-1.5 break-all text-sm text-text-primary">
+                <%= customer.domain.present? ? customer.domain : blank_value %>
+              </dd>
+            </div>
+            <div class="min-w-0">
+              <dt class="text-label"><%= t("chrome.customer_form.alias") %></dt>
+              <dd class="mt-1.5 break-words text-sm text-text-primary [overflow-wrap:anywhere]">
+                <%= customer.alias.present? ? customer.alias : blank_value %>
+              </dd>
+            </div>
+            <div class="min-w-0">
+              <dt class="text-label"><%= t("chrome.customer_form.industry") %></dt>
+              <dd class="mt-1.5 break-words text-sm text-text-primary [overflow-wrap:anywhere]">
+                <%= customer.industry_label.presence || blank_value %>
+              </dd>
+            </div>
+            <div class="min-w-0 sm:col-span-2">
+              <dt class="text-label"><%= t("chrome.customer_form.locale") %></dt>
+              <dd class="mt-1.5 text-sm text-text-primary"><%= locale_label %></dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="card overflow-hidden" aria-labelledby="customer-contact-title">
+        <div class="card-header">
+          <h2 id="customer-contact-title" class="section-header"><%= t("chrome.customer_form.sections.contact") %></h2>
+          <p class="mt-1 text-body-sm"><%= t("chrome.customer_form.sections.contact_hint") %></p>
+        </div>
+        <div class="p-4 sm:p-6">
+          <dl class="grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
+            <div class="min-w-0">
+              <dt class="text-label"><%= t("chrome.customer_form.contact_person") %></dt>
+              <dd class="mt-1.5 break-words text-sm text-text-primary [overflow-wrap:anywhere]">
+                <%= customer.contact.present? ? customer.contact : blank_value %>
+              </dd>
+            </div>
+            <div class="min-w-0">
+              <dt class="text-label"><%= t("chrome.customer_form.phone") %></dt>
+              <dd class="mt-1.5 break-words text-sm text-text-primary">
+                <% if customer.phone.present? %>
+                  <% if phone_href %>
+                    <%= link_to customer.phone, phone_href, class: "underline-offset-2 hover:underline" %>
+                  <% else %>
+                    <%= customer.phone %>
+                  <% end %>
+                <% else %>
+                  <%= blank_value %>
+                <% end %>
+              </dd>
+            </div>
+            <div class="min-w-0 sm:col-span-2">
+              <dt class="text-label"><%= t("chrome.customer_form.address") %></dt>
+              <dd class="mt-1.5 whitespace-pre-wrap break-words text-sm text-text-primary [overflow-wrap:anywhere]">
+                <%= customer.address.present? ? customer.address : blank_value %>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+    </div>
+
+    <section class="card min-w-0 overflow-hidden" aria-labelledby="customer-account-title">
+      <div class="card-header">
+        <h2 id="customer-account-title" class="section-header"><%= t("maint_platform.customers.show.account") %></h2>
+        <p class="mt-1 text-body-sm"><%= t("maint_platform.customers.show.account_hint") %></p>
+      </div>
+      <dl class="divide-y divide-border-subtle">
+        <div class="flex flex-col gap-1 px-4 py-3.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 sm:px-6">
+          <dt class="text-label shrink-0"><%= t("chrome.customer_form.customer_id") %></dt>
+          <dd class="min-w-0 font-mono text-sm text-text-primary sm:text-right"><%= customer.id %></dd>
+        </div>
+        <div class="flex flex-col gap-1 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6">
+          <dt class="text-label shrink-0"><%= t("common.labels.status") %></dt>
+          <dd>
+            <% if active? %>
+              <%= render BadgeComponent.new(variant: :success, size: :sm) do %><%= t("common.status.active") %><% end %>
+            <% else %>
+              <%= render BadgeComponent.new(variant: :default, size: :sm) do %><%= status_label %><% end %>
+            <% end %>
+          </dd>
+        </div>
+        <div class="flex flex-col gap-1 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6">
+          <dt class="text-label shrink-0"><%= t("chrome.customer_form.sections.plan") %></dt>
+          <dd><%= render TierBadgeComponent.new(tier: customer.tier) %></dd>
+        </div>
+        <div class="flex flex-col gap-1 px-4 py-3.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 sm:px-6">
+          <dt class="text-label shrink-0"><%= t("common.labels.created_at") %></dt>
+          <dd class="text-sm text-text-primary sm:text-right"><%= formatted_time(customer.created_at) %></dd>
+        </div>
+        <div class="flex flex-col gap-1 px-4 py-3.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4 sm:px-6">
+          <dt class="text-label shrink-0"><%= t("common.labels.updated_at") %></dt>
+          <dd class="text-sm text-text-primary sm:text-right"><%= formatted_time(customer.updated_at) %></dd>
+        </div>
+      </dl>
+    </section>
+  </div>
+</div>

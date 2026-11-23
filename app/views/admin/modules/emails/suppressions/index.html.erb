@@ -1,0 +1,48 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "email",
+      breadcrumbs: [{ label: t("admin_modules.nav.modules") }, { label: t("feature_modules.email.entries.audience"), path: admin_modules_emails_lists_path(current_customer_id) }, { label: t("feature_modules.email.tabs.suppressions") }],
+      title: t("feature_modules.email.tabs.suppressions"),
+      description: t("admin_modules.emails.suppressions.description"),
+      actions: []
+    ) do %>
+  <%= render "admin/modules/emails/shared/audience_tabs", active_tab: :suppressions %>
+  <div data-controller="batch-select">
+    <%= form_with url: batch_unblock_admin_modules_emails_suppressions_path(current_customer_id),
+                  method: :delete,
+                  html: { id: "bulk-unblock-form" },
+                  class: "card mb-3 flex flex-col items-start justify-between gap-3 p-3 sm:flex-row sm:items-center" do |f| %>
+      <label class="flex items-center gap-2 text-sm text-text-secondary">
+        <input type="checkbox"
+               class="rounded border-border text-accent focus:ring-accent"
+               data-batch-select-target="all"
+               data-action="change->batch-select#toggleAll">
+        <%= t("common.labels.all") %>
+      </label>
+      <button type="submit"
+              class="btn btn-secondary text-xs"
+              data-batch-select-target="submit"
+              disabled>
+        <%= t("admin_modules.emails.suppressions.bulk_unblock") %>
+      </button>
+    <% end %>
+
+    <%= render AdminTableComponent.new(
+      rows:       @rows,
+      columns:    @columns,
+      pagination: @pagination,
+      params:     params.permit(:q, :sort, :dir, :page, :reason, :provider).to_h.symbolize_keys,
+      search:     { param: :q, placeholder: t("admin_modules.emails.suppressions.search_placeholder") },
+      filters:    [
+        { key: :reason, label: t("admin_modules.emails.suppressions.filter_reason"),
+          options: ::Emails::Suppression::REASONS.map { |r| [t("admin_modules.emails.suppressions.reasons.#{r}"), r] } },
+        { key: :provider, label: t("admin_modules.emails.suppressions.filter_provider"),
+          options: @provider_options }
+      ],
+      base_path:  admin_modules_emails_suppressions_path(current_customer_id),
+      empty_state: {
+        title: t("admin_modules.emails.suppressions.empty_title"),
+        description: t("admin_modules.emails.suppressions.empty_description")
+      }
+    ) %>
+  </div>
+<% end %>

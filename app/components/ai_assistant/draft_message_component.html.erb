@@ -1,0 +1,27 @@
+<div id="<%= draft_id %>" class="flex w-full gap-3" data-role="assistant-draft">
+  <span class="mt-6 flex size-7 shrink-0 items-center justify-center rounded-lg bg-accent-subtle text-accent ring-1 ring-accent-muted/40" aria-hidden="true">
+    <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+    </svg>
+  </span>
+
+  <div class="flex min-w-0 flex-1 flex-col items-start gap-1.5">
+    <div class="flex items-baseline gap-2">
+      <p class="text-xs font-medium text-text-secondary"><%= author_label %></p>
+    </div>
+
+    <%# Filled by Stream.broadcast_progress; empty until the first step opens. %>
+    <div id="<%= steps_id %>"></div>
+
+    <div class="w-full">
+      <%# Filled by Stream.broadcast_delta with the reply so far, re-rendered
+          whole on every frame so mid-stream Markdown stays coherent — which is
+          why this is not a live region: announcing it would re-read the reply
+          from the start on every frame, and the finished message is announced
+          once by the thread's role="log" anyway. ProgressComponent's step
+          labels are the in-flight signal instead. %>
+      <div id="<%= body_id %>" class="<%= body_classes %>"></div>
+      <span class="mt-1 inline-block h-4 w-0.5 animate-pulse rounded-full bg-accent align-text-bottom motion-reduce:animate-none" aria-hidden="true"></span>
+    </div>
+  </div>
+</div>

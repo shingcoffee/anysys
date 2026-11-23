@@ -1,0 +1,181 @@
+zh-CN:
+  settings_people:
+    member_description: 设置会员中心中可见的页面及各页面的展示方式。
+    pages_heading: 会员页面
+    pages_heading_hint: 打开一个分组，选择会员可见的页面。
+    display_description: 设置此页面在会员中心中的展示方式。保存后生效。
+    sources:
+      builtin:
+        name: 基础页面
+        description: 首页、个人资料和账户安全始终对会员开放。
+      modules:
+        name: 会员模块
+        description: 选择会员可见的模块页面，并设置展示方式。
+      entities:
+        name: 记录页面
+        description: 设置会员查看个人记录时使用的页面。
+      pages:
+        name: 页面
+        description: 选择在会员导航中显示哪些已上线表单。
+    pages_count:
+      one: "%{count} 个页面"
+      other: "%{count} 个页面"
+    visible_count: "%{count} 个页面对会员可见"
+    always_available: 始终可用
+    builtin_note: 基础页面不可隐藏或调整顺序。
+    immediate_save: 可见性更改会立即保存。
+    display_settings: 展示设置
+    search_pages: 搜索页面
+    no_pages: 暂无可展示的页面。
+    navigation: 导航文字
+    display_name: 显示名称
+    relationship_name: "%{source}与%{target}"
+    relationship_description: "查看您的 %{name} 记录。"
+    list_display: 列表展示
+    content_columns: 显示列
+    row_action: 行操作
+    row_action_help: 每行会打开此操作，并在目标字段填入该行的记录编号。
+    record_details: 记录详情
+    details_fallback: 详情
+    empty_state: 空页面提示
+    advanced: 外观与顺序
+    icon: 导航图标
+    saved_icon: 当前图标
+    order_hint: 数值越小，在会员导航中的位置越靠前。
+    icons:
+      home: 首页
+      user: 个人
+      shield_check: 安全
+      rectangle_stack: 记录
+      credit_card: 支付卡
+      document_text: 文档
+    registration:
+      description: 允许新会员注册并确认电子邮箱。
+      label: 允许会员注册
+      details: 停用注册后的影响
+      consequences: 停用期间，无法注册新账户、使用待确认邮件中的链接或重新发送确认邮件。重新启用后恢复。
+    recovery:
+      description: 允许会员通过邮件链接重置密码。
+      label: 允许密码重置
+      details: 停用密码重置后的影响
+      consequences: 停用期间，无法申请重置密码或使用邮件中的重置链接。登录页的找回密码链接将显示停用提示。
+    roles_description: 查看角色的访问范围及已分配的用户。
+    user_access_description: 查看每位用户的当前角色，并管理其现有访问权限。
+    scope: 访问范围
+    role_details: 角色详情
+    built_in_role: 内置角色
+    custom_role: 自定义角色
+    owner_name: 平台所有者
+    admin_name: 管理员
+    member_name: 会员
+    owner_scope: 可访问所有组织的全部资源。
+    admin_scope: 可管理本组织内的资源。
+    member_scope: 仅可访问会员本人的资料与记录。
+    custom_scope: 访问范围由分配给此角色的权限决定。
+    locked_permissions: 权限只读
+    locked_note: 此角色的权限由系统管理，无法在此修改。
+    all_access: 全部资源与操作
+    permissions: 权限
+    permissions_description: 按功能区域与操作查看权限。可编辑的更改将在保存后生效。
+    role_form_description: 设置角色名称与说明。权限需单独管理。
+    role_identifier: 角色标识
+    identifier_hint: 此角色的唯一标识，创建后不可修改。
+    additional_details: 更多信息
+    edit_access: 编辑访问权限
+    assigned_users: 已分配用户
+    grant_label: "%{context} — %{resource}"
+    grant_contexts:
+      billing: 订阅与账单
+      code_generators: 自动化工具
+    grant_resources:
+      sms_consent_events: 同意记录
+      sms_entity_syncs: 联系人同步
+      sms_campaign_launches: 启动活动
+      sms_campaign_reports: 活动报告
+      other: 其他资源
+      page_groups: 页面分组
+      dashboards: 组织概览
+      platform_announcement_dismissals: 关闭公告
+      platform_announcement_reads: 阅读公告
+      support_ticket_reads: 阅读支持请求
+      support_ticket_messages: 支持请求回复
+      support_ticket_resolutions: 解决支持请求
+      help_emails: 邮件支持
+      entity_definitions: 实体定义
+      entity_entries: 实体条目
+      entity_association_entries: 关联记录行
+      entity_entry_person_links: 条目账户关联
+      entity_entry_journeys: 从记录启动流程
+      entity_entry_actions: 记录操作
+      entity_index_settings: 实体列表偏好
+      module_entries: 模块记录
+      module_configs: 模块配置
+      transcriptions: 语音转写
+      conversations: 助手会话
+      default_gateways: 默认收款服务商
+      skeletons: 网站初始模板
+      cancellations: 取消订阅
+      coupon_redemptions: 使用优惠券
+      one_time_payments: 账单单次付款
+      subscription_one_time_payments: 订阅单次付款
+      constant_copies: 复制选项列表
+      shared_resource_overrides: 组织专属配置
+      module_enablements: 模块可用性
+      module_sub_toggles: 模块功能可用性
+      entity_restorations: 恢复实体定义
+      entity_copies: 复制实体定义
+      entity_template_previews: 实体模板预览
+      entity_versions: 实体定义历史
+      template_picker_cards: 模板选择
+      template_previews: 模板预览
+      page_restorations: 恢复页面
+      page_visibilities: 页面可见性
+      page_versions: 页面历史
+      page_copies: 复制页面
+      page_template_applications: 应用页面模板
+      field_templates: 可复用表单字段
+      page_launches: 上线页面
+      page_previews: 页面预览
+      page_renders: 页面展示
+      page_forms: 填写表单
+      page_field_options: 表单字段选项
+      page_module_data: 页面模块内容
+      customer_restorations: 恢复组织
+      surfaces: 受保护的账户页面
+      platform_gateways: 可用收款服务商
+      webhook_events: 服务商通知
+      industry_template_assignments: 行业模板分配
+      industry_template_cards: 行业模板选择
+      industry_template_default_seeds: 默认行业模板
+      industry_template_new_template_seeds: 新增行业模板推荐
+      validations: 自动化校验
+      test_runs: 自动化测试运行
+      source_previews: 自动化代码预览
+      io_params: 自动化输入与输出
+      element_type_io_params: 步骤输入与输出
+      customer_contexts: 切换组织
+      user_activations: 账户激活
+      user_mfa_resets: 重置两步验证
+      user_trusted_devices: 受信任设备
+      user_profiles: 用户档案
+      template_versions: 模板历史
+      send_activity_deliveries: 群发投递记录
+      send_activity_cancellations: 取消群发
+      sends: 发送短信
+      subscription_cancellations: 取消收款订阅
+      publications: 网站发布
+      developer_docs: 开发文档
+      module_owner_configurations: 客户限额
+    areas:
+      admin: 管理功能
+      module_records: 模块记录
+      member: 会员中心
+      public: 公开页面
+      entities: 实体类型
+      pages: 页面
+      settings: 设置
+      maintenance: 管理工具
+      platform: 平台管理
+      authentication: 账户访问
+      user_role_assignments: 用户访问权限
+      role_grants: 角色权限

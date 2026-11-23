@@ -1,0 +1,111 @@
+<% if customer_settings %>
+<%= render Billing::Admin::CustomerInvoiceTableComponent.new(
+  invoices: invoices, customer_id: customer_id, filters: filters, pagination: pagination, page_path: page_path,
+  collection_by_invoice_id: collection_by_invoice_id, load_error: load_error
+) %>
+<% else %>
+<div class="card min-w-0 max-w-full overflow-hidden">
+  <div class="border-b border-border-subtle px-4 py-3 sm:px-5">
+    <%= render Billing::Admin::HistoryFiltersComponent.new(
+      action: history_path, filters: permitted_filters, query_key: "comp_billing.history.invoice_query",
+      statuses: Billing::Invoice::STATUSES, status_prefix: "comp_billing.invoice_table.statuses",
+      tenant_filter: filter_keys.include?(:tenant_id), compact: true
+    ) %>
+  </div>
+
+  <% if load_error %>
+    <div class="space-y-3 p-4 sm:p-5" role="alert">
+      <%= render AlertComponent.new(message: t("comp_billing.history.load_failed"), type: :error, auto_dismiss: false) %>
+      <%= link_to t("common.actions.view"), history_path(**permitted_filters), class: "btn btn-secondary btn-sm" %>
+    </div>
+  <% elsif invoices.empty? %>
+    <%= render Billing::Admin::EmptyStateComponent.new(icon: :receipt, title: t(empty_key)) do |empty| %>
+      <% if filtered? %>
+        <% empty.with_action { link_to t("common.actions.reset"), history_path, class: "btn btn-secondary btn-sm" } %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <ul class="divide-y divide-border-subtle lg:hidden" role="list">
+      <% invoices.each do |inv| %>
+        <li class="min-w-0 px-4 py-4">
+          <div class="flex items-start justify-between gap-3">
+            <p class="min-w-0 break-all font-medium text-text-primary tabular-nums"><%= inv.number.presence || t("comp_billing.invoice_table.draft") %></p>
+            <p class="shrink-0 font-semibold text-text-primary tabular-nums"><%= format_amount(inv.total_cents, inv.currency) %></p>
+          </div>
+          <div class="mt-1.5 flex flex-wrap items-center gap-2">
+            <%= render BadgeComponent.new(variant: status_variant(inv.status), size: :sm) do %><%= status_label(inv.status) %><% end %>
+            <span class="text-body-sm text-text-secondary"><%= collection_label(inv) %></span>
+          </div>
+          <dl class="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-body-sm">
+            <% if platform? %>
+              <div class="flex gap-1.5">
+                <dt class="text-text-tertiary"><%= t("comp_billing.invoice_table.customer") %></dt>
+                <dd class="text-text-secondary tabular-nums"><%= inv.customer_id %><% if customer_name(inv) %> <span class="text-text-tertiary"><%= customer_name(inv) %></span><% end %></dd>
+              </div>
+            <% end %>
+            <div class="flex gap-1.5"><dt class="text-text-tertiary"><%= t("comp_billing.invoice_table.issued") %></dt><dd class="text-text-secondary tabular-nums"><%= date_label(inv.issued_at) %></dd></div>
+            <div class="flex gap-1.5"><dt class="text-text-tertiary"><%= t("comp_billing.invoice_table.due") %></dt><dd class="text-text-secondary tabular-nums"><%= date_label(inv.due_at) %></dd></div>
+          </dl>
+          <div class="mt-3 flex gap-2">
+            <%= link_to t("common.actions.view"), invoice_path(inv), class: "btn btn-ghost btn-sm flex-1" %>
+            <%= link_to download_path(inv), class: "btn btn-ghost btn-sm flex-1" do %>
+              <%= render Billing::Admin::IconComponent.new(name: :download, class_name: "h-4 w-4") %><%= t("common.actions.download") %>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+
+    <div class="hidden max-w-full overflow-x-auto lg:block" role="region" aria-label="<%= t('comp_billing.invoice_table.invoices_heading') %>" tabindex="0">
+      <table class="min-w-full divide-y divide-border-subtle">
+        <caption class="<%= visually_hidden_class %>"><%= t("comp_billing.invoice_table.invoices_heading") %></caption>
+        <thead class="table-header">
+          <tr>
+            <th scope="col" class="px-5 py-3 text-left"><%= t("comp_billing.invoice_table.number") %></th>
+            <% if platform? %>
+              <th scope="col" class="px-4 py-3 text-left"><%= t("comp_billing.invoice_table.customer") %></th>
+            <% end %>
+            <th scope="col" class="px-4 py-3 text-left"><%= t("comp_billing.invoice_table.issued") %></th>
+            <th scope="col" class="px-4 py-3 text-left"><%= t("comp_billing.invoice_table.due") %></th>
+            <th scope="col" class="px-4 py-3 text-left"><%= t("common.labels.status") %></th>
+            <th scope="col" class="px-4 py-3 text-right"><%= t("comp_billing.invoice_table.total") %></th>
+            <th scope="col" class="px-5 py-3"><span class="<%= visually_hidden_class %>"><%= t("common.labels.actions") %></span></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-border-subtle">
+          <% invoices.each do |inv| %>
+            <tr class="table-row">
+              <th scope="row" class="px-5 py-3.5 text-left font-medium text-text-primary tabular-nums break-all"><%= inv.number.presence || t("comp_billing.invoice_table.draft") %></th>
+              <% if platform? %>
+                <td class="px-4 py-3.5">
+                  <p class="tabular-nums text-text-primary"><%= inv.customer_id %></p>
+                  <% if customer_name(inv) %><p class="mt-0.5 text-caption break-words"><%= customer_name(inv) %></p><% end %>
+                </td>
+              <% end %>
+              <td class="whitespace-nowrap px-4 py-3.5 text-body-sm text-text-secondary tabular-nums"><%= date_label(inv.issued_at) %></td>
+              <td class="whitespace-nowrap px-4 py-3.5 text-body-sm text-text-secondary tabular-nums"><%= date_label(inv.due_at) %></td>
+              <td class="px-4 py-3.5">
+                <div class="flex flex-col items-start gap-1">
+                  <%= render BadgeComponent.new(variant: status_variant(inv.status), size: :sm) do %><%= status_label(inv.status) %><% end %>
+                  <span class="text-caption"><%= collection_label(inv) %></span>
+                </div>
+              </td>
+              <td class="whitespace-nowrap px-4 py-3.5 text-right font-semibold text-text-primary tabular-nums"><%= format_amount(inv.total_cents, inv.currency) %></td>
+              <td class="px-5 py-3.5">
+                <div class="flex justify-end gap-1">
+                  <%= link_to t("common.actions.view"), invoice_path(inv), class: "btn btn-ghost btn-sm" %>
+                  <%= link_to download_path(inv), class: "btn btn-ghost btn-sm" do %>
+                    <%= render Billing::Admin::IconComponent.new(name: :download, class_name: "h-4 w-4") %><%= t("common.actions.download") %>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+  <% if pagination %><%= render ::Admin::PaginationComponent.new(pagination: pagination, page_path: pagination_path) %><% end %>
+</div>
+<% end %>

@@ -1,0 +1,7 @@
+<div class="mb-6 p-4 <%= bg_class %> border <%= border_class %> rounded-lg flex items-center"
+     <% if auto_dismiss? %>data-controller="flash" data-flash-auto-dismiss-value="true"<% end %>>
+  <svg class="w-5 h-5 <%= icon_class %> mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+    <path fill-rule="evenodd" d="<%= icon_path %>" clip-rule="evenodd" />
+  </svg>
+  <span class="text-sm font-medium <%= text_class %>"><%= message %></span>
+</div>

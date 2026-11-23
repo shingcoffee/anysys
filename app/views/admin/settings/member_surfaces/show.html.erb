@@ -1,0 +1,8 @@
+<%= render Admin::Settings::PageComponent.new(customer_id: current_customer.id,
+  title: @presenter.label, description: t(@source.editable? ? "settings_people.display_description" : "settings_people.builtin_note"),
+  breadcrumbs: [
+    { label: t("settings_navigation.items.member_portal"), path: "/#{current_customer.id}/admin/settings/member" },
+    { label: t("settings_people.sources.#{@presenter.effective.source_key}.name"), path: "/#{current_customer.id}/admin/settings/member/sources/#{@presenter.effective.source_key}" }
+  ]) do %>
+  <%= render Admin::Settings::MemberSurfaceFormComponent.new(presenter: @presenter, customer: current_customer, editable: @source.editable?, errors: @form_errors) %>
+<% end %>

@@ -1,0 +1,73 @@
+<% chrome = capture do %>
+  <%= render BreadcrumbsComponent.new(crumbs: breadcrumbs) if breadcrumbs.any? %>
+
+  <% if has_header_strip? %>
+    <div class="<%= header_classes %>">
+      <% if has_title? %>
+        <div class="flex min-w-0 items-start gap-3 sm:items-center">
+          <% if has_icon? %>
+            <span class="flex size-10 shrink-0 items-center justify-center rounded-xl <%= icon_class %>" aria-hidden="true">
+              <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                <path stroke-linecap="round" stroke-linejoin="round" d="<%= icon_path %>" />
+              </svg>
+            </span>
+          <% end %>
+          <div class="min-w-0">
+            <div class="flex min-w-0 flex-wrap items-center gap-2">
+              <h1 class="<%= title_classes %>"><%= title %></h1>
+              <% badges.each do |badge| %>
+                <%= render BadgeComponent.new(variant: badge_variant(badge), size: :sm, **badge.except(:label, :variant)) do %>
+                  <%= badge[:label] %>
+                <% end %>
+              <% end %>
+            </div>
+            <% if has_description? %>
+              <p class="mt-1 text-body-sm"><%= description %></p>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <% if has_actions? %>
+        <div class="<%= action_classes %>">
+          <% actions.each do |action| %>
+            <% icon = action_icon_path(action[:icon]) %>
+            <% if method_action?(action) %>
+              <%= button_to action[:path], method_action_attributes(action).merge(method: action[:method], form: { class: "w-full sm:w-auto" }) do %>
+                <% if icon %>
+                  <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="<%= icon %>" />
+                  </svg>
+                <% end %>
+                <%= action[:label] %>
+              <% end %>
+            <% else %>
+              <%= render ButtonComponent.new(**button_kwargs_for(action)) do %>
+                <% if icon %>
+                  <svg class="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="<%= icon %>" />
+                  </svg>
+                <% end %>
+                <%= action[:label] %>
+              <% end %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<% if edge? %>
+  <div class="flex h-full min-h-0 flex-1 flex-col" data-admin-page-workspace="true">
+    <div class="sticky top-0 z-20 shrink-0 border-b border-border bg-surface px-4 py-2.5 lg:px-6">
+      <%= chrome %>
+    </div>
+    <div class="min-h-0 flex-1 overflow-hidden">
+      <%= content %>
+    </div>
+  </div>
+<% else %>
+  <%= chrome %>
+  <%= content %>
+<% end %>

@@ -1,0 +1,315 @@
+en:
+  flowchart_actions:
+    hash_manipulate:
+      label: Hash Manipulate
+      description: Manipulate hash/dictionary data
+      fields:
+        sourceVariable:
+          label: Source
+          help: Context path of the hash this step reads.
+          placeholder: e.g., data
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        operation:
+          label: Operation
+          help: How to reshape the source hash.
+          options:
+            pick: pick
+            omit: omit
+            keys: keys
+            values: values
+            deep_merge: deep_merge
+            merge: merge
+            diff: diff
+            rename_keys: rename_keys
+            invert: invert
+            deep_dup: deep_dup
+            symbolize_keys: symbolize_keys
+            stringify_keys: stringify_keys
+            transform_keys: transform_keys
+            transform_values: transform_values
+            compact: compact
+            set_keys: set_keys
+            flatten: flatten
+        keys:
+          label: Keys
+          help: Key names to pick or omit.
+        otherVariable:
+          label: Other hash
+          help: Second hash used to merge or diff.
+          placeholder: e.g., overrides
+        renameMap:
+          label: Rename Map
+          help: Original key mapped to the new key.
+        transformExpression:
+          label: Transform Expression
+          help: Ruby expression applied to each key or value.
+        computedFields:
+          label: Computed fields
+          help: Keys to set, with a Ruby expression for each value.
+        flattenSeparator:
+          label: Flatten separator
+          help: String inserted between nested key segments.
+        caseInsensitive:
+          label: Case Insensitive
+          help: Match keys without regard to letter case.
+        mergeStrategy:
+          label: Merge Strategy
+          help: How the two hashes are combined.
+          options:
+            shallow: shallow
+            deep: deep
+            replace: replace
+            append: append
+        arrayMergeMode:
+          label: Array Merge Mode
+          help: How array values are combined on a deep or append merge.
+          options:
+            concat: concat
+            replace: replace
+            unique_union: unique_union
+        onConflict:
+          label: On Conflict
+          help: Which side wins when both hashes share a key.
+          options:
+            first: first
+            last: last
+    compare_data:
+      label: Compare Data
+      description: Compare two values
+      fields:
+        sourceVariable:
+          label: Left Key
+          help: Context path of the left hash.
+          placeholder: e.g., before
+        otherVariable:
+          label: Right Key
+          help: Context path of the right hash.
+          placeholder: e.g., after
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        mode:
+          label: Mode
+          help: Shape of an equality comparison.
+          options:
+            keys: keys
+            values: values
+            deep: deep
+        comparisonType:
+          label: Comparison Type
+          help: Kind of comparison to run.
+          options:
+            equality: equality
+            deep_equal: deep_equal
+            schema_match: schema_match
+            diff: diff
+            equal: equal
+        ignoreKeys:
+          label: Ignore Keys
+          help: Keys stripped from both sides before compare.
+        caseInsensitive:
+          label: Case Insensitive
+          help: Downcase strings before comparing.
+        numericTolerance:
+          label: Numeric Tolerance
+          help: Absolute difference allowed for numeric values.
+    map_value:
+      label: Map Value
+      description: Map a value through a lookup
+      fields:
+        sourceVariable:
+          label: Source Variable
+          help: Context path of the value to look up.
+          placeholder: e.g., status
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        matchMode:
+          label: Match Mode
+          help: How input values are matched to rows.
+          options:
+            exact: exact
+            regex: regex
+            range: range
+        mappings:
+          label: Mappings
+          help: Input value mapped to the output value.
+        rules:
+          label: Rules
+          help: Pattern or range mapped to the output value.
+        defaultValue:
+          label: Default Value
+          help: Value used when nothing matches.
+          placeholder: e.g., Unknown
+        fallbackStrategy:
+          label: Fallback Strategy
+          help: What to do when nothing matches.
+          options:
+            default: default (use defaultValue)
+            pass_through: pass_through (return input)
+            raise: raise (error on no match)
+        multiMatch:
+          label: Multi Match
+          help: Return every matching value as an array.
+        caseSensitive:
+          label: Case Sensitive
+          help: Match letter case when comparing.
+    type_cast:
+      label: Type Cast
+      description: Cast value to different type
+      fields:
+        sourceVariable:
+          label: Source Key
+          help: Context path of the value to cast.
+          placeholder: e.g., value
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        targetType:
+          label: Target Type
+          help: Type to cast the value to.
+          options:
+            string: string
+            integer: integer
+            float: float
+            boolean: boolean
+            date: date
+            datetime: datetime
+            array: array
+            hash: hash
+            big_decimal: big_decimal
+            rational: rational
+            complex: complex
+            symbol: symbol
+            time: time
+            date_time: date_time
+            json: json
+            decimal: decimal
+        format:
+          label: Format
+          help: strftime pattern used for date and datetime casts.
+          placeholder: e.g., %Y-%m-%d (date/datetime format)
+        timezoneAware:
+          label: Timezone Aware
+          help: Parse or rebase the value in a time zone.
+        strictBoolean:
+          label: Strict Boolean
+          help: Treat only true, "true", and 1 as true.
+        timezone:
+          label: Timezone
+          help: Time zone name used when timezone-aware.
+          placeholder: e.g., UTC or America/New_York
+        onError:
+          label: On Error
+          help: What to do when the value cannot be cast.
+          options:
+            fail: fail
+            nil: nil
+            default: default
+        defaultValue:
+          label: Default Value
+          help: Value stored when On Error is default.
+          placeholder: e.g., 0
+    generate_id:
+      label: Generate ID
+      description: Generate a unique identifier
+      fields:
+        idType:
+          label: ID Type
+          help: Kind of identifier to generate.
+          options:
+            uuid: uuid
+            ulid: ulid
+            nanoid: nanoid
+            hash: hash
+            custom_pattern: custom_pattern
+            hex: hex
+            base58: base58
+            urlsafe_base64: urlsafe_base64
+            secure_random: secure_random
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        length:
+          label: Length
+          help: Character length for hash, hex, and random types.
+        size:
+          label: Size
+          help: Character size for nanoid.
+        alphabet:
+          label: Alphabet
+          help: Characters nanoid may use.
+          placeholder: e.g., 0123456789abcdefghijklmnopqrstuvwxyz
+        pattern:
+          label: Pattern
+          help: strftime pattern for a custom identifier.
+          placeholder: e.g., %Y%m%d (custom pattern)
+        prefix:
+          label: Prefix
+          help: Text prepended to the generated identifier.
+          placeholder: e.g., user
+        separator:
+          label: Separator
+          help: Text between the prefix and the identifier.
+          placeholder: e.g., _ or -
+        uppercase:
+          label: Uppercase
+          help: Uppercase the generated identifier.
+    log:
+      label: Log
+      description: Write to logger or audit trail
+      fields:
+        logLevel:
+          label: Log Level
+          help: Severity written with the message.
+          options:
+            debug: debug
+            info: info
+            warn: warn
+            error: error
+            fatal: fatal
+        messageTemplate:
+          label: Message Template
+          help: Message written to the logger.
+          placeholder: 'e.g., "User #{ctx[:user_id]} created"'
+        logger:
+          label: Logger
+          help: Where the message is written.
+          options:
+            rails: rails
+            stdout: stdout
+            file: file
+        filePath:
+          label: File Path
+          help: Relative filename under the tenant log sandbox.
+          placeholder: e.g., log/custom.log
+        tags:
+          label: Tags
+          help: Extra values attached to a Rails tagged log.
+        includeBacktrace:
+          label: Include Backtrace (error only)
+          help: Append the call stack on error and fatal levels.
+        structured:
+          label: Structured (JSON)
+          help: Write the message as a JSON payload.
+        maxMessageLength:
+          label: Max Message Length
+          help: Truncate the message to this many characters (0 = no truncation).
+      errors:
+        unsafe_path: filePath must be a relative filename without traversal
+  flowchart_runtime:
+    errors:
+      hash_manipulate:
+        failed: Could not reshape the hash (%{reason}).
+      compare_data:
+        failed: Could not compare the values (%{reason}).
+      map_value:
+        failed: Could not map the value (%{reason}).
+      type_cast:
+        failed: Could not cast the value (%{reason}).
+      generate_id:
+        failed: Could not generate an id (%{reason}).
+      log:
+        failed: Could not write the log entry (%{reason}).

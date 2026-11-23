@@ -1,0 +1,53 @@
+<section class="relative isolate overflow-hidden bg-slate-950 text-white <%= hero_padding_class %>">
+  <%= aurora %>
+  <div class="<%= inner_measure_class %>">
+    <div class="relative <%= layout_class %>">
+      <div class="<%= copy_class %>">
+        <% if present_text?(prop('eyebrow')) %>
+          <p class="<%= kicker_class(tone: :dark) %> py-1.5 pl-1.5 shadow-lg shadow-violet-950/40 <%= fade(0) %>">
+            <% if lead? && page_role == :home %><span class="shrink-0 whitespace-nowrap rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 px-2.5 py-0.5 text-[12px] font-bold text-white"><%= hero_badge %></span><% else %><%= sparkle_icon(css_class: 'ml-1.5 size-3.5 text-fuchsia-300') %><% end %>
+            <span class="min-w-0"><%= prop('eyebrow') %></span>
+          </p>
+        <% end %>
+        <% if headline_lines.any? %>
+          <h1 class="<%= hero_heading_class %> <%= fade(80) %>"><%= headline_markup %></h1>
+        <% end %>
+        <% if present_text?(prop('subhead')) %><p class="<%= hero_subhead_class %> <%= fade(160) %>"><%= prop('subhead') %></p><% end %>
+        <% if actions? %>
+          <div class="mt-2 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap <%= 'sm:justify-center' if centered? %> <%= fade(240) %>">
+            <%= action(prop('primary_label'), props['primary_href'], arrow: true) %>
+            <%= action(prop('secondary_label'), props['secondary_href'], css_class: ghost_button_class) %>
+          </div>
+        <% end %>
+        <% if trust_items.any? %>
+          <ul class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[14px] leading-5 text-slate-400 <%= fade(320) %>">
+            <% trust_items.each do |item| %>
+              <li class="inline-flex items-center gap-2"><span class="inline-flex size-5 items-center justify-center rounded-full bg-emerald-400/15 text-emerald-300"><%= check_icon(css_class: 'size-3') %></span><%= item %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </div>
+      <% if split? %>
+        <div class="relative min-w-0 lg:col-span-6 <%= fade(200) %>">
+          <div aria-hidden="true" class="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-tr from-violet-600/50 via-fuchsia-500/30 to-sky-400/30 blur-3xl"></div>
+          <div class="relative rounded-[2rem] border border-white/15 bg-white/5 p-2 shadow-2xl shadow-violet-950/60 backdrop-blur">
+            <div class="<%= media_frame_class %> rounded-[1.5rem]"><%= render_media(prop('image_url'), alt: prop('headline').squish, css_class: 'absolute inset-0 size-full object-cover', eager: true) %></div>
+          </div>
+          <% chips.first(2).each_with_index do |chip, index| %>
+            <div aria-hidden="true" class="absolute hidden items-center gap-2.5 rounded-2xl border border-white/60 bg-white/90 px-4 py-3 text-[14px] font-semibold text-slate-900 shadow-xl shadow-violet-950/30 backdrop-blur sm:flex animate-float motion-reduce:animate-none <%= index.zero? ? '-left-6 top-10' : '-right-4 bottom-10 [animation-delay:-3.5s]' %>">
+              <span class="<%= icon_tile_class(index, size: 'size-8') %> rounded-xl"><%= index.zero? ? sparkle_icon(css_class: 'size-4') : check_icon(css_class: 'size-4') %></span>
+              <%= chip %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <% if lead? %>
+      <div class="relative mt-16 lg:mt-20 <%= fade(380) %>"><%= render Websites::HomeSite::ProductMockupComponent.new %></div>
+    <% elsif media_visible? && !split? %>
+      <div class="relative mx-auto mt-14 max-w-5xl rounded-[2rem] border border-white/15 bg-white/5 p-2 shadow-2xl shadow-violet-950/60">
+        <div class="<%= media_frame_class %> rounded-[1.5rem]"><%= render_media(prop('image_url'), alt: prop('headline').squish, css_class: 'absolute inset-0 size-full object-cover', eager: true) %></div>
+      </div>
+    <% end %>
+  </div>
+</section>

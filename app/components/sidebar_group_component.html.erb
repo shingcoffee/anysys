@@ -1,0 +1,18 @@
+<li data-list-filter-target="group" class="flex flex-col gap-0.5">
+  <% if plain_label %>
+    <p class="px-3 pt-1 pb-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted">
+      <%= plain_label.label %>
+    </p>
+  <% end %>
+  <ul class="flex flex-col gap-0.5">
+    <% nodes.each do |node| %>
+      <%= render SidebarNodeComponent.new(
+            node: node,
+            current_path: current_path,
+            mobile: mobile,
+            filterable: filterable,
+            selected_key: selected_key
+          ) %>
+    <% end %>
+  </ul>
+</li>

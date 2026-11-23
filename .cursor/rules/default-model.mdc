@@ -1,0 +1,23 @@
+---
+description: Pin Grok 4.6 as the only model for every session and every subagent
+alwaysApply: true
+---
+
+# Default model — Grok 4.6
+
+Grok 4.6 is the only model for this application. Use it for every parent session and every subagent. Do not switch to any other model.
+
+- Parent / chat default: Grok 4.6
+- Custom subagents in `.cursor/agents/` are pinned with `model: grok-4.6`
+- When launching Task / SDLC / explore / generalPurpose / review / bugbot / security-review subagents, omit `model` or pass `inherit`
+- Do not pass Claude, GPT, Gemini, Composer, Kimi, Grok 4.5, or any other model slug
+- Do not re-pick a model to “use a better one” for a subtask
+
+```
+# BAD — switches the subagent off Grok 4.6
+Task(subagent_type="anysys-backend-developer", model="claude-sonnet-5-thinking-high", ...)
+
+# GOOD — stays on Grok 4.6
+Task(subagent_type="anysys-backend-developer", model="inherit", ...)
+# also good: omit the model argument entirely
+```

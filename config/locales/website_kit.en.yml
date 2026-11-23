@@ -1,0 +1,669 @@
+en:
+  website:
+    sections:
+      hero_centered:
+        name: Centered hero
+        description: Launch headline over a soft glow, with an optional framed product image.
+      ai_preview:
+        name: AI preview
+        description: An illustrative request panel paired with editable draft output cards.
+      statement:
+        name: Statement
+        description: One oversized sentence and a short gloss.
+      logo_cloud:
+        name: Logo cloud
+        description: A quiet row of customer or partner marks.
+      feature_grid:
+        name: Feature grid
+        description: Numbered capabilities set on hairlines.
+      steps:
+        name: Steps
+        description: A numbered how-it-works sequence.
+      gallery:
+        name: Gallery
+        description: Asymmetric editorial photographs with captions.
+      testimonials:
+        name: Testimonials
+        description: A wall of short endorsements with names and roles.
+      pricing:
+        name: Pricing
+        description: Plan tiers with one optional featured column.
+      price_list:
+        name: Price list
+        description: A menu or service list with prices.
+      showcase_tiles:
+        name: Product tiles
+        description: Full-bleed and half-width photo tiles, each with a title and two pill links.
+      timeline:
+        name: Timeline
+        description: Dated milestones on a vertical rail — a history or a changelog.
+      story_index:
+        name: Story index
+        description: A newspaper front — a lead story, two secondary stories and headline briefs.
+      comparison_table:
+        name: Comparison table
+        description: Plans or models side by side, one row per feature.
+      listing_grid:
+        name: Listings
+        description: Photo cards with a badge, rating, details and price.
+      agenda:
+        name: Agenda
+        description: A programme or timetable — time, session, speaker and track.
+      locations:
+        name: Locations
+        description: Store, café or venue cards with address, hours, phone and a link.
+      announcement:
+        name: Announcement bar
+        description: A slim pill with a badge and a link — for launches and news.
+      product_spotlight:
+        name: Product spotlight
+        description: A centered product reveal with a large image and a row of key specs.
+      image_banner:
+        name: Image banner
+        description: A full-bleed photograph with an overlaid headline and one call to action.
+      metrics:
+        name: Metrics
+        description: Oversized numbers with short explanations — scale, impact or results.
+      feature_tabs:
+        name: Feature tabs
+        description: Switch between features with tabs; each tab pairs copy with an image.
+      split_checklist:
+        name: Checklist
+        description: A heading and pitch beside a list of checked benefits.
+      collection_rail:
+        name: Collection rail
+        description: A horizontally scrolling row of picture cards — categories, playlists or products.
+      cta_split:
+        name: Split call to action
+        description: A closing invitation beside a photograph, in a rounded panel.
+      groups:
+        heroes: Openers
+        stories: Story
+        showcase: Showcase
+        proof: Proof
+        people: People
+        offers: Offers
+        closing: Closing
+        more: More
+    skeletons:
+      categories:
+        business: Business
+        product: Product
+        hospitality: Hospitality
+        editorial: Editorial
+        portfolio: Portfolio
+        wellness: Wellness
+        education: Education
+        commerce: Commerce
+        nonprofit: Nonprofit
+        events: Events
+        culture: Culture
+      inspired_by_format: "Inspired by %{brand}"
+      lumen:
+        name: "Lumen"
+        description: "Developer platform launch site — centered hero, logos, features, pricing and contact."
+        inspired_by: "Vercel"
+      monograph:
+        name: "Monograph"
+        description: "Slow-living quarterly — oversized serif statements, photo essays and stories."
+        inspired_by: "Kinfolk"
+      terrain:
+        name: "Terrain"
+        description: "Outdoor brand with a mission — landscape heroes, gear, impact and stores."
+        inspired_by: "Patagonia"
+      supper:
+        name: "Supper"
+        description: "Fine-dining restaurant — candlelit hero, tasting menu and reservations."
+        inspired_by: "Noma"
+      clinic:
+        name: "Clinic"
+        description: "Modern primary care — calm hero, how it works, services and membership."
+        inspired_by: "One Medical"
+      folio:
+        name: "Folio"
+        description: "Design studio portfolio — statement, project plates, studio and contact."
+        inspired_by: "Pentagram"
+      voyage:
+        name: "Voyage"
+        description: "Luxury resort — quiet serif type, rooms, experiences and reservations."
+        inspired_by: "Aman"
+      kinetic:
+        name: "Kinetic"
+        description: "Premium fitness club — dark cinematic hero, classes and membership."
+        inspired_by: "Equinox"
+      voltage:
+        name: "Voltage"
+        description: "Electric car maker — stacked full-bleed product tiles, a model comparison, charging and studios."
+        inspired_by: "Tesla"
+      wellspring:
+        name: "Wellspring"
+        description: "Clean-water charity — emotional photo hero, the 100% promise, field stories, a timeline and monthly giving."
+        inspired_by: "charity: water"
+      summit:
+        name: "Summit"
+        description: "Ideas conference — dark stage hero, speakers, a day-by-day agenda, ticket tiers and the venue."
+        inspired_by: "TED"
+      manor:
+        name: "Manor"
+        description: "Luxury real estate — quiet serif hero, featured residences, advisors and offices."
+        inspired_by: "Sotheby's International Realty"
+      bloom:
+        name: "Bloom"
+        description: "Beauty brand — soft product-first shop with star ratings, edit tiles, reviews and stores."
+        inspired_by: "Glossier"
+      roast:
+        name: "Roast"
+        description: "Specialty coffee roaster — coffee shelf, subscriptions, cafés with a menu and a founding timeline."
+        inspired_by: "Blue Bottle Coffee"
+      atrium:
+        name: "Atrium"
+        description: "Art museum — bold exhibition hero, what's on view, today's programs, admission and membership."
+        inspired_by: "MoMA"
+      canvas:
+        name: "Canvas"
+        description: "Collaborative design product — a multiplayer file, live libraries, a feature tour and seat-based pricing."
+        inspired_by: "Figma"
+      harbor:
+        name: "Harbor"
+        description: "Commerce platform for merchants — first sale, themes, checkout, shop stories and plans that grow with the till."
+        inspired_by: "Shopify"
+      calm:
+        name: "Calm"
+        description: "Mindfulness app — warm sessions, sleep stories, member notes and a membership that never scolds."
+        inspired_by: "Headspace"
+      marque:
+        name: "Marque"
+        description: "Luxury car maker — cinematic product reveal, a numbered commission, house history and studio drives."
+        inspired_by: "Porsche"
+      tempo:
+        name: "Tempo"
+        description: "Audio streaming — dark playlists, city radio, culture stories and a desk that still hires hosts."
+        inspired_by: "Spotify"
+      quarterly:
+        name: "Quarterly"
+        description: "Print magazine — serif briefings, correspondent rails, a masthead and a shop that still sells the issue."
+        inspired_by: "Monocle"
+      presence:
+        inspired_by: Snøhetta
+      saas_landing:
+        inspired_by: Stripe
+      cinematic:
+        inspired_by: Apple
+      editorial:
+        inspired_by: Nike
+      studio:
+        inspired_by: Airbnb
+      product:
+        inspired_by: Notion
+      ledger:
+        inspired_by: Stripe
+      signal:
+        inspired_by: Linear
+      atelier:
+        inspired_by: Aesop
+      campus:
+        inspired_by: Stanford
+      gazette:
+        inspired_by: The New York Times
+    layouts:
+      lumen_home:
+        name: "Lumen home"
+        description: "Centered launch hero, logos, feature grid, bento, testimonials and a CTA."
+      lumen_platform:
+        name: "Lumen platform"
+        description: "Centered hero, steps, alternating features and proof numbers."
+      lumen_pricing:
+        name: "Lumen pricing"
+        description: "Plan tiers, FAQ and a closing CTA."
+      lumen_contact:
+        name: "Lumen contact"
+        description: "Sales and support contact details."
+      monograph_home:
+        name: "Monograph home"
+        description: "Oversized statement, editorial gallery, pull quote and stories."
+      monograph_journal:
+        name: "Monograph journal"
+        description: "Long-form text, a feature chapter, field notes and a quote."
+      monograph_about:
+        name: "Monograph about"
+        description: "Masthead statement, contributors and contact."
+      terrain_home:
+        name: "Terrain home"
+        description: "Full-bleed landscape hero, mission statement, gear bento and impact numbers."
+      terrain_gear:
+        name: "Terrain gear"
+        description: "Split hero, product cards and a technical feature grid."
+      terrain_mission:
+        name: "Terrain mission"
+        description: "Cinematic hero, commitments, a history timeline and a founder quote."
+      terrain_contact:
+        name: "Terrain contact"
+        description: "Stores and repair shops, plus contact details."
+      supper_home:
+        name: "Supper home"
+        description: "Candlelit hero, kitchen philosophy, plate gallery and reservations CTA."
+      supper_menu:
+        name: "Supper menu"
+        description: "Split hero, a priced tasting menu and pairings."
+      supper_visit:
+        name: "Supper visit"
+        description: "The room, hours and address."
+      clinic_home:
+        name: "Clinic home"
+        description: "Split hero, insurance logos, steps, services, testimonials and a CTA."
+      clinic_care:
+        name: "Clinic care"
+        description: "Cinematic hero, care programs and clinicians."
+      clinic_membership:
+        name: "Clinic membership"
+        description: "Membership plans and FAQ."
+      clinic_contact:
+        name: "Clinic contact"
+        description: "Locations, hours and contact details."
+      folio_home:
+        name: "Folio home"
+        description: "Studio statement, project gallery, client marks and a CTA."
+      folio_work:
+        name: "Folio work"
+        description: "Case study hero, narrative, plates and a client quote."
+      folio_studio:
+        name: "Folio studio"
+        description: "Studio statement, partners and capabilities."
+      folio_contact:
+        name: "Folio contact"
+        description: "New business and studio contact details."
+      voyage_home:
+        name: "Voyage home"
+        description: "Resort hero, a quiet statement, gallery, guest book and booking CTA."
+      voyage_stay:
+        name: "Voyage stay"
+        description: "Split hero, rates and a pavilion bento."
+      voyage_experiences:
+        name: "Voyage experiences"
+        description: "Alternating experiences and a day's itinerary."
+      voyage_contact:
+        name: "Voyage contact"
+        description: "Reservations and concierge details."
+      kinetic_home:
+        name: "Kinetic home"
+        description: "Dark full-bleed hero, club numbers, facilities bento, member quotes and a trial CTA."
+      kinetic_classes:
+        name: "Kinetic classes"
+        description: "Centered hero, class cards, today's timetable and how to start."
+      kinetic_membership:
+        name: "Kinetic membership"
+        description: "Membership tiers and FAQ."
+      kinetic_contact:
+        name: "Kinetic contact"
+        description: "Club locations with hours, plus contact details."
+      voltage_home:
+        name: "Voltage home"
+        description: "Stacked full-bleed product tiles, headline numbers and a test-drive CTA."
+      voltage_models:
+        name: "Voltage models"
+        description: "Centered hero, a spec comparison table, interior features and an order CTA."
+      voltage_charging:
+        name: "Voltage charging"
+        description: "Dark cinematic hero, network numbers, steps and FAQ."
+      voltage_visit:
+        name: "Voltage visit"
+        description: "Studio locations with hours and booking, plus contact details."
+      wellspring_home:
+        name: "Wellspring home"
+        description: "Photo hero, the 100% statement, impact numbers, field stories and a giving CTA."
+      wellspring_story:
+        name: "Wellspring story"
+        description: "Split hero, founding timeline, a program quote and the team."
+      wellspring_impact:
+        name: "Wellspring impact"
+        description: "Proof statement, how a gift becomes a tap, solutions bento and outcome numbers."
+      wellspring_give:
+        name: "Wellspring give"
+        description: "Monthly giving tiers, donor FAQ and a campaign CTA."
+      summit_home:
+        name: "Summit home"
+        description: "Dark stage hero, event numbers, speakers, most-watched talks and a tickets CTA."
+      summit_program:
+        name: "Summit program"
+        description: "Program statement and a day-by-day agenda."
+      summit_tickets:
+        name: "Summit tickets"
+        description: "Pass tiers, a what's-included table and FAQ."
+      summit_venue:
+        name: "Summit venue"
+        description: "The venue, partner hotels and attendee contact."
+      manor_home:
+        name: "Manor home"
+        description: "Serif photo hero, featured residences, approach, numbers, client quotes and a valuation CTA."
+      manor_listings:
+        name: "Manor residences"
+        description: "The residence portfolio and a private-search CTA."
+      manor_advisors:
+        name: "Manor advisors"
+        description: "Advisors, the selling process and a quote."
+      manor_offices:
+        name: "Manor offices"
+        description: "Office galleries with hours, plus private enquiries."
+      bloom_home:
+        name: "Bloom home"
+        description: "Split hero, rated bestsellers, edit tiles, reviews and a sign-up CTA."
+      bloom_shop:
+        name: "Bloom shop"
+        description: "The full product grid with ratings, plus shipping and returns."
+      bloom_story:
+        name: "Bloom story"
+        description: "Founding statement, values and a founder quote."
+      bloom_stores:
+        name: "Bloom stores"
+        description: "Store locations and contact details."
+      roast_home:
+        name: "Roast home"
+        description: "Split hero, this month's coffees, subscription and how it works."
+      roast_coffee:
+        name: "Roast coffee"
+        description: "Coffee shelf with tasting notes and a freshness FAQ."
+      roast_cafes:
+        name: "Roast cafés"
+        description: "Café locations and the bar menu."
+      roast_story:
+        name: "Roast story"
+        description: "Founding statement, timeline and a roastery gallery."
+      atrium_home:
+        name: "Atrium home"
+        description: "Exhibition hero, what's on view, membership and a plan-your-visit CTA."
+      atrium_exhibitions:
+        name: "Atrium exhibitions"
+        description: "Upcoming exhibitions and today's talks, tours and films."
+      atrium_visit:
+        name: "Atrium visit"
+        description: "Buildings and hours, admission prices and visitor FAQ."
+      atrium_membership:
+        name: "Atrium membership"
+        description: "Membership tiers and a benefits comparison."
+      canvas_home:
+        name: "Canvas home"
+        description: "Announcement, product spotlight, logos, metrics, feature tabs, testimonials and a split CTA."
+      canvas_product:
+        name: "Canvas product"
+        description: "Split hero, a feature tour, a contrast checklist, alternating chapters and a template rail."
+      canvas_pricing:
+        name: "Canvas pricing"
+        description: "Centered plans, a comparison table, FAQ and a sales CTA."
+      canvas_about:
+        name: "Canvas about"
+        description: "Studio statement, the team, a timeline, a quote and a careers split."
+      canvas_contact:
+        name: "Canvas contact"
+        description: "Sales desk, studio locations and migration FAQ."
+      harbor_home:
+        name: "Harbor home"
+        description: "Merchant hero, GMV metrics, a shop rail, platform tabs, testimonials and a trial split."
+      harbor_features:
+        name: "Harbor features"
+        description: "Checkout spotlight, growth tabs, an operations checklist and an apps bento."
+      harbor_pricing:
+        name: "Harbor pricing"
+        description: "Shop plans, fee comparison, merchant FAQ and a partner CTA."
+      harbor_stories:
+        name: "Harbor stories"
+        description: "Merchant index, a quote, testimonials and a write-in CTA."
+      harbor_contact:
+        name: "Harbor contact"
+        description: "Merchant studios with hours and support details."
+      calm_home:
+        name: "Calm home"
+        description: "Warm announcement, cinematic hero, honest metrics, a session rail and a trial split."
+      calm_practice:
+        name: "Calm practice"
+        description: "A Tuesday checklist, library tabs, tonight's rail, a first-week path and FAQ."
+      calm_stories:
+        name: "Calm stories"
+        description: "Member notes, a quote, short testimonials and a recording chapter."
+      calm_about:
+        name: "Calm about"
+        description: "House statement, voices, a no-streaks timeline and membership."
+      calm_contact:
+        name: "Calm contact"
+        description: "A person who writes back, plus practical FAQ."
+      marque_home:
+        name: "Marque home"
+        description: "Commission announcement, a tall banner, the 8S spotlight, tiles, house numbers and a drive CTA."
+      marque_models:
+        name: "Marque models"
+        description: "Line spotlight, a spec table, road tabs and a fourteen-week commission CTA."
+      marque_story:
+        name: "Marque story"
+        description: "House timeline, the hall banner, a founder quote, archive plates and a close."
+      marque_visit:
+        name: "Marque visit"
+        description: "Studio drives, commissions desk and a heritage split."
+      tempo_home:
+        name: "Tempo home"
+        description: "Live announcement, dark hero, playlist rail, catalog metrics, how-it-plays tabs and Premium."
+      tempo_listen:
+        name: "Tempo listen"
+        description: "City charts, a sessions banner, radio tabs, rooms gallery and a follow CTA."
+      tempo_stories:
+        name: "Tempo stories"
+        description: "Culture index, an editorial quote, desk cards and the Sunday letter."
+      tempo_about:
+        name: "Tempo about"
+        description: "House statement, payout metrics, the desk and a pitch split."
+      tempo_contact:
+        name: "Tempo contact"
+        description: "The desk, studio rooms and how to submit a record."
+      quarterly_home:
+        name: "Quarterly home"
+        description: "Issue announcement, a serif statement, the briefing, bureau rail, a quote and subscribe."
+      quarterly_stories:
+        name: "Quarterly stories"
+        description: "Dispatch index, issue plates, how we report and the house style."
+      quarterly_about:
+        name: "Quarterly about"
+        description: "Independence statement, masthead, house timeline and the desk."
+      quarterly_contact:
+        name: "Quarterly contact"
+        description: "Shop and bureaux, subscriptions and corrections FAQ."
+      cinematic_compare:
+        name: "Cinematic compare"
+        description: "A model comparison table and a store CTA."
+      studio_home:
+        name: "Studio home"
+        description: "Warm photo hero, a rated grid of stays, a featured house and a host CTA."
+      studio_stays:
+        name: "Studio stays"
+        description: "Every stay with photos, ratings and nightly prices, plus how booking works."
+      studio_hosts:
+        name: "Studio hosts"
+        description: "The hosts and what guests write afterwards."
+      studio_contact:
+        name: "Studio contact"
+        description: "Contact details and a browse CTA."
+      launch:
+        name: "Launch"
+        description: "Centered hero, logos, feature grid, testimonials and a CTA."
+      pricing:
+        name: "Pricing"
+        description: "Plan tiers, FAQ and a closing CTA."
+      portfolio:
+        name: "Portfolio"
+        description: "Statement, project gallery, client marks and a CTA."
+      menu:
+        name: "Menu"
+        description: "Full-bleed hero, a priced menu and visit details."
+      journal:
+        name: "Journal"
+        description: "Statement, photo essay and long-form text."
+      process:
+        name: "Process"
+        description: "Split hero, steps, features and FAQ."
+      showcase:
+        name: "Showcase"
+        description: "Stacked full-bleed product tiles and a CTA."
+      compare:
+        name: "Compare"
+        description: "A comparison table, FAQ and a CTA."
+      newsroom:
+        name: "Newsroom"
+        description: "A front-page story index and a newsletter CTA."
+      listings:
+        name: "Listings"
+        description: "A photo listing grid with prices and ratings, plus a CTA."
+      stores:
+        name: "Stores"
+        description: "Locations with hours and directions, plus contact details."
+      heritage:
+        name: "Heritage"
+        description: "A history statement, milestone timeline and a quote."
+      conference:
+        name: "Conference"
+        description: "Dark event hero, an agenda and a tickets CTA."
+      spotlight:
+        name: "Spotlight"
+        description: "Apple-register product page — announcement, a centered reveal, specs, feature tabs and a pre-order split."
+      campaign:
+        name: "Campaign"
+        description: "Nike-register campaign — stacked image banners, a product rail, season metrics and a shop split."
+      tour:
+        name: "Tour"
+        description: "Linear-register feature tour — announcement, centered hero, tabs, a contrast checklist and cycle metrics."
+      impact:
+        name: "Impact"
+        description: "Stripe-register annual report — a statement, volume metrics, reporting rules and the download."
+      why_us:
+        name: "Why us"
+        description: "Mailchimp-register checklist page — split hero, switch reasons, proof numbers, testimonials and FAQ."
+      launch_note:
+        name: "Launch note"
+        description: "Vercel-register launch — announcement, product reveal, changelog tabs, partner metrics and a preview CTA."
+    public:
+      pricing:
+        featured: Popular
+      comparison:
+        feature: Feature
+        included: Included
+        not_included: Not included
+      listings:
+        rating: "Rated %{rating}"
+      announcement:
+        learn_more: Learn more
+      feature_tabs:
+        tablist: Features
+    platform:
+      skeletons:
+        pages:
+          care: Care
+          classes: Classes
+          experiences: Experiences
+          gear: Gear
+          membership: Membership
+          menu: Menu
+          mission: Mission
+          platform: Platform
+          stay: Stay
+          stays: Stays
+          studio: Studio
+          work: Work
+          models: Models
+          charging: Charging
+          story: Story
+          impact: Impact
+          give: Give
+          program: Program
+          tickets: Tickets
+          venue: Venue
+          listings: Listings
+          advisors: Advisors
+          offices: Offices
+          shop: Shop
+          stores: Stores
+          coffee: Coffee
+          cafes: Cafés
+          exhibitions: Exhibitions
+          compare: Compare
+          clubs: Clubs
+          product: Product
+          features: Features
+          practice: Practice
+          listen: Listen
+    admin:
+      pages:
+        form:
+          fields:
+            media_mode: Hero media
+            example_label: Example label
+            prompt_label: Request label
+            prompt: Request
+            review_note: Review note
+            output_label: Output label
+            featured_label: Featured plan label
+            tiers: Plans
+            price: Price
+            cadence: Billing period
+            features: Included (one per line)
+            caption: Caption
+            highlight: Emphasis
+            tiles: Tiles
+            size: Size
+            date: Date
+            stories: Stories
+            byline: Byline
+            rows: Rows
+            column_1: Column 1
+            column_2: Column 2
+            column_3: Column 3
+            column_4: Column 4
+            value_1: Column 1 value
+            value_2: Column 2 value
+            value_3: Column 3 value
+            value_4: Column 4 value
+            listings: Listings
+            aspect: Photo shape
+            meta: Details
+            rating: Rating
+            badge: Badge
+            sessions: Sessions
+            time: Time
+            speaker: Speaker
+            track: Track
+            places: Locations
+            link_label: Link label
+            specs: Specs
+            tabs: Tabs
+            height: Height
+            placement: Text position
+            surface: Background
+            spacing: Spacing
+            align: Heading alignment
+          highlights:
+            standard: Standard
+            featured: Featured
+          media_modes:
+            image: Image
+            none: None
+          sizes:
+            full: Full width
+            half: Half width
+          aspects:
+            square: Square
+            portrait: Portrait
+            landscape: Landscape
+          heights:
+            tall: Tall
+            medium: Medium
+          placements:
+            bottom: Bottom
+            center: Center
+          surfaces:
+            default: Default
+            muted: Muted
+            contrast: Contrast
+            accent: Accent
+          spacings:
+            default: Default
+            tight: Tight
+            roomy: Roomy
+          aligns:
+            default: Default
+            start: Left
+            center: Center

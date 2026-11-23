@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://anysys.local/schemas/flowchart-structure.json",
+  "title": "Flowchart definition structured output",
+  "description": "Machine-readable contract for the dashboard AI Assistant flowchart turn. The LLM must return exactly this JSON object (no prose outside JSON). Exactly one flowchart per persistable turn. Tenant, customer_id, id, shared, uuid, and status are assigned by the server. Flowcharts are not bound to an entity: the page a flowchart is bound to supplies its entity at run time. Do not emit pixel layout; the server fills x/y/width/height.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["intent", "reply"],
+  "properties": {
+    "intent": {
+      "type": "string",
+      "enum": ["chat", "clarify", "apply_flowchart"],
+      "description": "chat: not creating or updating a flowchart; reply may be empty when the user only needed entity work. clarify: still gathering process requirements or proposing an update that has not been confirmed; flowchart may hold a partial definition and MUST NOT be persisted. apply_flowchart: persist exactly one flowchart. Creates persist immediately. Updates (name matches a live customer-owned flowchart in this tenant) persist only when updates_confirmed is true, including launched rows (new version, status stays launched)."
+    },
+    "reply": {
+      "type": "string",
+      "description": "Message shown in the assistant thread. Same language as the admin used. Empty string is allowed for chat when there is nothing to add after entity work. Never include raw JSON in reply."
+    },
+    "updates_confirmed": {
+      "type": "boolean",
+      "default": false,
+      "description": "True only when the latest user message is an unambiguous yes to a proposed flowchart update. False for creates and for 'yes, and also…' (treat as clarify)."
+    },
+    "flowchart": {
+      "description": "Exactly one flowchart fill, or null/omit when intent is chat.",
+      "anyOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/flowchartFill" }
+      ]
+    }
+  },
+  "$defs": {
+    "flowchartFill": {
+      "type": "object",
+      "description": "Customer-owned flowchart. Name is the identity key: exact match on a live customer-owned flowchart in this tenant is an UPDATE (new version); otherwise CREATE as draft.",
+      "required": ["name", "elements", "connections"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Identity. Human-readable unique name in this tenant (e.g. Create Student)."
+        },
+        "description": {
+          "type": ["string", "null"],
+          "description": "Short purpose of the process."
+        },
+        "elements": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/element" },
+          "description": "Graph nodes. Must include one start and at least one end. Use process elements for step actions; use decision/loop/subflow when the requirement needs them."
+        },
+        "connections": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/connection" },
+          "description": "Directed edges. from/to must be element ids. Decision branches set label and matchValue on the connection, listed in branch order."
+        }
+      }
+    },
+    "element": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "description": "Stable id unique in this graph (e.g. start_1, p1)." },
+        "type": {
+          "type": "string",
+          "enum": ["start", "end", "process", "decision", "loop", "subflow"],
+          "description": "Structural element type. Process holds steps; other types use properties for their config."
+        },
+        "label": { "type": "string", "description": "Display label." },
+        "steps": {
+          "type": "array",
+          "maxItems": 1,
+          "items": { "$ref": "#/$defs/step" },
+          "description": "Process steps. Prefer this top-level key; the server moves it into properties.steps. A process holds at most one action (maxItems: 1)."
+        },
+        "properties": {
+          "type": "object",
+          "description": "Element config using the palette element_types config_fields: steps for process; routeBy with subject or condition for decision; loopType with condition or collection for loop; flowchartId (plus optional inputVariables) for subflow; responseType for end."
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "required": ["action"],
+      "properties": {
+        "action": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Canonical ActionCatalog step-action key from the palette (e.g. new_model, validate_contract, query_models). Do not invent names."
+        },
+        "config": {
+          "type": "object",
+          "description": "Action-specific configuration using the declared ActionCatalog field names for that action (from palette config_fields). Every process step MUST include this object. Populate applicable fields: required fields, fields the user specified (conditions, orderBy, resultVar, etc.), and schema defaults for the rest. Omit only fields hidden by visibleWhen that do not apply. Do not leave config empty when the action has config_fields."
+        },
+        "selectionLabels": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Optional UI breadcrumb. Server fills from the action label when omitted."
+        }
+      }
+    },
+    "connection": {
+      "type": "object",
+      "required": ["from", "to"],
+      "properties": {
+        "id": { "type": "string" },
+        "from": { "type": "string", "description": "Source element id." },
+        "to": { "type": "string", "description": "Target element id." },
+        "label": { "type": "string", "description": "Branch label (e.g. Yes)." },
+        "matchValue": { "description": "Decision branch match (e.g. true, 'approved')." },
+        "fromPosition": { "type": "string", "enum": ["top", "bottom", "left", "right"] },
+        "toPosition": { "type": "string", "enum": ["top", "bottom", "left", "right"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+<div class="space-y-6 min-w-0">
+  <%= error_summary(root: nil) %>
+  <div class="flex flex-wrap items-center gap-3">
+    <%= status_badge(campaign.status) %>
+    <% if draft? %><%= link_to ui("campaigns.edit"), sms_path(:edit_campaign, campaign), class: "btn btn-secondary" %><% else %><%= link_to ui("campaigns.report"), sms_path(:campaign_report, campaign), class: "btn btn-primary" %><% end %>
+    <%= link_to ui("shared.refresh"), sms_path(:campaign, campaign), class: "btn btn-secondary" %>
+  </div>
+  <%= section(ui("campaigns.saved_settings")) do %>
+    <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <%= fact(ui("fields.segment_id"), audience_name) %><%= fact(ui("fields.template_id"), template_name) %>
+      <% %w[timezone quiet_hours_start quiet_hours_end frequency_window_hours send_rate_per_minute deadline_hours].each do |key| %><%= fact(label_text(:fields, key), settings[key]) %><% end %>
+      <%= fact(ui("fields.send_timing"), settings["send_timing"] == "scheduled" ? ui("campaigns.schedule") : t("sms_campaign_http.send_timing.immediate")) %>
+      <%= fact(ui("campaigns.intended_start_at"), time_value(draft? ? campaign.scheduled_at : settings["intended_start_at"])) %>
+    </dl>
+    <h3 class="form-label"><%= ui("fields.variable_map_json") %></h3>
+    <pre class="whitespace-pre-wrap break-words [overflow-wrap:anywhere] text-sm"><%= JSON.pretty_generate(draft? ? campaign.variable_map : settings.fetch("variable_map", {})) %></pre>
+  <% end %>
+  <% if draft? %>
+    <%= render Sms::Admin::AudienceSummaryComponent.new(preview: @preview) %>
+    <%= form_with url: sms_path(:preview_campaign, campaign), method: :post, local: true, data: { turbo: false } do %>
+      <%= hidden_field_tag "sms_campaign[lock_version]", campaign.lock_version %>
+      <%= render Sms::Admin::CampaignPreviewComponent.new(preview: @preview, contacts: @contacts, selected_contact_id: helpers.params[:preview_contact_id]) %>
+      <%= button_tag ui("campaigns.preview"), type: :submit, name: nil, class: "btn btn-secondary mt-4" %>
+    <% end %>
+    <%= section(t("admin_modules.emails.send_activities.wizard.steps.review")) do %>
+      <p class="text-text-secondary"><%= ui("campaigns.start_snapshot_help") %></p>
+      <p class="text-text-secondary"><%= ui("campaigns.acceptance_help") %></p>
+      <% if launchable? %>
+        <%= form_with url: sms_path(:launch_campaign, campaign), method: :post, local: true do %>
+          <%= hidden_field_tag :lock_version, campaign.lock_version %><%= hidden_field_tag :review_token, @preview[:review_token] %>
+          <%= button_tag ui(campaign.send_timing == "scheduled" ? "campaigns.schedule" : "campaigns.launch"), type: :submit, name: nil, class: "btn btn-primary" %>
+        <% end %>
+      <% else %>
+        <p class="text-text-secondary"><%= ui("campaigns.review_required") %></p>
+        <%= link_to ui("campaigns.edit"), sms_path(:edit_campaign, campaign), class: "btn btn-secondary" %>
+      <% end %>
+    <% end %>
+    <%= section(ui("campaigns.delete")) do %>
+      <p class="text-text-secondary"><%= ui("campaigns.delete_help") %></p>
+      <%= button_to ui("campaigns.delete"), sms_path(:campaign, campaign), method: :delete, class: "btn btn-secondary" %>
+    <% end %>
+  <% else %>
+    <%= section(ui("campaigns.sending_facts")) do %>
+      <dl class="grid grid-cols-1 md:grid-cols-2 gap-4"><% [:launched_at, :started_at, :heartbeat_at, :expires_at, :finished_at, :cancelled_at].each do |key| %><%= fact(label_text(:campaigns, key), time_value(campaign.public_send(key))) %><% end %></dl>
+      <% if campaign.failure_code.present? %><p class="text-danger"><%= reason_label(campaign.failure_code) %></p><% end %>
+      <p class="text-sm text-text-secondary"><%= ui("campaigns.completed_help") %></p>
+    <% end %>
+    <% if %w[scheduled running].include?(campaign.status) %>
+      <%= section(ui("campaigns.cancel")) do %>
+        <p class="text-text-secondary"><%= ui("campaigns.cancel_help") %></p>
+        <%= button_to ui("campaigns.cancel"), sms_path(:cancel_campaign, campaign), method: :post, class: "btn btn-secondary" %>
+      <% end %>
+    <% elsif campaign.status == "cancelled" %>
+      <%= section(t("common.status.cancelled")) do %><p><%= ui("campaigns.cancel_help") %></p><dl class="grid grid-cols-1 sm:grid-cols-2 gap-4"><%= fact(t("common.status.cancelled"), @report&.dig(:cancelled_count)) %><%= fact(ui("metrics.attempted_count"), @report&.dig(:attempted_count)) %></dl><% end %>
+    <% end %>
+  <% end %>
+</div>

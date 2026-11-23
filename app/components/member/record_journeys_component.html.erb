@@ -1,0 +1,15 @@
+<section data-member-card data-role="record-journeys" aria-labelledby="record-journeys-title" class="<%= chrome.card_class(:default) %>">
+  <header class="mb-6 border-b pb-5 <%= chrome.hairline_class %>">
+    <h2 id="record-journeys-title" class="<%= chrome.section_title_class %>"><%= t("member.record_journeys.title") %></h2>
+    <p class="mt-2 <%= chrome.body_copy_class %>"><%= t("member.record_journeys.description") %></p>
+  </header>
+
+  <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+    <% starts.each do |start| %>
+      <%= button_to start_path(start), method: :post, class: chrome.secondary_button_class,
+                                       data: { journey_start: start.journey.key }, form: { class: "w-full sm:w-auto" } do %>
+        <%= start_label(start) %>
+      <% end %>
+    <% end %>
+  </div>
+</section>

@@ -1,0 +1,18 @@
+<%= render Admin::Settings::PageComponent.new(
+  customer_id: current_customer.id,
+  title: t("settings_navigation.items.user_access"),
+  description: t("settings_people.user_access_description"),
+  actions: []
+) do %>
+  <% if @users.any? %>
+  <%= render Admin::Settings::Modules::Authentication::UserRolesTableComponent.new(
+        users: @users, roles: @roles, customer: current_customer
+      ) %>
+<% else %>
+  <%= render EmptyStateComponent.new(
+    title: t("admin_settings.authentication.user_role_assignments.empty_title"),
+    description: t("admin_settings.authentication.user_role_assignments.empty_description"),
+    icon_path: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+  ) %>
+  <% end %>
+<% end %>

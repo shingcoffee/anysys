@@ -1,0 +1,7 @@
+<%
+  tabs = [
+    { label: t("feature_modules.email.tabs.lists"), path: admin_modules_emails_lists_path(current_customer.id), active: active_tab == :lists },
+    { label: t("feature_modules.email.tabs.suppressions"), path: admin_modules_emails_suppressions_path(current_customer.id), active: active_tab == :suppressions }
+  ]
+%>
+<%= render Emails::TabsComponent.new(tabs: tabs) %>

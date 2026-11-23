@@ -1,0 +1,53 @@
+<%# Top bar %>
+<div class="bg-surface border-b border-border-subtle px-6 py-4 flex items-center justify-between">
+  <div class="flex items-center gap-2.5">
+    <% if @category_icon %>
+      <svg class="w-4 h-4 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="<%= @category_icon %>"/>
+      </svg>
+    <% end %>
+    <h2 class="text-body font-semibold text-text-primary"><%= @category_label %></h2>
+    <span class="text-caption text-text-muted bg-surface-active px-2 py-0.5 rounded-full"><%= t("comp_platform.code_generators.generators_count", count: @category_count) %></span>
+  </div>
+</div>
+
+<%# Card grid %>
+<div class="p-6">
+  <% if @generators.empty? %>
+    <%= render EmptyStateComponent.new(
+      title: t("comp_platform.code_generators.card_grid.empty_title"),
+      description: t("comp_platform.code_generators.card_grid.empty_description"),
+      action_path: new_admin_maintenance_platform_code_generator_path(@customer_id, kind: "step_action"),
+      action_text: t("comp_platform.code_generators.new_generator")
+    ) %>
+  <% else %>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+      <% @generators.each do |name, klass| %>
+        <a href="<%= generator_path(name, klass) %>"
+           class="group block card p-4 hover:border-accent/40 hover:shadow-md transition-all duration-200">
+          <div class="flex items-start justify-between mb-1.5">
+            <h3 class="font-mono text-sm font-semibold text-text-primary group-hover:text-accent transition-colors"><%= name %></h3>
+            <span class="text-caption text-text-muted bg-surface-active px-1.5 py-0.5 rounded flex-shrink-0">v<%= klass._metadata[:version] %></span>
+          </div>
+          <p class="text-xs text-text-secondary leading-relaxed line-clamp-2 mb-3"><%= klass._metadata[:description] %></p>
+          <div class="flex items-center gap-3 pt-2.5 border-t border-border-subtle">
+            <% io = generator_io(klass) %>
+            <% if io[:inputs].any? %>
+              <div class="flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-warning"></span>
+                <span class="text-caption text-text-muted"><%= t("comp_platform.code_generators.card_grid.in_count", count: io[:inputs].size) %></span>
+              </div>
+            <% end %>
+            <% if io[:outputs].any? %>
+              <div class="flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+                <span class="text-caption text-text-muted"><%= t("comp_platform.code_generators.card_grid.out_count", count: io[:outputs].size) %></span>
+              </div>
+            <% end %>
+            <svg class="w-4 h-4 text-text-muted group-hover:text-accent ml-auto transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </div>
+        </a>
+      <% end %>
+    </div>
+  <% end %>
+</div>

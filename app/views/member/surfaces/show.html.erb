@@ -1,0 +1,22 @@
+<% content_for :title, t("member.surfaces.title", label: @surface.label) %>
+<% content_for :member_nav, @surface.key %>
+
+<%= render Member::PageLayoutComponent.new do |c| %>
+  <% c.with_primary do %>
+    <%= render Member::SurfaceDetailComponent.new(
+          surface:  @surface,
+          record:   @record,
+          customer: current_customer
+        ) %>
+    <% if Array(@journey_starts).any? %>
+      <div class="mt-6">
+        <%= render Member::RecordJourneysComponent.new(starts: @journey_starts, record: @record, customer: current_customer) %>
+      </div>
+    <% end %>
+    <% Array(@record_rows).each do |section| %>
+      <div class="mt-6">
+        <%= render Member::RecordRowsComponent.new(section: section, customer: current_customer) %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

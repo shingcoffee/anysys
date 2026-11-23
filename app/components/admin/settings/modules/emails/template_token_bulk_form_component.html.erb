@@ -1,0 +1,64 @@
+<div class="flex w-full max-w-3xl flex-col gap-6">
+  <%= render FormErrorsComponent.new(resource: token) %>
+  <%= form_with model: token, url: url, local: true, class: "w-full",
+        data: { controller: "email-template-token-bulk", email_template_token_bulk_count_label_value: t("settings_modules.email.selected_count_template") } do |f| %>
+    <%= render Admin::Settings::SectionComponent.new(flush: true) do %>
+      <div class="divide-y divide-border-subtle">
+        <%= render Admin::Settings::SettingRowComponent.new(label: t("settings_modules.email.record_type"), description: t("settings_modules.email.record_type_hint"), label_for: "email-token-record", required: true) do %>
+          <%= f.select :entity_id, entity_options, { include_blank: t("settings_modules.email.choose_record") },
+                id: "email-token-record", required: true, class: "input-field w-full sm:w-72",
+                data: { email_template_token_bulk_target: "entity", action: "change->email-template-token-bulk#refresh" } %>
+        <% end %>
+        <div class="px-4 py-5 sm:px-6">
+          <div class="mb-4 space-y-1">
+            <h2 class="text-sm font-semibold text-text-primary"><%= t("settings_modules.email.fields_to_add") %></h2>
+            <p class="text-sm text-text-secondary"><%= t("settings_modules.email.fields_to_add_hint") %></p>
+            <p class="text-sm text-text-muted"><%= t("settings_modules.email.bulk_field_hint") %></p>
+          </div>
+          <p class="text-sm text-text-muted" data-email-template-token-bulk-target="prompt"><%= t("settings_modules.email.choose_record_first") %></p>
+          <% entities.each do |entity| %>
+            <% fields = fields_for(entity) %>
+            <div data-email-template-token-bulk-target="group" data-entity-id="<%= entity.id %>" hidden>
+              <% if fields.empty? %>
+                <p class="text-sm text-text-muted"><%= t("settings_modules.email.no_new_fields") %></p>
+              <% else %>
+                <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+                  <span class="text-sm font-medium text-text-secondary" data-email-template-token-bulk-target="count"></span>
+                  <div class="flex flex-wrap gap-3">
+                    <button type="button" class="text-sm font-medium text-accent-text hover:underline" data-action="email-template-token-bulk#selectAll"><%= t("settings_modules.email.select_all_fields") %></button>
+                    <button type="button" class="text-sm font-medium text-accent-text hover:underline" data-action="email-template-token-bulk#clearAll"><%= t("settings_modules.email.clear_all_fields") %></button>
+                  </div>
+                </div>
+                <div class="divide-y divide-border-subtle rounded-lg border border-border-subtle">
+                  <% fields.each_with_index do |(slug, name, submitted), index| %>
+                    <% selected = submitted.nil? || submitted[:selected] == "1" %>
+                    <div class="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:gap-6">
+                      <div class="flex min-w-0 items-center gap-3 sm:w-2/5">
+                        <%= hidden_field_tag "emails_template_token[fields][#{index}][attribute_slug]", slug, id: nil %>
+                        <%= hidden_field_tag "emails_template_token[fields][#{index}][selected]", "0", id: nil %>
+                        <%= check_box_tag "emails_template_token[fields][#{index}][selected]", "1", selected,
+                              id: "email-token-field-#{entity.id}-#{index}", class: "size-4 shrink-0 accent-accent",
+                              data: { email_template_token_bulk_target: "checkbox", action: "change->email-template-token-bulk#updateCount" } %>
+                        <%= label_tag "email-token-field-#{entity.id}-#{index}", name, class: "min-w-0 break-words text-sm font-medium text-text-primary" %>
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <%= label_tag "email-token-label-#{entity.id}-#{index}", t("settings_modules.email.display_name"), class: "mb-1 block text-xs font-medium text-text-secondary" %>
+                        <%= text_field_tag "emails_template_token[fields][#{index}][label]", submitted&.dig(:label) || name,
+                              id: "email-token-label-#{entity.id}-#{index}", maxlength: 100, class: "input-field w-full",
+                              data: { email_template_token_bulk_target: "label" } %>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="flex flex-wrap justify-end gap-3 border-t border-border-subtle bg-canvas-elevated px-4 py-3 sm:px-6">
+        <%= link_to t("common.actions.cancel"), cancel_path, class: "btn btn-secondary" %>
+        <%= f.submit t("settings_modules.email.add_selected_fields"), class: "btn btn-primary", data: { email_template_token_bulk_target: "submit" } %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

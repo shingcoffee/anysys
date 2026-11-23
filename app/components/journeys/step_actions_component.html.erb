@@ -1,0 +1,4 @@
+<div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+  <%= render Journeys::SkipButtonComponent.new if skip? %>
+  <%= render Journeys::RepeatButtonComponent.new(step: @step) if repeat? %>
+</div>

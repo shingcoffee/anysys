@@ -1,0 +1,16 @@
+<div class="<%= sticky? ? "sticky bottom-0 z-10" : "" %> border-t border-border-subtle bg-surface/95 px-4 py-3 backdrop-blur sm:px-6"
+     data-module-settings-form-actions="true"
+     data-sticky="<%= sticky? %>"
+     role="group"
+     aria-label="<%= t("maint_platform.module_settings.workspace.form_actions_label") %>">
+  <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+    <%= render ButtonComponent.new(variant: :secondary, tag: :a, href: cancel_path,
+                                   class: "w-full sm:w-auto") do %>
+      <%= t("maint_platform.module_settings.workspace.cancel") %>
+    <% end %>
+    <%= render ButtonComponent.new(variant: :primary, tag: :button, type: :submit,
+                                   class: "w-full sm:w-auto") do %>
+      <%= submit_label %>
+    <% end %>
+  </div>
+</div>

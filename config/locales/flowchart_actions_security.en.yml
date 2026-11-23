@@ -1,0 +1,538 @@
+en:
+  flowchart_actions:
+    authorize:
+      label: Authorize
+      description: Role or CanCanCan ability check
+      fields:
+        authType:
+          label: Auth Type
+          help: How this step decides whether the actor may continue.
+          options:
+            role_check: role_check
+            ability_check: ability_check
+            multi_role: multi_role
+            record_owner: record_owner
+        userExpression:
+          label: User
+          help: Context path of the user. Defaults to current_user (written by Load current user).
+        roleName:
+          label: Role Name
+          help: Reserved role the user must have.
+          options:
+            owner: owner
+            admin: admin
+            member: member
+        abilityAction:
+          label: Ability Action
+          help: CanCanCan action name such as read or update.
+        abilityResource:
+          label: Ability Resource
+          help: Context path of the record or subject being authorized.
+        recordVariable:
+          label: Record
+          help: Context path of the EntityEntry the member must own (user_id).
+        roleList:
+          label: Role List
+          help: Reserved roles to match (owner, admin, or member).
+        roleMode:
+          label: Role Mode
+          help: Whether any listed role is enough, or all are required.
+          options:
+            any_of: any_of
+            all_of: all_of
+        onDenied:
+          label: On Denied
+          help: What this step does when authorization fails.
+          options:
+            fail: fail
+            flag: flag
+        resultVar:
+          label: Save result as
+          help: Variable set to true or false when On Denied is flag.
+        deniedMessage:
+          label: Denied Message
+          help: Custom localized error used when On Denied is fail.
+      errors:
+        invalid_ability_action: "Invalid abilityAction: %{action}. Must match /\\A[a-z_][a-z0-9_]*\\z/i"
+        invalid_role_list: "Invalid roleList entries: %{entries}. Must be owner, admin, or member"
+    authenticate:
+      label: Authenticate
+      description: Authenticate user or request
+      fields:
+        authMethod:
+          label: Auth Method
+          help: How credentials are verified.
+          options:
+            password: password
+            token: token
+            api_key: api_key
+            session: session
+        credentialSource:
+          label: Credential Source
+          help: Where the submitted secret is read from.
+          options:
+            ctx: ctx
+            params: params
+        sourceVariable:
+          label: Source
+          help: Context path or params key holding the submitted secret.
+          placeholder: e.g., credentials, auth_token, Authorization
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        userVariable:
+          label: User Variable
+          help: Context path of the user whose password is checked.
+          placeholder: e.g., user
+        tokenType:
+          label: Token Type
+          help: Prefix stripped before the token is compared.
+          options:
+            bearer: bearer
+            basic: basic
+            custom: custom
+        expectedKeyVariable:
+          label: Expected Key
+          help: Context path of the secret this step compares against.
+          placeholder: e.g., stored_key
+        onFailure:
+          label: On Failure
+          help: What this step does when authentication fails.
+          options:
+            fail: fail
+            flag: flag
+    encrypt_data:
+      label: Encrypt Data
+      description: Encrypt sensitive data
+      fields:
+        sourceVariable:
+          label: Source
+          help: Context path of the plaintext.
+          placeholder: e.g., sensitive_data
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        algorithm:
+          label: Algorithm
+          help: Cipher algorithm used to encrypt.
+          options:
+            aes_256_gcm: aes-256-gcm
+        keySource:
+          label: Key Source
+          help: Where the encryption key is read from.
+          options:
+            credentials: credentials
+            env: env
+            ctx: ctx
+            derived: derived
+        keyPath:
+          label: Key Path
+          help: Credentials dot-path, environment variable name, or context variable.
+          placeholder: credentials dot-path, ENV name, or ctx var
+        deriveKeyFrom:
+          label: Derive Key From
+          help: Context path of the passphrase used to derive the key.
+        deriveKeySalt:
+          label: Derive Key Salt
+          help: Extra salt mixed with the tenant id when deriving a key.
+          placeholder: e.g., user-data-v1
+        encoding:
+          label: Encoding
+          help: How the ciphertext is encoded in the result.
+          options:
+            hex: hex
+            base64: base64
+            base64url: base64url
+            raw: raw
+        purpose:
+          label: Key purpose
+          help: MessageEncryptor purpose that encrypt and decrypt must share.
+      errors:
+        invalid_env_name: "Invalid keyPath: %{value}. Must be a valid environment variable name"
+        invalid_credential_path: "Invalid keyPath segments: %{value}. Must be credential keys such as security.primary_key"
+    decrypt_data:
+      label: Decrypt Data
+      description: Decrypt encrypted data
+      fields:
+        sourceVariable:
+          label: Source
+          help: Context path of the ciphertext.
+          placeholder: e.g., encrypted
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        algorithm:
+          label: Algorithm
+          help: Cipher algorithm used to decrypt.
+          options:
+            aes_256_gcm: aes-256-gcm
+        keySource:
+          label: Key Source
+          help: Where the decryption key is read from.
+          options:
+            credentials: credentials
+            env: env
+            ctx: ctx
+            derived: derived
+        keyPath:
+          label: Key Path
+          help: Credentials dot-path, environment variable name, or context variable.
+          placeholder: e.g., security.primary_key or APP_DECRYPT_KEY
+        deriveKeyFrom:
+          label: Derive Key From
+          help: Context path of the passphrase used to derive the key.
+        deriveKeySalt:
+          label: Derive Key Salt
+          help: Extra salt mixed with the tenant id when deriving a key.
+          placeholder: e.g., user-data-v1
+        encoding:
+          label: Encoding
+          help: How the stored ciphertext is encoded.
+          options:
+            hex: hex
+            base64: base64
+            base64url: base64url
+            raw: raw
+            binary: binary
+        purpose:
+          label: Key purpose
+          help: MessageEncryptor purpose that encrypt and decrypt must share.
+      errors:
+        invalid_env_name: "Invalid keyPath: %{value}. Must be a valid environment variable name"
+        invalid_credential_path: "Invalid keyPath segments: %{value}. Must be credential keys such as security.primary_key"
+    hash_data:
+      label: Hash Data
+      description: Generate hash digest
+      fields:
+        sourceVariable:
+          label: Source
+          help: Context path of the value to hash.
+          placeholder: e.g., password
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        algorithm:
+          label: Algorithm
+          help: Hash or password algorithm.
+          options:
+            bcrypt: bcrypt
+            scrypt: scrypt
+            argon2: argon2
+            pbkdf2: pbkdf2
+            sha256: sha256
+            sha512: sha512
+            md5: md5
+        cost:
+          label: Cost (bcrypt)
+          help: bcrypt cost factor (4–31).
+        iterations:
+          label: Iterations
+          help: Stretching rounds for pbkdf2 or scrypt.
+        salt:
+          label: Salt
+          help: Context path of extra salt mixed into the digest.
+        pepper:
+          label: Pepper
+          help: Context path of an additional secret mixed into the digest.
+        encoding:
+          label: Encoding
+          help: How the digest is encoded (not used for bcrypt, scrypt, or argon2).
+          options:
+            hex: hex
+            base64: base64
+            base64url: base64url
+        timeCost:
+          label: Time Cost
+          help: Argon2 time cost (iterations).
+        memoryCost:
+          label: Memory Cost
+          help: Argon2 memory cost as a power of two (KiB).
+    mask_data:
+      label: Mask Data
+      description: Mask sensitive data fields
+      fields:
+        sourceVariable:
+          label: Source
+          help: Context path of the value to mask.
+          placeholder: e.g., credit_card
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        maskType:
+          label: Mask Type
+          help: Masking convention to apply.
+          options:
+            email: email
+            phone: phone
+            ssn: ssn
+            credit_card: credit_card
+            custom: custom
+            first1_last1: first1_last1
+            full: full
+            last4: last4
+            name: name
+            address: address
+            mobile: mobile
+            id_number: id_number
+        visibleStart:
+          label: Visible Start
+          help: Significant characters kept at the start.
+        visibleEnd:
+          label: Visible End
+          help: Significant characters kept at the end.
+        maskChar:
+          label: Mask Character
+          help: Character used to hide the masked portion.
+        preserveFormat:
+          label: Preserve Format
+          help: Keep separators such as dashes and spaces.
+        regexPattern:
+          label: Regex Pattern
+          help: Pattern whose matches are replaced when maskType is custom.
+          placeholder: e.g., \d
+    sanitize_input:
+      label: Sanitize Input
+      description: Sanitize user input
+      fields:
+        sourceVariable:
+          label: Source
+          help: Context path of the submitted text.
+          placeholder: e.g., user_input
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        sanitizer:
+          label: Sanitizer
+          help: Sanitization strategy.
+          options:
+            strip_tags: strip_tags
+            escape_html: escape_html
+            rails: rails
+            loofah: loofah
+            scrubber: scrubber
+        scrubberVariable:
+          label: Scrubber Variable
+          help: Context path of a Rails HTML scrubber.
+        allowedTags:
+          label: Allowed Tags
+          help: Tag names the rails sanitizer may keep.
+        allowedAttributes:
+          label: Allowed Attributes
+          help: Attribute names the rails sanitizer may keep.
+        stripTags:
+          label: Strip Tags
+          help: Run a second full-tag strip after the chosen sanitizer.
+        removeNullBytes:
+          label: Remove Null Bytes
+          help: Delete null bytes from the sanitized string.
+        maxLength:
+          label: Max Length
+          help: Truncate the result to this many characters (0 = no truncation).
+        onOverflow:
+          label: On Overflow
+          help: What to do when the sanitized text is longer than Max Length.
+          options:
+            truncate: truncate
+            fail: fail
+        trimWhitespace:
+          label: Trim Whitespace
+          help: Strip leading and trailing whitespace after sanitizing.
+      errors:
+        invalid_tags: "Invalid allowedTags entries: %{entries}"
+        invalid_attributes: "Invalid allowedAttributes entries: %{entries}"
+    generate_token:
+      label: Generate Token
+      description: Generate authentication token
+      fields:
+        tokenType:
+          label: Token Type
+          help: Kind of token to issue.
+          options:
+            jwt: jwt
+            hmac: hmac
+            numeric_otp: numeric_otp
+            signed: signed
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        tokenLength:
+          label: Token Length
+          help: Number of digits in a numeric OTP.
+        dataVariable:
+          label: Data Variable
+          help: Context path of the data signed for an HMAC.
+        digest:
+          label: Digest
+          help: HMAC digest algorithm.
+          options:
+            sha1: sha1
+            sha256: sha256
+            sha512: sha512
+        payloadVariable:
+          label: Payload Variable
+          help: Context path of the JWT payload hash.
+        issuer:
+          label: Issuer
+          help: Value written to the iss claim.
+          placeholder: e.g., auth.example.com
+        audience:
+          label: Audience
+          help: Value written to the aud claim.
+          placeholder: e.g., api.example.com
+        subject:
+          label: Subject
+          help: Value written to the sub claim.
+          placeholder: e.g., user-123
+        includeIssuedAt:
+          label: Include Issued At
+          help: Write the iat claim as the current time.
+        notBefore:
+          label: Not Before
+          help: Ruby expression for the nbf claim.
+        expiresIn:
+          label: Expires In
+          help: Lifetime in seconds, ISO 8601, or a duration such as 1h.
+          placeholder: e.g., 3600 or 1h
+        claims:
+          label: Claims
+          help: Extra JWT claims. Values are Ruby expressions.
+        keyId:
+          label: Key Id
+          help: Optional kid header on the signed JWT.
+          placeholder: e.g., key-2026-01
+        algorithm:
+          label: Algorithm
+          help: JWT signing algorithm.
+          options:
+            hs256: HS256
+            hs384: HS384
+            hs512: HS512
+            rs256: RS256
+        secretSource:
+          label: Secret Source
+          help: Where the signing secret is read from.
+          options:
+            credentials: credentials
+            env: env
+            ctx: ctx
+        secretVariable:
+          label: Secret Variable
+          help: Credentials path, environment variable name, or context key. Never a literal secret.
+          placeholder: credentials path (a.b), ENV name, or ctx key
+        purpose:
+          label: Token purpose
+          help: MessageVerifier purpose that generate and verify must share.
+      errors:
+        invalid_env_name: "Invalid secretVariable: %{value}. Must be a valid environment variable name"
+        invalid_credential_path: "Invalid secretVariable segments: %{value}. Must be credential keys such as jwt.hmac"
+    verify_token:
+      label: Verify Token
+      description: Verify token validity
+      fields:
+        tokenType:
+          label: Token Type
+          help: Kind of token to verify (JWT or signed payload).
+          options:
+            jwt: jwt
+            signed: signed
+        sourceVariable:
+          label: Source
+          help: Context path of the token to verify.
+          placeholder: ctx key holding the token (e.g., auth_token)
+        secretSource:
+          label: Secret Source
+          help: Where the verification secret is read from.
+          options:
+            credentials: credentials
+            env: env
+            ctx: ctx
+        secretVariable:
+          label: Secret Variable
+          help: Credentials path, environment variable name, or context key. Never a literal secret.
+          placeholder: credentials path (a.b), ENV name, or ctx key
+        purpose:
+          label: Token purpose
+          help: MessageVerifier purpose that generate and verify must share.
+        secretKey:
+          label: Secret Key
+          help: Context path of the verification secret.
+          placeholder: ctx key holding the secret (e.g., jwt_secret)
+        algorithm:
+          label: Algorithm (fallback)
+          help: Algorithm used when the allowlist is empty.
+          options:
+            hs256: HS256
+            hs384: HS384
+            hs512: HS512
+            rs256: RS256
+        algorithmAllowlist:
+          label: Algorithm Allowlist
+          help: Algorithms accepted during verification.
+        verifyIssuer:
+          label: Verify Issuer (iss)
+          help: Expected iss claim.
+          placeholder: Expected iss claim, e.g., https://issuer.example
+        verifyAudience:
+          label: Verify Audience (aud)
+          help: Expected aud claim.
+          placeholder: Expected aud claim, e.g., api.example
+        leewaySeconds:
+          label: Leeway Seconds
+          help: Clock-skew leeway in seconds.
+        requiredClaims:
+          label: Required Claims
+          help: Claim names that must be present. A value, if set, must match.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        onInvalid:
+          label: On Invalid
+          help: What this step does when the token is invalid.
+          options:
+            fail: fail
+            flag: flag
+        validVar:
+          label: Save validity as
+          help: Variable set to true or false when On Invalid is flag.
+      errors:
+        invalid_algorithms: "Invalid algorithmAllowlist entries: %{entries}"
+        invalid_env_name: "Invalid secretVariable: %{value}. Must be a valid environment variable name"
+        invalid_credential_path: "Invalid secretVariable segments: %{value}. Must be credential keys such as jwt.hmac"
+    register_member:
+      label: Register member
+      description: Register a public visitor as a passwordless member
+      fields:
+        personVar:
+          label: Person
+          help: Context path of the person entry this step writes.
+        identityVar:
+          label: Identity
+          help: Context path of the name and email hash used to register.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+  flowchart_runtime:
+    errors:
+      authorize:
+        denied: You are not authorized to perform this action.
+      register_member:
+        public_only: Registration is only available to visitors who aren't signed in.
+        person_entity_required: Registration needs a form on a person entity.
+        signup_disabled: Sign-up is turned off.
+        unavailable: We couldn't complete sign-up right now. Please try again later.
+      authenticate:
+        failed: Authentication failed.
+      encrypt_data:
+        failed: Could not encrypt the data (%{reason}).
+      decrypt_data:
+        failed: Could not decrypt the data (%{reason}).
+      hash_data:
+        failed: Could not hash the data (%{reason}).
+      mask_data:
+        failed: Could not mask the data (%{reason}).
+      sanitize_input:
+        failed: Could not sanitize the input (%{reason}).
+      generate_token:
+        failed: Could not generate the token (%{reason}).
+      verify_token:
+        failed: Could not verify the token (%{reason}).

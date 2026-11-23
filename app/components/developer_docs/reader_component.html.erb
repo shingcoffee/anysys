@@ -1,0 +1,307 @@
+<div class="docs-page font-sans relative w-full min-w-0 @container/docs"
+     data-controller="developer-docs-nav docs-reader"
+     data-developer-docs-nav-open-label-value="<%= reader_text("nav_open") %>"
+     data-developer-docs-nav-close-label-value="<%= reader_text("nav_close") %>"
+     data-docs-reader-copy-label-value="<%= reader_text("copy_code") %>"
+     data-docs-reader-copied-label-value="<%= reader_text("copied_code") %>">
+
+  <%# ---- Mobile / short viewport: sticky location bar opening the drawer ---- %>
+  <div class="sticky top-0 z-30 -mx-3 mb-4 flex min-w-0 items-center gap-3 border-b border-border-subtle bg-canvas/95 px-3 py-2 backdrop-blur-sm sm:-mx-4 sm:px-4 lg:-mx-8 lg:px-8 [@media(min-height:640px)]:@min-[52rem]/docs:hidden" data-docs-mobile-bar>
+    <button type="button"
+            data-developer-docs-nav-target="trigger"
+            data-action="click->developer-docs-nav#openDrawer"
+            aria-label="<%= reader_text("nav_open") %>"
+            aria-haspopup="dialog"
+            aria-controls="developer-docs-drawer"
+            class="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm font-medium text-text-primary shadow-xs transition-colors hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2">
+      <svg class="size-4 text-text-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+      </svg>
+      <%= reader_text("contents") %>
+    </button>
+    <p class="min-w-0 truncate text-sm text-text-tertiary" aria-hidden="true">
+      <% if current_group && !home? %>
+        <span><%= reader_text("groups.#{current_group.key}") %></span>
+        <span class="px-1">/</span>
+        <span class="font-medium text-text-primary"><%= navigation_label(page.slug, title: page.title) %></span>
+      <% else %>
+        <span class="font-medium text-text-primary"><%= doc_set_title %></span>
+      <% end %>
+    </p>
+  </div>
+
+  <div class="<%= reader_grid_class %>">
+
+    <%# ---- Left rail: enabled by available reader width ---- %>
+    <aside class="<%= rail_class %>" data-developer-docs-nav-target="desktop">
+      <div class="sticky top-6 flex h-[calc(var(--docs-pane-height,100dvh_-_10rem)_-_3rem)] min-h-0 min-w-0 flex-col">
+        <div class="min-w-0 shrink-0 space-y-3 pb-4" data-docs-nav-header="desktop">
+          <% if home_path.present? %>
+            <%= link_to home_path, class: "group flex min-w-0 items-center gap-2.5 rounded-lg px-1 py-1 #{FOCUS_RING}" do %>
+              <span class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent-subtle text-accent-text" aria-hidden="true">
+                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                </svg>
+              </span>
+              <span class="min-w-0 truncate text-sm font-semibold text-text-primary group-hover:text-accent-text"><%= doc_set_title %></span>
+            <% end %>
+          <% end %>
+
+          <%= form_with url: page.search_path, method: :get, local: true, class: "relative min-w-0", html: { role: "search" } do %>
+            <%= hidden_field_tag :locale, locale, id: nil if locale %>
+            <label for="<%= search_field_id %>" class="<%= visually_hidden_class %>"><%= reader_text("search_placeholder") %></label>
+            <input id="<%= search_field_id %>" type="search" name="q" value="<%= page.query %>" maxlength="80"
+                   placeholder="<%= reader_text("search_placeholder") %>" autocomplete="off" aria-keyshortcuts="/"
+                   data-docs-reader-target="search"
+                   class="peer input-field h-10 min-w-0 w-full rounded-lg border-border-subtle bg-surface pl-9 pr-9 shadow-none focus-visible:ring-2 focus-visible:ring-accent" />
+            <button type="submit" class="absolute inset-y-0 left-0 flex w-9 items-center justify-center rounded-l-lg text-text-tertiary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"><svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg><span class="<%= visually_hidden_class %>"><%= reader_text("search_submit") %></span></button>
+            <kbd class="pointer-events-none absolute right-2.5 top-1/2 hidden -translate-y-1/2 rounded border border-border bg-canvas-elevated px-1.5 font-mono text-xs leading-5 text-text-tertiary peer-placeholder-shown:inline-block" aria-hidden="true">/</kbd>
+          <% end %>
+
+          <% if page.query.present? %>
+            <%= link_to reader_text("search_clear"), page.search_path, class: "w-full #{clear_link_class(:desktop)}" %>
+            <div class="relative min-w-0 rounded-lg border border-border-subtle bg-surface p-2.5 text-sm" role="region" aria-labelledby="<%= context_label_id(:desktop) %>">
+              <p id="<%= context_label_id(:desktop) %>" class="text-xs font-medium text-text-tertiary"><%= reader_text("current_context") %></p>
+              <nav aria-label="<%= reader_text("current_context") %>" class="mt-1 min-w-0 text-text-primary [overflow-wrap:anywhere]">
+                <% if current_group %>
+                  <% if group_path %>
+                    <%= link_to reader_text("groups.#{current_group.key}"), group_path, class: "rounded-sm text-text-secondary hover:text-text-primary #{FOCUS_RING}" %>
+                  <% else %>
+                    <span class="text-text-secondary"><%= reader_text("groups.#{current_group.key}") %></span>
+                  <% end %>
+                  <span class="px-1 text-text-tertiary" aria-hidden="true">/</span>
+                <% end %>
+                <%= link_to navigation_label(page.slug, title: page.title), current_path,
+                            class: "rounded-sm font-semibold text-accent-text hover:underline hover:underline-offset-4 #{FOCUS_RING}",
+                            aria: { current: "page", describedby: context_title_id(:desktop) },
+                            data: { docs_current_guide: true } %>
+              </nav>
+              <span id="<%= context_title_id(:desktop) %>" class="<%= visually_hidden_class %>"><%= page.title %></span>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="-mx-1 min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-contain border-t border-border-subtle px-1 pb-4 pt-4" data-docs-nav-list="desktop">
+          <%= render DeveloperDocs::ContentsNavComponent.new(page: page, translation_scope: translation_scope, surface: :desktop) %>
+        </div>
+      </div>
+    </aside>
+
+    <%# ---- Center: page chrome and content share one reading measure ---- %>
+    <article id="<%= article_id %>" class="mx-auto w-full min-w-0 scroll-mt-6 <%= center_class %>" data-docs-reader-center>
+      <% if header? %>
+        <header class="mb-8 min-w-0 border-b border-border-subtle pb-6">
+          <div class="<%= header_class %>"><%= header %></div>
+        </header>
+      <% end %>
+
+      <% if home? %>
+        <%= render CustomerDocs::HomeGuidesComponent.new(groups: home_groups, translation_scope: translation_scope) %>
+      <% end %>
+
+      <% if show_page_toc? %>
+        <div class="mb-8 min-w-0 [@media(min-height:640px)]:@min-[76rem]/docs:hidden" data-docs-inline-toc>
+          <details class="group/toc min-w-0 rounded-xl border border-border-subtle bg-surface">
+            <summary class="flex min-h-11 min-w-0 cursor-pointer list-none items-center justify-between gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-text-primary marker:content-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent [&::-webkit-details-marker]:hidden">
+              <span class="inline-flex min-w-0 items-center gap-2">
+                <svg class="size-4 shrink-0 text-text-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+                </svg>
+                <%= reader_text("on_this_page") %>
+              </span>
+              <svg class="size-4 shrink-0 text-text-tertiary transition-transform group-open/toc:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </summary>
+            <%# Turbo resolves same-page anchors from the percent-encoded hash and misses non-ASCII (zh-CN) heading ids; native fragment navigation decodes them. %>
+            <nav aria-label="<%= reader_text("on_this_page") %>" class="min-w-0 border-t border-border-subtle px-4 py-3" data-turbo="false">
+              <div class="min-w-0 border-l border-border-subtle">
+                <% page.headings.each do |heading| %>
+                  <%= link_to heading[:text], "##{heading[:id]}", class: toc_link_class(heading[:level]), data: { docs_reader_target: "tocLink" } %>
+                <% end %>
+              </div>
+            </nav>
+          </details>
+        </div>
+      <% end %>
+
+      <div class="<%= article_class %>" data-docs-reader-target="prose">
+        <%= page.html %>
+      </div>
+
+      <% if section_entries.any? %>
+        <nav aria-label="<%= reader_text("more_in_section") %>"
+             class="mt-12 min-w-0 border-t border-border-subtle pt-8">
+          <p class="text-sm font-semibold text-text-primary">
+            <%= reader_text("more_in_section") %>
+          </p>
+          <% if current_group %>
+            <p class="mt-1 text-sm text-text-tertiary [overflow-wrap:anywhere]"><%= reader_text("groups.#{current_group.key}") %></p>
+          <% end %>
+          <ul class="mt-4 grid min-w-0 grid-cols-1 gap-2 @min-[40rem]/docs:grid-cols-2">
+            <% section_entries.each do |entry| %>
+              <li class="min-w-0">
+                <%= link_to entry.path,
+                            class: "group flex h-full min-h-11 min-w-0 items-center justify-between gap-3 rounded-lg border border-border-subtle bg-surface px-3.5 py-2.5 text-sm font-medium text-text-primary transition hover:border-accent-muted hover:text-accent-text #{FOCUS_RING}" do %>
+                  <span class="min-w-0 [overflow-wrap:anywhere]"><%= entry.title %></span>
+                  <svg class="size-4 shrink-0 text-text-tertiary transition-transform group-hover:translate-x-0.5 group-hover:text-accent-text" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6-6 6" />
+                  </svg>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </nav>
+      <% end %>
+
+      <% if sequence_pages.any? %>
+        <div class="mt-10 min-w-0 @container/hub">
+          <nav aria-label="<%= reader_text("sequence_label") %>"
+               class="grid min-w-0 grid-cols-1 gap-3 @min-[30rem]/hub:grid-cols-2" data-docs-footer-sequence>
+            <% sequence_pages.each do |direction, link| %>
+              <%= link_to link.path, class: sequence_link_class(direction) do %>
+                <span class="inline-flex items-center gap-1.5 text-xs font-medium text-text-tertiary">
+                  <% if direction == :previous %>
+                    <svg class="size-3.5 shrink-0 transition-transform group-hover:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5m6 6l-6-6 6-6" />
+                    </svg>
+                  <% end %>
+                  <%= reader_text(direction.to_s) %>
+                  <% if direction == :next %>
+                    <svg class="size-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6-6 6" />
+                    </svg>
+                  <% end %>
+                </span>
+                <span class="text-base font-semibold text-text-primary group-hover:text-accent-text"><%= link.title %></span>
+              <% end %>
+            <% end %>
+          </nav>
+        </div>
+      <% end %>
+    </article>
+
+    <%# ---- Right rail: only when the center retains its full measure ---- %>
+    <% if show_page_toc? %>
+      <nav aria-label="<%= reader_text("on_this_page") %>" class="hidden min-w-0 [@media(min-height:640px)]:@min-[76rem]/docs:block [@media(min-height:640px)]:@min-[76rem]/docs:py-10" data-turbo="false">
+        <div class="sticky top-6 flex max-h-[calc(var(--docs-pane-height,100dvh_-_10rem)_-_3rem)] min-h-0 min-w-0 flex-col">
+          <p class="flex shrink-0 items-center gap-2 text-xs font-semibold text-text-primary">
+            <svg class="size-3.5 text-text-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+            </svg>
+            <%= reader_text("on_this_page") %>
+          </p>
+          <div class="mt-3 min-h-0 min-w-0 overflow-y-auto overscroll-contain border-l border-border-subtle">
+            <% page.headings.each do |heading| %>
+              <%= link_to heading[:text], "##{heading[:id]}", class: toc_link_class(heading[:level]), data: { docs_reader_target: "tocLink" } %>
+            <% end %>
+          </div>
+          <a href="#<%= article_id %>" class="mt-4 inline-flex shrink-0 items-center gap-1.5 self-start rounded-sm text-sm text-text-tertiary transition-colors hover:text-text-primary <%= FOCUS_RING %>">
+            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5m-6 6l6-6 6 6" />
+            </svg>
+            <%= reader_text("back_to_top") %>
+          </a>
+        </div>
+      </nav>
+    <% end %>
+  </div>
+
+  <%# Cloned around each rendered code block by docs-reader. %>
+  <template data-docs-reader-target="copyTemplate">
+    <div class="group/code relative my-6 [&>pre]:my-0!" data-docs-code>
+      <button type="button" data-action="docs-reader#copy"
+              class="absolute right-2 top-2 inline-flex h-7 items-center gap-1.5 rounded-md border border-slate-700 bg-slate-900 px-2 text-xs font-medium text-slate-300 transition hover:text-white focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent data-[copied=true]:text-emerald-300 data-[copied=true]:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover/code:opacity-100">
+        <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+        <span data-docs-copy-label aria-live="polite"><%= reader_text("copy_code") %></span>
+      </button>
+    </div>
+  </template>
+
+  <div data-developer-docs-nav-target="backdrop"
+       data-action="click->developer-docs-nav#closeDrawer"
+       class="fixed inset-0 z-40 hidden bg-slate-900/50 opacity-0 transition-opacity duration-200 [@media(min-height:640px)]:@min-[52rem]/docs:hidden"
+       aria-hidden="true"></div>
+
+  <div id="developer-docs-drawer" data-developer-docs-nav-target="drawer"
+       class="invisible fixed inset-y-0 left-0 z-50 flex h-dvh w-80 max-w-[85vw] min-h-0 min-w-0 -translate-x-full flex-col border-r border-border-subtle bg-surface shadow-float transition-transform duration-200 [&.translate-x-0]:visible [@media(min-height:640px)]:@min-[52rem]/docs:hidden"
+       role="dialog"
+       aria-modal="true"
+       aria-label="<%= reader_text("contents") %>">
+    <div class="min-w-0 shrink-0 border-b border-border-subtle px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] [@media(max-height:639px)]:pb-2 [@media(max-height:639px)]:pt-[max(0.25rem,env(safe-area-inset-top))]" data-docs-nav-header="mobile">
+      <%# Close stays first in DOM order: opening the drawer focuses its first control. %>
+      <div class="mb-2 flex min-w-0 flex-row-reverse items-center justify-between gap-2 [@media(max-height:639px)]:mb-1">
+        <button type="button"
+                data-action="click->developer-docs-nav#closeDrawer"
+                aria-label="<%= reader_text("nav_close") %>"
+                class="flex size-11 shrink-0 items-center justify-center rounded-md text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+          <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <% if home_path.present? %>
+          <%= link_to doc_set_title, home_path, class: "block min-w-0 truncate rounded-md py-3 text-sm/5 font-semibold text-text-primary hover:text-accent-text #{FOCUS_RING}" %>
+        <% else %>
+          <p class="min-w-0 truncate text-sm font-semibold text-text-primary" aria-hidden="true"><%= doc_set_title %></p>
+        <% end %>
+      </div>
+
+      <%# On short viewports, pair the field with Search to retain list space. %>
+      <div class="grid min-w-0 grid-cols-1 gap-2 [@media(max-height:639px)]:gap-1">
+        <%= form_with url: page.search_path, method: :get, local: true,
+                      class: "col-span-full grid min-w-0 grid-cols-1 gap-2 [@media(max-height:639px)]:grid-cols-[minmax(0,1fr)_auto] [@media(max-height:639px)]:gap-1",
+                      html: { role: "search" } do %>
+          <%= hidden_field_tag :locale, locale, id: nil if locale %>
+          <label for="<%= search_field_id(:mobile) %>" class="<%= visually_hidden_class %>"><%= reader_text("search_placeholder") %></label>
+          <div class="relative min-w-0">
+            <input id="<%= search_field_id(:mobile) %>" type="search" name="q" value="<%= page.query %>" maxlength="80"
+                   placeholder="<%= reader_text("search_placeholder") %>" autocomplete="off"
+                   class="input-field h-11 min-w-0 w-full rounded-lg border-border-subtle pl-9 pr-3 shadow-none focus-visible:ring-2 focus-visible:ring-accent" />
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-text-tertiary" aria-hidden="true">
+              <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+          <button type="submit" class="<%= search_submit_class %>"><%= reader_text("search_submit") %></button>
+        <% end %>
+
+        <% if page.query.present? %>
+          <%= link_to reader_text("search_clear"), page.search_path,
+                      class: clear_link_class(:mobile),
+                      data: { action: "click->developer-docs-nav#navigate" } %>
+        <% end %>
+      </div>
+
+      <% if page.query.present? %>
+        <div class="relative mt-2 min-w-0 rounded-lg bg-canvas-elevated p-2 text-sm [@media(max-height:639px)]:mt-1" role="region" aria-labelledby="<%= context_label_id(:mobile) %>">
+          <p id="<%= context_label_id(:mobile) %>" class="text-xs font-medium text-text-tertiary"><%= reader_text("current_context") %></p>
+          <nav aria-label="<%= reader_text("current_context") %>" class="flex min-w-0 flex-wrap items-center gap-x-1 text-text-primary [overflow-wrap:anywhere] <%= current_group ? '[@media(max-height:639px)]:grid [@media(max-height:639px)]:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] [@media(max-height:639px)]:gap-x-2' : '' %>">
+            <% if current_group %>
+              <% if group_path %>
+                <%= link_to reader_text("groups.#{current_group.key}"), group_path,
+                            class: "inline-flex min-h-11 min-w-0 max-w-full items-center rounded-sm text-text-secondary hover:text-text-primary #{FOCUS_RING}",
+                            data: { action: "click->developer-docs-nav#navigate" } %>
+              <% else %>
+                <span class="min-w-0 text-text-secondary"><%= reader_text("groups.#{current_group.key}") %></span>
+              <% end %>
+              <span class="text-text-tertiary" aria-hidden="true">/</span>
+            <% end %>
+            <%= link_to navigation_label(page.slug, title: page.title), current_path,
+                        class: "inline-flex min-h-11 min-w-0 max-w-full items-center rounded-sm font-semibold text-accent-text hover:underline hover:underline-offset-4 #{FOCUS_RING}",
+                        aria: { current: "page", describedby: context_title_id(:mobile) },
+                        data: { docs_current_guide: true, action: "click->developer-docs-nav#navigate" } %>
+          </nav>
+          <span id="<%= context_title_id(:mobile) %>" class="<%= visually_hidden_class %>"><%= page.title %></span>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 [@media(max-height:639px)]:min-h-16"
+         data-docs-nav-list="mobile" data-developer-docs-nav-target="drawerList">
+      <%= render DeveloperDocs::ContentsNavComponent.new(page: page, translation_scope: translation_scope, navigate: true, surface: :mobile) %>
+    </div>
+  </div>
+</div>

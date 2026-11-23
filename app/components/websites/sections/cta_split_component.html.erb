@@ -1,0 +1,21 @@
+<section class="<%= padding_class %>">
+  <div class="<%= inner_measure_class %>">
+    <div class="grid overflow-hidden rounded-[1.75rem] md:grid-cols-2 md:rounded-[2rem] <%= panel_class %>">
+      <div class="relative min-h-[16rem] sm:min-h-[20rem] md:min-h-[28rem] lg:min-h-[32rem] <%= image_order_class %>">
+        <%= render_media(props["image_url"], alt: prop("headline"), css_class: "absolute inset-0 size-full object-cover") %>
+      </div>
+      <div class="flex flex-col justify-center gap-5 px-6 py-10 sm:px-10 sm:py-14 md:gap-6 md:px-12 md:py-16 lg:px-16 <%= copy_order_class %>">
+        <% if present_text?(prop("kicker")) %>
+          <p <%= el_attrs("kicker", class: kicker_class) %>><%= prop("kicker") %></p>
+        <% end %>
+        <% if present_text?(prop("headline")) %>
+          <h2 <%= el_attrs("headline", class: "text-balance break-words text-site-3xl leading-[1.08] sm:text-site-4xl md:text-site-5xl #{headline_font_class}") %>><%= prop("headline") %></h2>
+        <% end %>
+        <% if present_text?(prop("body")) %>
+          <p <%= el_attrs("body", class: "max-w-md text-pretty whitespace-pre-line text-site-md leading-relaxed md:text-site-lg #{body_text_class}") %>><%= prop("body") %></p>
+        <% end %>
+        <div class="pt-1"><%= buttons %></div>
+      </div>
+    </div>
+  </div>
+</section>

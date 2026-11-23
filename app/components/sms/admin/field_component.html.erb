@@ -1,0 +1,6 @@
+<div class="min-w-0 space-y-1.5">
+  <%= form.label field, label, for: id, class: "form-label" %>
+  <%= control %>
+  <% if help.present? %><p id="<%= id %>_help" class="text-sm text-text-secondary break-words"><%= help %></p><% end %>
+  <% if messages.any? %><ul id="<%= id %>_errors" class="text-sm text-danger"><% messages.uniq.each do |message| %><li><%= message %></li><% end %></ul><% end %>
+</div>

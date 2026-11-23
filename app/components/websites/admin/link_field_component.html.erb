@@ -1,0 +1,35 @@
+<div data-href-field class="min-w-0 <%= workspace? ? 'group/link gap-1' : 'gap-1.5' %> <%= inline_label? ? 'grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3' : 'flex flex-col' %>">
+  <label for="<%= field_id %>" class="form-label mb-0<%= ' flex min-h-7 items-center pointer-coarse:min-h-9' if workspace? %>"><%= label %></label>
+  <div class="<%= 'flex min-w-0 items-center rounded-md border border-border bg-surface shadow-inset focus-within:border-accent focus-within:ring-3 focus-within:ring-accent-subtle' if workspace? %>">
+    <input type="text" id="<%= field_id %>" value="<%= value %>" data-prop="<%= key %>"
+           class="<%= workspace? ? 'text-body h-8.5 w-full min-w-0 flex-1 rounded-md border-0 bg-transparent px-3 py-2 leading-tight placeholder:text-text-muted focus:outline-none focus:ring-0' : 'studio-field font-mono' %>"
+           data-action="input->website-builder#markDirty input->website-builder#checkHref"
+           <% if workspace? %>aria-describedby="<%= field_id %>_status"<% end %>
+           placeholder="<%= t('website.admin.pages.form.href_placeholder') %>">
+    <% if workspace? && site_pages.any? %>
+      <button type="button" data-href-toggle aria-controls="<%= field_id %>_picker_panel" aria-expanded="false"
+              data-action="click->website-builder#toggleHrefPicker"
+              class="btn btn-ghost mr-1 h-7 shrink-0 px-2.5 text-text-tertiary transition pointer-fine:opacity-0 group-hover/link:opacity-100 group-focus-within/link:opacity-100 aria-expanded:bg-surface-active aria-expanded:text-text-primary aria-expanded:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+        <%= t('website.admin.pages.form.choose_page') %>
+      </button>
+    <% end %>
+  </div>
+  <% if site_pages.any? %>
+    <div <% if workspace? %>data-href-picker id="<%= field_id %>_picker_panel" data-action="keydown.esc->website-builder#closeHrefPicker"<% end %>
+         class="<%= workspace? ? 'hidden' : 'grid grid-cols-1 sm:grid-cols-2 gap-2' %> <%= 'col-start-2' if inline_label? %>">
+      <div class="flex min-w-0 flex-col gap-1">
+        <label for="<%= field_id %>_picker" class="<%= workspace? ? visually_hidden_class : 'form-label' %>"><%= t('website.admin.pages.form.href_picker') %></label>
+        <select id="<%= field_id %>_picker" class="input-field <%= 'h-9 min-w-0' if workspace? %>" data-action="change->website-builder#applyHref">
+          <option value=""><%= t(workspace? ? 'website.admin.pages.form.choose_page' : 'website.admin.pages.form.href_custom') %></option>
+          <% site_pages.each do |page| %>
+            <option value="<%= page['slug'] %>" <%= 'selected' if value == page['slug'] %>><%= page['title'] %><% unless workspace? %> — <%= page['slug'] %><% end %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+  <% end %>
+  <% unless workspace? %>
+    <p class="text-sm text-text-tertiary"><%= t('website.admin.pages.form.href_hint') %></p>
+  <% end %>
+  <p data-href-status class="hidden text-sm text-danger <%= 'col-start-2' if inline_label? %>" <% if workspace? %>id="<%= field_id %>_status" role="status" aria-live="polite"<% end %>><%= t('website.errors.invalid_href') %></p>
+</div>

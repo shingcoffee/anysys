@@ -1,0 +1,12 @@
+<%= render Member::AuthShellComponent.new(
+      customer: current_customer,
+      title:    t("auth.sessions.shell_title"),
+      subtitle: t("auth.sessions.shell_subtitle")
+    ) do %>
+
+  <% if @unconfirmed_email.present? %>
+    <%= render "authentication/sessions/unconfirmed", unconfirmed_email: @unconfirmed_email %>
+  <% end %>
+
+  <%= render Authentication::SignInFormComponent.new(resource: resource) %>
+<% end %>

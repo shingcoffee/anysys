@@ -1,0 +1,8 @@
+<%= render Member::AuthShellComponent.new(
+      customer: current_customer,
+      title:    t("public_views.home.auth_title"),
+      subtitle: t("public_views.home.auth_subtitle")
+    ) do %>
+
+  <%= render Authentication::SignInFormComponent.new(resource: @user) %>
+<% end %>

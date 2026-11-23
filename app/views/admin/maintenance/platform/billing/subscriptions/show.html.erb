@@ -1,0 +1,36 @@
+<%= render Billing::Admin::PlatformPageComponent.new(
+  customer_id: current_customer_id,
+  section: :subscriptions,
+  title: t("maint_platform.billing.subscriptions.show.subscription_number", id: @subscription.id),
+  description: t("maint_platform.billing.subscriptions.show.description"),
+  crumbs: [{ label: t("maint_platform.billing.subscriptions.show.subscription_number", id: @subscription.id) }]
+) do %>
+  <div class="space-y-6">
+    <div class="max-w-4xl">
+      <%= render Billing::Admin::SubscriptionSummaryComponent.new(
+        subscription: @subscription,
+        customer_id:  current_customer_id,
+        show_actions: false,
+        platform: true,
+        pending_plan_change: @pending_plan_change,
+        coupon_benefit: @coupon_benefit,
+        entitlements: @entitlements,
+        can_cancel_immediately: @can_cancel_immediately,
+        subscription_actions: @subscription_actions,
+        can_cancel: @can_cancel,
+        can_resume: @can_resume
+      ) %>
+    </div>
+
+    <%= render Billing::Admin::InvoiceTableComponent.new(
+      invoices:    @invoices,
+      customer_id: current_customer_id,
+      context:     :platform,
+      filters: @filters,
+      pagination: @pagination,
+      page_path: @page_path,
+      history_url: admin_maintenance_platform_billing_subscription_path(current_customer_id, @subscription),
+      collection_by_invoice_id: @collection_by_invoice_id
+    ) %>
+  </div>
+<% end %>

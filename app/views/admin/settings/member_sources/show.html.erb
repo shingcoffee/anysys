@@ -1,0 +1,6 @@
+<%= render Admin::Settings::PageComponent.new(customer_id: current_customer.id,
+  title: t("settings_people.sources.#{@source.key}.name"),
+  description: t("settings_people.sources.#{@source.key}.description"),
+  breadcrumbs: [{ label: t("settings_navigation.items.member_portal"), path: "/#{current_customer.id}/admin/settings/member" }]) do %>
+  <%= render Admin::Settings::MemberSourceListComponent.new(rows: @rows, source: @source, customer: current_customer) %>
+<% end %>

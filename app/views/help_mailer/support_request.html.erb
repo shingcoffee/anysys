@@ -1,0 +1,13 @@
+<%= render Mailers::ShellComponent.new(
+      preheader: t("help_mailer.support_request.preheader", subject: @subject_line),
+      brand:     t("help_mailer.shell.brand"),
+      heading:   t("help_mailer.support_request.heading"),
+      title:     @subject_line,
+      body:      @request_body,
+      facts: [
+        { label: t("help_mailer.support_request.label_customer"), value: "#{@customer.name} (#{@customer.id})" },
+        { label: t("help_mailer.support_request.label_from"), value: "#{@user.display_name} <#{@user.email}>" },
+        { label: t("help_mailer.support_request.label_page"), value: @page_url.presence || t("common.labels.em_dash") }
+      ],
+      footer:    t("help_mailer.shell.footer")
+    ) %>

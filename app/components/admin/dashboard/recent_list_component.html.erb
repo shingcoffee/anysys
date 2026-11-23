@@ -1,0 +1,78 @@
+<%= render CardComponent.new(variant: :default, padding: :none, class: "flex h-full flex-col overflow-hidden rounded-2xl border-border-subtle shadow-xs") do %>
+  <section class="flex h-full flex-col" aria-labelledby="<%= heading_id %>" data-recent-kind="<%= kind %>">
+    <div class="flex items-center justify-between gap-3 border-b border-border-subtle bg-canvas-elevated/70 px-5 py-4">
+      <div class="flex min-w-0 items-center gap-2.5">
+        <span class="flex size-8 shrink-0 items-center justify-center rounded-lg <%= header_icon_classes %>" aria-hidden="true">
+          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+            <path stroke-linecap="round" stroke-linejoin="round" d="<%= item_icon %>"/>
+          </svg>
+        </span>
+        <h2 id="<%= heading_id %>" class="truncate text-md font-semibold tracking-tight text-text-primary"><%= title %></h2>
+        <% if items.any? %>
+          <span class="inline-flex items-center rounded-full bg-surface-active px-2 py-0.5 text-xs font-semibold tabular-nums text-text-secondary"><%= items.size %></span>
+        <% end %>
+      </div>
+      <%= link_to view_all_href,
+            class: "group/all inline-flex min-h-8 shrink-0 items-center gap-1 rounded-lg border border-border-subtle bg-surface px-2.5 py-1 text-xs font-semibold text-text-secondary no-underline shadow-2xs transition-base hover:border-accent-muted hover:bg-accent-subtle/50 hover:text-accent-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent pointer-coarse:min-h-11" do %>
+        <%= view_all_label %>
+        <svg class="size-3.5 transition-transform group-hover/all:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+        </svg>
+      <% end %>
+    </div>
+
+    <% if items.any? %>
+      <ul class="flex flex-1 flex-col divide-y divide-border-subtle/80">
+        <% items.each do |item| %>
+          <li class="flex <%= 'flex-1' if stretch_rows? %>">
+            <%= link_to item_href(item),
+                  class: "group flex min-h-14 w-full items-center gap-3.5 px-5 py-3 no-underline transition-base hover:bg-canvas-elevated/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-inset" do %>
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-xl transition-base <%= row_icon_classes %>" aria-hidden="true">
+                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="<%= item_icon %>"/>
+                </svg>
+              </span>
+              <span class="flex min-w-0 flex-1 flex-col gap-0.5">
+                <span class="truncate text-sm font-semibold text-text-primary transition-colors group-hover:text-accent"><%= item_name(item) %></span>
+                <% if (updated = item_updated_label(item)) %>
+                  <span class="truncate text-xs text-text-muted"><%= updated %></span>
+                <% end %>
+              </span>
+              <% if live_badge?(item) %>
+                <%= render BadgeComponent.new(variant: :success, size: :sm, class: "gap-1.5") do %>
+                  <span class="size-1.5 rounded-full bg-success" aria-hidden="true"></span>
+                  <%= t("common.status.live") %>
+                <% end %>
+              <% elsif draft_badge?(item) %>
+                <%= render BadgeComponent.new(variant: :default, size: :sm, class: "gap-1.5") do %>
+                  <span class="size-1.5 rounded-full bg-text-muted" aria-hidden="true"></span>
+                  <%= t("common.status.draft") %>
+                <% end %>
+              <% end %>
+              <span class="flex size-7 shrink-0 items-center justify-center rounded-lg text-text-muted transition-base group-hover:translate-x-0.5 group-hover:bg-accent-subtle group-hover:text-accent" aria-hidden="true">
+                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+                </svg>
+              </span>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div class="flex flex-1 flex-col items-center justify-center gap-3 px-5 py-10 text-center">
+        <span class="flex size-11 items-center justify-center rounded-2xl bg-canvas-elevated text-text-muted ring-1 ring-border-subtle shadow-2xs" aria-hidden="true">
+          <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="<%= item_icon %>"/>
+          </svg>
+        </span>
+        <div class="space-y-1">
+          <p class="text-sm font-semibold text-text-primary"><%= empty_title %></p>
+          <p class="text-xs leading-relaxed text-text-muted"><%= empty_description %></p>
+        </div>
+        <%= render ButtonComponent.new(variant: :secondary, size: :sm, tag: :a, href: empty_cta_href) do %>
+          <%= empty_cta_label %>
+        <% end %>
+      </div>
+    <% end %>
+  </section>
+<% end %>

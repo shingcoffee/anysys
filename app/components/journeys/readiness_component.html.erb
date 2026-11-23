@@ -1,0 +1,24 @@
+<section aria-labelledby="journey-readiness-title" class="card min-w-0 p-5 sm:p-6">
+  <h2 id="journey-readiness-title" class="section-header"><%= t("journeys.admin.readiness.title") %></h2>
+
+  <% if ready? %>
+    <p role="status" class="mt-4 flex items-start gap-2 text-sm text-success">
+      <svg class="mt-0.5 size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="<%= Journeys::ReadinessComponent::CHECK %>" />
+      </svg>
+      <%= t("journeys.admin.readiness.ready") %>
+    </p>
+  <% else %>
+    <p class="mt-4 text-sm text-text-secondary"><%= t("journeys.admin.readiness.issues") %></p>
+    <ul role="list" class="mt-3 space-y-2">
+      <% @issues.each do |issue| %>
+        <li class="flex items-start gap-2">
+          <svg class="mt-0.5 size-4 shrink-0 text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="<%= Journeys::ReadinessComponent::WARNING %>" />
+          </svg>
+          <span class="text-sm text-text-secondary"><%= issue %></span>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</section>

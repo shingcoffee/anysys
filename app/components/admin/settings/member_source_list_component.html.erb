@@ -1,0 +1,21 @@
+<%= render SectionNavComponent.new(
+      label: t("settings_navigation.items.member_portal"),
+      tabs: %w[builtin modules entities pages].map { |key|
+        {
+          id: key,
+          label: t("settings_people.sources.#{key}.name"),
+          path: "/#{customer.id}/admin/settings/member/sources/#{key}",
+          active: source.key.to_s == key
+        }
+      }
+    ) %>
+<%= render Admin::Settings::SectionComponent.new(description: t(source.editable? ? "settings_people.immediate_save" : "settings_people.builtin_note")) do %>
+  <div data-controller="list-filter">
+    <label for="member-page-search" class="form-label"><%= t("settings_people.search_pages") %></label>
+    <input id="member-page-search" type="search" class="input-field max-w-md mb-4" data-list-filter-target="search" data-action="input->list-filter#search"/>
+    <% rows.sort_by(&:position).each do |row| %>
+      <%= render Admin::Settings::MemberSourceRowComponent.new(presenter: row, editable: source.editable?, customer: customer) %>
+    <% end %>
+    <p data-list-filter-target="empty" class="text-sm text-text-secondary <%= 'hidden' if rows.any? %>"><%= t("settings_people.no_pages") %></p>
+  </div>
+<% end %>

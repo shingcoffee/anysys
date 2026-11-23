@@ -1,0 +1,756 @@
+---
+en:
+  maint_platform:
+    errors:
+      validations:
+        invalid_industry: "is not a valid industry"
+        invalid_template: "is not a valid template"
+        variables_must_be_array_of_strings: "must be an array of strings"
+        sms_provider_codes_required: "needs at least one provider template code"
+        required_needs_active_module: "requires the module to be active"
+        handoff_needs_active_module: "requires the module to be active"
+
+    flash:
+      sms_credentials:
+        created: SMS credential created.
+        updated: SMS credential updated.
+        delivery_updated: Delivery providers updated.
+      sms_templates:
+        registered: Template registered.
+        updated: Template updated.
+        retired: Template retired (history preserved).
+        deleted: Template deleted.
+      emails_credentials:
+        created: Email credential created.
+        updated: Email credential updated.
+        delivery_updated: Delivery providers updated.
+      code_generators:
+        config_object_required: "Configuration must be a JSON object"
+        invalid_json: "Invalid JSON: %{error}"
+        generator_not_found: Generator not found
+        file_exists: "File already exists: %{file}"
+        created: Generator created
+        updated_versioned: Generator updated (v%{version})
+        updated: Generator updated
+        deleted: Generator deleted
+      customer_contexts:
+        now_acting_as: Now acting as %{name}
+        returned_to_platform: Returned to platform context
+        customer_not_found: Customer not found
+      announcements:
+        created: Announcement created.
+        updated: Announcement updated.
+        deleted: Announcement deleted.
+      customers:
+        restored: 'Customer "%{name}" was successfully restored.'
+        permanently_deleted: "%{count} customer(s) permanently deleted."
+        created: Customer was successfully created.
+        updated: Customer was successfully updated.
+        deleted: Customer was successfully deleted.
+        platform_protected: The platform customer cannot be deleted.
+      industry_templates:
+        mapping_not_found: Mapping not found
+        invalid_industry: "Invalid industry: %{industry}"
+        defaults_seeded: Default mappings seeded (%{count} mappings created).
+        reset_to_defaults: All mappings reset to defaults.
+        new_mappings_created: "%{count} new template mapping(s) created."
+        mappings_updated: 'Template mappings for "%{industry}" updated successfully.'
+        invalid_template_keys: "One or more selected templates are invalid."
+      billing:
+        plan_archived: "Plan archived. Existing subscriptions and invoice history are retained."
+        coupon_archived: "Coupon archived. Accepted discounts and invoice history are retained."
+        invoice_unchanged: "Invoice settlement state is unchanged."
+        invoice_settlement_review: "Payment is recorded; its subscription effect requires platform review."
+        subscription_unchanged: "Subscription state is unchanged."
+        subscription_cancelled: "Subscription #%{id} cancelled immediately."
+        coupon_created: "Coupon '%{code}' created."
+        coupon_updated: "Coupon '%{code}' updated."
+        coupon_deleted: Coupon deleted.
+        invoice_marked_paid: Invoice %{number} marked as paid.
+        invoice_voided: Invoice %{number} voided.
+        invoice_cannot_mark_paid: "This invoice cannot be marked as paid."
+        invoice_cannot_void: "This invoice cannot be voided."
+        invoice_collection_triggered: Collection attempt triggered for invoice %{number}.
+        invoice_collection_skipped: "Invoice %{number} is not open; collection was not attempted."
+        plan_created: "Plan '%{name}' created."
+        plan_updated: "Plan '%{name}' updated."
+        plan_deleted: Plan deleted.
+        plan_in_use: "This plan has live subscriptions and cannot be deleted."
+        settings_updated: Billing settings updated.
+        countable_items_updated: Countable items updated.
+        countable_items_update_failed: "Countable items could not be updated."
+        update_failed: "Update failed: %{error}"
+      payments:
+        gateway_availability_updated: Gateway availability updated.
+      module_settings:
+        updated: "%{name} updated."
+        update_failed: "Failed to update."
+        token_attribute_forbidden: "Credential columns cannot be enabled as email template tokens."
+    billing:
+      breadcrumbs:
+        maintenance: Maintenance
+        billing: Billing
+        module_settings: Module Settings
+        coupons: Coupons
+        plans: Plans
+        invoices: Invoices
+        subscriptions: Subscriptions
+      countable_items:
+        show:
+          title: Countable Items
+          description: Configure which resource types are tracked as billable countable items.
+      coupons:
+        index:
+          title: Billing Coupons
+          description: Manage discount coupons.
+          new_coupon: New Coupon
+        new:
+          title: New Coupon
+          description: Create a new discount coupon.
+        edit:
+          title: Edit Coupon
+          description: Update coupon details.
+        show:
+          description: Coupon details.
+          details: Details
+          code: Code
+          discount_type: Discount type
+          discount_value: Discount value
+          duration: Duration
+          cycles: "%{count} cycles"
+          redemptions: Redemptions
+          expires_at: Expires at
+          never: Never
+          redeemable_now: Redeemable now?
+      invoices:
+        index:
+          title: All Invoices
+          description: Cross-tenant billing invoice oversight.
+        show:
+          draft: "(draft)"
+          title_fallback: Invoice
+          description: Invoice details, line items, and admin actions.
+      plans:
+        index:
+          title: Billing Plans
+          description: Manage the platform billing plan catalog.
+          new_plan: New Plan
+        new:
+          title: New Plan
+          description: Add a new billing plan to the catalog.
+        edit:
+          title: Edit Plan
+          description: Update plan details.
+        show:
+          description_fallback: Plan details.
+          code: Code
+          interval: Interval
+          price_usd: Price (USD)
+          price_cny: Price (CNY)
+          trial_days: Trial days
+          display_position: Display position
+          default_plan: Default plan
+          unlimited: Unlimited
+          plan_limits: Plan Limits
+          details: Details
+      settings:
+        show:
+          title: Billing Settings
+          description: Global billing configuration for all customers.
+        edit:
+          title: Edit Billing Settings
+          description: Update global billing configuration.
+      subscriptions:
+        index:
+          title: All Subscriptions
+          description: Cross-tenant billing subscription oversight.
+        show:
+          subscription_number: 'Subscription #%{id}'
+          description: Subscription details and invoices.
+    emails:
+      breadcrumbs:
+        maintenance: Maintenance
+        module_settings: Module Settings
+        email: Email
+        credentials: Credentials
+      credentials:
+        new_credential: New Credential
+        index:
+          title: Email Credentials
+          description: SMTP + DKIM credentials for email delivery
+          search_placeholder: Search credentials…
+          empty_title: No email credentials configured yet
+          empty_description: Add your first SMTP credential to enable email delivery.
+        new:
+          title: New Email Credential
+          description: Configure SMTP gateway access credentials and optional DKIM signing.
+        edit:
+          title: Edit Email Credential
+          description: Update the SMTP gateway access credentials and DKIM signing configuration.
+        form:
+          provider_label: Provider
+          mode_label: Mode
+          status_label: Status
+          identity_title: Account
+          identity_hint: Which vendor and environment this credential belongs to.
+          identity_hint_locked: Enable this environment for the selected vendor after credentials are complete.
+          secret_title: Secret
+          secret_hint: Stored encrypted. Leave blank when editing to keep the current value.
+          host_label: Host
+          port_label: Port
+          username_label: Username
+          domain_label: Domain
+          authentication_label: Authentication
+          smtp_legend: SMTP Settings
+          enable_starttls: Enable STARTTLS
+          ssl_label: SSL
+          password_keep_hint: Leave password blank to keep the existing encrypted value.
+          modes:
+            sandbox: Sandbox
+            production: Production
+          authentications:
+            plain: PLAIN
+            login: LOGIN
+            cram_md5: CRAM_MD5
+          daily_limit_label: Daily Limit
+          daily_limit_placeholder: Leave blank for unlimited
+          dkim_legend: DKIM Signing
+          enable_dkim: Enable DKIM signing
+          dkim_domain_label: DKIM Domain
+          dkim_selector_label: DKIM Selector
+          dkim_key_keep_hint: Leave private key blank to keep the existing encrypted value.
+          dkim_private_key_label: DKIM Private Key (PEM)
+          dns_txt_hint: DNS TXT Record (add to your DNS provider)
+      platform_settings:
+        title: "Email — Platform Settings"
+        page_description: "Choose the live delivery vendor per environment. Edit a vendor only when you need to change its credentials."
+        nav_label: "Providers"
+        delivery_section: "Delivery"
+        delivery_section_hint: "One vendor is live per environment. Changing it does not edit credentials."
+        delivery_mode_hint:
+          sandbox: "Used for non-production sends."
+          production: "Used for live tenant sends."
+        vendor_section: "Vendor"
+        vendor_section_hint: "Credentials for the selected vendor, per environment."
+        edit_delivery: "Change provider"
+        edit_credentials: "Edit credentials"
+        add_credentials: "Add credentials"
+        provider: "Provider"
+        not_assigned: "Not assigned"
+        credentials_section_hint_show: "Secrets are stored encrypted and never shown in full."
+        mode_empty: "No credentials for this environment yet."
+        masked: "••••••"
+        errors:
+          missing_credential: "No credentials exist for %{provider} (%{mode})."
+    sms:
+      breadcrumbs:
+        maintenance: Maintenance
+        module_settings: Module Settings
+        sms: SMS
+        credentials: Credentials
+        templates: Templates
+      credentials:
+        new_credential: New Credential
+        index:
+          title: SMS Credentials
+          description: Gateway credentials for SMS delivery
+          search_placeholder: Search credentials…
+          empty_title: No SMS credentials configured yet
+          empty_description: Add your first credential to enable SMS delivery.
+        new:
+          title: New SMS Credential
+          description: Configure gateway access credentials.
+        edit:
+          title: Edit SMS Credential
+          description: Update the gateway access credentials.
+        form:
+          provider_label: Provider
+          identity_title: Account
+          identity_hint: Which vendor and environment this credential belongs to.
+          identity_hint_locked: Enable this environment for the selected vendor after credentials are complete.
+          secret_title: Secret
+          secret_hint: Stored encrypted. Leave blank when editing to keep the current value.
+          secret_hint_new: Stored encrypted. Required to send messages.
+          secret_keep_hint: Leave access_key_secret blank to keep the existing encrypted value.
+          access_key_secret_label: Access key secret
+          provider_fields_legend: "%{provider} Settings"
+      platform_settings:
+        title: "SMS — Platform Settings"
+        page_description: "Choose the live delivery vendor per environment. Edit a vendor only when you need to change its credentials."
+        nav_label: "Providers"
+        delivery_section: "Delivery"
+        delivery_section_hint: "One vendor is live per environment. Changing it does not edit credentials."
+        delivery_mode_hint:
+          sandbox: "Used for non-production sends."
+          production: "Used for live tenant sends."
+        vendor_section: "Vendor"
+        vendor_section_hint: "Credentials for the selected vendor, per environment."
+        edit_delivery: "Change provider"
+        edit_credentials: "Edit credentials"
+        add_credentials: "Add credentials"
+        provider: "Provider"
+        not_assigned: "Not assigned"
+        credentials_section_hint_show: "Secrets are stored encrypted and never shown in full."
+        mode_empty: "No credentials for this environment yet."
+        masked: "••••••"
+        errors:
+          missing_credential: "No credentials exist for %{provider} (%{mode})."
+      templates:
+        new_template: New Template
+        index:
+          title: SMS Templates
+          description: Shared message templates for SMS delivery
+          search_placeholder: Search templates…
+          sort_label: Sort templates
+          current_sort: "Sorted by %{column}, %{direction}"
+          sort_directions:
+            asc: ascending
+            desc: descending
+          delete_confirm: Delete or retire this template?
+          empty_title: No templates registered yet
+          empty_description: Create a template to start sending SMS messages.
+        new:
+          title: New SMS Template
+          description: Register a new shared SMS template.
+        edit:
+          title: Edit SMS Template
+          description: Update the SMS template settings.
+        form:
+          key_label: Template key (snake_case, e.g. verify_code)
+          key_placeholder: verify_code
+          provider_code_label: "%{provider} code"
+          variables_label: Variables (comma-separated, in template order)
+          variables_placeholder: code, minutes
+          details_title: Template
+          details_hint: Key, description, status, and substitution variables.
+          codes_title: Provider codes
+          codes_hint: Vendor-side template identifiers.
+    announcements:
+      breadcrumb:
+        maintenance: Maintenance
+        announcements: Announcements
+      index:
+        title: Announcements
+        description: Publish time-bounded notices to tenant admins.
+        new_action: New announcement
+        search_placeholder: Search by title...
+        empty_title: No announcements yet
+        empty_description: Create a notice to display on tenant admin dashboards.
+        empty_action: New announcement
+        delete_confirm: Delete "%{title}"? This cannot be undone.
+        columns:
+          title: Title
+          severity: Severity
+          status: Status
+          audience: Audience
+          starts_at: Starts
+          ends_at: Ends
+          updated_at: Updated
+        filters:
+          status: Status
+          severity: Severity
+      new:
+        title: New announcement
+        description: Write a bilingual notice and choose who should see it.
+      edit:
+        title: Edit announcement
+        description: Update the notice content, schedule, or audience.
+      form:
+        content: Content
+        display: Display
+        audience: Audience
+        title: Title
+        body_en: English body
+        body_zh: Chinese body
+        link_url: Learn more URL
+        link_url_hint: Optional. Must start with http:// or https://.
+        severity: Severity
+        status: Status
+        starts_at: Starts at
+        ends_at: Ends at
+        window_hint: Leave blank for no start or end limit.
+        audience_all: All customers
+        audience_all_hint: Every tenant, including customers created later.
+        audience_selected: Selected customers
+        audience_selected_hint: Only customers that match the conditions below.
+        audience_conditions_hint: Filter customers by attributes, the same way email audience conditions work.
+        preview_action: Preview audience
+        preview_loading: Checking audience...
+        preview_error: Could not size this audience.
+        preview_count: "{count} customers match these conditions."
+        preview_empty: No customers match these conditions.
+        create: Create announcement
+        update: Save changes
+        errors:
+          target_rules_blank: Add at least one customer condition.
+          target_rules_invalid: Audience conditions are not valid JSON.
+      severities:
+        info: Info
+        warning: Warning
+        critical: Critical
+      audience:
+        all: All customers
+        selected: Selected customers
+      lifecycle:
+        draft: Draft
+        scheduled: Scheduled
+        live: Live
+        ended: Ended
+      show:
+        targets: Target customers
+        targets_all: Every tenant, including customers created later.
+        targets_matching:
+          one: "%{count} customer currently matches."
+          other: "%{count} customers currently match."
+        targets_empty: No customers currently match these conditions.
+        targets_truncated: Showing the first %{shown} of %{count} matching customers.
+        learn_more: Learn more
+      fields:
+        id: Id
+        name: Name
+        alias: Alias
+        industry: Industry
+        tier: Tier
+        status: Status
+        locale: Locale
+        contact: Contact
+        phone: Phone
+        address: Address
+        created_at: Created At
+        updated_at: Updated At
+    support_tickets:
+      breadcrumb:
+        maintenance: Maintenance
+        support_tickets: Support tickets
+      index:
+        title: Support tickets
+        description: In-app tickets from tenant admins.
+        search_placeholder: Search by subject...
+        empty_title: No support tickets yet
+        empty_description: When a tenant admin notifies the platform owner, the ticket appears here.
+        columns:
+          subject: Subject
+          customer: Customer
+          requester: Requester
+          status: Status
+          last_message_at: Last message
+        filters:
+          status: Status
+      show:
+        resolve: Mark resolved
+        resolve_confirm: Mark this support ticket as resolved?
+        reply: Reply
+        resolved_note: This ticket is resolved.
+        images: Screenshots
+        meta:
+          details: Ticket details
+          customer: Customer
+          requester: Requester
+          opened: Opened
+          last_message: Last message
+    customers:
+      breadcrumb:
+        maintenance: Maintenance
+        customers: Customers
+      index:
+        title: Customers
+        description: Manage tenant accounts
+        new_action: New Customer
+        search_placeholder: Search name, ID, or domain
+        act_as: Act As
+        delete_confirm: Delete "%{name}"? They will be moved to trash.
+        empty_title: No customers yet
+        empty_description: Start by adding your first customer.
+        empty_action: Add First Customer
+      edit:
+        title: Edit %{name}
+        untitled: this organization
+        description: Update the profile and service plan. Public hostnames below are saved separately.
+      new:
+        title: Create Customer
+        description: Add a new tenant account to the platform.
+      select:
+        subtitle: Select a customer to view their flowcharts
+        empty_title: No customers yet
+        empty_description: Start by creating your first customer to build flowcharts.
+      show:
+        description: Organization profile, service plan, and the public hostnames that route to this tenant.
+        edit_profile: Edit profile
+        move_to_trash: Move to trash
+        delete_confirm: Move "%{name}" to trash? You can restore the account later.
+        in_trash: This organization is in the trash. Restore it before editing the profile or adding hostnames.
+        language_browser: Follows the browser
+        account: Account
+        account_hint: Identifiers and the plan recorded for this tenant.
+        not_set: Not set
+        unknown: Unknown
+      trash:
+        title: Trash
+        description: Deleted customers can be restored from here
+        empty_trash: Empty Trash
+        empty_trash_confirm: Are you sure you want to permanently delete all %{count} customer(s)? This action cannot be undone.
+        restore: Restore
+        restore_confirm: Restore %{name}?
+        empty_title: Trash is empty
+        empty_description: Deleted customers will appear here.
+        back_action: Back to Customers
+    industry_templates:
+      breadcrumbs:
+        maintenance: Maintenance
+        industry_template_mappings: Industry Template Mappings
+        industry_mappings: Industry Mappings
+      edit:
+        manage_title_html: Manage Templates for "%{industry}"
+        intro: Select which layout templates are associated with this industry.
+        of_selected: of %{count} selected.
+        all_filter: All (%{count})
+        select_all_visible: Select All Visible
+        deselect_all_visible: Deselect All Visible
+        save_mappings: Save Mappings
+        templates_selected: templates selected
+      index:
+        title: Industry Template Mappings
+        description: Manage which templates are available for each industry. %{count} templates total.
+        seed_unmapped: Seed Unmapped
+        sync_new: Sync New
+        reset_confirm: This will reset ALL industry-template mappings to defaults. Continue?
+        reset_all: Reset All
+        industries_count: "%{count} industries"
+        mappings_count: "%{count} mappings"
+        loading_templates: "Loading templates..."
+        load_failed: "Failed to load templates. Please try again."
+      cards:
+        template_associations: Template Associations
+        templates_associated: of %{count} templates associated
+        bulk_edit: Bulk Edit
+        search_placeholder: Search by name, description, or category...
+        clear_search: Clear search
+        templates_found: templates found
+        associated: Associated
+        available: Available
+        no_templates_found: No templates found
+        no_templates_hint: Try adjusting your search or category filter
+        preview_title: Template Preview
+        preview_description: Template description
+        preview_category: Category
+        preview_theme: Modern
+    module_settings:
+      breadcrumbs:
+        maintenance: Maintenance
+        module_settings: Module Settings
+      index:
+        title: Module Settings
+        description: Platform-wide module configuration. Changes apply to every customer using these modules.
+        stats_summary: "%{total} total · %{active} active · %{required} required"
+        empty: No modules available
+        empty_description: No feature modules are registered on this platform.
+        search_placeholder: Search modules…
+        filter_group_label: Filter modules
+        filter_all: All
+        filter_active: Active
+        filter_inactive: Inactive
+        filter_required: Required
+        configure: Configure
+        filter_empty_title: No matching modules
+        filter_empty_description: Try a different search or filter.
+        health:
+          label: Configuration health
+          ready: Ready
+          configured: Configured
+          unknown: Not yet assessed
+          inactive: Inactive
+        configuration_context:
+          label: Configuration
+          provider: Provider assignment
+          defaults: Platform defaults
+          none: No additional settings
+        stats:
+          total: Total
+          active: Active
+          required: Required
+      show:
+        platform_scope: Changes apply to every customer using this module.
+        actions:
+          open: Open
+        module_key: Module Key
+        version: Version
+        details:
+          title: Module details
+          description: How this module is registered on the platform.
+        sections:
+          availability: Availability
+          availability_hint: Whether customers can enable this module, whether it is required, and whether other resources may hand off to it.
+          configuration: Configuration
+          technical: Technical
+          advanced: Advanced
+        module_status: Module Status
+        module_status_hint: Customers can enable this module when it is on.
+        locked_hint: Locked — this module is always active and required.
+        required_module: Required Module
+        required_module_hint: On for every customer. They cannot turn it off.
+        required_disabled_hint: Activate the module before making it required.
+        required_confirm: This will enable the module for ALL existing customers. Continue?
+        handoff_target: Handoff Target
+        handoff_target_hint: Pages may hand off here after submit.
+        handoff_on_label: Handoff enabled
+        handoff_disabled_hint: Activate the module before allowing handoff.
+        nav:
+          label: Module sections
+          overview: Overview
+          configuration: Configuration
+          resources: Resources
+          operations: Operations
+          developer: Developer
+          credentials: Credentials
+          templates: Templates
+          providers: Providers
+          vendor: Vendor
+          skeletons: Skeletons
+          layouts: Layouts
+          webhooks: Webhooks
+          advanced: Advanced
+        tabs:
+          nav_label: Module settings sections
+          settings: Settings
+          technical: Technical Reference
+          no_settings: This module has no additional settings to configure.
+          no_settings_description: Platform defaults and vendor credentials will appear here when this module defines them.
+        authentication:
+          title: Customer sign-up
+          subtitle: Public organization registration at /auth/sign_up.
+          customer_signup: Allow public customer sign-up
+          customer_signup_hint: When off, visitors cannot create a new organization from the public site.
+        sms:
+          title: SMS Configuration
+          subtitle: Platform-wide gateway credentials and shared message templates.
+          credentials: Credentials
+          templates: Templates
+        email:
+          title: Email Configuration
+          subtitle: Platform-wide email gateway credentials and SMTP settings.
+          credentials: Credentials
+        ai_assistant:
+          title: AI Assistant configuration
+          subtitle: Platform-wide provider credentials used by every tenant.
+          credentials: Credentials
+        payment:
+          title: Available Tenders
+          subtitle: Control which payment gateways customers may enable.
+          available: Available
+          unavailable: Unavailable
+          available_count: "%{count} of %{total} available"
+          empty_title: No gateways registered
+          empty_description: Add a gateway under app/services/payments/gateways to make it available here.
+          gateway_available_label: "%{gateway} availability"
+          flows:
+            qr: QR code
+            h5: Mobile web
+            jsapi: In-app
+            card: Hosted card
+        models:
+          title: Models
+          subtitle: Tables this module owns, and whether customers may extend them.
+          count:
+            one: "%{count} model"
+            other: "%{count} models"
+          class: Class
+          table_name: Table Name
+          columns: Columns
+          associations: Associations
+          extendable: Extendable
+          extendable_label: "Allow extensions for %{model}"
+          extendable_attributes: "Attributes that may be extended"
+          extendable_attributes_hint: "Choose which columns of this model an extension may use."
+          extendable_attribute_label: "Allow %{model} to extend %{attribute}"
+          extendable_attributes_count:
+            one: "%{count} attribute"
+            other: "%{count} attributes"
+          allowed: Allowed
+          not_allowed: Not allowed
+          empty: No models found for this module.
+          empty_description: This module stores no data of its own.
+          reference_subtitle: Choose which models customers may extend and which attributes are available as template tokens.
+          list_label: Module models
+          column_count:
+            one: "%{count} column"
+            other: "%{count} columns"
+          association_count:
+            one: "%{count} association"
+            other: "%{count} associations"
+          extendable_off_hint: Turn on Extendable to choose which attributes an extension may use.
+          filter_attributes: Filter attributes
+          filter_empty: No attributes match this filter.
+          no_attributes: This model has no attributes to configure.
+        tokens:
+          title: "Model Attributes & Template Tokens"
+          subtitle: "Configure which model attributes are exposed as reference tokens for email and SMS templates"
+          available: "Token Available"
+          not_available: "Not Tokenized"
+          saving: "Saving…"
+          failed: "Failed"
+          attribute: "Attribute"
+          attribute_label: "Attribute Label"
+          type: "Data Type"
+          token_status: "Template Token"
+        schema:
+          title: Defaults
+          subtitle: Used when a customer has not set their own value.
+          setting: Setting
+          default: Default
+          save_defaults: Save Defaults
+        summary:
+          availability: Availability
+          configuration: Configuration
+          version: Version
+          configuration_available: Settings available
+          configuration_none: No additional settings
+          unavailable: "—"
+        next_actions:
+          title: Next actions
+          description: Continue with the section that matches the task you need to complete.
+          hint: Use the module navigation to configure providers, resources, operations, or developer settings.
+        captcha:
+          title: "Captcha configuration"
+          subtitle: "Vendor credentials and protected public page rates."
+          credentials: "Vendor credentials"
+          pages_title: "Protected public pages"
+          pages_subtitle: "Rate-limit these public URLs per IP. Captcha appears after the limit. Default 100 / 5 min."
+          skip_title: "Skip captcha"
+          skip_subtitle: "These URLs never show a captcha. Move one back to restore its rate."
+          protected_search: "Search protected URLs"
+          skip_search: "Search skipped URLs"
+          protected_empty: "No URLs are captcha-protected. Move a skipped URL here to set a rate."
+          skip_empty: "No URLs skip captcha. Move a protected URL here to turn the challenge off."
+          search_empty: "No URLs match this search."
+          protected_count:
+            one: "%{count} protected"
+            other: "%{count} protected"
+          total_count: "%{count}"
+          empty: "No public platform forms were discovered."
+          empty_description: "Public forms and pages appear here when they are available."
+          empty_section_description: "Use the throttle control on another URL to move it into this section."
+          collection:
+            resource: Resource
+            path: Path
+            throttle: Access throttle
+      collections:
+        sms_templates: SMS templates
+        webhook_events: Webhook events
+      workspace:
+        provider_health: Provider health and credentials
+        stages:
+          assignment: Assignment
+          provider: Provider
+          health: Provider health
+          credentials: Credentials
+          advanced_options: Advanced options
+        platform_scope: Changes made here apply platform-wide to every customer using this module.
+        form_actions_label: Form actions
+        cancel: Cancel
+        status:
+          mandatory: Mandatory
+          required: Required
+          active: Active
+          inactive: Inactive
+    captcha: {}
+    code_generators: {}

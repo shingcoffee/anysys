@@ -1,0 +1,10 @@
+<% role_actions = [{ label: t("settings_people.permissions"), path: admin_settings_modules_authentication_role_grants_path(current_customer.id, @role), variant: :primary, icon: :shield_check }]
+   unless @role.system?
+     role_actions << { label: t("common.actions.edit"), path: edit_admin_settings_modules_authentication_role_path(current_customer.id, @role), variant: :secondary }
+   end %>
+<%= render Admin::Settings::PageComponent.new(customer_id: current_customer.id,
+  title: Admin::Settings::RolePresenter.new(@role).name,
+  breadcrumbs: [{ label: t("settings_navigation.items.roles_permissions"), path: admin_settings_modules_authentication_roles_path(current_customer.id) }],
+  actions: role_actions) do %>
+  <%= render Admin::Settings::Modules::Authentication::RoleDetailsComponent.new(role: @role) %>
+<% end %>

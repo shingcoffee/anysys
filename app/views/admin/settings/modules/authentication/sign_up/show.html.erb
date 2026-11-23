@@ -1,0 +1,4 @@
+<%= render Admin::Settings::PageComponent.new(customer_id: current_customer.id,
+  title: t("settings_navigation.items.member_registration"), description: t("settings_people.registration.description")) do %>
+  <%= render Admin::Settings::Modules::Authentication::PolicyFormComponent.new(policy: :registration, enabled: @enabled, customer: current_customer) %>
+<% end %>

@@ -1,0 +1,102 @@
+<% presenter = announcement_presenter(@announcement) %>
+<% lifecycle = presenter.lifecycle_badge %>
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("maint_platform.announcements.breadcrumb.maintenance"), path: admin_maintenance_path(current_customer_id) },
+    { label: t("maint_platform.announcements.breadcrumb.announcements"), path: admin_maintenance_platform_announcements_path(current_customer_id) },
+    { label: @announcement.title }
+  ],
+  title: @announcement.title,
+  actions: [
+    { label: t("common.actions.edit"),
+      path: edit_admin_maintenance_platform_announcement_path(current_customer_id, @announcement),
+      variant: :primary, icon: :edit }
+  ]
+) do %>
+  <div class="mb-4">
+    <%= render BadgeComponent.new(variant: lifecycle[:variant], size: :sm) do %><%= lifecycle[:label] %><% end %>
+  </div>
+
+  <div class="card p-6">
+    <dl class="grid grid-cols-1 gap-x-6 gap-y-4 text-body-sm sm:grid-cols-2">
+      <div>
+        <dt class="font-medium text-text-tertiary"><%= t("maint_platform.announcements.form.severity") %></dt>
+        <dd class="mt-1">
+          <% severity = presenter.severity_badge %>
+          <%= render BadgeComponent.new(variant: severity[:variant], size: :sm) do %><%= severity[:label] %><% end %>
+        </dd>
+      </div>
+      <div>
+        <dt class="font-medium text-text-tertiary"><%= t("common.labels.status") %></dt>
+        <dd class="mt-1">
+          <% status = presenter.status_badge %>
+          <%= render BadgeComponent.new(variant: status[:variant], size: :sm) do %><%= status[:label] %><% end %>
+        </dd>
+      </div>
+      <div>
+        <dt class="font-medium text-text-tertiary"><%= t("maint_platform.announcements.index.columns.audience") %></dt>
+        <dd class="mt-1 text-text-primary"><%= presenter.audience_label %></dd>
+      </div>
+      <div>
+        <dt class="font-medium text-text-tertiary"><%= t("maint_platform.announcements.show.learn_more") %></dt>
+        <dd class="mt-1 break-all text-text-primary">
+          <% if presenter.link_url %>
+            <%= link_to presenter.link_url, presenter.link_url, target: "_blank", rel: "noopener noreferrer", class: "link" %>
+          <% else %>
+            <%= t("common.labels.em_dash") %>
+          <% end %>
+        </dd>
+      </div>
+      <div>
+        <dt class="font-medium text-text-tertiary"><%= t("maint_platform.announcements.form.starts_at") %></dt>
+        <dd class="mt-1 text-text-primary tabular-nums"><%= presenter.starts_at %></dd>
+      </div>
+      <div>
+        <dt class="font-medium text-text-tertiary"><%= t("maint_platform.announcements.form.ends_at") %></dt>
+        <dd class="mt-1 text-text-primary tabular-nums"><%= presenter.ends_at %></dd>
+      </div>
+      <div>
+        <dt class="font-medium text-text-tertiary"><%= t("common.labels.created_at") %></dt>
+        <dd class="mt-1 text-text-primary tabular-nums"><%= presenter.created_at %></dd>
+      </div>
+      <div>
+        <dt class="font-medium text-text-tertiary"><%= t("common.labels.updated_at") %></dt>
+        <dd class="mt-1 text-text-primary tabular-nums"><%= presenter.updated_at %></dd>
+      </div>
+      <div class="sm:col-span-2">
+        <dt class="form-label"><%= t("maint_platform.announcements.form.body_en") %></dt>
+        <dd class="whitespace-pre-wrap text-body text-text-primary"><%= @announcement.body_en %></dd>
+      </div>
+      <div class="sm:col-span-2">
+        <dt class="form-label"><%= t("maint_platform.announcements.form.body_zh") %></dt>
+        <dd class="whitespace-pre-wrap text-body text-text-primary"><%= @announcement.body_zh %></dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="card mt-4 p-6">
+    <h2 class="section-header mb-3"><%= t("maint_platform.announcements.show.targets") %></h2>
+    <% if @announcement.all_customers? %>
+      <p class="text-body-sm text-text-primary"><%= t("maint_platform.announcements.show.targets_all") %></p>
+    <% elsif @matching_customers.any? %>
+      <p class="mb-3 text-caption"><%= t("maint_platform.announcements.show.targets_matching", count: @matching_count) %></p>
+      <ul class="flex flex-col divide-y divide-border-subtle">
+        <% @matching_customers.each do |customer| %>
+          <li class="flex flex-wrap items-center gap-3 px-3 py-2.5">
+            <span class="text-body font-medium text-text-primary"><%= customer.name %></span>
+            <span class="rounded bg-surface-active px-1.5 py-0.5 text-mono text-sm"><%= customer.id %></span>
+          </li>
+        <% end %>
+      </ul>
+      <% if @matching_truncated %>
+        <p class="mt-3 text-caption">
+          <%= t("maint_platform.announcements.show.targets_truncated",
+                shown: Admin::Maintenance::Platform::AnnouncementsController::MATCHING_CUSTOMERS_LIMIT,
+                count: @matching_count) %>
+        </p>
+      <% end %>
+    <% else %>
+      <p class="text-body-sm text-text-primary"><%= t("maint_platform.announcements.show.targets_empty") %></p>
+    <% end %>
+  </div>
+<% end %>

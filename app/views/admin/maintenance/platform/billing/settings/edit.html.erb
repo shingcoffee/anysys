@@ -1,0 +1,11 @@
+<%= render Billing::Admin::PlatformPageComponent.new(
+  customer_id: current_customer_id,
+  section: :settings,
+  crumbs: [{ label: t("common.actions.edit") }],
+  title: t("maint_platform.billing.settings.edit.title"),
+  description: t("maint_platform.billing.settings.edit.description")
+) do %>
+  <div class="max-w-4xl">
+    <%= render Billing::Admin::SettingsFormComponent.new(settings: @settings, form: @contract, customer_id: current_customer_id, mode: :edit) %>
+  </div>
+<% end %>

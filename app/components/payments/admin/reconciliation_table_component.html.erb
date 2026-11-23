@@ -1,0 +1,34 @@
+<%= render Admin::CardTableComponent.new(
+      headers: [
+        { label: t("comp_payments.reconciliation.headers.date"),          align: :left },
+        { label: t("comp_payments.reconciliation.headers.provider"),      align: :left },
+        { label: t("comp_payments.reconciliation.headers.bill_type"),     align: :left },
+        { label: t("comp_payments.reconciliation.headers.rows"),          align: :right },
+        { label: t("comp_payments.reconciliation.headers.amount"),        align: :right },
+        { label: t("comp_payments.reconciliation.headers.discrepancies"), align: :right },
+        { label: t("common.labels.status"),                               align: :left },
+        { label: "",                                                      align: :right }
+      ],
+      empty: bills.empty?,
+      empty_text: t("comp_payments.reconciliation.empty")) do %>
+  <% bills.each do |b| %>
+    <tr class="table-row">
+      <td class="px-4 py-3 text-body text-text-primary tabular-nums"><%= bill_date_label(b.bill_date) %></td>
+      <td class="px-4 py-3 text-body text-text-secondary"><%= provider_label(b.provider) %></td>
+      <td class="px-4 py-3 text-body text-text-secondary"><%= bill_type_label(b.bill_type) %></td>
+      <td class="px-4 py-3 text-right text-body text-text-primary tabular-nums"><%= b.total_count || 0 %></td>
+      <td class="px-4 py-3 text-right text-body text-text-primary tabular-nums"><%= format_money(b.total_amount || 0, "CNY") %></td>
+      <td class="px-4 py-3 text-right text-body text-text-primary tabular-nums"><%= b.discrepancy_count || 0 %></td>
+      <td class="px-4 py-3">
+        <%= render BadgeComponent.new(variant: status_variant(b.status), size: :sm) do %><%= status_label(b.status) %><% end %>
+      </td>
+      <td class="px-4 py-3 text-right">
+        <% if b.bill_file.attached? %>
+          <%= link_to t("comp_payments.reconciliation.download"),
+              helpers.download_admin_modules_payments_reconciliation_path(customer_id: helpers.params[:customer_id], id: b.id),
+              class: "btn btn-secondary text-xs" %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+<% end %>

@@ -1,0 +1,276 @@
+/**
+ * Anysys - Application Styles
+ *
+ * This stylesheet contains only essential styles that cannot be achieved with TailwindCSS:
+ * - SVG/Canvas-specific styles for the flowchart editor
+ * - Custom scrollbar styles
+ * - Drag-and-drop element styles
+ */
+
+/* ============================================================================
+   Utility Classes (Scrollbars)
+   ============================================================================ */
+
+/**
+ * Hide scrollbar - Useful for horizontal scroll areas like menu bars.
+ */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/**
+ * Custom Scrollbar - Reusable class for consistent scrollbar styling.
+ * Apply to any element that needs custom scrollbar appearance.
+ * Also applies to property editor form fields via attribute selector.
+ */
+.custom-scrollbar::-webkit-scrollbar,
+[data-property-editor-target="formFields"]::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track,
+[data-property-editor-target="formFields"]::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb,
+[data-property-editor-target="formFields"]::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
+[data-property-editor-target="formFields"]::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Property Editor Scrollable Area - Max height constraint */
+[data-property-editor-target="formFields"] {
+  max-height: calc(100vh - 320px);
+  overflow-y: auto;
+}
+
+/* ============================================================================
+   Flowchart Editor Styles (Drop Zone)
+   ============================================================================ */
+
+/* Drop Zone - Visual feedback when dragging elements */
+.drop-zone-active {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+  border: 2px dashed #3b82f6 !important;
+  border-radius: 8px;
+}
+
+/* Drop Success Animation - Ripple effect on successful drop */
+.drop-success-animation {
+  position: absolute;
+  background: rgba(34, 197, 94, 0.2);
+  border: 2px solid #22c55e;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: dropSuccess 1s ease-out forwards;
+}
+
+@keyframes dropSuccess {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+  }
+}
+
+/* Dragging State - Change cursor when actively dragging */
+.dragging-element .flowchart-element {
+  cursor: grabbing !important;
+}
+
+/* ============================================================================
+   SVG Canvas Styles
+   ============================================================================ */
+
+/* Base Canvas */
+.flowchart-svg {
+  background-color: #ffffff;
+}
+
+/* Element Interactions */
+.flowchart-svg [data-element-id] {
+  transition: filter 0.15s ease-in-out;
+}
+
+.flowchart-svg [data-element-id]:hover {
+  filter: brightness(0.97);
+}
+
+/* Selected Element - Blue glow and stroke */
+.flowchart-svg [data-element-id].selected {
+  filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.7));
+}
+
+.flowchart-svg [data-element-id].selected > rect,
+.flowchart-svg [data-element-id].selected > ellipse,
+.flowchart-svg [data-element-id].selected > polygon,
+.flowchart-svg [data-element-id].selected > circle,
+.flowchart-svg [data-element-id].selected > path {
+  stroke: #3b82f6 !important;
+  stroke-width: 3 !important;
+}
+
+/* Resize Handles */
+.flowchart-svg [data-handle-position] {
+  transition: transform 0.1s ease;
+}
+
+/* Connection Lines and Arrows */
+.flowchart-svg .connection-line {
+  transition: stroke 0.15s ease-in-out, stroke-width 0.15s ease-in-out;
+}
+
+.flowchart-svg .connection-arrow {
+  transition: fill 0.15s ease-in-out;
+}
+
+.flowchart-svg .connection-endpoint-handle {
+  transition: r 0.1s ease, stroke-width 0.1s ease;
+}
+
+/* Connection Target Highlight - Green glow when connecting */
+.flowchart-svg [data-element-id].connection-target-highlight {
+  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.6));
+}
+
+.flowchart-svg [data-element-id].connection-target-highlight > rect,
+.flowchart-svg [data-element-id].connection-target-highlight > ellipse,
+.flowchart-svg [data-element-id].connection-target-highlight > polygon,
+.flowchart-svg [data-element-id].connection-target-highlight > circle,
+.flowchart-svg [data-element-id].connection-target-highlight > path {
+  stroke: #22c55e;
+  stroke-width: 3;
+}
+
+/* Drop Target Highlight - Proximity-aware blue glow when dropping.
+   --drop-glow-intensity is set by JS (0.4..1.0) based on cursor distance. */
+.flowchart-svg [data-element-id].drop-target-highlight {
+  --drop-glow-intensity: 0.7;
+  filter: drop-shadow(0 0 calc(6px + 8px * var(--drop-glow-intensity)) rgba(59, 130, 246, var(--drop-glow-intensity)));
+  transition: filter 0.1s ease-out;
+}
+
+.flowchart-svg [data-element-id].drop-target-highlight > rect,
+.flowchart-svg [data-element-id].drop-target-highlight > ellipse,
+.flowchart-svg [data-element-id].drop-target-highlight > polygon,
+.flowchart-svg [data-element-id].drop-target-highlight > circle,
+.flowchart-svg [data-element-id].drop-target-highlight > path {
+  stroke: #3b82f6;
+  stroke-width: 3;
+  transition: stroke-width 0.1s ease-out;
+}
+
+/* Drop Side Indicator */
+.flowchart-svg .drop-side-indicator {
+  pointer-events: none;
+}
+
+.flowchart-svg .drop-side-indicator polygon {
+  filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.4));
+}
+
+.flowchart-svg .drop-indicator-pulse {
+  animation: dropIndicatorPulse 1s ease-in-out infinite;
+}
+
+@keyframes dropIndicatorPulse {
+  0% {
+    r: 12;
+    opacity: 0.6;
+  }
+  50% {
+    r: 18;
+    opacity: 0.2;
+  }
+  100% {
+    r: 12;
+    opacity: 0.6;
+  }
+}
+
+/* Selection Preview - Preview selection before click */
+.flowchart-svg [data-element-id].selection-preview {
+  filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.7));
+}
+
+.flowchart-svg [data-element-id].selection-preview > rect,
+.flowchart-svg [data-element-id].selection-preview > ellipse,
+.flowchart-svg [data-element-id].selection-preview > polygon,
+.flowchart-svg [data-element-id].selection-preview > circle,
+.flowchart-svg [data-element-id].selection-preview > path {
+  stroke: #3b82f6 !important;
+  stroke-width: 3 !important;
+}
+
+/* Expanded Subflow Elements - Dashed borders for subflow content */
+.flowchart-svg [data-element-id][data-expanded-subflow] {
+  filter: drop-shadow(0 0 4px rgba(6, 182, 212, 0.3));
+}
+
+.flowchart-svg [data-element-id][data-expanded-subflow] > rect,
+.flowchart-svg [data-element-id][data-expanded-subflow] > ellipse,
+.flowchart-svg [data-element-id][data-expanded-subflow] > polygon,
+.flowchart-svg [data-element-id][data-expanded-subflow] > path:not(.connection-line) {
+  stroke-dasharray: 6 3;
+  stroke-width: 2;
+}
+
+/* Subflow Element Type Colors */
+.flowchart-svg [data-element-id][data-expanded-subflow][data-element-type="start"] > ellipse {
+  stroke: #10b981;
+  stroke-dasharray: 6 3;
+}
+
+.flowchart-svg [data-element-id][data-expanded-subflow][data-element-type="end"] > ellipse {
+  stroke: #ef4444;
+  stroke-dasharray: 6 3;
+}
+
+.flowchart-svg [data-element-id][data-expanded-subflow][data-element-type="process"] > rect {
+  stroke: #3b82f6;
+  stroke-dasharray: 6 3;
+}
+
+.flowchart-svg [data-element-id][data-expanded-subflow][data-element-type="decision"] > polygon {
+  stroke: #f59e0b;
+  stroke-dasharray: 6 3;
+}
+
+.flowchart-svg [data-element-id][data-expanded-subflow][data-element-type="loop"] > polygon {
+  stroke: #a855f7;
+  stroke-dasharray: 6 3;
+}
+
+/* Fold Icon - Collapse/expand subflows */
+.flowchart-svg .fold-icon {
+  transition: transform 0.15s ease-in-out;
+}
+
+.flowchart-svg .fold-icon:hover {
+  transform: scale(1.1);
+}
+
+.flowchart-svg .fold-icon circle {
+  transition: all 0.15s ease-in-out;
+}
+
+.flowchart-svg .fold-icon:active circle {
+  fill: #0e7490;
+}

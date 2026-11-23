@@ -1,0 +1,69 @@
+<section class="<%= spacing_class("pt-4 pb-16 md:pb-24") %>">
+  <div class="<%= inner_measure_class %> flex flex-col gap-8 md:gap-10">
+    <%= header(kicker: prop("kicker"), heading: prop("heading"), subhead: prop("subhead"), align: :center, css_class: "[&_h2]:text-site-3xl md:[&_h2]:text-site-4xl") %>
+
+    <div class="min-w-0 overflow-hidden rounded-2xl ring-1 shadow-xl md:rounded-3xl <%= frame_class %>">
+      <div class="flex flex-wrap items-center gap-4 border-b px-5 py-4 sm:px-8 <%= hairline_class %>">
+        <div class="flex shrink-0 gap-1.5 <%= muted_class %>" aria-hidden="true">
+          <% 3.times do %>
+            <span class="size-2 rounded-full bg-current opacity-30"></span>
+          <% end %>
+        </div>
+        <% if present_text?(prop("example_label")) %>
+          <p <%= el_attrs("example_label", class: "min-w-0 break-words text-site-xs font-medium #{muted_class}") %>><%= prop("example_label") %></p>
+        <% end %>
+      </div>
+
+      <div class="grid gap-6 p-4 sm:p-6 md:p-8 <%= items.any? ? "lg:grid-cols-12" : "" %>">
+        <div class="flex min-w-0 flex-col rounded-2xl bg-gradient-to-br p-6 ring-1 sm:p-8 <%= prompt_class %> <%= items.any? ? "lg:col-span-5" : "" %>">
+          <div class="mb-8 flex flex-wrap items-center gap-3">
+            <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-violet-600 text-white" aria-hidden="true">
+              <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z M20 3v4 M18 5h4"/></svg>
+            </span>
+            <% if present_text?(prop("prompt_label")) %>
+              <p <%= el_attrs("prompt_label", class: "min-w-0 break-words text-site-sm font-semibold #{prompt_muted_class}") %>><%= prop("prompt_label") %></p>
+            <% end %>
+          </div>
+          <% if present_text?(prop("prompt")) %>
+            <p <%= el_attrs("prompt", class: "break-words text-site-xl font-medium leading-relaxed sm:text-site-2xl") %>><%= prop("prompt") %></p>
+          <% end %>
+          <% if present_text?(prop("review_note")) %>
+            <div class="mt-auto pt-8">
+              <p <%= el_attrs("review_note", class: "border-t border-current/15 pt-5 text-pretty break-words text-site-sm leading-relaxed #{prompt_muted_class}") %>><%= prop("review_note") %></p>
+            </div>
+          <% end %>
+        </div>
+
+        <% if items.any? %>
+          <div class="flex min-w-0 flex-col gap-4 lg:col-span-7">
+            <% if present_text?(prop("output_label")) %>
+              <p <%= el_attrs("output_label", class: "break-words px-1 text-site-xs font-semibold #{muted_class}") %>><%= prop("output_label") %></p>
+            <% end %>
+            <div class="flex flex-col gap-4">
+              <% items.each_with_index do |item, index| %>
+                <article <%= item_attrs("items", framed: true, class: "flex min-w-0 items-start gap-4 rounded-2xl p-5 ring-1 sm:p-6 #{output_class}") %>>
+                  <span class="flex size-10 shrink-0 items-center justify-center rounded-xl ring-1 <%= icon_class %>" aria-hidden="true">
+                    <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="<%= output_icon_path(index) %>"/></svg>
+                  </span>
+                  <div class="min-w-0 flex-1">
+                    <div class="flex flex-wrap items-start justify-between gap-2">
+                      <% if present_text?(item["title"]) %>
+                        <h3 <%= el_attrs("items.title", class: "min-w-0 break-words text-site-base font-semibold") %>><%= item["title"] %></h3>
+                      <% end %>
+                      <% if present_text?(item["status"]) %>
+                        <span <%= el_attrs("items.status", class: "max-w-full break-words rounded-full px-2.5 py-1 text-site-xs font-medium ring-1 ring-inset #{icon_class}") %>><%= item["status"] %></span>
+                      <% end %>
+                    </div>
+                    <% if present_text?(item["body"]) %>
+                      <p <%= el_attrs("items.body", class: "mt-2 text-pretty break-words text-site-sm leading-relaxed #{muted_class}") %>><%= item["body"] %></p>
+                    <% end %>
+                  </div>
+                </article>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>

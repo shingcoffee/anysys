@@ -1,0 +1,16 @@
+<%= render Billing::Admin::PlatformPageComponent.new(
+  customer_id: current_customer_id,
+  section: :coupons,
+  crumbs: [
+    { label: @coupon.code, path: admin_maintenance_platform_billing_coupon_path(current_customer_id, @coupon) },
+    { label: t("common.actions.edit") }
+  ],
+  title: t("maint_platform.billing.coupons.edit.title"),
+  description: t("maint_platform.billing.coupons.edit.description")
+) do %>
+  <%= render Billing::Admin::CouponFormComponent.new(
+    coupon:      @coupon,
+    form:        @contract,
+    customer_id: current_customer_id
+  ) %>
+<% end %>

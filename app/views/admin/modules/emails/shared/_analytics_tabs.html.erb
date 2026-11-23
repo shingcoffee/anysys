@@ -1,0 +1,7 @@
+<%
+  tabs = [
+    { label: t("feature_modules.email.tabs.overview"), path: admin_modules_emails_dashboard_path(current_customer.id), active: active_tab == :overview },
+    { label: t("feature_modules.email.tabs.health"), path: admin_modules_emails_health_index_path(current_customer.id), active: active_tab == :health }
+  ]
+%>
+<%= render Emails::TabsComponent.new(tabs: tabs) %>

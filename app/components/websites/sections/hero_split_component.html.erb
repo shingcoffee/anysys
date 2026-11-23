@@ -1,0 +1,25 @@
+<section class="relative overflow-hidden <%= spacing_class(theme.density == "compact" ? "py-16 md:py-24" : "py-20 md:py-28") %>">
+  <div class="<%= inner_measure_class %> grid min-w-0 items-center gap-12 md:grid-cols-12 md:gap-10 lg:gap-16">
+    <div class="flex flex-col items-start gap-6 md:col-span-6 md:gap-7">
+      <% if present_text?(prop("eyebrow")) %>
+        <p <%= el_attrs("eyebrow", class: "inline-flex items-center gap-2 rounded-full px-3 py-1 text-site-xs font-medium #{theme.accent_soft_class}") %>>
+          <span class="size-1.5 rounded-full <%= theme.accent_dot_class %>" aria-hidden="true"></span>
+          <%= prop("eyebrow") %>
+        </p>
+      <% end %>
+      <% if present_text?(prop("headline")) %>
+        <h1 <%= el_attrs("headline", class: "text-balance break-words text-site-4xl leading-[1.04] sm:text-site-5xl lg:text-site-6xl #{headline_font_class}") %>><%= prop("headline") %></h1>
+      <% end %>
+      <% if present_text?(prop("subhead")) %>
+        <p <%= el_attrs("subhead", class: "max-w-xl #{subhead_class}") %>><%= prop("subhead") %></p>
+      <% end %>
+      <div class="w-full pt-2 sm:w-auto"><%= buttons %></div>
+    </div>
+    <div class="relative md:col-span-6">
+      <div class="absolute -inset-x-6 -inset-y-10 -z-10 rounded-full opacity-60 blur-3xl <%= theme.glow_class %>" aria-hidden="true"></div>
+      <div class="relative aspect-[4/3] w-full md:aspect-[4/5] lg:aspect-[5/6] <%= image_frame_class %>">
+        <%= render_media(props["visual_url"], alt: prop("headline"), css_class: "absolute inset-0 size-full object-cover", eager: true) %>
+      </div>
+    </div>
+  </div>
+</section>

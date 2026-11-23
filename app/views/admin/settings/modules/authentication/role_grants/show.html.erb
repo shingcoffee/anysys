@@ -1,0 +1,8 @@
+<%= render Admin::Settings::PageComponent.new(customer_id: current_customer.id,
+  title: t("settings_people.permissions"), description: t("settings_people.permissions_description"),
+  breadcrumbs: [
+    { label: t("settings_navigation.items.roles_permissions"), path: admin_settings_modules_authentication_roles_path(current_customer.id) },
+    { label: Admin::Settings::RolePresenter.new(@role).name, path: admin_settings_modules_authentication_role_path(current_customer.id, @role) }
+  ]) do %>
+  <%= render Admin::Settings::Modules::Authentication::GrantsEditorComponent.new(role: @role, catalog: @catalog, granted_keys: @granted_keys, customer: current_customer) %>
+<% end %>

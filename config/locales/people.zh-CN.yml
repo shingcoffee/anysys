@@ -1,0 +1,8 @@
+zh-CN:
+  people:
+    errors:
+      not_a_person: "此记录不是人员实体。"
+      user_unavailable: "无法关联该用户。"
+      already_linked: "此记录已关联用户。"
+      user_already_linked: "该用户已关联此类型的另一条记录。"
+      not_linked: "此记录尚未关联用户。"

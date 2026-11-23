@@ -1,0 +1,58 @@
+zh-CN:
+  flowchart_actions:
+    shared:
+      fields:
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        sourceVariable:
+          label: 来源
+          help: 本步骤读取的上下文路径。
+        retryOnTransportError:
+          label: 传输错误时重试
+          help: 仅在请求幂等时重试。
+        retryAttempts:
+          label: 重试次数
+          help: 额外的传输尝试次数（1–2）。
+        connectTimeout:
+          label: 连接超时
+          help: 等待建立连接的秒数（1–5）。
+        readTimeout:
+          label: 读取超时
+          help: 等待响应的秒数（1–9）。
+        circuitBreaker:
+          label: 熔断器
+          help: 远端不健康时快速失败。
+        breakerName:
+          label: 熔断器名称
+          help: 此熔断器的缓存键后缀。
+        failureThreshold:
+          label: 失败阈值
+          help: 打开熔断器前的失败次数（1–20）。
+        resetTimeoutSeconds:
+          label: 复位超时
+          help: 半开重试前的等待秒数（10–3600）。
+      errors:
+        required: "必须填写 %{field}"
+        invalid_identifier: "%{field} 必须是合法的标识符路径"
+        reserved_name: "%{field} 不能使用 %{value}"
+        not_in_list: "%{field} 必须是以下之一：%{allowed}"
+        out_of_range: "%{field} 必须介于 %{min} 与 %{max} 之间"
+        too_long: "%{field} 最多 %{max_length} 个字符"
+        invalid_expression: "%{field} 必须是单个安全的 Ruby 表达式"
+        not_one_statement: "%{field} 必须恰好是一条语句"
+        invalid_template: "%{field} 不是有效模板"
+        not_boolean: "%{field} 必须为 true 或 false"
+        unknown_attribute: "%{attribute} 不是 %{entity} 的属性"
+        unknown_reference: "%{field} 无法匹配已知的 %{source}"
+        unknown_field: "%{field} 不是已声明的设置"
+        retry_not_idempotent: "仅幂等请求允许重试"
+        timeout_exceeds_run_limit: "connectTimeout 与 readTimeout 之和不得超过 %{cap} 秒"
+        invalid_integer: "%{field} 必须是整数"
+        invalid_decimal: "%{field} 必须是数字"
+        invalid_list: "%{field} 必须是列表"
+        invalid_mapping: "%{field} 必须是键值对列表"
+        invalid_conditions: "%{field} 必须是条件组"
+        en_required: "%{field} 必须包含英文（en）文案"
+        missing_customer_scope: "查找实体时必须指定客户范围"
+        entity_not_accessible: "当前客户无法访问实体 %{id}"

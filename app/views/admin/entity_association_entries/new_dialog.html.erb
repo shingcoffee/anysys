@@ -1,0 +1,12 @@
+<%# Add form inside the entry page's dialog; its target dropdowns open the next dialog level. %>
+<turbo-frame id="<%= Admin::Entities::QuickAddDialogComponent.frame_id(dialog_depth) %>">
+  <%= render Admin::Entities::AssociationEntriesFormComponent.new(
+    forms: @forms,
+    template_form: @template_form,
+    url: admin_entity_entry_association_entries_path(current_customer.id, @entity, @entry, @association.id),
+    cancel_path: nil,
+    errors: @errors || {},
+    frame: true,
+    quick_add_depth: dialog_depth + 1
+  ) %>
+</turbo-frame>

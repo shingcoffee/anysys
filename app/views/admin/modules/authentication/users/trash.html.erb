@@ -1,0 +1,32 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "authentication",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("admin_modules.nav.users"), path: admin_modules_authentication_users_path(current_customer_id) },
+        { label: t("admin_modules.users.actions.trash") }
+      ],
+      title: t("admin_modules.users.trash.title"),
+      description: t("admin_modules.users.trash.description")
+    ) do %>
+  <%= render AdminTableComponent.new(
+        rows:        @rows,
+        columns:     @columns,
+        pagination:  @pagination,
+        params:      @table_params,
+        base_path:   trash_admin_modules_authentication_users_path(current_customer_id),
+        search:      { param: :q, placeholder: t("admin_modules.users.index.search_placeholder") },
+        row_path:    ->(user) { admin_modules_authentication_user_path(current_customer_id, user) },
+        row_actions: ->(user) {
+          [{
+            label: t("admin_modules.users.actions.restore"),
+            path: restore_admin_modules_authentication_user_path(current_customer_id, user),
+            method: :patch,
+            data: { turbo_confirm: t("admin_modules.users.show.restore_confirm", name: user.display_name) }
+          }]
+        },
+        empty_state: {
+          title: t("admin_modules.users.trash.empty_title"),
+          description: t("admin_modules.users.trash.empty_description")
+        }
+      ) %>
+<% end %>

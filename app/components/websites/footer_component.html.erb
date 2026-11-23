@@ -1,0 +1,35 @@
+<footer class="<%= theme.footer_class %>">
+  <div class="<%= inner_measure_class %> grid grid-cols-1 gap-12 py-16 md:grid-cols-12 md:py-24">
+    <div class="flex flex-col gap-4 md:col-span-5">
+      <p class="text-site-2xl md:text-site-3xl <%= headline_font_class %>"><%= site_name %></p>
+      <% if present_text?(blurb) %>
+        <p class="max-w-sm text-pretty text-site-base <%= muted_class %>"><%= blurb %></p>
+      <% end %>
+    </div>
+    <% if show_columns? %>
+      <div class="grid grid-cols-2 gap-10 sm:grid-cols-3 md:col-span-7">
+        <% columns.each do |column| %>
+          <div class="flex flex-col gap-3.5">
+            <% if present_text?(column["heading"]) %>
+              <p class="text-site-sm font-semibold uppercase tracking-[0.12em]"><%= column["heading"] %></p>
+            <% end %>
+            <% links_for(column).each do |link| %>
+              <a href="<%= href_for(link["url"]) %>" class="w-fit text-site-base transition-colors <%= muted_class %> <%= link_hover_class %>">
+                <%= link["label"] %>
+              </a>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="<%= inner_measure_class %>">
+    <div class="flex flex-col gap-2 border-t py-7 text-site-sm sm:flex-row sm:items-center sm:justify-between <%= hairline_class %> <%= muted_class %>">
+      <span>&copy; <%= Time.current.year %> <%= site_name %></span>
+      <% if present_text?(tagline) %>
+        <span><%= tagline %></span>
+      <% end %>
+    </div>
+  </div>
+</footer>

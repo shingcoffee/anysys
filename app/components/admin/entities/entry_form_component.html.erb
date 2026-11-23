@@ -1,0 +1,41 @@
+<%= form_with url: url, method: http_method, local: true, class: "min-w-0 space-y-6", data: form_data do %>
+  <% if summary_errors.any? %>
+    <section role="alert" tabindex="-1" autofocus="autofocus" aria-labelledby="<%= errors_heading_id %>" class="rounded-lg border border-danger bg-danger-subtle p-4 text-danger break-words [overflow-wrap:anywhere]">
+      <h2 id="<%= errors_heading_id %>" class="font-semibold"><%= t("admin_misc.entities.entry_form.errors_heading") %></h2>
+      <ul class="mt-2 list-disc space-y-1 pl-5 text-sm">
+        <% summary_errors.each do |error| %>
+          <li>
+            <% if error[:field] %>
+              <a href="#<%= field_id(error[:field]) %>" class="underline underline-offset-2">
+                <span class="font-medium"><%= error[:field].label %></span>: <%= error[:message] %>
+              </a>
+            <% else %>
+              <%= error[:message] %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
+
+  <% unless form.available? %>
+    <p role="status" class="rounded-lg border border-warning bg-warning-subtle p-4 text-sm text-text-primary break-words [overflow-wrap:anywhere]"><%= unavailable_message %></p>
+  <% end %>
+
+  <% if groups.any? %>
+    <div class="min-w-0">
+      <% groups.each_with_index do |group, index| %>
+        <%= render Admin::Entities::EntryGroupComponent.new(label: group.label, separated: index.positive?) do %>
+          <% group.fields.each do |field| %>
+            <%= render Admin::Entities::EntryFieldComponent.new(field: field, value: form.value_for(field.slug), errors: form.errors_for(field.slug), quick_add: quick_add_for(field), id_prefix: id_prefix) %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= render Admin::Entities::EntryActionsComponent.new(submit_label: submit_label, submitting_label: submitting_label, disabled: !form.available?, dismiss_action: dismiss_action, cancel_path: cancel_path) %>
+<% end %>
+<% if quick_add_dialog? %>
+  <%= render Admin::Entities::QuickAddDialogComponent.new(depth: quick_add_depth) %>
+<% end %>

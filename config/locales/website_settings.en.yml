@@ -1,0 +1,73 @@
+en:
+  website_settings:
+    description: "Manage your site's identity, appearance, and publishing."
+    page_defaults: "Page defaults"
+    appearance:
+      appearance: "Color mode"
+      accent: "Accent color"
+      type: "Font style"
+      density: "Page spacing"
+      corners: "Corner style"
+      neutral: "Neutral tone"
+    search:
+      heading: "Search appearance"
+      title: "Search result title"
+      title_hint: "The clickable headline in search results. Aim for about 60 characters."
+      description: "Search result description"
+      description_hint: "The short summary under the title. Aim for about 155 characters."
+    footer:
+      introduction: "Short introduction"
+      editing_hint: "Drag or use the arrows to reorder columns. To remove a link, clear its label and URL. To remove a column, clear its heading and all links, then Save."
+    publishing:
+      heading: "Publishing"
+      label: "Make site public"
+      hint: "Click Save to apply. When off, visitors cannot open your website. Individual pages must also be published to appear."
+    starter:
+      heading: "Starter template"
+      description: "Replacing your website deletes all current pages and their content. This is separate from Save and cannot be undone."
+      browse: "Choose a replacement template"
+      consequences: "When you replace your website:"
+      deletes_pages: "All existing pages and their sections are permanently deleted and replaced with the template's pages."
+      resets_appearance: "Colors, fonts, spacing, and the default layout for new pages change to the template's settings."
+      unpublished_pages: "New pages are unpublished. Review and publish them before visitors can open them."
+      unsaved_changes: "Unsaved settings on this page will be lost."
+      replace: "Replace website"
+      replace_named: "Replace website with %{name}"
+      confirm: "Replace your website with %{name}? All existing pages and their sections will be permanently deleted. Appearance and the default page layout will reset to this template. New pages will be unpublished, and unsaved settings will be lost. This cannot be undone."
+      pages: "Included pages: %{pages}"
+      page: "Page"
+      not_selected: "No starter template selected."
+      unavailable: "Previously selected template"
+      unnamed: "Website template"
+  website:
+    admin:
+      settings:
+        identity:
+          description: "The name and tagline visitors see in the header and browser tab."
+        theme:
+          description: "Colors, type, and spacing for your public site."
+          specimen: "Aa"
+          footer: "Click Save to apply this look to your public pages."
+          preview:
+            kicker: "Theme preview"
+            headline: "Your site, in this look"
+            body: "Headlines, body copy, and buttons update as you choose."
+            action: "Get started"
+            brand: "Studio"
+            nav_home: "Home"
+            nav_work: "Work"
+        seo:
+          helper: "What search engines and social previews show for your homepage."
+        footer:
+          description: "The short blurb and link columns at the bottom of every page."
+          columns_helper: "Drag to reorder. Blank links are not saved."
+        publish:
+          status_on: "Published"
+          status_off: "Unpublished"
+          card_description: "When unpublished, every public site URL returns 404."
+        skeleton:
+          nav: "Starter"
+          card_title: "Starter templates"
+          current_badge: "Current"
+          replace_this: "Replace site with this starter"
+          pages_label: "Pages"

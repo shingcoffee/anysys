@@ -1,0 +1,413 @@
+<% person_entity_ids = Admin::Maintenance::Entities::AttributeModalComponent.person_entity_ids_for(current_customer_id) %>
+<%= form_with model: @entity,
+            url: @entity.persisted? ? admin_maintenance_entity_path(current_customer_id, @entity) : admin_maintenance_entities_path(current_customer_id),
+            class: "flex flex-col gap-6",
+            data: {
+              controller: "entity-form",
+              action: "turbo:submit-start->entity-form#collectAttributes submit->entity-form#collectAttributes template-selector:templateSelected->entity-form#handleTemplateSelected template-selector:templateCleared->entity-form#handleTemplateCleared",
+              entity_form_customer_id_value: current_customer_id,
+              entity_form_current_entity_id_value: @entity.persisted? ? @entity.id : nil,
+              entity_form_person_entity_ids_value: person_entity_ids.to_json,
+              entity_form_html_type_validators_value: ValidatorRegistry::HTML_TYPE_VALIDATORS.to_json,
+
+              # AssociationManager
+              entity_form_add_association_label_value: t("maint_core.entities.form.add_association"),
+              entity_form_edit_association_label_value: t("maint_core.entities.form.edit_association"),
+              entity_form_update_association_label_value: t("maint_core.entities.form.update_association"),
+              entity_form_edit_association_attribute_label_value: t("comp_admin.attribute_modal.edit_association_attribute"),
+              entity_form_update_attribute_label_value: t("comp_admin.attribute_modal.update_attribute"),
+              entity_form_select_target_entity_msg_value: t("maint_core.entities.assoc_modal.select_target_entity_alert"),
+              entity_form_select_display_field_msg_value: t("maint_core.entities.assoc_modal.select_display_field_alert"),
+
+              # ValidatorManager
+              entity_form_allowed_values_label_value: t("comp_admin.attribute_modal.allowed_values"),
+              entity_form_forbidden_values_label_value: t("comp_admin.attribute_modal.forbidden_values"),
+              entity_form_configuration_value_label_value: t("comp_admin.attribute_modal.configuration_value"),
+              entity_form_validator_config_labels_value: t("comp_admin.attribute_modal.validator_config_labels").to_json,
+              entity_form_validator_labels_value: ValidatorRegistry.labels_for_js.to_json,
+              entity_form_enter_value_msg_value: t("comp_admin.attribute_modal.please_enter_value"),
+              entity_form_enter_min_max_msg_value: t("comp_admin.attribute_modal.please_enter_min_max"),
+              entity_form_min_less_than_max_msg_value: t("comp_admin.attribute_modal.min_less_than_max"),
+              entity_form_enter_pattern_msg_value: t("comp_admin.attribute_modal.please_enter_pattern"),
+              entity_form_invalid_pattern_msg_value: t("comp_admin.attribute_modal.invalid_pattern"),
+              entity_form_enter_at_least_one_value_msg_value: t("comp_admin.attribute_modal.please_enter_at_least_one_value"),
+
+              # GroupManager
+              entity_form_new_group_label_value: t("maint_core.entities.group_modal.new_group"),
+              entity_form_create_group_label_value: t("maint_core.entities.group_modal.create_group"),
+              entity_form_edit_group_label_value: t("maint_core.entities.group_modal.edit_group"),
+              entity_form_save_group_label_value: t("maint_core.entities.group_modal.save_group"),
+              entity_form_group_name_required_msg_value: t("maint_core.entities.group_modal.name_required"),
+              entity_form_group_name_unique_msg_value: t("maint_core.entities.group_modal.name_unique"),
+
+              # AttributeManager
+              entity_form_name_required_msg_value: t("comp_admin.attribute_modal.name_required"),
+              entity_form_display_label_required_msg_value: t("comp_admin.attribute_modal.display_label_required"),
+              entity_form_duplicate_name_msg_value: t("comp_admin.attribute_modal.duplicate_name"),
+              entity_form_duplicate_slug_msg_value: t("comp_admin.attribute_modal.duplicate_slug"),
+              entity_form_field_reserved_msg_value: t("comp_admin.attribute_modal.field_reserved"),
+              entity_form_edit_attribute_label_value: t("comp_admin.attribute_modal.edit_attribute"),
+              entity_form_save_changes_label_value: t("maint_core.entities.form.save_changes"),
+
+              # ModalManager
+              entity_form_add_association_attribute_label_value: t("comp_admin.attribute_modal.add_association_attribute"),
+              entity_form_add_attribute_label_value: t("comp_admin.attribute_modal.add_attribute"),
+
+              # ConstantsManager
+              entity_form_constant_option_count_label_value: t("comp_admin.attribute_modal.constant_option_count"),
+              entity_form_option_count_singular_label_value: t("comp_admin.attribute_modal.option_count_singular"),
+              entity_form_option_count_plural_label_value: t("comp_admin.attribute_modal.option_count_plural"),
+
+              # TemplateBuilder — attribute table, badges, view/association modals
+              entity_form_name_label_value: t("common.labels.name"),
+              entity_form_display_label_header_value: t("comp_admin.attribute_modal.display_label"),
+              entity_form_html_type_header_value: t("comp_admin.attribute_modal.html_type"),
+              entity_form_validators_header_value: t("comp_admin.attribute_modal.validators"),
+              entity_form_visibility_header_value: t("comp_admin.attribute_modal.visibility"),
+              entity_form_actions_header_value: t("common.labels.actions"),
+              entity_form_drag_title_value: t("comp_admin.attribute_modal.drag_title"),
+              entity_form_view_attribute_title_value: t("comp_admin.attribute_modal.view_attribute_title"),
+              entity_form_copy_attribute_title_value: t("comp_admin.attribute_modal.copy_attribute_title"),
+              entity_form_edit_attribute_title_value: t("comp_admin.attribute_modal.edit_attribute_title"),
+              entity_form_remove_attribute_title_value: t("comp_admin.attribute_modal.remove_attribute_title"),
+              entity_form_group_ungrouped_label_value: t("comp_admin.attribute_modal.group_ungrouped"),
+              entity_form_group_empty_badge_label_value: t("comp_admin.attribute_modal.group_empty_badge"),
+              entity_form_group_actions_title_value: t("comp_admin.attribute_modal.group_actions_title"),
+              entity_form_attribute_count_singular_value: t("comp_admin.attribute_modal.attribute_count_singular"),
+              entity_form_attribute_count_plural_value: t("comp_admin.attribute_modal.attribute_count_plural"),
+              entity_form_admin_label_value: t("comp_admin.attribute_modal.admin"),
+              entity_form_member_label_value: t("comp_admin.attribute_modal.member"),
+              entity_form_public_label_value: t("comp_admin.attribute_modal.public"),
+              entity_form_visible_label_value: t("comp_admin.attribute_modal.visible"),
+              entity_form_editable_label_value: t("comp_admin.attribute_modal.editable"),
+              entity_form_apply_validators_label_value: t("comp_admin.attribute_modal.apply_validators"),
+              entity_form_option_default_label_value: t("comp_admin.attribute_modal.option_default_label"),
+              entity_form_option_label_placeholder_value: t("comp_admin.attribute_modal.option_label_placeholder"),
+              entity_form_option_value_placeholder_value: t("comp_admin.attribute_modal.option_value_placeholder"),
+              entity_form_remove_option_title_value: t("comp_admin.attribute_modal.remove_option_title"),
+              entity_form_remove_validator_title_value: t("common.actions.remove"),
+              entity_form_none_label_value: t("common.labels.none"),
+              entity_form_group_header_value: t("comp_admin.attribute_modal.group_label"),
+              entity_form_configuration_header_value: t("comp_admin.attribute_modal.configuration_label"),
+              entity_form_description_header_value: t("common.labels.description"),
+              entity_form_identity_section_header_value: t("maint_core.entities.attr_view.identity"),
+              entity_form_audience_section_header_value: t("maint_core.entities.attr_view.audience"),
+              entity_form_validation_section_header_value: t("maint_core.entities.attr_view.validation"),
+              entity_form_details_section_header_value: t("maint_core.entities.attr_view.details"),
+              entity_form_no_description_provided_label_value: t("comp_admin.attribute_modal.no_description_provided"),
+              entity_form_config_label_header_value: t("comp_admin.attribute_modal.config_label_header"),
+              entity_form_config_value_header_value: t("comp_admin.attribute_modal.config_value_header"),
+              entity_form_config_accept_label_value: t("comp_admin.attribute_modal.config_accept_label"),
+              entity_form_config_multiple_label_value: t("comp_admin.attribute_modal.config_multiple_label"),
+              entity_form_yes_label_value: t("common.labels.yes"),
+              entity_form_no_label_value: t("common.labels.no"),
+              entity_form_assoc_will_be_created_label_value: t("maint_core.entities.assoc.will_be_created"),
+              entity_form_assoc_more_format_value: t("comp_admin.attribute_modal.assoc_more_format"),
+              entity_form_edit_association_title_value: t("comp_admin.attribute_modal.edit_association_title"),
+              entity_form_remove_association_title_value: t("comp_admin.attribute_modal.remove_association_title"),
+              entity_form_target_entity_header_value: t("maint_core.entities.assoc.target_entity"),
+              entity_form_display_column_header_value: t("maint_core.entities.assoc.display"),
+              entity_form_bridge_entity_header_value: t("maint_core.entities.bridge.title"),
+              entity_form_additional_attributes_header_value: t("maint_core.entities.assoc.additional_attributes"),
+              entity_form_group_menu_new_group_label_value: t("comp_admin.attribute_modal.group_menu_new_group"),
+              entity_form_group_menu_edit_label_value: t("comp_admin.attribute_modal.group_menu_edit"),
+              entity_form_group_menu_delete_label_value: t("common.actions.delete"),
+
+              # TypeManager
+              entity_form_html_type_labels_value: t("comp_admin.attribute_modal.html_type_labels").to_json,
+              entity_form_html_type_na_label_value: t("comp_admin.attribute_modal.html_type_na"),
+
+              # ComputedManager
+              entity_form_computed_options_value: Entities::ComputedOptions.call(entity: @entity, customer_id: current_customer_id).to_json,
+              entity_form_computed_incomplete_msg_value: t("comp_admin.attribute_modal.computed_incomplete"),
+              entity_form_computed_type_badge_value: t("comp_admin.attribute_modal.computed_type_badge"),
+              entity_form_computed_relation_placeholder_value: t("comp_admin.attribute_modal.computed_relation_placeholder"),
+              entity_form_computed_attribute_placeholder_value: t("comp_admin.attribute_modal.computed_attribute_placeholder"),
+              entity_form_computed_relation_format_value: t("comp_admin.attribute_modal.computed_relation_format"),
+              entity_form_computed_empty_hint_value: t("maint_core.entities.computed.empty_hint"),
+              entity_form_computed_filter_none_value: t("comp_admin.attribute_modal.computed_filter_none")
+            } do |form| %>
+
+  <%# Error Messages %>
+  <% if @entity.errors.any? %>
+    <%= render "shared/form_errors", resource: @entity %>
+  <% end %>
+
+  <%# Hidden state fields — serialized by entity-form on submit %>
+  <%= form.hidden_field :property_schema,
+      value: @entity.property_schema.presence || "[]",
+      data: { entity_form_target: "propertySchema" } %>
+  <%= form.hidden_field :associations,
+      value: @entity.associations.presence || "[]",
+      data: { entity_form_target: "associationsSchema" } %>
+
+  <% identity_locked = tenant_override?(@entity) %>
+  <%# Identity — same card on tenant and Shared Resources. "Extend Base Model"
+      is a field in this card (not a side column); required on Shared Resources. %>
+  <div class="card">
+    <div class="px-5 py-3.5 border-b border-border-subtle">
+      <h3 class="text-sm font-medium text-text-primary"><%= t("maint_core.entities.form.basic_information") %></h3>
+      <p class="mt-0.5 text-caption"><%= t("maint_core.entities.form.basic_information_hint") %></p>
+    </div>
+
+    <div class="p-5 flex flex-col gap-6">
+      <% if identity_locked %>
+        <p class="text-caption text-info"><%= t("maint_core.entities.form.identity_locked_hint") %></p>
+      <% end %>
+      <% if !@entity.persisted? && @domains %>
+        <div class="flex flex-col gap-1.5 sm:max-w-md" data-role="entity-domain-choice">
+          <label class="form-label form-label-required" for="entity_domain_id"><%= t("maint_core.entities.form.domain") %></label>
+          <% if @domains.any? %>
+            <%= select_tag :entity_domain_id,
+                options_from_collection_for_select(@domains, :id, :name, @entity_domain_id),
+                include_blank: (@entity_domain_id.nil? ? t("maint_core.entities.form.domain_prompt") : false),
+                required: true, id: "entity_domain_id", class: "input-field",
+                aria: { describedby: "entity_domain_id_hint" } %>
+            <p id="entity_domain_id_hint" class="text-caption"><%= t("maint_core.entities.form.domain_hint") %></p>
+          <% else %>
+            <p class="text-caption text-warning">
+              <%= t("maint_core.entities.form.no_domains") %>
+              <%= link_to t("maint_core.entity_domains.index.new_domain"), new_admin_maintenance_entity_domain_path(current_customer_id),
+                          class: "font-medium text-accent-text underline" %>
+            </p>
+          <% end %>
+        </div>
+      <% end %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1.5">
+          <label class="form-label form-label-required" for="entity_name"><%= t("common.labels.name") %></label>
+          <%= form.text_field :name,
+              required: true,
+              disabled: identity_locked,
+              class: "input-field #{'opacity-60 cursor-not-allowed' if identity_locked}",
+              id: "entity_name",
+              placeholder: t("maint_core.entities.form.name_placeholder"),
+              data: {
+                action: "input->entity-form#updateEntityDisplayLabel",
+                entity_form_target: "entityName"
+              } %>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="form-label form-label-required" for="entity_display_label"><%= t("maint_core.entities.form.display_label") %></label>
+          <%= form.text_field :display_label,
+              required: true,
+              disabled: identity_locked,
+              class: "input-field #{'opacity-60 cursor-not-allowed' if identity_locked}",
+              id: "entity_display_label",
+              placeholder: t("maint_core.entities.form.display_label_placeholder"),
+              data: {
+                action: "input->entity-form#markDisplayLabelEdited",
+                entity_form_target: "entityDisplayLabel"
+              } %>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label class="form-label" for="entity_description"><%= t("common.labels.description") %></label>
+        <%= form.text_area :description,
+            rows: 2,
+            class: "input-field resize-none",
+            id: "entity_description",
+            placeholder: t("maint_core.entities.form.description_placeholder") %>
+      </div>
+
+      <% unless @entity.bridge_entity? %>
+        <% base_models = ExtendableModelRegistry.for_customer(current_customer_id) %>
+        <% base_model_required = shared_resources_mode? %>
+        <% person_locked = @entity.persisted? && @entity.extended_model_in_database == EntityDefinitions::Capabilities::PERSON_MODEL %>
+        <% base_model_locked = identity_locked || person_locked %>
+        <% selected_base_model = person_locked ? @entity.extended_model_in_database : @entity.extended_model %>
+        <div class="flex flex-col gap-1.5" id="entity_base_model_section">
+          <label class="form-label <%= 'form-label-required' if base_model_required %>" for="entity_extended_model"><%= t("maint_core.entities.form.extend_base_model") %></label>
+          <% if base_models.any? %>
+            <select id="entity_extended_model"
+                    name="entity[extended_model]"
+                    class="input-field <%= 'opacity-60 cursor-not-allowed' if base_model_locked %>"
+                    data-action="change->entity-form#extendedModelChanged"
+                    <%= "required" if base_model_required %>
+                    <%= "disabled" if base_model_locked %>>
+              <option value=""><%= t(base_model_required ? "maint_core.entities.form.select_base_model" : "maint_core.entities.form.no_base_model") %></option>
+              <% base_models.each do |bm| %>
+                <option value="<%= bm[:class_name] %>"
+                        <%= "selected" if selected_base_model == bm[:class_name] %>>
+                  <%= bm[:label] %> (<%= bm[:module_key] %>)
+                </option>
+              <% end %>
+            </select>
+            <% if person_locked %>
+              <p class="text-caption text-info"><%= t("maint_core.entities.form.person_extension_locked_hint") %></p>
+            <% end %>
+            <p class="text-caption"><%= t("maint_core.entities.form.extend_base_model_hint_html") %></p>
+          <% else %>
+            <p class="text-body-sm italic text-text-muted">
+              <%= t(shared_resources_mode? ? "maint_core.entities.form.no_base_models" : "maint_core.entities.form.no_base_models_tenant") %>
+            </p>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%# ── Referenced Template — full width so the picker never overflows ── %>
+  <%
+    referenced_template_key = begin
+      ref = @entity.referenced_template
+      ref.present? ? JSON.parse(ref)["key"] : nil
+    rescue JSON::ParserError
+      ref
+    end
+    referenced_template = referenced_template_key.present? ? PageLayoutTemplates.find(referenced_template_key) : nil
+    category_counts = PageLayoutTemplates.category_counts_for_industry(current_customer&.industry)
+    cards_url = "#{admin_maintenance_template_picker_cards_path(current_customer_id)}?scope=industry"
+  %>
+  <div class="card"
+       data-controller="template-selector"
+       data-template-selector-customer-id-value="<%= current_customer_id %>"
+       data-template-selector-cards-url-value="<%= cards_url %>"
+       data-action="entity-form:overwriteCancelled@window->template-selector#revertCommit">
+    <div class="px-5 py-3.5 border-b border-border-subtle">
+      <h3 class="text-sm font-medium text-text-primary"><%= t("maint_core.entities.form.referenced_template") %></h3>
+      <p class="mt-0.5 text-caption"><%= t("maint_core.entities.form.referenced_template_hint") %></p>
+    </div>
+
+    <div class="p-5">
+      <%= render PageBuilder::TemplatePickerComponent.new(
+        selected_template: referenced_template,
+        category_counts: category_counts,
+        cards_url: cards_url,
+        field_name: "entity[referenced_template]",
+        field_value: @entity.referenced_template,
+        field_key: referenced_template_key,
+        confirm_label: t("maint_core.entities.form.use_template"),
+        preview_url: (@entity.persisted? ? admin_maintenance_entity_template_preview_path(current_customer_id, @entity) : nil)
+      ) %>
+    </div>
+  </div>
+
+  <%# ── Attributes — full width (wide data table) ── %>
+  <div class="card">
+    <div class="px-5 py-3.5 border-b border-border-subtle">
+      <h3 class="text-sm font-medium text-text-primary"><%= t("maint_core.entities.form.attributes") %></h3>
+      <p class="mt-0.5 text-caption"><%= t("maint_core.entities.form.attributes_hint") %></p>
+    </div>
+
+    <div class="p-5">
+      <% attributes = @entity.property_schema_json || [] %>
+
+      <%# Grouping controls — always rendered so grouping works for newly-added
+          attributes too, not only for entities that already have attributes. %>
+      <%= render "admin/maintenance/entities/attribute_grouping_controls", entity: @entity %>
+
+      <%# Attributes Table Container %>
+      <div data-entity-form-target="attributesContainer" class="overflow-x-auto">
+        <%# Empty State — compact %>
+        <div data-entity-form-target="emptyState"
+             class="<%= "hidden" if attributes.any? %> px-4 py-6 text-center border border-dashed rounded-md border-border">
+          <p class="text-body-sm text-text-secondary"><%= t("maint_core.entities.form.no_attributes") %></p>
+          <p class="mt-0.5 text-caption"><%= t("maint_core.entities.form.no_attributes_hint") %></p>
+        </div>
+
+        <% if attributes.any? %>
+          <%= render "admin/maintenance/entities/attributes_table", entity: @entity, attributes: attributes, editable: true, show_view_action: true %>
+        <% end %>
+      </div>
+
+      <%# Add Attribute Button %>
+      <button type="button"
+              data-action="click->entity-form#openModal"
+              class="mt-4 btn btn-secondary">
+        <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        <%= t("maint_core.entities.form.add_attribute") %>
+      </button>
+    </div>
+  </div>
+
+  <%# ── Associations — full width (hidden for bridge entities) ── %>
+  <% unless @entity.bridge_entity? %>
+    <div class="card">
+      <div class="px-5 py-3.5 border-b border-border-subtle">
+        <h3 class="text-sm font-medium text-text-primary"><%= t("maint_core.entities.form.associations") %></h3>
+        <p class="mt-0.5 text-caption"><%= t("maint_core.entities.form.associations_hint") %></p>
+      </div>
+
+      <div class="p-5">
+        <% associations = @entity.associations_json || [] %>
+
+        <%# Associations Table Container %>
+        <div data-entity-form-target="associationsContainer" class="overflow-x-auto">
+          <%# Empty State — compact %>
+          <div data-entity-form-target="associationsEmptyState"
+               class="<%= "hidden" if associations.any? %> px-4 py-6 text-center border border-dashed rounded-md border-border">
+            <p class="text-body-sm text-text-secondary"><%= t("maint_core.entities.form.no_associations") %></p>
+            <p class="mt-0.5 text-caption"><%= t("maint_core.entities.form.no_associations_hint") %></p>
+          </div>
+
+          <% if associations.any? %>
+            <%= render "admin/maintenance/entities/associations_table", associations: associations %>
+          <% end %>
+        </div>
+
+        <%# Add Association Button %>
+        <button type="button"
+                data-action="click->entity-form#openAssociationModal"
+                class="mt-4 btn btn-secondary">
+          <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          <%= t("maint_core.entities.form.add_association") %>
+        </button>
+      </div>
+    </div>
+  <% end %>
+
+  <%# ── Sticky action bar — always reachable while scrolling ── %>
+  <div class="sticky bottom-0 z-20">
+    <div class="flex items-center justify-between gap-3 px-1 py-3 bg-surface/95 backdrop-blur border-t border-border-subtle">
+      <p class="text-caption truncate min-w-0">
+        <%= @entity.persisted? ? t("maint_core.entities.form.versioned_hint") : t("maint_core.entities.form.add_later_hint") %>
+      </p>
+      <div class="flex items-center gap-3 ml-auto">
+        <%= link_to t("common.actions.cancel"), (@entity.persisted? ? admin_maintenance_entity_path(current_customer_id, @entity) : admin_maintenance_entities_path(current_customer_id, domain_id: @entity_domain_id)), class: "btn btn-secondary" %>
+        <button type="submit" class="btn btn-primary">
+          <%= @entity.persisted? ? t("maint_core.entities.form.save_changes") : t("maint_core.entities.form.create_entity") %>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <%# Add Attribute Modal %>
+  <%= render Admin::Maintenance::Entities::AttributeModalComponent.new(entity: @entity, person_entity_ids: person_entity_ids) %>
+
+  <%# Group Edit Modal %>
+  <%= render "admin/maintenance/entities/group_edit_modal" %>
+
+  <%# Attribute View Modal %>
+  <%= render "admin/maintenance/entities/attribute_view_modal" %>
+
+  <%# Template overwrite confirmation %>
+  <div class="hidden fixed inset-0 z-[55] overflow-y-auto" data-entity-form-target="overwriteModal">
+    <div class="flex items-center justify-center min-h-screen px-4">
+      <div class="fixed inset-0 bg-text-primary/75" aria-hidden="true"></div>
+      <div class="relative inline-block w-full max-w-md text-left align-middle transform bg-surface rounded-xl shadow-float overflow-hidden">
+        <div class="px-6 py-5">
+          <h3 class="text-subheading mb-2"><%= t("maint_core.entities.form.overwrite_title") %></h3>
+          <p class="text-body-sm">
+            <%= t("maint_core.entities.form.overwrite_before") %>
+            <span class="font-semibold" data-entity-form-target="overwriteCount">0</span>
+            <%= t("maint_core.entities.form.overwrite_after") %>
+          </p>
+        </div>
+        <div class="px-6 py-4 bg-canvas border-t border-border flex justify-end gap-3">
+          <button type="button" class="btn btn-secondary" data-action="click->entity-form#cancelOverwrite"><%= t("common.actions.cancel") %></button>
+          <button type="button" class="btn btn-danger" data-action="click->entity-form#confirmOverwrite"><%= t("maint_core.entities.form.replace") %></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# Add Association Modal %>
+  <%= render "admin/maintenance/entities/association_modal" %>
+<% end %>

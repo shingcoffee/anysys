@@ -1,0 +1,86 @@
+<div class="flex flex-col gap-4">
+  <% if payment_method %>
+    <div class="flex flex-col gap-3 rounded-xl border border-border-subtle bg-canvas-elevated p-4 sm:flex-row sm:items-center sm:justify-between" role="status">
+      <div class="flex min-w-0 flex-wrap items-center gap-3">
+        <span class="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border-subtle bg-surface text-text-secondary"><%= render Billing::Admin::IconComponent.new(name: :credit_card) %></span>
+        <p class="font-medium text-text-primary"><%= humanized_provider(payment_method.provider) %></p>
+        <%= render BadgeComponent.new(variant: status_variant(payment_method.status), size: :sm) do %><%= status_label(payment_method.status) %><% end %>
+      </div>
+      <div class="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+        <% if payment_method.status == "pending" && confirmation_url.present? %>
+          <%= button_to t("settings_billing.payment_methods.verify_authorization"), confirmation_url, method: :post, class: "btn btn-primary btn-sm" %>
+        <% end %>
+        <%= link_to authorization_path(payment_method), class: "btn btn-ghost btn-sm" do %>
+          <%= render Billing::Admin::IconComponent.new(name: :refresh, class_name: "size-4") %>
+          <%= t("settings_billing.payment_methods.refresh_status") %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if authorization_kind %>
+    <div class="flex flex-col gap-3 rounded-xl border border-accent-muted bg-accent-subtle/30 p-4 sm:p-5">
+      <% case authorization_kind %>
+      <% when "redirect" %>
+        <p class="text-text-primary"><%= t("settings_billing.payment_methods.authorize_redirect_hint", provider: humanized_provider(redirect_provider_key)) %></p>
+        <%= link_to t("common.actions.continue"), fact(authorization, :url), data: { turbo: false }, class: "btn btn-primary w-full sm:w-auto" %>
+      <% when "provider_form" %>
+        <%= form_tag fact(authorization, :action_url), method: :post, authenticity_token: false, enforce_utf8: false, data: { turbo: false } do %>
+          <% (fact(authorization, :fields) || {}).each do |name, value| %><%= hidden_field_tag name, value %><% end %>
+          <%= submit_tag t("common.actions.continue"), name: nil, class: "btn btn-primary w-full sm:w-auto" %>
+        <% end %>
+      <% when "stripe_setup" %>
+        <%= tag.div data: stripe_data, class: "flex max-w-xl flex-col gap-3" do %>
+          <p class="flex items-start gap-1.5 text-body-sm text-text-secondary">
+            <%= render Billing::Admin::IconComponent.new(name: :lock, class_name: "mt-0.5 size-4") %>
+            <span><%= t("settings_billing.payment_methods.stripe_setup_hint") %></span>
+          </p>
+          <div class="rounded-lg border border-border bg-surface p-3" data-payments--stripe-card-target="element" aria-label="<%= t('settings_billing.payment_methods.authorization') %>"></div>
+          <p data-payments--stripe-card-target="error" class="hidden text-body-sm text-danger" role="alert" aria-live="polite"></p>
+          <button type="button" data-action="click->payments--stripe-card#submit" class="btn btn-primary w-full sm:w-auto"><%= t("comp_payments.member.payment_methods.save_card") %></button>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if authorization || payment_method&.status == "pending" %>
+    <p class="flex items-start gap-1.5 text-body-sm text-text-secondary">
+      <%= render Billing::Admin::IconComponent.new(name: :clock, class_name: "mt-0.5 size-4") %>
+      <span><%= t("settings_billing.payment_methods.return_pending") %></span>
+    </p>
+  <% end %>
+
+  <% if enabled_provider_options.any? %>
+    <ul class="grid gap-3 sm:grid-cols-2" role="list">
+      <% enabled_provider_options.each do |option| %>
+        <% key = fact(option, :key) %>
+        <li class="min-w-0">
+          <%= form_with url: create_path, method: :post, scope: :billing_payment_method, data: { turbo: false }, class: "h-full" do |f| %>
+            <%= f.hidden_field :provider, value: key %>
+            <%= f.hidden_field :request_key, value: request_key %>
+            <%= f.button type: "submit", name: nil, class: "group flex h-full w-full cursor-pointer items-center gap-3 rounded-xl border border-border-subtle bg-surface p-4 text-left shadow-xs transition hover:border-accent-muted hover:bg-accent-subtle/40 hover:shadow-sm focus-visible:outline-accent" do %>
+              <span class="flex size-11 shrink-0 items-center justify-center rounded-xl <%= provider_tile_class(key) %>"><%= render Billing::Admin::IconComponent.new(name: :credit_card) %></span>
+              <span class="min-w-0 flex-1">
+                <span class="block font-medium text-text-primary"><%= t("comp_billing.payment_method.setup_provider", provider: humanized_provider(key)) %></span>
+                <span class="mt-0.5 block text-caption"><%= t("settings_billing.payment_methods.setup_caption") %></span>
+              </span>
+              <span class="text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-accent-text"><%= render Billing::Admin::IconComponent.new(name: :chevron_right, class_name: "size-4") %></span>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% if disabled_provider_options.any? %>
+    <ul class="flex flex-col gap-1.5" role="list">
+      <% disabled_provider_options.each do |option| %>
+        <% key = fact(option, :key) %>
+        <li class="flex min-w-0 items-start gap-2 px-1 py-1 text-caption">
+          <span class="font-medium text-text-secondary"><%= humanized_provider(key) %></span>
+          <span class="text-text-muted"><%= t(fact(option, :reason_key).presence || "settings_billing.payment_methods.setup_unsupported", currency: currency) %></span>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>

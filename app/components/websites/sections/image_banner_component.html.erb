@@ -1,0 +1,26 @@
+<section class="relative isolate flex flex-col overflow-hidden bg-neutral-950 text-white <%= height_class %>">
+  <div class="absolute inset-0 -z-10">
+    <%= render_media(props["image_url"], alt: "", css_class: "absolute inset-0 size-full object-cover", appearance: "dark", eager: true) %>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent"></div>
+  </div>
+
+  <div class="<%= inner_measure_class %> flex w-full <%= placement_class %>">
+    <div class="flex w-full max-w-3xl flex-col gap-5 md:gap-6 <%= copy_align_class %>">
+      <% if present_text?(prop("kicker")) %>
+        <p <%= el_attrs("kicker", class: "text-site-xs font-semibold uppercase tracking-[0.2em] text-white/75") %>><%= prop("kicker") %></p>
+      <% end %>
+      <% if present_text?(prop("headline")) %>
+        <h2 <%= el_attrs("headline", class: "text-balance break-words whitespace-pre-line text-site-4xl leading-[1.02] sm:text-site-5xl md:text-site-6xl lg:text-site-7xl #{headline_font_class}") %>><%= prop("headline") %></h2>
+      <% end %>
+      <% if present_text?(prop("body")) %>
+        <p <%= el_attrs("body", class: "max-w-xl text-pretty whitespace-pre-line text-site-md leading-relaxed text-white/80 md:text-site-lg") %>><%= prop("body") %></p>
+      <% end %>
+      <% if present_text?(prop("button_label")) %>
+        <div class="flex w-full pt-1 <%= centered? ? "justify-center" : "justify-start" %>" data-site-el="buttons">
+          <%= content_tag(button_href.present? ? :a : :span, prop("button_label"), href: button_href.presence, class: primary_button_class, **{ style: styler.button_css(:primary) }.compact) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

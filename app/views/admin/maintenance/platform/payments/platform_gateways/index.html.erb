@@ -1,0 +1,7 @@
+<%= render Admin::Maintenance::Platform::ModuleSettings::ShellComponent.new(
+      feature_module: @feature_module, customer_id: current_customer_id, current: :providers
+    ) do %>
+  <%= render Admin::Maintenance::Platform::Payments::GatewayAvailabilityComponent.new(
+        gateways: @gateways, customer_id: current_customer_id
+      ) %>
+<% end %>

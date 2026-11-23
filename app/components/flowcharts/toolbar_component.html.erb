@@ -1,0 +1,191 @@
+  <!-- Top Toolbar -->
+  <div class="min-w-0 bg-white border-b border-slate-200 flex-shrink-0" data-controller="toolbar"
+       data-toolbar-read-only-save-message-value="<%= t("comp_misc.toolbar.read_only_save") %>"
+       data-toolbar-saved-message-value="<%= t("comp_misc.toolbar.saved") %>"
+       data-toolbar-save-failed-message-value="<%= t("comp_misc.toolbar.save_failed") %>"
+       data-toolbar-error-separator-value="<%= t("comp_misc.toolbar.error_separator") %>"
+       data-toolbar-edge-insert-button-label-value="<%= t("maint_core.flowcharts.editor.edge_insert_button") %>"
+       data-toolbar-edge-insert-menu-label-value="<%= t("maint_core.flowcharts.editor.edge_insert_menu") %>">
+    <div class="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1.5 px-3 py-1.5 sm:flex-nowrap sm:gap-0">
+
+      <!-- Left: Flowchart name -->
+      <div class="w-full min-w-0 flex-none sm:w-auto sm:flex-1 sm:pr-3">
+        <%= link_to flowchart_path,
+            class: "inline-flex max-w-full items-center gap-1.5 text-sm font-semibold text-slate-900 hover:text-indigo-600 transition-colors",
+            title: t("comp_misc.toolbar.view_details") do %>
+          <svg class="h-4 w-4 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          <span class="truncate"><%= flowchart.name %></span>
+        <% end %>
+      </div>
+
+      <!-- Center: Zoom pill group -->
+      <div class="flex shrink-0 items-center gap-0.5 bg-slate-100 rounded-lg p-0.5">
+        <button type="button"
+                data-action="click->toolbar#zoomOut"
+                title="<%= t("comp_misc.toolbar.zoom_out") %>"
+                aria-label="<%= t("comp_misc.toolbar.zoom_out") %>"
+                class="p-1.5 rounded-md text-slate-500 hover:text-slate-900 hover:bg-white transition-colors">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+          </svg>
+        </button>
+        <span data-toolbar-target="zoomLevel" class="text-xs text-slate-600 font-mono w-10 text-center select-none">100%</span>
+        <button type="button"
+                data-action="click->toolbar#zoomIn"
+                title="<%= t("comp_misc.toolbar.zoom_in") %>"
+                aria-label="<%= t("comp_misc.toolbar.zoom_in") %>"
+                class="p-1.5 rounded-md text-slate-500 hover:text-slate-900 hover:bg-white transition-colors">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+        </button>
+        <button type="button"
+                data-action="click->toolbar#fitToContent"
+                title="<%= t("comp_misc.toolbar.fit_to_content") %>"
+                aria-label="<%= t("comp_misc.toolbar.fit_to_content") %>"
+                class="p-1.5 rounded-md text-slate-500 hover:text-slate-900 hover:bg-white transition-colors">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4h4M20 8V4h-4M4 16v4h4M20 16v4h-4" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Actions pill group -->
+      <div class="relative ml-0 flex shrink-0 items-center gap-0.5 bg-slate-100 rounded-lg p-0.5 sm:ml-2">
+        <button type="button"
+                data-action="click->flowchart-canvas#validate"
+                title="<%= t("comp_misc.toolbar.validate") %>"
+                aria-label="<%= t("comp_misc.toolbar.validate") %>"
+                class="relative p-1.5 rounded-md text-slate-500 hover:text-slate-900 hover:bg-white transition-colors">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span data-flowchart-canvas-target="validationBadge"
+                class="absolute -top-1 -right-1 flex items-center justify-center min-w-[16px] h-4 rounded-full text-[10px] font-bold bg-red-500 text-white hidden">0</span>
+        </button>
+        <button type="button"
+                data-action="click->flowchart-canvas#toggleTestPanel"
+                title="<%= t("comp_misc.toolbar.test_runner") %>"
+                aria-label="<%= t("comp_misc.toolbar.test_runner") %>"
+                class="p-1.5 rounded-md text-slate-500 hover:text-slate-900 hover:bg-white transition-colors">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </button>
+        <button type="button"
+                data-action="click->toolbar#toggleOverflow"
+                title="<%= t("comp_misc.toolbar.more_actions") %>"
+                aria-label="<%= t("comp_misc.toolbar.more_actions") %>"
+                class="p-1.5 rounded-md text-slate-500 hover:text-slate-900 hover:bg-white transition-colors">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="6" r="1.5"/>
+            <circle cx="12" cy="12" r="1.5"/>
+            <circle cx="12" cy="18" r="1.5"/>
+          </svg>
+        </button>
+
+        <!-- Overflow Menu -->
+        <div data-toolbar-target="overflowMenu"
+             class="absolute left-0 sm:left-auto sm:right-0 top-full mt-1 w-48 rounded-lg shadow-lg bg-white ring-1 ring-slate-200 z-50 hidden">
+          <div class="py-1">
+            <button type="button"
+                    data-toolbar-target="mutatingAction"
+                    data-action="click->toolbar#autoLayout click->toolbar#closeOverflow"
+                    class="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed flex items-center">
+              <svg class="mr-2 h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1v-3z" />
+              </svg>
+              <%= t("comp_misc.toolbar.tidy_layout") %>
+            </button>
+            <button type="button"
+                    data-toolbar-target="mutatingAction"
+                    data-action="click->toolbar#cycleConnectionRouting click->toolbar#closeOverflow"
+                    class="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed flex items-center">
+              <svg class="mr-2 h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <%= t("comp_misc.toolbar.connection_routing") %>
+            </button>
+            <button type="button"
+                    data-action="click->flowchart-canvas#generateDocs click->toolbar#closeOverflow"
+                    class="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center">
+              <svg class="mr-2 h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <%= t("comp_misc.toolbar.generate_docs") %>
+            </button>
+            <div class="border-t border-slate-100 my-1"></div>
+            <button type="button"
+                    data-action="click->toolbar#exportSVG click->toolbar#closeOverflow"
+                    class="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center">
+              <svg class="mr-2 h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <%= t("comp_misc.toolbar.export_svg") %>
+            </button>
+            <button type="button"
+                    data-action="click->toolbar#exportPNG click->toolbar#closeOverflow"
+                    class="w-full text-left px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 flex items-center">
+              <svg class="mr-2 h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <%= t("comp_misc.toolbar.export_png") %>
+            </button>
+            <div class="border-t border-slate-100 my-1"></div>
+            <button type="button"
+                    data-toolbar-target="mutatingAction"
+                    data-action="click->toolbar#clear click->toolbar#closeOverflow"
+                    class="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 disabled:opacity-40 disabled:cursor-not-allowed flex items-center">
+              <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              <%= t("comp_misc.toolbar.clear_canvas") %>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="mx-3 hidden h-5 w-px bg-slate-200 sm:block sm:shrink-0"></div>
+
+      <!-- Right: Save + Undo/Redo pill group -->
+      <div class="ml-auto flex shrink-0 items-center gap-0.5 bg-slate-100 rounded-lg p-0.5">
+        <button type="button"
+                data-action="click->toolbar#undo"
+                data-toolbar-target="undoButton"
+                title="<%= t("comp_misc.toolbar.undo") %>"
+                aria-label="<%= t("comp_misc.toolbar.undo") %>"
+                class="p-1.5 rounded-md text-slate-500 hover:text-slate-900 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+          </svg>
+        </button>
+        <button type="button"
+                data-action="click->toolbar#redo"
+                data-toolbar-target="redoButton"
+                title="<%= t("comp_misc.toolbar.redo") %>"
+                aria-label="<%= t("comp_misc.toolbar.redo") %>"
+                class="p-1.5 rounded-md text-slate-500 hover:text-slate-900 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 10H11a8 8 0 00-8 8v2m18-10l-6-6m6 6l-6 6" />
+          </svg>
+        </button>
+        <button type="button"
+                data-action="click->toolbar#save"
+                data-toolbar-target="saveButton"
+                title="<%= t("common.actions.save") %>"
+                class="btn btn-primary relative text-xs">
+          <svg class="h-3.5 w-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12" />
+          </svg>
+          <%= t("common.actions.save") %>
+          <span data-toolbar-target="saveDot"
+                class="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-500 hidden"></span>
+        </button>
+      </div>
+
+    </div>
+  </div>

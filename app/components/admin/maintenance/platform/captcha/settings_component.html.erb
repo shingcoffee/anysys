@@ -1,0 +1,247 @@
+<% workspace_body = capture do %>
+<%= render Admin::Maintenance::Platform::ModuleSettings::ProviderWorkspaceComponent.new do |workspace| %>
+  <% workspace.with_assignment do %>
+  <% if errors.any? %>
+    <%= render AlertComponent.new(message: errors_message, type: :error) %>
+  <% end %>
+
+  <% if edit_active? %>
+    <%= form_with url: settings_path, method: :patch, local: true, class: "flex w-full flex-col gap-6" do %>
+      <input type="hidden" name="section" value="active">
+      <div class="card overflow-hidden">
+        <div class="card-header">
+          <h2 class="section-header"><%= t("captcha.platform_settings.active_section") %></h2>
+          <p class="mt-0.5 text-caption"><%= t("captcha.platform_settings.active_section_hint") %></p>
+        </div>
+        <ul class="divide-y divide-border-subtle">
+          <li class="px-4 sm:px-6 py-4 grid grid-cols-1 gap-2 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-start sm:gap-6">
+            <label class="form-label mb-0" for="captcha_provider_settings_active_assignee"><%= t("captcha.platform_settings.provider") %></label>
+            <div class="w-full max-w-xl">
+              <select id="captcha_provider_settings_active_assignee"
+                      name="<%= param_key %>[active_assignee]"
+                      class="input-field">
+                <option value="" <%= "selected" if active_key.blank? %>><%= t("captcha.platform_settings.not_assigned") %></option>
+                <% providers.each do |pc| %>
+                  <option value="<%= pc.key %>" <%= "selected" if pc.key.to_s == active_key.to_s %>>
+                    <%= pc.display_name %>
+                  </option>
+                <% end %>
+              </select>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <%= render Admin::Maintenance::Platform::ModuleSettings::FormActionsComponent.new(
+            cancel_path: settings_path, submit_label: t("captcha.platform_settings.save")
+          ) %>
+    <% end %>
+  <% else %>
+    <div class="card overflow-hidden">
+      <div class="card-header flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div class="min-w-0">
+          <h2 class="section-header"><%= t("captcha.platform_settings.active_section") %></h2>
+          <p class="mt-0.5 text-caption"><%= t("captcha.platform_settings.active_section_hint") %></p>
+        </div>
+        <% if show_mode? %>
+          <%= render ButtonComponent.new(variant: :secondary, size: :sm, tag: :a, href: active_edit_path) do %>
+            <%= t("captcha.platform_settings.edit_active") %>
+          <% end %>
+        <% end %>
+      </div>
+      <ul class="divide-y divide-border-subtle">
+        <li class="px-4 sm:px-6 py-4 grid grid-cols-1 gap-1 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-baseline sm:gap-6">
+          <span class="text-body text-text-primary font-medium"><%= t("captcha.platform_settings.provider") %></span>
+          <span class="text-body-sm text-text-secondary"><%= active_provider_name.presence || t("captcha.platform_settings.not_assigned") %></span>
+        </li>
+      </ul>
+    </div>
+  <% end %>
+  <% end %>
+
+  <% unless edit_active? %>
+    <% workspace.with_provider do %>
+    <div class="flex flex-col gap-3">
+      <div>
+        <h2 class="section-header"><%= t("captcha.platform_settings.vendor_section") %></h2>
+        <p class="mt-0.5 text-caption"><%= t("captcha.platform_settings.vendor_section_hint") %></p>
+      </div>
+
+      <%= render Admin::Maintenance::Platform::ProviderSwitcherComponent.new(
+            nav_label: t("captcha.platform_settings.nav_label"),
+            items: switcher_items
+          ) %>
+    </div>
+    <% end %>
+
+    <% workspace.with_health do %>
+    <div class="card px-4 sm:px-5 py-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-caption"><%= t("captcha.platform_settings.status.health") %></span>
+        <%= render BadgeComponent.new(variant: health_badge_variant, size: :sm) do %>
+          <%= t("captcha.platform_settings.health.#{health_status_key}") %>
+        <% end %>
+      </div>
+      <% if show_mode? %>
+        <%= form_with url: test_connection_path, method: :post, local: true, class: "inline" do %>
+          <%= render ButtonComponent.new(variant: :secondary, size: :sm, tag: :button, type: :submit) do %>
+            <%= t("captcha.platform_settings.test.button") %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+    <% end %>
+
+    <% workspace.with_credentials do %>
+      <% edit_action = if show_mode?
+           render(ButtonComponent.new(variant: :secondary, size: :sm, tag: :a, href: vendor_edit_path)) {
+             t("captcha.platform_settings.edit_credentials")
+           }
+         end %>
+      <%= render Admin::Maintenance::Platform::ModuleSettings::CredentialPanelComponent.new(
+            title: t("captcha.platform_settings.credentials_section"),
+            description: edit_vendor? ? t("captcha.platform_settings.credentials_section_hint") : t("captcha.platform_settings.credentials_section_hint_show"),
+            action: edit_action
+          ) do %>
+        <ul class="divide-y divide-border-subtle">
+          <% if edit_vendor? %>
+            <li class="px-4 sm:px-6 py-4 grid grid-cols-1 gap-2 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-start sm:gap-6">
+              <label class="form-label mb-0" for="captcha_provider_settings_access_key_id"><%= credential_label(:access_key_id) %></label>
+              <div class="w-full max-w-xl">
+                <input type="text" id="captcha_provider_settings_access_key_id"
+                       name="<%= param_key %>[access_key_id]"
+                       value="<%= settings.access_key_id %>"
+                       class="input-field">
+              </div>
+            </li>
+            <li class="px-4 sm:px-6 py-4 grid grid-cols-1 gap-2 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-start sm:gap-6">
+              <div class="min-w-0">
+                <label class="form-label mb-0" for="captcha_provider_settings_access_key_secret"><%= credential_label(:access_key_secret) %></label>
+                <% if settings.access_key_secret.present? %>
+                  <p class="text-caption mt-1"><%= t("captcha.platform_settings.keep_hint") %></p>
+                <% end %>
+              </div>
+              <div class="w-full max-w-xl">
+                <input type="password" id="captcha_provider_settings_access_key_secret"
+                       name="<%= param_key %>[access_key_secret]"
+                       autocomplete="new-password"
+                       placeholder="<%= settings.access_key_secret.present? ? secret_placeholder : "" %>"
+                       class="input-field">
+              </div>
+            </li>
+          <% else %>
+            <li class="px-4 sm:px-6 py-3 grid grid-cols-1 gap-1 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-baseline sm:gap-6">
+              <span class="text-body text-text-primary font-medium"><%= credential_label(:access_key_id) %></span>
+              <span class="text-body-sm text-text-secondary break-all font-mono"><%= settings.access_key_id.presence || t("common.labels.em_dash") %></span>
+            </li>
+            <li class="px-4 sm:px-6 py-3 grid grid-cols-1 gap-1 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-baseline sm:gap-6">
+              <span class="text-body text-text-primary font-medium"><%= credential_label(:access_key_secret) %></span>
+              <span class="text-body-sm text-text-secondary font-mono"><%= settings.access_key_secret.present? ? t("captcha.platform_settings.masked") : t("common.labels.em_dash") %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% end %>
+
+    <% workspace.with_advanced_options do %>
+      <%= render Admin::Maintenance::Platform::ModuleSettings::CredentialPanelComponent.new(
+            title: t("captcha.platform_settings.configuration_section"),
+            description: t("captcha.platform_settings.configuration_section_hint")
+          ) do %>
+        <ul class="divide-y divide-border-subtle">
+          <% config_fields.each do |field| %>
+            <% if edit_vendor? %>
+              <li class="px-4 sm:px-6 py-4 grid grid-cols-1 gap-2 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-start sm:gap-6">
+                <div class="min-w-0">
+                  <label class="form-label mb-0" for="captcha_provider_settings_<%= field[:name] %>"><%= field_label(field) %></label>
+                  <% if field[:type] == :password && config_secret_present?(field) %>
+                    <p class="text-caption mt-1"><%= t("captcha.platform_settings.keep_hint") %></p>
+                  <% end %>
+                </div>
+                <div class="w-full max-w-xl">
+                  <% if field[:type] == :password %>
+                    <input type="password"
+                           id="captcha_provider_settings_<%= field[:name] %>"
+                           name="<%= param_key %>[<%= field[:name] %>]"
+                           autocomplete="new-password"
+                           placeholder="<%= config_secret_present?(field) ? secret_placeholder : "" %>"
+                           class="input-field">
+                  <% else %>
+                    <input type="text"
+                           id="captcha_provider_settings_<%= field[:name] %>"
+                           name="<%= param_key %>[<%= field[:name] %>]"
+                           value="<%= field_value(field) %>"
+                           class="input-field">
+                  <% end %>
+                </div>
+              </li>
+            <% else %>
+              <li class="px-4 sm:px-6 py-3 grid grid-cols-1 gap-1 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-baseline sm:gap-6">
+                <span class="text-body text-text-primary font-medium"><%= field_label(field) %></span>
+                <% if field[:type] == :password %>
+                  <span class="text-body-sm text-text-secondary font-mono"><%= config_secret_present?(field) ? t("captcha.platform_settings.masked") : t("common.labels.em_dash") %></span>
+                <% else %>
+                  <span class="text-body-sm text-text-secondary break-all"><%= field_value(field).presence || t("common.labels.em_dash") %></span>
+                <% end %>
+              </li>
+            <% end %>
+          <% end %>
+          <% if edit_vendor? %>
+            <li class="px-4 sm:px-6 py-4 grid grid-cols-1 gap-2 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-start sm:gap-6">
+              <div class="min-w-0">
+                <label class="form-label mb-0" for="captcha_provider_settings_fail_policy"><%= t("captcha.platform_settings.fail_policy") %></label>
+                <p class="text-caption mt-1"><%= t("captcha.platform_settings.fail_policy_hint") %></p>
+              </div>
+              <div class="w-full max-w-xl">
+                <select id="captcha_provider_settings_fail_policy"
+                        name="<%= param_key %>[fail_policy]"
+                        class="input-field">
+                  <% ::Captcha::ProviderSettings::FAIL_POLICIES.each do |policy| %>
+                    <option value="<%= policy %>" <%= "selected" if settings.fail_policy == policy %>>
+                      <%= t("captcha.platform_settings.fail_policies.#{policy}") %>
+                    </option>
+                  <% end %>
+                </select>
+              </div>
+            </li>
+            <% if score_based? %>
+              <li class="px-4 sm:px-6 py-4 grid grid-cols-1 gap-2 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-start sm:gap-6">
+                <label class="form-label mb-0" for="captcha_provider_settings_score_threshold"><%= t("captcha.platform_settings.score_threshold") %></label>
+                <div class="w-full max-w-xl">
+                  <input type="number" step="0.01" min="0" max="1"
+                         id="captcha_provider_settings_score_threshold"
+                         name="<%= param_key %>[score_threshold]"
+                         value="<%= settings.score_threshold %>"
+                         class="input-field">
+                </div>
+              </li>
+            <% end %>
+          <% else %>
+            <li class="px-4 sm:px-6 py-3 grid grid-cols-1 gap-1 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-baseline sm:gap-6">
+              <span class="text-body text-text-primary font-medium"><%= t("captcha.platform_settings.fail_policy") %></span>
+              <span class="text-body-sm text-text-secondary"><%= t("captcha.platform_settings.fail_policies.#{settings.fail_policy}") %></span>
+            </li>
+            <% if score_based? %>
+              <li class="px-4 sm:px-6 py-3 grid grid-cols-1 gap-1 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-baseline sm:gap-6">
+                <span class="text-body text-text-primary font-medium"><%= t("captcha.platform_settings.score_threshold") %></span>
+                <span class="text-body-sm text-text-secondary tabular-nums"><%= settings.score_threshold.presence || t("common.labels.em_dash") %></span>
+              </li>
+            <% end %>
+          <% end %>
+        </ul>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+<% end %>
+
+<% if edit_vendor? %>
+  <%= form_with url: settings_path, method: :patch, local: true, class: "flex w-full flex-col gap-6" do %>
+    <input type="hidden" name="section" value="vendor">
+    <%= workspace_body %>
+    <%= render Admin::Maintenance::Platform::ModuleSettings::FormActionsComponent.new(
+          cancel_path: settings_path, submit_label: t("captcha.platform_settings.save")
+        ) %>
+  <% end %>
+<% else %>
+  <%= workspace_body %>
+<% end %>

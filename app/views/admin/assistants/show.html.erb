@@ -1,0 +1,7 @@
+<%= render Admin::Assistants::WorkspaceComponent.new(
+      customer: current_customer,
+      user: current_user,
+      assistant_available: @assistant_available,
+      assistant_messages: @assistant_messages,
+      assistant_conversation: @assistant_conversation
+    ) %>

@@ -1,0 +1,31 @@
+<div class="flex flex-col gap-6">
+  <div data-wizard-field-group>
+    <%= f.label :email_template_id, t("admin_modules.emails.send_activities.form.template_label"), class: "form-label form-label-required" %>
+    <div class="mt-1 flex items-center gap-2">
+      <%= f.collection_select :email_template_id, templates, :id, :name,
+            { include_blank: t("admin_modules.emails.send_activities.form.select_template") },
+            {
+              class: "input-field flex-1 min-w-0",
+              required: true,
+              data: {
+                wizard_field: true,
+                wizard_required_msg: t("admin_modules.emails.send_activities.wizard.errors.template_required"),
+                email_send_activity_wizard_target: "templateSelect"
+              }
+            } %>
+      <button type="button"
+              class="inline-flex shrink-0 items-center justify-center rounded-md border border-border bg-surface px-3 py-2 text-text-muted hover:bg-surface-active hover:text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/40"
+              data-action="email-send-activity-wizard#refreshTemplates"
+              data-email-send-activity-wizard-target="refreshTemplatesButton"
+              aria-label="<%= t("admin_modules.emails.send_activities.form.refresh_templates") %>"
+              title="<%= t("admin_modules.emails.send_activities.form.refresh_templates") %>">
+        <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+      </button>
+      <%= link_to t("admin_modules.emails.send_activities.form.create_template"), new_template_url,
+            target: "_blank", rel: "noopener noreferrer",
+            class: "shrink-0 whitespace-nowrap text-sm text-text-muted hover:text-primary hover:underline" %>
+    </div>
+  </div>
+</div>

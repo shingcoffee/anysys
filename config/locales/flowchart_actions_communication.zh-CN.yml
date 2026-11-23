@@ -1,0 +1,269 @@
+zh-CN:
+  flowchart_actions:
+    api_call:
+      label: HTTP 请求
+      description: 向外部服务发起 HTTP 请求。
+      fields:
+        httpMethod:
+          label: HTTP 方法
+          help: 本次请求使用的动词。
+          options:
+            get: GET
+            head: HEAD
+            post: POST
+            put: PUT
+            patch: PATCH
+            delete: DELETE
+            options: OPTIONS
+        url:
+          label: URL
+          help: 请求地址（Ruby 表达式）。
+          placeholder: https://api.example.com/...
+        headers:
+          label: 请求头
+          help: 随请求发送的额外 HTTP 头。
+        queryParams:
+          label: 查询参数
+          help: 追加到 URL 的查询键值。
+        bodyTemplate:
+          label: 请求体
+          help: 表示请求体的 Ruby 表达式。
+        bodyFormat:
+          label: 请求体格式
+          help: 请求体的编码方式。
+          options:
+            json: JSON
+            form: 表单
+            text: 文本
+            xml: XML
+            binary: 二进制
+        authType:
+          label: 认证方式
+          help: 如何携带凭证。
+          options:
+            none: 无
+            bearer: Bearer
+            basic: Basic
+            apikey: API Key
+        authToken:
+          label: 认证令牌
+          help: Bearer 令牌或 API 密钥表达式。
+        authUsername:
+          label: 用户名
+          help: Basic 认证用户名表达式。
+        authPassword:
+          label: 密码
+          help: Basic 认证密码表达式。
+        apiKeyHeader:
+          label: API 密钥头
+          help: 承载 API 密钥的请求头名称。
+        responseFormat:
+          label: 响应格式
+          help: 如何保存响应体。
+          options:
+            json: JSON
+            text: 文本
+            binary: 二进制
+        responseParseKey:
+          label: 解析路径
+          help: 可选，从 JSON 响应中保留的点分路径。
+        followRedirects:
+          label: 跟随重定向
+          help: 在跳数上限内跟随 HTTP 重定向。
+        maxRedirects:
+          label: 最大重定向次数
+          help: 最多跟随的重定向跳数（0–20）。
+        failOnHttpError:
+          label: 遇 HTTP 错误则失败
+          help: 响应非 2xx 时使步骤失败。关闭后可根据保存的状态码分支。
+        statusVar:
+          label: 将状态码保存为
+          help: 可选，保存 HTTP 状态码的变量。
+        headersVar:
+          label: 将响应头保存为
+          help: 可选，保存响应头的变量。
+        idempotencyKey:
+          label: 幂等键
+          help: 写入 Idempotency-Key；POST 携带此键才允许传输层重试。
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        retryOnTransportError:
+          label: 传输失败时重试
+          help: 仅当请求幂等时才重试。
+        retryAttempts:
+          label: 重试次数
+          help: 额外的传输尝试次数（1–2）。
+        connectTimeout:
+          label: 连接超时
+          help: 等待建立连接的秒数（1–5）。
+        readTimeout:
+          label: 读取超时
+          help: 等待响应的秒数（1–9）。
+        circuitBreaker:
+          label: 熔断器
+          help: 远端不健康时快速失败。
+        breakerName:
+          label: 熔断器名称
+          help: 该熔断器的缓存键后缀。
+        failureThreshold:
+          label: 失败阈值
+          help: 打开熔断器前允许的失败次数（1–20）。
+        resetTimeoutSeconds:
+          label: 复位超时
+          help: 半开重试前等待的秒数（10–3600）。
+    send_webhook:
+      label: 发送 Webhook
+      description: 以 POST 方式发送 Webhook
+      fields:
+        url:
+          label: URL
+          help: Webhook 地址（Ruby 表达式）。
+          placeholder: Webhook 地址
+        payloadExpression:
+          label: 负载
+          help: 作为 JSON 或表单正文的 Ruby 哈希。
+        headers:
+          label: 请求头
+          help: 随 Webhook 发送的额外 HTTP 头。
+        secretExpression:
+          label: 签名密钥
+          help: HMAC 签名密钥表达式。
+        hmacAlgorithm:
+          label: HMAC 算法
+          help: 用于签名正文的摘要算法。
+          options:
+            sha256: sha256
+            sha512: sha512
+            sha1: sha1
+        signatureHeader:
+          label: 签名头
+          help: 承载 HMAC 签名的请求头。
+        idempotencyKey:
+          label: 幂等键
+          help: 写入 Idempotency-Key；重试此 POST 必须提供该键。
+        contentType:
+          label: 内容类型
+          help: Webhook 正文的编码方式。
+          options:
+            application_json: application/json
+            application_x_www_form_urlencoded: application/x-www-form-urlencoded
+        failOnHttpError:
+          label: 遇 HTTP 错误则失败
+          help: 响应非 2xx 时使步骤失败。关闭后可根据保存的状态码分支。
+        statusVar:
+          label: 将状态码保存为
+          help: 可选，保存 HTTP 状态码的变量。
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+        retryOnTransportError:
+          label: 传输失败时重试
+          help: 仅在提供幂等键时才重试。
+        retryAttempts:
+          label: 重试次数
+          help: 额外的传输尝试次数（1–2）。
+        connectTimeout:
+          label: 连接超时
+          help: 等待建立连接的秒数（1–5）。
+        readTimeout:
+          label: 读取超时
+          help: 等待响应的秒数（1–9）。
+        circuitBreaker:
+          label: 熔断器
+          help: 远端不健康时快速失败。
+        breakerName:
+          label: 熔断器名称
+          help: 该熔断器的缓存键后缀。
+        failureThreshold:
+          label: 失败阈值
+          help: 打开熔断器前允许的失败次数（1–20）。
+        resetTimeoutSeconds:
+          label: 复位超时
+          help: 半开重试前等待的秒数（10–3600）。
+    send_email:
+      label: 发送邮件
+      description: 在此直接填写收件人、主题和正文发送邮件，无需邮件模板。
+      fields:
+        to:
+          label: 收件人
+          help: "收件地址，多个用逗号分隔。可读取记录，例如 {{ model.email }}。"
+          placeholder: 例如 sales@example.com
+        subject:
+          label: 主题
+          help: "邮件主题。记录中的值写在 {{ }} 中，例如 {{ model.order_number }}。"
+          placeholder: "例如 新订单 {{ model.order_number }}"
+        body:
+          label: 正文
+          help: "邮件正文。记录中的值写在 {{ }} 中，包括由关联行汇总得出的合计。"
+          placeholder: "例如 订单 {{ model.order_number }} 已下单，合计：{{ model.total }}"
+        cc:
+          label: 抄送
+          help: 抄送地址，多个用逗号分隔。
+          placeholder: 例如 manager@example.com
+        bcc:
+          label: 密送
+          help: 密送地址，多个用逗号分隔。
+          placeholder: 例如 audit@example.com
+        replyTo:
+          label: 回复地址
+          help: 回复邮件发往的地址。
+          placeholder: 例如 support@example.com
+        locale:
+          label: 语言
+          help: 发送时使用的语言。留空则使用请求语言。
+        attachmentsVariable:
+          label: 附件
+          help: 生成文档或 Blob ID 在上下文中的路径，将作为附件发送。
+        idempotencyKey:
+          label: 幂等键
+          help: 相同键的发送会去重。
+        onError:
+          label: 无法发送时
+          help: 选择继续时，邮件发送失败不影响本次提交；选择失败时拒绝本次提交。
+          options:
+            continue: 继续
+            fail: 失败
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+    send_template_email:
+      label: 发送模板邮件
+      description: 通过邮件网关发送预定义邮件模板
+      fields:
+        templateId:
+          label: 模板
+          help: 为本客户发送的邮件模板。
+          placeholder: 例如 123
+        to:
+          label: 收件人
+          help: 收件人地址所在的上下文路径。
+        vars:
+          label: 模板变量
+          help: 代入模板的变量值。
+        cc:
+          label: 抄送
+          help: 抄送地址表达式。
+        bcc:
+          label: 密送
+          help: 密送地址表达式。
+        replyTo:
+          label: 回复地址
+          help: Reply-To 地址表达式。
+        locale:
+          label: 语言
+          help: 发送时使用的语言。留空则使用请求语言。
+        idempotencyKey:
+          label: 幂等键
+          help: 相同键的发送会去重。
+        resultVar:
+          label: 将结果保存为
+          help: 后续步骤读取的变量名。
+  flowchart_runtime:
+    errors:
+      send_email:
+        failed: 邮件未能发送。
+      send_template_email:
+        failed: 邮件未能发送。
+      send_webhook:
+        sign_failed: 无法计算 Webhook 签名。

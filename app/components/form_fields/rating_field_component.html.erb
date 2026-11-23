@@ -1,0 +1,39 @@
+<div class="<%= wrapper_classes %>"
+     data-controller="rating"
+     data-rating-not-rated-label-value="<%= t("comp_form_fields.rating.not_rated") %>"
+     data-rating-value-of-format-value="<%= t("comp_form_fields.rating.value_of", value: "{value}", max: "{max}") %>">
+  <label class="<%= label_classes %>">
+    <%= label %>
+    <%= required_indicator %>
+  </label>
+
+  <div class="flex items-center gap-1" data-rating-target="stars">
+    <% (1..max).each do |star| %>
+      <button type="button"
+              data-rating-star
+              data-value="<%= star %>"
+              data-selected="<%= star <= current_value %>"
+              data-action="click->rating#select mouseenter->rating#hover mouseleave->rating#unhover"
+              class="p-1 transition-colors focus:outline-none focus:ring-2 <%= color_palette(theme)[:ring_color] %> rounded">
+        <svg class="w-6 h-6 transition-colors duration-150 <%= star <= current_value ? 'text-amber-400 fill-current' : 'text-gray-300' %>"
+             viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+        </svg>
+      </button>
+    <% end %>
+
+    <span class="ml-2 text-sm text-gray-400" data-rating-target="label">
+      <%= current_value > 0 ? t("comp_form_fields.rating.value_of", value: current_value, max: max) : t("comp_form_fields.rating.not_rated") %>
+    </span>
+  </div>
+
+  <input type="hidden"
+         name="<%= field_name %>"
+         value="<%= current_value %>"
+         data-rating-target="input"
+         <%= 'required' if required %>>
+
+  <% if html_attributes[:help_text].present? %>
+    <p class="mt-1 text-sm text-gray-500"><%= html_attributes[:help_text] %></p>
+  <% end %>
+</div>

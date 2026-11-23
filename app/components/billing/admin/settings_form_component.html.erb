@@ -1,0 +1,87 @@
+<% if edit? %>
+  <%= form_with model: settings, url: form_url, method: :patch, scope: :billing_settings, class: "space-y-6" do |f| %>
+    <%= render Billing::Admin::FormErrorsComponent.new(errors: form_errors, scope: form_scope, label_prefix: "comp_billing.settings_form.fields") %>
+
+    <%= render ::Admin::Settings::SectionComponent.new(title: t("comp_billing.settings_form.invoicing_section"), description: t("comp_billing.settings_form.invoicing_section_hint")) do %>
+      <div class="divide-y divide-border-subtle">
+        <%= render Billing::Admin::FieldRowComponent.new(label: t("comp_billing.settings_form.tax_rate_show"), for_id: "billing_settings_tax_rate_bps", hint: t("comp_billing.settings_form.tax_rate_hint")) do %>
+          <div class="relative max-w-xs">
+            <%= f.text_field :tax_rate_bps, value: form_value(:tax_rate_bps), inputmode: "numeric", class: "input-field pr-14 tabular-nums", **field_options(:tax_rate_bps) %>
+            <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-body-sm text-text-muted"><%= t("comp_billing.settings_form.bps_unit") %></span>
+          </div>
+          <%= field_error(:tax_rate_bps) %>
+        <% end %>
+        <%= render Billing::Admin::FieldRowComponent.new(label: t("comp_billing.settings_form.collection_mode_show"), for_id: "billing_settings_collection_mode", hint: t("comp_billing.settings_form.provider_selection_hint")) do %>
+          <%= f.select :collection_mode, collection_mode_options, { selected: form_value(:collection_mode) }, class: "input-field max-w-xs", **field_options(:collection_mode) %>
+          <%= field_error(:collection_mode) %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%= render ::Admin::Settings::SectionComponent.new(title: t("comp_billing.settings_form.recovery_section"), description: t("comp_billing.settings_form.recovery_section_hint")) do |section| %>
+      <div class="divide-y divide-border-subtle">
+        <%= render Billing::Admin::FieldRowComponent.new(label: t("comp_billing.settings_form.trial_notice_show"), for_id: "billing_settings_trial_ending_notice_days") do %>
+          <div class="relative max-w-xs">
+            <%= f.text_field :trial_ending_notice_days, value: form_value(:trial_ending_notice_days), inputmode: "numeric", class: "input-field pr-14 tabular-nums", **field_options(:trial_ending_notice_days) %>
+            <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-body-sm text-text-muted"><%= t("comp_billing.settings_form.days_unit") %></span>
+          </div>
+          <%= field_error(:trial_ending_notice_days) %>
+        <% end %>
+        <%= render Billing::Admin::FieldRowComponent.new(label: t("comp_billing.settings_form.grace_period_show"), for_id: "billing_settings_grace_period_days") do %>
+          <div class="relative max-w-xs">
+            <%= f.text_field :grace_period_days, value: form_value(:grace_period_days), inputmode: "numeric", class: "input-field pr-14 tabular-nums", **field_options(:grace_period_days) %>
+            <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-body-sm text-text-muted"><%= t("comp_billing.settings_form.days_unit") %></span>
+          </div>
+          <%= field_error(:grace_period_days) %>
+        <% end %>
+        <%= render Billing::Admin::FieldRowComponent.new(label: t("comp_billing.settings_form.dunning_show"), for_id: "billing_settings_dunning_schedule", hint: t("comp_billing.settings_form.dunning_hint")) do %>
+          <%= f.text_field :dunning_schedule, value: dunning_schedule_display, placeholder: t("comp_billing.settings_form.dunning_placeholder"), class: "input-field tabular-nums", **field_options(:dunning_schedule) %>
+          <%= field_error(:dunning_schedule) %>
+        <% end %>
+      </div>
+      <% section.with_footer do %>
+        <p class="flex items-start gap-2 text-caption sm:mr-auto"><%= render Billing::Admin::IconComponent.new(name: :info, class_name: "mt-px h-4 w-4") %><span><%= t("comp_billing.settings_form.snapshot_hint") %></span></p>
+        <%= link_to t("common.actions.cancel"), form_url, class: "btn btn-secondary" %>
+        <%= f.submit t("comp_billing.settings_form.update_settings"), class: "btn btn-primary" %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% else %>
+  <div class="space-y-6">
+    <%= render ::Admin::Settings::SectionComponent.new(title: t("comp_billing.settings_form.invoicing_section"), description: t("comp_billing.settings_form.invoicing_section_hint")) do %>
+      <%= render Billing::Admin::DetailListComponent.new do |list| %>
+        <% list.with_row(label: t("comp_billing.settings_form.tax_rate_show")) do %>
+          <span class="font-medium tabular-nums"><%= t("comp_billing.settings_form.tax_rate_percent", percent: tax_rate_percent) %></span>
+          <span class="ml-2 text-caption tabular-nums"><%= t("comp_billing.settings_form.tax_rate_bps", bps: settings.tax_rate_bps) %></span>
+        <% end %>
+        <% list.with_row(label: t("comp_billing.settings_form.collection_mode_show"), hint: t("comp_billing.settings_form.provider_selection_hint")) do %>
+          <%= render BadgeComponent.new(variant: settings.collection_mode == "gateway" ? :primary : :default, size: :sm) do %><%= collection_mode_label %><% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= render ::Admin::Settings::SectionComponent.new(title: t("comp_billing.settings_form.recovery_section"), description: t("comp_billing.settings_form.recovery_section_hint")) do %>
+      <%= render Billing::Admin::DetailListComponent.new do |list| %>
+        <% list.with_row(label: t("comp_billing.settings_form.trial_notice_show")) do %>
+          <span class="tabular-nums"><%= t("comp_billing.settings_form.days_before_suffix", value: settings.trial_ending_notice_days) %></span>
+        <% end %>
+        <% list.with_row(label: t("comp_billing.settings_form.grace_period_show")) do %>
+          <span class="tabular-nums"><%= t("comp_billing.settings_form.days_suffix", value: settings.grace_period_days) %></span>
+        <% end %>
+        <% list.with_row(label: t("comp_billing.settings_form.dunning_show")) do %>
+          <% if dunning_days.any? %>
+            <ul class="flex flex-wrap gap-1.5" role="list">
+              <% dunning_days.each do |day| %>
+                <li class="rounded-md border border-border-subtle bg-canvas-elevated px-2 py-0.5 text-caption font-medium text-text-secondary tabular-nums"><%= t("comp_billing.settings_form.dunning_day", day: day) %></li>
+              <% end %>
+            </ul>
+          <% else %>
+            <span class="text-text-secondary"><%= t("comp_billing.settings_form.no_retries") %></span>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <p class="flex items-start gap-2 px-1 text-caption"><%= render Billing::Admin::IconComponent.new(name: :info, class_name: "mt-px h-4 w-4") %><span><%= t("comp_billing.settings_form.snapshot_hint") %></span></p>
+  </div>
+<% end %>

@@ -1,0 +1,8 @@
+<div role="alert" class="rounded-lg border border-danger p-4 space-y-2 text-danger">
+  <h2 class="font-semibold"><%= ui("shared.errors") %></h2>
+  <ul class="list-disc pl-5 break-words">
+    <% errors.each do |key, messages| %><% Array(messages).each do |message| %>
+      <li><%= target(key) ? link_to(message, target(key), class: "underline") : message %></li>
+    <% end %><% end %>
+  </ul>
+</div>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>" class="<%= member_site_theme.html_class %> overflow-x-clip" style="<%= member_site_theme.root_style %>">
+  <head>
+    <title><%= content_for(:title) || t("public_views.layouts.member_title") %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
+    <link href="<%= websites_font_stylesheet(member_site_theme, sections: []) %>" rel="stylesheet">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="<%= member_site_theme.body_class %> overflow-x-clip">
+    <% nav   = content_for?(:member_nav) ? content_for(:member_nav).to_s.strip.to_sym : :home
+       width = content_for?(:member_container_width) ? content_for(:member_container_width).to_s.strip.to_sym : :default %>
+    <%= render Member::ShellComponent.new(
+          customer: current_customer,
+          user: current_user,
+          current_nav: nav,
+          container_width: width
+        ) do %>
+      <%= yield %>
+    <% end %>
+  </body>
+</html>

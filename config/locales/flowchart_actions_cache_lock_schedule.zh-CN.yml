@@ -1,0 +1,313 @@
+zh-CN:
+  flowchart_actions:
+    cache_read:
+      label: 读取缓存
+      description: 从缓存读取值
+      fields:
+        cacheKey:
+          label: 缓存键
+          help: 按租户隔离的读取键。
+          placeholder: 例如 user_42
+        resultVar:
+          label: 结果变量
+          help: 接收缓存值的上下文变量。
+        namespace:
+          label: 命名空间
+          help: 可选前缀，会拼到键前面。
+          placeholder: 以 <命名空间>:<缓存键> 的形式拼接
+        decompressOnRead:
+          label: 读取时解压
+          help: 读取时解压已存储的值。
+        versionCheck:
+          label: 版本校验
+          help: 期望的缓存版本。
+          placeholder: 期望版本，例如 v1
+        onMiss:
+          label: 未命中时
+          help: 键不存在时写入的内容。
+          options:
+            nil: 空值
+            default: 默认值
+        defaultValue:
+          label: 默认值
+          help: 未命中且选择默认值时使用。
+          placeholder: 未命中时使用
+      errors:
+        wildcard: "%{field} 不能包含通配符"
+        too_long: "%{field} 最多 %{max_length} 字节"
+        invalid_expression: "%{field} 必须是单个安全的 Ruby 表达式"
+    cache_write:
+      label: 写入缓存
+      description: 将值写入缓存
+      fields:
+        cacheKey:
+          label: 缓存键
+          help: 按租户隔离的写入键。
+          placeholder: 例如 user_42
+        action:
+          label: 动作
+          help: 覆盖该键，或仅在键不存在时写入。
+          options:
+            write: 写入
+            write_if_absent: 不存在时写入
+        sourceVariable:
+          label: 源变量
+          help: 待写入值所在的上下文路径。
+        ttl:
+          label: 存活时间（秒）
+          help: 条目过期前的秒数。
+          placeholder: 例如 3600
+        compress:
+          label: 压缩
+          help: 压缩存储的值。
+        raw:
+          label: 原始存储
+          help: 不序列化，按原样存储。
+        race_condition_ttl:
+          label: 竞态存活时间（秒）
+          help: 缓存击穿时额外保留旧值的秒数。
+          placeholder: 例如 5
+        raceConditionTtl:
+          label: 竞态存活时间（秒）
+          help: 缓存击穿时额外保留旧值的秒数。
+          placeholder: 例如 5
+        namespace:
+          label: 命名空间
+          help: 可选前缀，会拼到键前面。
+          placeholder: 拼到键前面
+        version:
+          label: 版本
+          help: 缓存版本标记。
+          placeholder: 例如 v1
+        tags:
+          label: 标签
+          help: 供“删除缓存”按标签失效使用的名称。
+      errors:
+        wildcard: "%{field} 不能包含通配符"
+        too_long: "%{field} 最多 %{max_length} 字节"
+    cache_delete:
+      label: 删除缓存
+      description: 删除缓存中的值
+      fields:
+        scope:
+          label: 范围
+          help: 删除单个键、通配模式、命名空间、标签，或清空本租户全部键。
+          options:
+            key: 单个键
+            pattern: 通配模式
+            namespace: 命名空间前缀
+            all: 全部（清空本租户）
+            tagged: 按标签
+        cacheKey:
+          label: 缓存键 / 模式 / 命名空间
+          help: 要删除的键、通配模式或命名空间。
+          placeholder: "例如 user:42、user:*、tenant_42:"
+        tags:
+          label: 标签
+          help: 要失效的标签名。
+        confirmPattern:
+          label: 模式规模保护
+          help: 当模式匹配的键达到 10000 个时拒绝删除。
+      errors:
+        wildcard: "%{field} 不能包含通配符"
+        too_long: "%{field} 最多 %{max_length} 字节"
+    cache_fetch:
+      label: 读取并回填缓存
+      description: 缓存未命中时用回退路径计算并写入
+      fields:
+        cacheKey:
+          label: 缓存键
+          help: 按租户隔离的读取键。
+          placeholder: 例如 user_42
+        fallbackExpression:
+          label: 回退表达式
+          help: 未命中时读取的上下文路径。
+        resultVar:
+          label: 结果变量
+          help: 接收读取结果的上下文变量。
+        ttl:
+          label: 存活时间
+          help: 回填值过期前的秒数。
+          placeholder: 例如 3600（秒）
+        raceConditionTtl:
+          label: 竞态存活时间（秒）
+          help: 缓存击穿时额外保留旧值的秒数。
+        forceRefresh:
+          label: 强制刷新
+          help: 忽略已有缓存，重新计算回退值。
+        skipNilCache:
+          label: 跳过空值缓存
+          help: 回退结果为 nil 时不写入缓存。
+        versionKey:
+          label: 版本键
+          help: 缓存版本标记。
+          placeholder: 例如 v2
+        namespace:
+          label: 命名空间
+          help: 可选前缀，会拼到键前面。
+          placeholder: 以 <命名空间>:<缓存键> 的形式拼接
+      errors:
+        wildcard: "%{field} 不能包含通配符"
+        too_long: "%{field} 最多 %{max_length} 字节"
+    acquire_lock:
+      label: 获取锁
+      description: 获取分布式锁
+      fields:
+        lockKey:
+          label: 锁键
+          help: 字面锁名（或改用锁键变量）。
+          placeholder: 例如 order_processing（或改用锁键变量）
+        lockKeyVariable:
+          label: 锁键变量
+          help: 存放锁键的上下文路径。
+          placeholder: 存放锁键的上下文变量（或改用锁键）
+        holderIdentity:
+          label: 持有者标识
+          help: 持锁令牌。默认生成随机十六进制串。
+          placeholder: 持锁令牌（默认 SecureRandom.hex）
+        ttl:
+          label: 存活时间（秒）
+          help: 未释放时锁的持有秒数。
+          placeholder: 缓存锁存活时间（默认 30）
+        onConflict:
+          label: 冲突时
+          help: 锁已被占用时的处理。本步骤不会等待。
+          options:
+            fail: 使步骤失败（返回 false）
+            raise: 失败
+            skip: 跳过（返回 true）
+        lockKeyVar:
+          label: 将锁键保存为
+          help: 后续步骤用来释放锁的上下文变量。
+        tokenVar:
+          label: 将锁令牌保存为
+          help: 后续步骤用作持有者令牌的上下文变量。
+      errors:
+        invalid_holder: "%{field} 必须是单行标识符、字面量或 ctx[:key] 表达式"
+    release_lock:
+      label: 释放锁
+      description: 释放分布式锁
+      fields:
+        lockKey:
+          label: 锁键
+          help: 字面锁名（或改用锁键变量）。
+          placeholder: 例如 order_processing（或改用锁键变量）
+        lockKeyVariable:
+          label: 锁键变量
+          help: 存放锁键的上下文路径。
+          placeholder: 存放锁键的上下文变量（或改用锁键）
+        holderIdentity:
+          label: 持有者标识
+          help: 持锁令牌。默认使用“获取锁”写入的令牌。
+          placeholder: 字面量、ctx[:token] 或 ctx:token
+        onMissing:
+          label: 锁不存在时
+          help: 当前令牌未持有该锁时的处理。
+          options:
+            ignore: 忽略
+            fail: 失败
+            log: 记录警告
+      errors:
+        invalid_holder: "%{field} 必须是单行标识符、字面量或 ctx[:key] 表达式"
+    deadline_check:
+      label: 检查截止时间
+      description: 检查截止时间是否已过
+      fields:
+        deadlineVariable:
+          label: 截止时间变量
+          help: 存放截止时间的上下文路径。
+          placeholder: 存放截止时间的上下文键
+        deadlineFormat:
+          label: 截止时间格式
+          help: 如何解析字符串形式的截止时间。
+          options:
+            iso8601: iso8601
+            rfc2822: rfc2822
+            auto: 自动
+        referenceTime:
+          label: 参照时间
+          help: 作为时钟的上下文路径。留空则使用当前时间。
+          placeholder: 参照时间的上下文键（留空为 Time.current）
+        gracePeriodSeconds:
+          label: 宽限期（秒）
+          help: 判定逾期前额外加上的秒数。
+          placeholder: 判定逾期前加到截止时间上的秒数
+        warningSeconds:
+          label: 预警（秒）
+          help: 剩余时间不超过该秒数则标记为有风险。0 表示关闭预警。
+        behaviorOnBreach:
+          label: 逾期行为
+          help: 标记变量，或使步骤失败。
+          options:
+            mark: 标记
+            raise: 失败
+            fail: 使步骤失败
+        breachedVar:
+          label: 逾期变量
+          help: 逾期时设为 true 的上下文变量。
+          placeholder: 标记逾期的上下文变量
+        resultVar:
+          label: 结果变量
+          help: 接收截止时间状态哈希的上下文变量。
+        atRiskVar:
+          label: 风险变量
+          help: 剩余时间进入预警窗口时设为 true 的上下文变量。
+    business_hours_check:
+      label: 检查营业时间
+      description: 检查当前是否处于营业时间
+      fields:
+        schedule:
+          label: 每周时间表
+          help: 星期到 HH:MM-HH:MM 时段。
+          placeholder: 星期 -> HH:MM-HH:MM（例如 monday -> 09:00-17:00）
+        holidays:
+          label: 假日
+          help: 视为休息的日期。
+          placeholder: YYYY-MM-DD -> 假日名称（跳过这些日期）
+        timezone:
+          label: 时区
+          help: 用于判断时间表的 IANA 时区。
+          placeholder: IANA 标识，例如 America/New_York
+        timeVariable:
+          label: 时间变量
+          help: 存放 Time 或 ISO 字符串的上下文路径。留空则使用当前时间。
+          placeholder: 存放 Time 或 ISO 字符串的上下文键（默认现在）
+        resultMode:
+          label: 结果模式
+          help: 返回是否营业、下次开门时间，或距离开门的分钟数。
+          options:
+            bool: 布尔值（是否营业）
+            next_open: 下次开门（ISO8601）
+            minutes_until_open: 距开门分钟数
+            add_business_minutes: 加上营业分钟
+        businessMinutes:
+          label: 营业分钟数
+          help: 结果模式为加上营业分钟时，从起始时间累加的营业分钟。
+        resultVar:
+          label: 结果变量
+          help: 接收检查结果的上下文变量。
+      errors:
+        invalid_timezone: 时区必须是有效的 IANA 标识
+        invalid_schedule: "%{field} 必须使用星期键和 HH:MM-HH:MM 时段"
+        invalid_holidays: "%{field} 必须使用 YYYY-MM-DD 日期"
+  flowchart_runtime:
+    errors:
+      cache_read:
+        failed: "无法读取缓存（%{reason}）。"
+      cache_write:
+        failed: "无法写入缓存（%{reason}）。"
+      cache_delete:
+        failed: "无法删除缓存条目（%{reason}）。"
+      cache_fetch:
+        failed: "无法读取并回填缓存（%{reason}）。"
+      acquire_lock:
+        lock_busy: 锁已被占用。
+        failed: "无法获取锁（%{reason}）。"
+      release_lock:
+        not_held: 当前令牌未持有该锁。
+        failed: "无法释放锁（%{reason}）。"
+      deadline_check:
+        breached: 已超过截止时间。
+        failed: "无法检查截止时间（%{reason}）。"
+      business_hours_check:
+        failed: "无法检查营业时间（%{reason}）。"

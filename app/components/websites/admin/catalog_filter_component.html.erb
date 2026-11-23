@@ -1,0 +1,22 @@
+<nav class="flex flex-wrap items-center gap-2" data-catalog-filter="true" aria-label="<%= label %>">
+  <%= link_to all_path,
+              class: chip_class(all_active?),
+              aria: { current: (all_active? ? "page" : nil) },
+              data: { filter_id: "all" } do %>
+    <%= t("website.platform.catalog.filter.all") %>
+    <% if all_count %>
+      <span class="<%= count_class(all_active?) %>"><%= t("website.platform.catalog.filter.count", count: all_count) %></span>
+    <% end %>
+  <% end %>
+  <% items.each do |item| %>
+    <%= link_to item[:path],
+                class: chip_class(item_active?(item)),
+                aria: { current: (item_active?(item) ? "page" : nil) },
+                data: { filter_id: item[:id] } do %>
+      <%= item[:label] %>
+      <% if (count = count_for(item)) %>
+        <span class="<%= count_class(item_active?(item)) %>"><%= t("website.platform.catalog.filter.count", count: count) %></span>
+      <% end %>
+    <% end %>
+  <% end %>
+</nav>

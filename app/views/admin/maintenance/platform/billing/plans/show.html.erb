@@ -1,0 +1,77 @@
+<%= render Billing::Admin::PlatformPageComponent.new(
+  customer_id: current_customer_id,
+  section: :plans,
+  crumbs: [{ label: @plan.name }],
+  title: @plan.name,
+  description: @plan.description.presence || t("maint_platform.billing.plans.show.description_fallback"),
+  actions: [
+    { label: t("common.actions.edit"), path: edit_admin_maintenance_platform_billing_plan_path(current_customer_id, @plan), icon: :edit }
+  ],
+  wrap_title: true
+) do %>
+  <div class="max-w-4xl space-y-6">
+    <div class="card overflow-hidden">
+      <div class="flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:justify-between sm:p-6">
+        <div class="min-w-0">
+          <p class="text-caption"><%= t("maint_platform.billing.plans.show.price_usd") %></p>
+          <% if @plan.free? %>
+            <p class="text-title"><%= t("comp_billing.plan_catalog.free") %></p>
+          <% else %>
+            <p class="text-title tabular-nums">
+              <%= Billing::CurrencyResolver.format_amount(@plan.amount_usd, "USD") %>
+              <span class="text-body font-normal text-text-tertiary"><%= t("comp_billing.plan_catalog.interval_#{@plan.interval == 'yearly' ? 'year' : 'month'}") %></span>
+            </p>
+          <% end %>
+          <p class="mt-1 text-body-sm text-text-secondary tabular-nums">
+            <%= t("comp_billing.plan_catalog.amount_cny", amount: Billing::CurrencyResolver.format_amount(@plan.amount_cny, "CNY")) %>
+          </p>
+          <% if @plan.trial_days.to_i.positive? %>
+            <p class="mt-1.5 text-body-sm text-text-secondary"><%= t("comp_billing.plan_catalog.trial", days: @plan.trial_days) %></p>
+          <% end %>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <%= render BadgeComponent.new(variant: @plan.active? ? :success : :default, size: :sm) do %>
+            <%= @plan.active? ? t("common.status.active") : t("common.status.inactive") %>
+          <% end %>
+          <% if @plan.is_default? %>
+            <%= render BadgeComponent.new(variant: :primary, size: :sm) do %>
+              <%= t("comp_billing.plan_catalog.default_badge") %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <%= render ::Admin::Settings::SectionComponent.new(title: t("maint_platform.billing.plans.show.details")) do %>
+      <%= render Billing::Admin::DetailListComponent.new do |list| %>
+        <% list.with_row(label: t("maint_platform.billing.plans.show.code"), mono: true) { @plan.code } %>
+        <% list.with_row(label: t("maint_platform.billing.plans.show.interval")) { t("comp_billing.plan_form.intervals.#{@plan.interval}") } %>
+        <% list.with_row(label: t("maint_platform.billing.plans.show.trial_days")) { @plan.trial_days } %>
+        <% list.with_row(label: t("maint_platform.billing.plans.show.display_position")) { @plan.position } %>
+        <% list.with_row(label: t("maint_platform.billing.plans.show.default_plan")) do %>
+          <%= @plan.is_default? ? t("common.labels.yes") : t("common.labels.no") %>
+        <% end %>
+        <% list.with_row(label: t("common.labels.status")) do %>
+          <%= @plan.active? ? t("common.status.active") : t("common.status.inactive") %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% if @items.any? %>
+      <%= render ::Admin::Settings::SectionComponent.new(title: t("maint_platform.billing.plans.show.plan_limits")) do %>
+        <dl class="divide-y divide-border-subtle">
+          <% @items.each do |item| %>
+            <% limit = @plan.limit_for(item.key) %>
+            <% unlimited = limit == Billing::PlanLimit::UNLIMITED %>
+            <div class="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
+              <dt class="min-w-0 truncate text-body-sm text-text-secondary"><%= item.label %></dt>
+              <dd class="shrink-0 text-body-sm tabular-nums <%= unlimited ? 'text-text-muted' : 'font-medium text-text-primary' %>">
+                <%= unlimited ? t("maint_platform.billing.plans.show.unlimited") : limit %>
+              </dd>
+            </div>
+          <% end %>
+        </dl>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,41 @@
+zh-CN:
+  sms:
+    statuses:
+      queued: "待发送"
+      expired: "已过期"
+    errors:
+      module_disabled: "该客户尚未启用短信模块。"
+      idempotency_conflict: "该幂等键已用于其他短信请求。"
+      key_invalid: "短信标识必须是非空字符串，且不超过 128 字节。"
+      recipient_invalid: "收件号码无效"
+      vars_invalid: "短信变量必须是键名唯一的对象，值仅支持字符串或数字。"
+      expiry_invalid: "短信有效期必须使用 Time 对象。"
+      snapshot_invalid: "短信模板快照无效。"
+      enqueue_rejected: "短信发送任务入队失败"
+      rate_limited: "已达到 %{window} 窗口的发送频率上限"
+    credentials:
+      access_key_id: "Access Key ID"
+      access_key_secret: "Access Key Secret"
+      errors:
+        incomplete: "请先完善凭据信息，再启用该凭据。"
+    adapters:
+      aliyun:
+        name: "阿里云短信"
+        credentials:
+          access_key_id: "Access Key ID"
+          access_key_secret: "Access Key Secret"
+        fields:
+          sign_name: "签名"
+          region: "地域"
+      twilio:
+        name: "Twilio"
+        credentials:
+          access_key_id: "Account SID"
+          access_key_secret: "Auth Token"
+        fields:
+          messaging_service_sid: "Messaging Service SID"
+          from: "发送号码"
+    failures:
+      delivery_failed: "投递失败"
+      send_never_confirmed: "服务商未确认发送结果"
+      send_failed: "短信发送失败"

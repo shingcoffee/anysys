@@ -1,0 +1,6 @@
+<% payment_module = FeatureModules::Module.find_by(key: "payment") %>
+<%= render Admin::Maintenance::Platform::ModuleSettings::ShellComponent.new(
+      feature_module: payment_module, customer_id: current_customer_id, current: :operations
+    ) do %>
+  <%= render Payments::Admin::WebhookEventTableComponent.new(events: @events) %>
+<% end %>

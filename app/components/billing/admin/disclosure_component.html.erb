@@ -1,0 +1,15 @@
+<%= tag.section id: id, aria: { label: title }, class: wrapper_classes, data: { controller: "billing-disclosure", billing_disclosure_open_value: open, billing_disclosure_hashes_value: hashes.to_json } do %>
+  <%= content_tag(heading_tag, class: "m-0") do %>
+    <button type="button" data-billing-disclosure-target="trigger" data-action="billing-disclosure#toggle" aria-expanded="<%= open %>" aria-controls="<%= panel_id %>" class="flex min-h-11 w-full cursor-pointer items-center justify-between gap-3 px-4 py-3.5 text-left transition-colors hover:bg-surface-hover focus-visible:outline-accent sm:px-6">
+      <span class="min-w-0 flex-1">
+        <span class="block <%= heading_class %>"><%= title %></span>
+        <% if description.present? %><span class="mt-0.5 block text-caption font-normal"><%= description %></span><% end %>
+      </span>
+      <span class="flex shrink-0 items-center gap-2.5">
+        <% if summary? %><%= summary %><% end %>
+        <span data-billing-disclosure-target="icon" class="text-text-muted transition-transform duration-150 <%= 'rotate-90' if open %>"><%= render Billing::Admin::IconComponent.new(name: :chevron_right, class_name: "size-4") %></span>
+      </span>
+    </button>
+  <% end %>
+  <div id="<%= panel_id %>" data-billing-disclosure-target="panel" class="border-t border-border-subtle <%= 'px-4 py-4 sm:px-6' unless flush %>"><%= content %></div>
+<% end %>

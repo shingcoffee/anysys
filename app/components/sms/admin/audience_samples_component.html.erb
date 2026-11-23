@@ -1,0 +1,9 @@
+<%= section(ui("segments.samples")) do %>
+  <ul class="space-y-3"><% Array(@preview[:samples]).first(5).each do |sample| %>
+    <li class="border border-border-subtle rounded-lg p-3 break-words">
+      <%= link_to(sample[:name].presence || sample[:phone_e164], sms_path(:contact, sample[:contact_id]), class: "link") %>
+      <%= status_badge(sample[:consent_status]) %>
+      <p class="text-sm"><%= sample[:eligible] ? t("sms_campaign_ui.campaigns.eligible") : reason_label(sample[:reason]) %></p>
+    </li>
+  <% end %></ul>
+<% end %>

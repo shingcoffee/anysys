@@ -1,0 +1,16 @@
+<% price = t("billing_mailer.trial_ending.price", amount: Billing::CurrencyResolver.format(@subscription.amount_cents, @subscription.currency), currency: @subscription.currency, interval: t("comp_billing.plan_form.intervals.#{@subscription.interval}")) %>
+<%= render Mailers::ShellComponent.new(
+      preheader: t("billing_mailer.trial_ending.preheader", date: format_mail_date(@subscription.trial_end)),
+      brand:     t("billing_mailer.shell.brand"),
+      heading:   t("billing_mailer.trial_ending.heading"),
+      title:     t("billing_mailer.trial_ending.title"),
+      body:      t("billing_mailer.trial_ending.intro"),
+      highlight: price,
+      highlight_caption: t("billing_mailer.trial_ending.label_price_after_trial"),
+      facts: [
+        { label: t("billing_mailer.trial_ending.label_plan"), value: @plan.name },
+        { label: t("billing_mailer.trial_ending.label_trial_ends"), value: format_mail_date(@subscription.trial_end) }
+      ],
+      note:      t("billing_mailer.trial_ending.outro"),
+      footer:    t("billing_mailer.shell.footer")
+    ) %>

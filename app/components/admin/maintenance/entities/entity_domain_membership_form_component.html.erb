@@ -1,0 +1,36 @@
+<%= render CardComponent.new(padding: :none) do %>
+  <%= form_with scope: :entity_domain_membership, url: form_url, method: :patch, local: true,
+                data: { turbo: false }, html: { class: "min-w-0 space-y-5 p-4 sm:p-6" } do |form| %>
+    <% if errors.any? %>
+      <div role="alert">
+        <%= render AlertComponent.new(message: safe_join(errors.map { |message| tag.span(message, class: "block") }), type: :error) %>
+      </div>
+    <% end %>
+
+    <div class="min-w-0 space-y-2 md:max-w-md">
+      <%= form.label :entity_domain_id, t("maint_core.entity_domains.move.domain"), for: "entity-domain-membership-domain", class: "form-label" %>
+      <%= form.select :entity_domain_id, options_for_select(options, selected), {},
+                      { id: "entity-domain-membership-domain", class: "input-field min-h-11 w-full", required: true,
+                        aria: { describedby: "entity-domain-membership-hint" } } %>
+      <p id="entity-domain-membership-hint" class="text-xs text-text-secondary">
+        <%= hint %>
+        <% if entity.has_associations? %><%= t("maint_core.entity_domains.move.bridges_follow") %><% end %>
+      </p>
+      <% if domains.empty? %>
+        <p class="text-sm text-text-secondary">
+          <%= t("maint_core.entity_domains.move.no_domains") %>
+          <%= link_to t("maint_core.entity_domains.index.new_domain"), new_domain_path, class: "text-accent-text underline" %>
+        </p>
+      <% end %>
+    </div>
+
+    <div class="flex flex-col gap-3 sm:flex-row">
+      <%= render ButtonComponent.new(type: "submit", class: "min-h-11 w-full justify-center sm:w-auto") do %>
+        <%= t("common.actions.save") %>
+      <% end %>
+      <%= render ButtonComponent.new(tag: :a, href: cancel_path, variant: :secondary, class: "min-h-11 w-full justify-center sm:w-auto") do %>
+        <%= t("common.actions.cancel") %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

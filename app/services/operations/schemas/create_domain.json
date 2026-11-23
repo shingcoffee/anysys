@@ -1,0 +1,54 @@
+{
+  "title": "Create domain",
+  "description": "Create a new domain (sub-system): a named group of related entities in this workspace. Call this before create_entity when starting a new business area. Does not create entities.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Name of the sub-system. Unique per tenant, case-insensitive. Example: Academics."
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Optional short description of what this sub-system covers."
+    },
+    "color": {
+      "type": "string",
+      "enum": [
+        "slate",
+        "blue",
+        "green",
+        "amber",
+        "rose",
+        "purple",
+        "teal"
+      ],
+      "description": "Accent colour for the sub-system in the workspace. Defaults to slate when omitted.",
+      "x-enum-descriptions": {
+        "slate": "Neutral grey accent. Used when colour is omitted.",
+        "blue": "Blue accent.",
+        "green": "Green accent.",
+        "amber": "Amber accent.",
+        "rose": "Rose accent.",
+        "purple": "Purple accent.",
+        "teal": "Teal accent."
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Academics",
+      "description": "Courses, students and enrolment.",
+      "color": "blue"
+    },
+    {
+      "name": "Ticketing"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+zh-CN:
+  code_generator_inputs:
+    errors:
+      group_fields: "groupByFields 必须包含有效字段名，或每行键均为有效字段名的键值列表。"
+      clone_overrides: "overrideAttributes 必须为 JSON 对象，将有效属性名映射到标量值或 ctx 引用。"
+      schedule: "schedule 必须将星期名称映射到有效的 HH:MM-HH:MM 时间段，且开始时间早于结束时间。"
+      holidays: "holidays 必须将有效的 YYYY-MM-DD 日期映射到节假日名称；不允许格式错误或重复的行。"
+      archive_entries: "entries 必须为 JSON 对象数组；每项须包含 name，且仅指定 sourceKey 或字符串字面量二者之一。"
+      download_headers: "headers 必须为 JSON 对象或键值数组，包含有效请求头名称和不含换行符的标量值。"
+      csv_columns: "columns 必须为非空 JSON 对象数组；每项须包含字符串 header，以及使用 nestedSeparator 分隔的有效字段路径。"
+      tools: "tools 必须为 JSON 对象或键值数组，键为不重复的 ctx 工具名称，值须留空。"
+      tools_provider: "所选服务商不支持工具调用。"
+      tool_binding: "工具 %{name} 必须在 ctx 中绑定到 RubyLLM::Tool 实例。"

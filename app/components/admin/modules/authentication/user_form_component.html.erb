@@ -1,0 +1,82 @@
+<%= form_with model: user, url: url, method: method, class: "flex flex-col gap-6" do |f| %>
+  <%= hidden_field_tag :journey, journey.key if journey %>
+  <%= render FormErrorsComponent.new(resource: user) %>
+
+  <section class="card overflow-hidden" aria-labelledby="user-form-account-heading">
+    <%= render Admin::Modules::Authentication::UserCardHeaderComponent.new(
+          heading_id: "user-form-account-heading",
+          title: t("admin_modules.users.form.sections.account"),
+          icon_path: attribute_group_icon_path("user"),
+          tile_class: tile("indigo")
+        ) %>
+    <div class="flex flex-col gap-5 px-4 py-5 sm:px-6">
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div>
+          <%= f.label :first_name, class: label_class(required: true) %>
+          <%= f.text_field :first_name, autofocus: true, required: true, autocomplete: "given-name",
+                placeholder: t("admin_modules.users.form.first_name_placeholder"), class: "input-field w-full" %>
+        </div>
+        <div>
+          <%= f.label :last_name, class: label_class(required: true) %>
+          <%= f.text_field :last_name, required: true, autocomplete: "family-name",
+                placeholder: t("admin_modules.users.form.last_name_placeholder"), class: "input-field w-full" %>
+        </div>
+      </div>
+      <div>
+        <%= f.label :email, class: label_class(required: true) %>
+        <%= f.email_field :email, required: true, autocomplete: "email",
+              placeholder: t("admin_modules.users.form.email_placeholder"), class: "input-field w-full" %>
+      </div>
+    </div>
+  </section>
+
+  <section class="card overflow-hidden" aria-labelledby="user-form-password-heading">
+    <%= render Admin::Modules::Authentication::UserCardHeaderComponent.new(
+          heading_id: "user-form-password-heading",
+          title: t("admin_modules.users.form.sections.password"),
+          description: password_description,
+          icon_path: Admin::Modules::Authentication::UserFormComponent::LOCK_ICON,
+          tile_class: tile("sky")
+        ) %>
+    <% unless journey %>
+      <div class="grid grid-cols-1 gap-5 px-4 py-5 sm:grid-cols-2 sm:px-6">
+        <div>
+          <%= f.label :password, class: label_class(required: !user.persisted?) %>
+          <%= f.password_field :password, autocomplete: "new-password", required: !user.persisted?,
+                placeholder: password_placeholder, class: "input-field w-full" %>
+        </div>
+        <div>
+          <%= f.label :password_confirmation, t("admin_modules.users.form.confirm_password_label"), class: label_class(required: !user.persisted?) %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", required: !user.persisted?,
+                placeholder: t("admin_modules.users.form.password_confirmation_placeholder"), class: "input-field w-full" %>
+        </div>
+      </div>
+    <% end %>
+  </section>
+
+  <section class="card overflow-hidden" aria-labelledby="user-form-access-heading">
+    <%= render Admin::Modules::Authentication::UserCardHeaderComponent.new(
+          heading_id: "user-form-access-heading",
+          title: t("admin_modules.users.form.sections.access"),
+          icon_path: attribute_group_icon_path("settings"),
+          tile_class: tile("violet")
+        ) %>
+    <div class="px-4 py-5 sm:px-6">
+      <%= f.label :role, class: "form-label" %>
+      <%= f.select :role, role_options, { selected: selected_role }, class: "input-field w-full" %>
+      <ul class="mt-4 flex flex-col gap-2 border-t border-border-subtle pt-4">
+        <% %w[member admin owner].each do |key| %>
+          <li class="text-sm text-text-secondary">
+            <span class="font-medium text-text-primary"><%= t("admin_modules.users.roles.#{key}") %></span>
+            <span class="text-text-muted"><%= t("admin_modules.users.form.role_hint.#{key}") %></span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </section>
+
+  <div class="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-end">
+    <%= link_to t("common.actions.cancel"), cancel_path, class: "btn btn-secondary w-full sm:w-auto" %>
+    <%= f.submit submit_label, class: "btn btn-primary w-full sm:w-auto" %>
+  </div>
+<% end %>

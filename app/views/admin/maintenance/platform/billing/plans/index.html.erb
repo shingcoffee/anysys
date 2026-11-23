@@ -1,0 +1,14 @@
+<%= render Billing::Admin::PlatformPageComponent.new(
+  customer_id: current_customer_id,
+  section: :plans,
+  title: t("maint_platform.billing.plans.index.title"),
+  description: t("maint_platform.billing.plans.index.description"),
+  actions: [
+    { label: t("maint_platform.billing.plans.index.new_plan"),
+      path: new_admin_maintenance_platform_billing_plan_path(current_customer_id),
+      variant: :primary, icon: :plus }
+  ]
+) do %>
+  <%= render Billing::Admin::PlanCatalogComponent.new(plans: @plans, items: @items, customer_id: current_customer_id,
+        pagination: @pagination, page_path: @page_path) %>
+<% end %>

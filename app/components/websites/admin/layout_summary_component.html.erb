@@ -1,0 +1,11 @@
+<div class="flex min-w-0 flex-col gap-3 border-t border-border-subtle bg-canvas-elevated/60 px-5 py-4" data-layout-summary="true">
+  <p class="text-xs font-semibold uppercase tracking-[0.08em] text-text-tertiary"><%= t("website.admin.pages.new.selected_layout") %></p>
+  <div class="flex min-w-0 flex-col gap-1">
+    <p class="break-words text-md font-semibold text-text-primary" data-website-layout-picker-target="summaryName"><%= name %></p>
+    <p class="break-words text-sm leading-snug text-text-secondary <%= "hidden" if description.blank? %>" data-website-layout-picker-target="summaryDescription"><%= description %></p>
+  </div>
+  <div class="flex min-w-0 flex-col gap-1">
+    <p class="text-xs font-medium text-text-tertiary" data-website-layout-picker-target="summaryCount"><%= count_label %></p>
+    <p class="break-words text-sm leading-relaxed text-text-secondary <%= "hidden" if sections_text.blank? %>" data-website-layout-picker-target="summarySections"><%= sections_text %></p>
+  </div>
+</div>

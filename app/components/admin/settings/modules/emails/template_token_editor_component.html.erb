@@ -1,0 +1,18 @@
+<%= render Admin::Settings::PageComponent.new(
+  customer_id: customer_id, title: title, description: t("settings_modules.email.#{token.persisted? ? 'form_description' : 'bulk_form_description'}"),
+  breadcrumbs: [{ label: t("settings_navigation.items.email_personalization"), path: index_path }, { label: title }]
+) do %>
+  <% if token.persisted? %>
+    <%= render Admin::Settings::Modules::Emails::TemplateTokenFormComponent.new(
+      token: token, entities: entities, entity_attributes: entity_attributes,
+      existing_slugs: existing_slugs, submitted_values: submitted_values,
+      url: form_url, method: :patch, cancel_path: index_path
+    ) %>
+  <% else %>
+    <%= render Admin::Settings::Modules::Emails::TemplateTokenBulkFormComponent.new(
+      token: token, entities: entities, entity_attributes: entity_attributes,
+      existing_slugs: existing_slugs, submitted_fields: submitted_fields,
+      url: form_url, cancel_path: index_path
+    ) %>
+  <% end %>
+<% end %>

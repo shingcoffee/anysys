@@ -1,0 +1,8 @@
+<%# Read by the entity-quick-add-dialog controller, which selects the entry in the dropdown. %>
+<turbo-frame id="<%= Admin::Entities::QuickAddDialogComponent.frame_id(quick_add_depth) %>">
+  <p role="status"
+     class="py-16 text-center text-body-sm text-text-muted"
+     data-entity-quick-add-dialog-target="created"
+     data-entry-id="<%= @entry.id %>"
+     data-entry-label="<%= quick_add_label(@entry) %>"><%= t("admin_misc.entities.entry_form.created") %></p>
+</turbo-frame>

@@ -1,0 +1,39 @@
+<%= render Admin::CardTableComponent.new(
+      headers: [
+        { label: t("comp_payments.transaction_table.headers.order"),    align: :left },
+        { label: t("comp_payments.transaction_table.headers.provider"), align: :left },
+        { label: t("comp_payments.transaction_table.headers.amount"),   align: :right },
+        { label: t("common.labels.status"),                             align: :left },
+        { label: "" }
+      ],
+      empty: payments.empty?,
+      empty_text: t("comp_payments.transaction_table.empty")) do %>
+  <% payments.each do |p| %>
+    <tr class="table-row">
+      <td class="px-4 py-3 text-body text-text-primary tabular-nums">
+        <%= link_to p.payment_order.external_ref, transaction_path(p), class: "link underline-offset-2 hover:underline" %>
+      </td>
+      <td class="px-4 py-3 text-body text-text-secondary"><%= provider_label(p.provider) %></td>
+      <td class="px-4 py-3 text-right text-body text-text-primary tabular-nums"><%= formatted_amount(p) %></td>
+      <td class="px-4 py-3">
+        <div class="flex items-center gap-1.5">
+          <%= render BadgeComponent.new(variant: status_variant(p.status), size: :sm) do %><%= status_label(p.status) %><% end %>
+          <% if (flag = dispute_flag(p)) %>
+            <%= render BadgeComponent.new(variant: flag[:variant], size: :sm) do %><%= t("comp_payments.transaction_table.#{flag[:key]}") %><% end %>
+          <% end %>
+        </div>
+      </td>
+      <td class="px-4 py-3 text-right">
+        <% if p.status == "succeeded" %>
+          <%= link_to t("comp_payments.transaction_table.refund"),
+                transaction_path(p),
+                class: "btn btn-danger text-xs min-h-10 pointer-coarse:min-h-11" %>
+        <% else %>
+          <%= link_to t("common.actions.view"),
+                transaction_path(p),
+                class: "btn btn-secondary text-xs min-h-10 pointer-coarse:min-h-11" %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+<% end %>

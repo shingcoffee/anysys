@@ -1,0 +1,8 @@
+en:
+  operations:
+    violations:
+      journey:
+        option_not_found: "%{domain} has no journey option %{key}. Call list_journey_options and use one of its keys."
+        generation_failed: "The journey %{key} could not be built: %{errors}"
+    journeys:
+      sign_up_disabled: "Sign-up is turned off for this workspace, so the sign-up journey stays a draft."

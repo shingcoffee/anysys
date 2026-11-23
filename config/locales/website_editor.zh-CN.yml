@@ -1,0 +1,78 @@
+zh-CN:
+  website:
+    admin:
+      pages:
+        edit:
+          back: "返回页面列表"
+          kit_catalog: "区块类型"
+          inspector_hint: "编辑所选区块，预览会同步更新。"
+          preview_address: "预览"
+          address_label: "公开地址"
+          address_hidden: "访客暂不可见"
+          address_opens: "（在新标签页中打开）"
+          section_position: "第 %{number} / %{total} 个"
+          previous_section: "上一个"
+          next_section: "下一个"
+          section_steps: "切换区块"
+          back_to_sections: "全部区块"
+          identity_preview: "标题、可见性与首页"
+        index:
+          list_label: "页面"
+        style:
+          heading: "设计"
+          trigger: "设计：%{target}"
+          reset: "重置设计"
+          edited: "已修改"
+          default: "主题"
+          custom: "自定义颜色"
+          targets:
+            section: "区块"
+            buttons: "按钮"
+            items: "%{list} 条目"
+          attributes:
+            background: "背景"
+            custom_background: "自定义背景"
+            heading_font: "标题字体"
+            body_font: "正文字体"
+            scale: "字号比例"
+            color: "颜色"
+            font: "字体"
+            size: "字号"
+            weight: "字重"
+            italic: "字形"
+            align: "对齐"
+            shape: "形状"
+            fill: "填充"
+            text: "文字颜色"
+          tokens:
+            accent: "强调色"
+            ink: "墨色"
+            body: "正文色"
+            muted: "弱化色"
+            inverse: "反色"
+            band: "色带"
+            accent_soft: "强调浅色"
+            canvas: "页面底色"
+          options:
+            scales:
+              xs: "极小"
+              sm: "小"
+              lg: "大"
+              xl: "极大"
+              2xl: "特大"
+            weights:
+              regular: "常规"
+              medium: "中等"
+              semibold: "半粗"
+              bold: "粗体"
+            italics:
+              italic: "斜体"
+              normal: "正体"
+            aligns:
+              start: "起始"
+              center: "居中"
+              end: "末尾"
+            shapes:
+              pill: "胶囊"
+              rounded: "圆角"
+              square: "直角"

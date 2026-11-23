@@ -1,0 +1,30 @@
+<section class="<%= padding_class %>">
+  <div class="<%= inner_measure_class %> grid gap-12 lg:grid-cols-12 lg:gap-16">
+    <div class="lg:col-span-4">
+      <div class="lg:sticky lg:top-28">
+        <%= header(kicker: prop("kicker"), heading: prop("heading"), subhead: prop("subhead")) %>
+      </div>
+    </div>
+    <ol class="min-w-0 lg:col-span-8" role="list">
+      <% items.each do |item| %>
+        <li <%= item_attrs("items", class: "group grid grid-cols-[0.75rem_minmax(0,1fr)] gap-x-6 md:grid-cols-[8rem_0.75rem_minmax(0,1fr)] md:gap-x-10") %>>
+          <div class="relative col-start-1 row-span-2 row-start-1 flex justify-center md:col-start-2 md:row-span-1" aria-hidden="true">
+            <span class="absolute inset-y-0 w-px group-first:top-3 group-last:bottom-auto group-last:h-3 <%= rail_class %>"></span>
+            <span class="<%= dot_class %>"></span>
+          </div>
+          <% if present_text?(item["date"]) %>
+            <p <%= el_attrs("items.date", class: "col-start-2 row-start-1 pb-3 md:col-start-1 md:pb-0 md:pt-0.5 md:text-right #{date_class(item)}") %>><%= item["date"] %></p>
+          <% end %>
+          <div class="col-start-2 row-start-2 flex min-w-0 flex-col gap-3 pb-12 group-last:pb-0 md:col-start-3 md:row-start-1 md:pb-16">
+            <% if present_text?(item["title"]) %>
+              <h3 <%= el_attrs("items.title", class: card_title_class) %>><%= item["title"] %></h3>
+            <% end %>
+            <% if present_text?(item["body"]) %>
+              <p <%= el_attrs("items.body", class: "max-w-2xl whitespace-pre-line text-pretty text-site-md leading-relaxed md:text-site-lg #{muted_class}") %>><%= item["body"] %></p>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ol>
+  </div>
+</section>

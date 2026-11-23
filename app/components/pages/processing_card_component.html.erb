@@ -1,0 +1,49 @@
+<div class="card overflow-hidden" data-role="page-processing">
+  <div class="px-5 py-4 border-b border-border-subtle">
+    <h2 class="text-sm font-medium text-text-primary"><%= t("comp_misc.page_processing.header") %></h2>
+    <p class="mt-0.5 text-caption text-text-muted"><%= t("comp_misc.page_processing.description") %></p>
+  </div>
+
+  <div class="px-5 py-4 flex flex-col gap-4">
+    <div>
+      <p class="text-caption text-text-muted"><%= t("comp_misc.page_processing.current") %></p>
+      <% if flowchart %>
+        <div class="mt-1 flex flex-wrap items-center gap-2 min-w-0">
+          <%= link_to flowchart.name, flowchart_path, class: "text-sm text-accent hover:underline truncate" %>
+          <%= render BadgeComponent.new(variant: flowchart.launched? ? :success : :warning, size: :sm) do %>
+            <%= flowchart.launched? ? t("maint_core.flowcharts.status.launched") : t("common.status.draft") %>
+          <% end %>
+          <% if default_flowchart? %>
+            <%= render BadgeComponent.new(variant: :default, size: :sm) do %><%= t("comp_misc.page_processing.default_badge") %><% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="mt-1 text-sm text-text-muted"><%= t("comp_misc.page_processing.none") %></p>
+      <% end %>
+    </div>
+
+    <% if problems.any? %>
+      <div role="status" class="rounded-lg border border-warning/30 bg-warning-subtle px-4 py-3 text-sm" data-role="processing-problems">
+        <p class="font-medium text-text-primary"><%= t("maint_core.errors.page_launch.submission_process_incompatible", entity: page.entity.display_label) %></p>
+        <ul class="mt-1 list-disc pl-5 text-text-secondary break-words [overflow-wrap:anywhere]">
+          <% problems.each do |problem| %>
+            <li><%= problem %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <% if editable? %>
+      <%= form_with model: page, url: update_path, method: :patch, local: true, class: "flex flex-col gap-3" do |form| %>
+        <div class="flex flex-col gap-1.5">
+          <%= form.label :flowchart_id, t("comp_misc.page_processing.select_label"), class: "form-label" %>
+          <%= form.select :flowchart_id, options_for_select(options, page.flowchart_id), {}, class: "input-field w-full" %>
+          <p class="text-caption text-text-muted"><%= t("comp_misc.page_processing.select_hint") %></p>
+        </div>
+        <div class="flex justify-end">
+          <%= form.submit t("common.actions.save"), class: "btn btn-primary btn-sm cursor-pointer" %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,5 @@
+en:
+  auth:
+    errors:
+      credentials_changed: "Account security details changed while this request was being processed. Reload the page and try again."
+      role_removal_failed: "Could not remove role."

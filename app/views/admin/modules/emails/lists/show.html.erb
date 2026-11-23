@@ -1,0 +1,102 @@
+<%
+  actions = [
+    {
+      label: t("common.actions.edit"),
+      path: edit_admin_modules_emails_list_path(current_customer_id, @list),
+      variant: :primary,
+      icon: :edit
+    },
+    {
+      label: t("common.actions.delete"),
+      path: admin_modules_emails_list_path(current_customer_id, @list),
+      variant: :danger,
+      icon: :trash,
+      data: {
+        turbo_method: :delete,
+        turbo_confirm: t("admin_modules.emails.lists.show.delete_confirm")
+      }
+    }
+  ]
+%>
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "email",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.email.entries.audience"), path: admin_modules_emails_lists_path(current_customer_id) },
+        { label: t("feature_modules.email.tabs.lists"), path: admin_modules_emails_lists_path(current_customer_id) },
+        { label: @list.name }
+      ],
+      title: @list.name,
+      description: @list.description.presence,
+      actions: actions
+    ) do %>
+  <div class="flex flex-col gap-6">
+    <div class="flex items-center gap-2 flex-wrap">
+      <%= render BadgeComponent.new(
+            variant: @list.static? ? :primary : :purple,
+            size: :sm
+          ) do %>
+        <%= t("admin_modules.emails.lists.form.types.#{@list.list_type}") %>
+      <% end %>
+    </div>
+
+    <dl class="card divide-y divide-border-subtle">
+      <div class="px-4 py-3 grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-4">
+        <dt class="form-label"><%= t("admin_modules.emails.lists.show.type") %></dt>
+        <dd class="text-body text-text-primary sm:col-span-2">
+          <%= t("admin_modules.emails.lists.form.types.#{@list.list_type}") %>
+        </dd>
+      </div>
+      <div class="px-4 py-3 grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-4">
+        <dt class="form-label"><%= t("admin_modules.emails.lists.show.audience") %></dt>
+        <dd class="text-body text-text-primary sm:col-span-2 tabular-nums"><%= @audience_count %></dd>
+      </div>
+      <div class="px-4 py-3 grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-4">
+        <dt class="form-label"><%= t("common.labels.updated_at") %></dt>
+        <dd class="text-body text-text-primary sm:col-span-2 tabular-nums">
+          <time datetime="<%= @list.updated_at.iso8601 %>"><%= @list.updated_at.to_fs(:long) %></time>
+        </dd>
+      </div>
+      <div class="px-4 py-3 grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-4">
+        <dt class="form-label"><%= t("common.labels.created_at") %></dt>
+        <dd class="text-body text-text-primary sm:col-span-2 tabular-nums">
+          <time datetime="<%= @list.created_at.iso8601 %>"><%= @list.created_at.to_fs(:long) %></time>
+        </dd>
+      </div>
+    </dl>
+
+    <% if @list.dynamic? %>
+      <section class="card overflow-hidden">
+        <header class="px-4 py-3 border-b border-border-subtle">
+          <h2 class="section-header text-base mb-0"><%= t("admin_modules.emails.lists.show.segment_rules") %></h2>
+          <p class="mt-1 text-caption text-sm"><%= t("admin_modules.emails.lists.show.segment_rules_hint") %></p>
+        </header>
+        <div class="p-4">
+          <% if @list.segment_rules.present? %>
+            <pre class="text-mono text-xs whitespace-pre-wrap text-text-secondary overflow-x-auto"><%= JSON.pretty_generate(@list.segment_rules) %></pre>
+          <% else %>
+            <p class="text-caption text-sm"><%= t("admin_modules.emails.lists.show.segment_rules_empty") %></p>
+          <% end %>
+        </div>
+      </section>
+    <% else %>
+      <section class="card overflow-hidden">
+        <header class="px-4 py-3 border-b border-border-subtle">
+          <h2 class="section-header text-base mb-0"><%= t("admin_modules.emails.lists.show.members") %></h2>
+          <p class="mt-1 text-caption text-sm"><%= t("admin_modules.emails.lists.show.members_hint") %></p>
+        </header>
+        <div class="p-4">
+          <% if @member_emails.any? %>
+            <ul class="flex flex-col gap-1.5">
+              <% @member_emails.each do |email| %>
+                <li class="text-mono text-sm text-text-secondary"><%= email %></li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-caption text-sm"><%= t("admin_modules.emails.lists.show.members_empty") %></p>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+  </div>
+<% end %>

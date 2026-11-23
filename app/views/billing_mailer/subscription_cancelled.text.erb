@@ -1,0 +1,11 @@
+<%= t("billing_mailer.subscription_cancelled.title") %>
+
+<%= t("billing_mailer.subscription_cancelled.intro") %>
+
+<%= t("billing_mailer.subscription_cancelled.label_plan") %>: <%= @plan.name %>
+<%= t("billing_mailer.subscription_cancelled.label_cancelled_at") %>: <%= format_mail_datetime(@subscription.cancelled_at) %>
+<%= t("billing_mailer.subscription_cancelled.label_service_ends") %>: <%= format_mail_date(@subscription.ended_at) %>
+
+<%= t("billing_mailer.subscription_cancelled.outro") %>
+
+<%= t("billing_mailer.shell.footer") %>

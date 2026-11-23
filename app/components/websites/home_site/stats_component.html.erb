@@ -1,0 +1,12 @@
+<section class="relative bg-white <%= padding_class %>">
+  <div class="<%= inner_measure_class %>">
+    <dl class="grid grid-cols-1 gap-x-4 gap-y-10 min-[280px]:grid-cols-2 <%= grid_class %> lg:gap-0 lg:divide-x lg:divide-slate-200">
+      <% items.each do |item| %>
+        <div class="flex min-w-0 flex-col items-center gap-2 text-center lg:px-8">
+          <dt class="order-2 min-w-0 max-w-[16rem] text-[14px] leading-6 text-slate-600 sm:text-[15px]"><%= item['label'] %></dt>
+          <dd class="order-1 min-w-0 text-[36px] leading-none font-bold tabular-nums sm:text-[44px] lg:text-[56px] <%= GRADIENT_TEXT %> <%= tracking_class %> pb-1"><%= item['value'] %></dd>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+</section>

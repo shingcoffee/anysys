@@ -1,0 +1,39 @@
+<%= render Admin::Modules::PageComponent.new(
+      breadcrumbs: [{ label: t("admin_modules.nav.modules") }],
+      title: t("admin_modules.nav.modules"),
+      description: t("admin_modules.index.description")
+    ) do %>
+  <% if empty? %>
+    <%= render EmptyStateComponent.new(
+          title: t("admin_modules.index.empty_title"),
+          description: t("admin_modules.index.empty_body"),
+          icon_path: Admin::Maintenance::Platform::ModuleSettingsHelper::DEFAULT_MODULE_ICON_PATH
+        ) %>
+  <% else %>
+    <div class="flex flex-col gap-10 pb-8">
+      <% sections.each do |section| %>
+        <section aria-labelledby="modules-section-<%= section[:key] %>" class="flex flex-col gap-4">
+          <div class="flex items-center gap-4">
+            <h2 id="modules-section-<%= section[:key] %>" class="text-base font-semibold tracking-tight text-text-primary">
+              <%= section[:title] %>
+            </h2>
+            <div class="h-px flex-1 bg-border-subtle" aria-hidden="true"></div>
+          </div>
+          <div class="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-2 2xl:grid-cols-3">
+            <% section[:modules].each do |mod| %>
+              <%= render Admin::Dashboard::ModuleCardComponent.new(
+                    key: mod.key,
+                    name: mod.name,
+                    description: mod.description,
+                    primary: mod.primary,
+                    secondaries: Array(mod.secondaries),
+                    links: (mod.links if mod.respond_to?(:links)),
+                    variant: :rich
+                  ) %>
+            <% end %>
+          </div>
+        </section>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

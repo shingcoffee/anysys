@@ -1,0 +1,192 @@
+en:
+  flowchart_actions:
+    calculate_pricing:
+      label: Calculate Pricing
+      description: Totals an order, invoice, or quote from line items.
+      fields:
+        sourceVariable:
+          label: Line items
+          help: Context path of the line-item array (hashes with quantity and unit price).
+        quantityField:
+          label: Quantity field
+          help: Key read from each line for quantity.
+        unitPriceField:
+          label: Unit price field
+          help: Key read from each line for unit price.
+        lineDiscountField:
+          label: Line discount field
+          help: Optional key for a per-line discount amount. Leave blank to skip.
+        lineTaxRateField:
+          label: Line tax rate field
+          help: Optional key for a per-line tax-rate percent override. Leave blank to use the order tax rate.
+        discountType:
+          label: Order discount
+          help: How the order-level discount is applied. Amount discounts are split across lines pro rata and never push a line below zero.
+          options:
+            none: None
+            percent: Percent
+            amount: Amount
+        discountValue:
+          label: Discount value
+          help: Percent (0–100) or amount, according to Order discount. Overridden at runtime when a discount variable is set.
+        discountVariable:
+          label: Discount variable
+          help: Optional context path whose numeric value overrides Discount value (for example a coupon).
+        taxMode:
+          label: Tax mode
+          help: Exclusive adds tax on top of net; inclusive extracts tax from the entered price; none skips tax.
+          options:
+            exclusive: Exclusive
+            inclusive: Inclusive
+            none: None
+        taxRate:
+          label: Tax rate
+          help: Order-level tax rate as a percent (0–100). A line tax-rate field overrides this per line.
+        shippingAmount:
+          label: Shipping
+          help: Shipping amount added to the order. Entered in the same units as line prices.
+        shippingVariable:
+          label: Shipping variable
+          help: Optional context path whose numeric value overrides Shipping (for example a rate lookup).
+        shippingTaxable:
+          label: Shipping taxable
+          help: When on, shipping is taxed using the order tax rate and tax mode.
+        precision:
+          label: Precision
+          help: Decimal places for every amount (0–6).
+        roundingMode:
+          label: Rounding
+          help: How amounts are rounded at the chosen precision.
+          options:
+            half_up: Half up
+            half_even: Half even
+            floor: Floor
+            ceiling: Ceiling
+        roundPer:
+          label: Round per
+          help: Line rounds each line then sums; total keeps line math exact and rounds only the order totals.
+          options:
+            line: Line
+            total: Total
+        currency:
+          label: Currency
+          help: Optional currency code echoed into the result (not used for conversion).
+        resultVar:
+          label: Save result as
+          help: Context variable for the pricing hash. Amounts are decimal strings at the chosen precision (for example "10.00") so JSON stays exact. Keys are lines, subtotal, discount, tax, shipping, total, currency.
+    allocate_amount:
+      label: Allocate Amount
+      description: Splits an amount into parts that always sum exactly to the input.
+      fields:
+        amount:
+          label: Amount
+          help: Context path of the amount to split.
+        method:
+          label: Method
+          help: Even splits into equal parts; ratio uses relative weights; percent uses weights that must sum to 100.
+          options:
+            even: Even
+            ratio: Ratio
+            percent: Percent
+        parts:
+          label: Parts
+          help: Number of equal parts (1–1000).
+        weightsVariable:
+          label: Weights
+          help: Context path of an array of numbers, or of hashes when a weight field is set.
+        weightField:
+          label: Weight field
+          help: Hash key to read when weights are hashes. Leave blank to try weight, value, ratio, percent, or share.
+        precision:
+          label: Precision
+          help: Decimal places for each allocated amount (0–6).
+        remainderStrategy:
+          label: Remainder
+          help: Where leftover units go after rounding so the parts still sum to the input.
+          options:
+            largest_remainder: Largest remainder
+            first: First part
+            last: Last part
+            largest_share: Largest share
+        resultVar:
+          label: Save result as
+          help: Context variable for the array of allocated amounts as decimal strings (for example "33.34") so JSON stays exact.
+    build_installment_plan:
+      label: Build Installment Plan
+      description: Builds a repayment, subscription, or instalment schedule.
+      fields:
+        principal:
+          label: Principal
+          help: Context path of the principal (loan, subscription total, or financed amount).
+        annualRate:
+          label: Annual rate
+          help: Nominal annual interest rate as a percent (0–100). Overridden at runtime when a rate variable is set.
+        rateVariable:
+          label: Rate variable
+          help: Optional context path whose numeric value overrides Annual rate.
+        periods:
+          label: Periods
+          help: Number of payments (1–600).
+        frequency:
+          label: Frequency
+          help: Spacing between due dates, and the divisor used to turn the annual rate into a period rate.
+          options:
+            monthly: Monthly
+            quarterly: Quarterly
+            semiannual: Semiannual
+            annual: Annual
+            weekly: Weekly
+            biweekly: Biweekly
+        method:
+          label: Method
+          help: Annuity is equal payments; equal principal declines the interest; interest only balloons the principal; flat charges interest on the original principal.
+          options:
+            annuity: Annuity
+            equal_principal: Equal principal
+            interest_only: Interest only
+            flat: Flat
+        startDateVariable:
+          label: Start date
+          help: Optional context path of the schedule start date. Defaults to today in the application time zone.
+        firstPaymentOffset:
+          label: First payment offset
+          help: Periods after the start date before the first due date (0 = due on the start date).
+        downPayment:
+          label: Down payment
+          help: Amount subtracted from principal before the schedule is built.
+        precision:
+          label: Precision
+          help: Decimal places for every amount (0–6).
+        roundingMode:
+          label: Rounding
+          help: How amounts are rounded at the chosen precision.
+          options:
+            half_up: Half up
+            half_even: Half even
+            floor: Floor
+            ceiling: Ceiling
+        finalPaymentAdjust:
+          label: Adjust final payment
+          help: When on, the last row absorbs rounding residue so principal sums exactly to the financed amount.
+        resultVar:
+          label: Save schedule as
+          help: Context variable for the schedule array. Amounts are decimal strings (for example "888.49"); due_date is an ISO8601 date (YYYY-MM-DD).
+        totalsVar:
+          label: Save totals as
+          help: Context variable for the payment, principal, and interest totals as decimal strings.
+  flowchart_runtime:
+    errors:
+      calculate_pricing:
+        failed: Could not calculate pricing (%{reason}).
+        invalid_line: Line %{line} has a non-numeric or negative quantity or unit price.
+      allocate_amount:
+        failed: Could not allocate the amount (%{reason}).
+        invalid_amount: Amount must be a number.
+        invalid_weights: Weights must be a non-empty list of non-negative numbers (and not all zero).
+        percent_total: Percent weights must sum to 100 (got %{total}).
+      build_installment_plan:
+        failed: Could not build the installment plan (%{reason}).
+        invalid_principal: Principal must be a number greater than zero.
+        invalid_periods: The number of payments must be a whole number from 1 to %{max}.
+        invalid_start_date: The first payment date is not a valid date.
+        down_payment_exceeds_principal: Down payment must be less than principal.

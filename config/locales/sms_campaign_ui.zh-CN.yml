@@ -1,0 +1,255 @@
+zh-CN:
+  sms_campaign_ui:
+    shared:
+      navigation: 短信工作区
+      errors: 请修正以下错误。
+      evaluated_at: 评估时间
+      refresh: 刷新
+      reload_saved: 重新加载已保存内容
+    fields:
+      consent_status: 营销授权
+      custom_attributes_json: 自定义属性（JSON）
+      occurred_at: 授权发生时间
+      reference: 凭证来源
+      statement: 同意内容
+      segment_rules_json: 分群规则（JSON）
+      segment_id: 分群
+      template_id: 已审核营销模板
+      variable_map_json: 变量映射（JSON）
+      send_timing: 发送方式
+      scheduled_local: 本地日期与时间
+      quiet_hours_start: 免打扰开始时间（0–23 时）
+      quiet_hours_end: 免打扰结束时间（0–23 时）
+      frequency_window_hours: 频次窗口（小时）
+      send_rate_per_minute: 发送速率（联系人/分钟）
+      deadline_hours: 有效时长（小时）
+      phone_field: 电话字段
+      name_field: 姓名字段
+      attribute_map_json: 自定义属性映射（JSON）
+    statuses:
+      sent: 服务商已受理
+    sources:
+      recipient_unsubscribe: 收件人退订
+      provider_opt_out: 服务商退订
+    encodings:
+      gsm7: GSM-7
+      ucs2: UCS-2
+      utf16: UTF-16
+    contacts:
+      description: 管理手机号码，单独记录明确的营销授权。
+      add: 添加联系人
+      edit: 编辑联系人
+      save: 保存联系人
+      back: 返回联系人
+      sync: 从实体同步
+      permission: 营销授权
+      eligibility: 发送资格
+      consent_changed_at: 最近授权记录时间
+      synced_at: 最近同步时间
+      history: 授权历史
+      no_history: 暂无授权记录
+      recorded_at: 记录时间
+      actor: 操作人
+      evidence: 授权凭证
+      record_consent: 记录授权事件
+      grant: 记录同意
+      revoke: 撤回同意
+      archive: 归档联系人
+      restore: 恢复联系人
+      archive_help: 归档后保留授权凭证与活动历史。已归档联系人不会收到活动短信。
+      no_implied_consent: 添加联系人不代表已获得短信发送授权。
+      phone_help: 输入国际号码，或填写本地号码并指定国家代码。
+      country_help: 使用 CN 等两位国家代码。国家代码不决定时区。
+      timezone_help: 使用 Asia/Shanghai 等 IANA 时区。联系人时区为空时采用活动时区。
+      attributes_help: '最多 32 个标量属性，总大小不超过 8 KiB。键名使用小写字母、数字和下划线。示例：{"city":"Shanghai","vip":true}。不支持嵌套对象或数组。'
+      occurred_help: 输入带明确时差的 ISO 8601 时间，如 2026-10-13T10:00:00+08:00。不允许未来时间。
+      statement_help: 记录同意时必填，请填写收件人实际授予的营销权限。
+      grant_help: 同意与可发送状态分别判断。记录同意不会解除已有退订限制。
+      empty_title: 添加首位短信联系人
+      search: 搜索姓名或号码
+    segments:
+      description: 根据联系人字段与标量属性构建动态受众。
+      create: 创建分群
+      edit: 编辑分群
+      save: 保存分群
+      back: 返回分群
+      details: 分群详情
+      rules: 受众规则
+      samples: 示例联系人
+      rules_help: AND/OR 从左到右计算，嵌套组单独计算。空根组考虑全部联系人。匹配分群不代表获得营销授权。
+      invalid_rules_help: 请先修正原始规则 JSON，再重新预览。无效规则不会匹配全部联系人。
+      delete: 删除分群
+      delete_help: 草稿引用的分群无法删除，请先处理相关活动。
+      empty_title: 创建首个短信分群
+      empty_help: 分群动态匹配联系人。请先添加联系人，再定义所需受众。
+      search: 搜索分群
+    campaigns:
+      description: 规划、启动定向短信活动并查看发送报告。
+      create: 创建活动
+      edit: 编辑草稿
+      save_draft: 保存草稿
+      preview: 预览活动
+      launch: 启动活动
+      schedule: 定时发送
+      cancel: 取消剩余发送
+      report: 查看报告
+      csv: 下载 CSV
+      back: 返回活动
+      steps_label: 活动步骤
+      step: '%{number} %{label}'
+      all_contacts: 全部联系人
+      matched: 匹配联系人
+      eligible: 当前可发送
+      audience_estimate: 受众估算
+      excluded_counts: 已排除联系人
+      deferred_counts: 等待发送的合格联系人
+      manage_contacts: 管理联系人
+      manage_segments: 管理分群
+      eligibility_help: 仅有效、明确同意营销且未退订的联系人可发送。加入分群不代表获得发送授权。
+      start_snapshot_help: 发送开始时确定受众名单。
+      preview_needed: 预览受众后可查看当前人数。
+      no_contacts: 请添加联系人或手动从实体同步，再单独记录授权。
+      choose_template: 选择营销模板
+      no_templates: 暂无有效的已审核营销模板。可先保存草稿，再请平台所有者配置模板。
+      sms_settings: 短信设置
+      platform_templates: 管理平台模板
+      template_key: 模板标识
+      required_vars: 必需变量
+      mapping_help: 映射键须与所选模板变量完全一致。可使用带明确默认值的字段，或固定值。字段为空且无默认值时跳过该收件人。无变量模板使用 {}。
+      allowed_fields: '可用字段：name、phone_e164、country_code、timezone、受控 attributes.<key>，以及服务器生成的 unsubscribe_url。不执行表达式或代码。'
+      mapping_example_help: 示例包含联系人字段与默认值、固定优惠值、签名退订链接。请将示例键替换为所选模板的必需变量。
+      sample_message: 示例短信
+      sample: 示例联系人
+      automatic_sample: 自动选择示例
+      sample_help: 选择联系人后提交“预览活动”以更新示例。示例不会将联系人加入受众，也不会绕过授权检查。
+      preview_unavailable: 短信正文由服务商管理，暂无预览文本。
+      encoding: 预估编码
+      units: 预估编码单元数
+      segments: 预估短信段数
+      estimate_help: 仅根据已审核内容的预览副本估算，服务商实际段数可能不同。
+      scheduled_help: 仅定时活动必填。尚未填写完整的草稿仍可保存。
+      timezone_help: 使用 Asia/Shanghai 等 IANA 时区。须修正不存在或有歧义的本地时间。
+      quiet_hours: 免打扰时段
+      quiet_help: 优先采用收件人时区，否则采用活动时区。短信等待免打扰时段结束，但不会超过绝对截止时间。
+      frequency_help: 同一号码在窗口内最多尝试发送一次活动短信，结果未知的尝试也计入。
+      rate_help: 此值限制活动入队速率。共享账户上限与其他发送流量可能进一步延迟实际发送。
+      deadline_help: 有效时长从活动预定开始时间计算，不因免打扰或其他延迟而重置。
+      save_first: 请先保存草稿，再从确认页面启动活动。
+      saved_settings: 已保存活动设置
+      blockers: 启动前须处理项
+      review_required: 请确认已保存设置并补齐必需项。编辑变量映射或添加已授权联系人后，再重新预览。
+      acceptance_help: 服务商受理不代表已送达。发送处理完成后仍可能收到送达更新。
+      cancel_help: 已尝试发送的短信仍会更新送达状态。
+      completed_help: 已完成表示发送处理结束。服务商送达更新仍可能到达；未知不代表失败。
+      delete: 删除草稿
+      delete_help: 删除尚未启动的草稿。已启动活动与发送报告会保留。
+      sending_facts: 发送记录
+      intended_start_at: 预定开始时间
+      expires_at: 绝对截止时间
+      earliest_dispatch_at: 最早发送时间
+      account_rate_per_second: 共享账户速率（短信/秒）
+      effective_rate_per_minute: 实际速率上限（接收人/分钟）
+      estimated_minimum_duration_seconds: 预估最短时长（秒）
+      duration_help: 此值为最短时长估算。共享流量、收件人免打扰时段与服务商队列可能延长发送时间。
+      launched_at: 启动时间
+      started_at: 开始时间
+      heartbeat_at: 最近任务心跳
+      finished_at: 发送处理结束时间
+      empty_title: 创建首个短信活动
+      empty_help: 选择已授权受众、配置已审核内容，确认后再启动。
+      search: 搜索活动
+    metrics:
+      matched_count: 已匹配
+      eligible_at_start_count: 开始时可发送
+      attempted_count: 已尝试
+    report:
+      title: 发送报告
+      campaign_details: 活动详情
+      not_started: 发送开始时确定受众名单
+      outcomes: 发送结果与历史节点
+      milestone_help: 已尝试与服务商已受理为历史节点，送达状态为当前结果。各项计数存在重叠，不可相加。
+      skips_delays: 跳过与延迟
+      skip_counts: 终止原因
+      deferred_counts: 当前延迟
+      snapshot_at: 受众快照时间
+      refreshed_at: 报告评估时间
+      delivery_rate: 送达率
+      delivery_rate_help: 已送达数除以已尝试数。尚无尝试时送达率为未知。
+      provider_segments_missing_count: 未获得服务商段数的短信数
+      segment_help: 仅汇总服务商已记录的正数段数。缺失值保持未知，此数据不是费用报价。
+      search: 搜索收件人姓名或号码
+      message_details: 短信详情
+      attempted_at: 尝试发送时间
+      current_delay: 当前延迟
+      no_recipients: 暂无收件人记录
+    entity_sync:
+      title: 从实体同步短信联系人
+      description: 预览数据后，按限定批次手动同步联系人。
+      choose_source: 选择来源
+      choose_entity: 选择实体
+      choose_phone: 选择电话字段
+      load_fields: 加载字段
+      mapping: 字段映射
+      attributes_help: '将联系人属性键映射到实体标量字段标识。示例：{"city":"city","vip":"vip"}。不会导入授权字段。'
+      no_consent: 同步数据不会授予短信发送授权。
+      no_sources: 暂无可访问且受支持的实体来源。
+      no_phone_fields: 请选择包含电话值类型字段的受支持实体。字段名称类似电话并不足以作为来源。
+      preview: 预览前 100 条
+      preview_title: 批次预览
+      result_title: 批次结果
+      execute: 同步此批次
+      continue: 预览下一批 100 条
+      scanned: 已扫描
+      unchanged: 无变化
+      invalid: 无效
+      conflicts: 冲突
+      entry_id: 条目
+      outcome: 结果
+    reasons:
+      contact_archived: 联系人已归档
+      phone_changed: 号码已更换
+      consent_missing: 缺少明确同意
+      opted_out: 已退订
+      personalization_missing: 个性化内容不完整
+      frequency_capped: 已达到频次上限
+      campaign_cancelled: 活动已取消
+      campaign_failed: 活动失败
+      campaign_expired: 已达到活动截止时间
+      module_disabled: 短信模块已停用
+      template_invalid: 模板无效
+      template_required: 请选择营销模板
+      credentials_missing: 发送账户尚未配置
+      daily_cap_exceeded: 已超过每日容量
+      rate_limited: 已限流
+      quiet_hours: 等待免打扰时段结束
+      campaign_rate: 等待活动速率额度
+      account_rate: 等待共享账户额度
+      daily_cap: 等待每日容量
+      phone_window: 等待号码频次额度
+      outside_audience: 仅用于个性化示例，不在受众中
+      audience_too_large: 请将受众缩小至最多 10,000 人
+      audience_empty: 请添加已授权且可发送的联系人
+      mapping_incomplete: 请补齐全部必需变量映射
+      schedule_in_past: 请选择未来的定时发送时间
+      account_rate_invalid: 请修正共享账户发送速率
+      schedule_required: 请设置定时发送时间
+      review_changed: 已保存设置发生变化，请重新确认。
+      invalid_source_data: 来源数据不符合联系人字段限制
+      invalid_name: 来源姓名不是标量值
+      phone_missing: 缺少号码
+      source_conflict: 联系人已关联其他来源
+      identity_conflict: 联系人身份与已有记录冲突
+    platform:
+      purpose: 用途
+      purpose_help: 活动必须使用营销模板。活动启动时固定用途分类。
+      body_template: 预览短信正文（可选）
+      body_help: '请使用 {{name}} 等简单占位符维护服务商已审核内容的副本。此文本仅供预览，不作为原始正文发送。请确认已审核模板包含有效的退订方式。'
+      sender_rate_help: 大于 0 且不超过 1。所有使用此账户的租户、活动与直接发送共享此上限。
+    unsubscribe:
+      title: 退订短信
+      help: 确认后，此号码将不再接收该组织的营销短信。
+      confirm: 确认退订
+      success: 已退订
+      success_help: 该组织向此号码发送的剩余未尝试营销短信将被拦截。
+      invalid_title: 退订链接不可用
+      invalid_help: 此链接无效或已过期。

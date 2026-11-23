@@ -1,0 +1,6 @@
+<div class="rounded-lg overflow-hidden">
+  <% if language_present? %>
+    <div class="px-4 py-1.5 bg-gray-700 text-xs text-gray-300 font-mono"><%= code_language %></div>
+  <% end %>
+  <pre class="bg-gray-800 text-gray-100 p-4 text-sm font-mono overflow-x-auto leading-relaxed"><code><%= content_text %></code></pre>
+</div>

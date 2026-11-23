@@ -1,0 +1,25 @@
+{
+  "title": "Get entity",
+  "description": "Read one customer-owned, active, non-bridge entity in the public vocabulary, including version and each association's bridge_entity name. Call this before update_entity so expected_version matches. Shared entities, bridges, and trash are not returned.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "entity"
+  ],
+  "properties": {
+    "entity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Exact entity name to read. Must be a customer-owned active non-bridge entity in this tenant."
+    }
+  },
+  "examples": [
+    {
+      "entity": "Student"
+    },
+    {
+      "entity": "Course"
+    }
+  ]
+}

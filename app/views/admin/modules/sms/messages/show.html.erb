@@ -1,0 +1,11 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "sms",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.sms.entries.messages"), path: admin_modules_sms_messages_path(current_customer_id) },
+        { label: t("admin_modules.sms.messages.show.heading", id: @message.id) }
+      ],
+      title: t("admin_modules.sms.messages.show.heading", id: @message.id)
+    ) do %>
+  <%= render Sms::Admin::MessageDetailsComponent.new(message: @message) %>
+<% end %>

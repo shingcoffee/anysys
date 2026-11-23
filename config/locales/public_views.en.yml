@@ -1,0 +1,70 @@
+en:
+  public_views:
+    flash:
+      response_save_error: "There was a problem saving your response: %{errors}"
+      response_field_errors: "Some answers need attention. Check the highlighted fields and try again."
+      response_submitted: "Thank you! Your response has been submitted."
+      outcomes:
+        submitted: "Thank you! Your response has been submitted."
+        saved: "Your response has been saved."
+        thank_you: "Thank you!"
+        custom: "Thank you! Your response has been submitted."
+        registration_pending: "Check your email to finish signing up."
+    home:
+      auth_title: "Sign in to your account."
+      auth_subtitle: "Enter your credentials to access the dashboard."
+      password_placeholder: "Your password"
+      remember_me: "Remember me"
+    actions:
+      continue_here: "Continue with the form for your account."
+      not_for_your_account: "This form isn't available for your account."
+    public_pages:
+      empty: "This form has no content yet."
+      not_found: "Page not found"
+    forms:
+      submit: "Submit"
+    composite:
+      no_records: "No records found"
+      showing_records: "Showing %{count} records"
+      row_action_default: "Open"
+    unsubscribes:
+      confirmed:
+        heading: "Unsubscribed"
+        body_html: "<strong>%{email}</strong> has been unsubscribed from our emails."
+      not_found:
+        heading: "Link Invalid"
+        body: "This unsubscribe link is invalid or has expired."
+      show:
+        heading: "Unsubscribe"
+        body_html: "Are you sure you want to unsubscribe <strong>%{email}</strong> from our emails?"
+        submit: "Yes, unsubscribe me"
+    preferences:
+      title: "Email Preferences"
+      description: "Manage your email subscription preferences for %{email}."
+      updated: "Your preferences have been saved."
+      invalid_token: "This preferences link is invalid or has expired."
+      submit: "Save preferences"
+      required_label: "Required"
+      no_topics: "There are no subscription topics available at this time."
+    layouts:
+      auth_title: "Sign in — Anysys"
+      dashboard_title: "Dashboard"
+      member_title: "Account — Anysys"
+      payment_title: "Payment"
+      handoff_title: "Continue"
+      preview:
+        title: "Preview - %{name}"
+        badge: "Preview Mode"
+        back_to_editor: "Back to Editor"
+      template_preview:
+        title: "Template Preview - %{name}"
+        badge: "Template Preview"
+  emails:
+    signup_forms:
+      disabled: "This signup form is currently disabled."
+      subscribed: "You have been subscribed."
+      subscribed_title: "Subscribed!"
+      subscribed_body: "Thank you for signing up."
+    preferences:
+      updated: "Your preferences have been saved."
+      invalid_token: "This preferences link is invalid or has expired."

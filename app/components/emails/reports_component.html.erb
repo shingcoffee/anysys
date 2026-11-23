@@ -1,0 +1,95 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "email",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.email.entries.analytics"), path: helpers.admin_modules_emails_dashboard_path(helpers.current_customer_id) },
+        { label: t("feature_modules.email.tabs.reports") }
+      ],
+      title: t("admin_modules.emails.analytics.reports.title"),
+      description: t("admin_modules.emails.analytics.reports.description"),
+      actions: [
+        { label: t("admin_modules.emails.analytics.reports.export_csv"), path: csv_path, variant: :secondary }
+      ]
+    ) do %>
+
+  <%= render "admin/modules/emails/shared/overview_tabs", active_tab: :reports %>
+
+  <div class="mb-6">
+    <%= render Emails::DateRangePickerComponent.new(url: url, since: since, until_date: until_date) %>
+  </div>
+
+  <div class="mb-8 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
+    <% %i[sent delivered bounced opened clicked].each do |key| %>
+      <%= render Emails::MetricCardComponent.new(
+            label: t("admin_modules.emails.dashboard.stats.#{key}"),
+            value: number_with_delimiter(totals[key]),
+            tone: key
+          ) %>
+    <% end %>
+  </div>
+
+  <h3 class="text-lg font-semibold text-text-primary mb-4"><%= t("admin_modules.emails.analytics.reports.daily_trend") %></h3>
+
+  <% if any_data? %>
+    <div class="bg-surface card overflow-hidden mb-8">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b border-border-subtle bg-surface-subtle">
+            <th class="p-4 text-sm font-semibold text-text-muted"><%= t("admin_modules.emails.dashboard.stats.metric") %></th>
+            <th class="p-4 text-sm font-semibold text-text-muted"><%= t("admin_modules.emails.analytics.reports.trend") %></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-border-subtle">
+          <% [
+            { metric: :sent,      tone: "accent" },
+            { metric: :delivered, tone: "success" },
+            { metric: :bounced,   tone: "danger" },
+            { metric: :opened,    tone: "info" },
+            { metric: :clicked,   tone: "accent" }
+          ].each do |row| %>
+            <tr>
+              <td class="p-4 text-sm text-text-primary font-medium w-1/4">
+                <%= t("admin_modules.emails.dashboard.stats.#{row[:metric]}") %>
+              </td>
+              <td class="p-4 w-3/4">
+                <%= render Emails::SparklineComponent.new(values: sparkline_values(row[:metric]), tone: row[:tone]) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="bg-surface card p-8 text-center mb-8">
+      <p class="text-text-muted"><%= t("admin_modules.emails.analytics.reports.empty_daily") %></p>
+    </div>
+  <% end %>
+
+  <div>
+      <h3 class="text-lg font-medium text-text-primary mb-4"><%= t("feature_modules.email.tabs.send_activities") %></h3>
+      <% if empty?(send_activities) %>
+        <div class="bg-surface card p-6 text-center">
+          <p class="text-text-muted"><%= t("admin_modules.emails.analytics.reports.empty_send_activities") %></p>
+        </div>
+      <% else %>
+        <div class="bg-surface card overflow-hidden">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-border-subtle">
+                <th class="p-3 text-sm font-medium text-text-muted"><%= t("admin_modules.emails.analytics.reports.send_activity") %></th>
+                <th class="p-3 text-sm font-medium text-text-muted text-right"><%= t("admin_modules.emails.analytics.deliverability.count") %></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border-subtle">
+              <% send_activities.each do |id, count| %>
+                <tr>
+                  <td class="p-3 text-sm text-text-primary"><%= send_activity_names[id] || t("admin_modules.emails.analytics.reports.unknown_send_activity") %></td>
+                  <td class="p-3 text-sm text-text-primary text-right"><%= number_with_delimiter(count) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,7 @@
+<%= render Admin::Settings::PageComponent.new(
+  customer_id: current_customer.id,
+  title: t("admin_settings.index.title"),
+  description: t("admin_settings.index.subtitle")
+) do %>
+  <%= render Admin::Settings::CatalogComponent.new(nodes: @settings_nodes) %>
+<% end %>

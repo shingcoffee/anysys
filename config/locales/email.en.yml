@@ -1,0 +1,76 @@
+en:
+  activerecord:
+    models:
+      "emails/send_activities/send_activity":
+        one: "Send Activity"
+        other: "Send Activity"
+  feature_modules:
+    email:
+      tabs:
+        reports: "Reports"
+        deliverability: "Deliverability"
+        engagement: "Engagement"
+  email:
+    credentials:
+      password: "Password"
+      webhook_secret: "Webhook secret"
+      errors:
+        incomplete: "Complete the credential before activating it."
+    providers:
+      errors:
+        unsupported_campaign: "The selected email provider (%{provider}) does not support campaign emails with one-click unsubscribe."
+        unsupported_message: "The selected email provider (%{provider}) does not support this message's recipients, reply address, or inline attachments."
+      smtp:
+        name: "SMTP (self-hosted MTA)"
+        credentials:
+          password: "Password"
+      ses:
+        name: "AWS SES"
+        credentials:
+          password: "Secret Access Key"
+        fields:
+          access_key_id: "Access Key ID"
+          region: "Region"
+          from_email: "From email"
+          sns_topic_arn: "SNS topic ARN"
+      aliyun:
+        name: "Aliyun DirectMail"
+        credentials:
+          password: "Access Key Secret"
+        fields:
+          access_key_id: "Access Key ID"
+          region: "Region"
+          from_email: "From email"
+          from_alias: "From alias"
+    preview:
+      title: "Live Preview"
+      hint: "Preview the rendered subject, HTML, and text."
+      load_button: "Load Preview"
+      new_tab: "New Tab"
+      tab_html: "HTML"
+      tab_text: "Text"
+      empty_placeholder: "Click 'Load Preview' to render."
+    template_tokens:
+      unknown_label: "Token"
+      unknown_platform_label: "Other field: %{label}"
+      platform:
+        unsubscribe_url: "Unsubscribe URL"
+        authentication_user:
+          first_name: "Recipient first name"
+          last_name: "Recipient last name"
+        authentication_event:
+          id: "Authentication event ID"
+        authentication_trusted_device:
+          id: "Trusted device ID"
+        payments_dispute:
+          provider: "Payment dispute provider"
+          psp_dispute_id: "Payment dispute provider's dispute ID"
+          raw: "Payment dispute raw data"
+      errors:
+        unknown_attribute: "is not an attribute on the selected entity"
+        entity_not_accessible: "must belong to this customer or be a shared entity"
+        platform_readonly: "Platform tokens cannot be changed."
+  admin_modules:
+      emails:
+        placeholders:
+          coming_in_phase: "Coming in Phase %{phase}."

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/app/assets/builds/tailwind.css">
+    <title>Flowchart canvas geometry fixture</title>
+  </head>
+  <body class="bg-slate-50">
+    <!-- Mirrors the canvas part of app/views/admin/maintenance/flowcharts/_editor.html.erb:
+         same controller/target contract and the same container classes (palette
+         width, canvas container, minimap, bottom panel), so geometry matches the app. -->
+    <main data-controller="flowchart-canvas"
+          data-flowchart-canvas-id-value="1"
+          data-flowchart-canvas-customer-id-value="81721200"
+          data-flowchart-canvas-head-version-id-value="100"
+          class="h-screen flex flex-col">
+      <div data-flowchart-canvas-target="saveConflictBanner" role="alert" class="hidden bg-red-50 border-b border-red-200 px-4 py-2">
+        <span data-flowchart-canvas-target="saveConflictMessage" class="text-sm">conflict</span>
+        <button type="button" data-action="click->flowchart-canvas#reloadAfterConflict">Reload</button>
+        <button type="button" data-action="click->flowchart-canvas#overwriteAfterConflict">Overwrite</button>
+      </div>
+      <div data-flowchart-canvas-target="previewNotice" role="status" class="hidden bg-sky-50 border-b border-sky-200 px-4 py-2 text-sm">
+        Previewing a subflow — fold it to edit
+      </div>
+      <div class="flex items-center gap-2 border-b border-slate-200 bg-white px-3 py-1 text-xs">
+        <button type="button" data-testid="tidy" data-action="click->flowchart-canvas#autoLayout">Tidy layout</button>
+        <button type="button" data-testid="validate" data-action="click->flowchart-canvas#validate">Validate</button>
+        <span data-flowchart-canvas-target="unsavedIndicator" data-testid="unsaved" class="hidden">unsaved</span>
+      </div>
+
+      <div class="flex-1 flex overflow-hidden relative">
+        <div class="shrink-0 w-[160px] sm:w-[200px] bg-slate-50 border-r border-slate-200 flex flex-col overflow-hidden"
+             data-controller="element-palette"
+             data-element-palette-current-flowchart-id-value="1">
+          <div class="grid grid-cols-2 gap-1.5 p-3" data-element-palette-target="basicElements">
+            <div data-drag-source="true" data-flowchart-element="start" class="rounded border bg-white p-2 text-xs">Start</div>
+            <div data-drag-source="true" data-flowchart-element="process" class="rounded border bg-white p-2 text-xs">Process</div>
+            <div data-drag-source="true" data-flowchart-element="decision" class="rounded border bg-white p-2 text-xs">Decision</div>
+            <div data-drag-source="true" data-flowchart-element="loop" class="rounded border bg-white p-2 text-xs">Loop</div>
+            <div data-drag-source="true" data-flowchart-element="end" class="rounded border bg-white p-2 text-xs">End</div>
+          </div>
+          <div class="flex flex-col gap-1.5 px-3" data-element-palette-target="flowchartsList">
+            <div data-element-palette-target="flowchartsPlaceholder">…</div>
+          </div>
+        </div>
+
+        <div class="flex-1 min-w-0 flex flex-col overflow-hidden relative">
+          <div class="flex-1 min-h-0 bg-slate-100 overflow-hidden relative" data-flowchart-canvas-target="canvasContainer" data-testid="canvas-container">
+            <div class="absolute inset-0" data-flowchart-canvas-target="canvasWrapper">
+              <div data-flowchart-canvas-target="canvas" class="flowchart-canvas-container w-full h-full"></div>
+              <div data-flowchart-canvas-target="overlay" class="absolute inset-0 pointer-events-none"></div>
+              <div data-flowchart-canvas-target="toastContainer" class="absolute top-4 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center gap-2 pointer-events-none"></div>
+              <div data-flowchart-canvas-target="minimapContainer"
+                   class="absolute bottom-2 left-2 z-30 border border-slate-300 rounded-lg shadow-md bg-white overflow-hidden w-[160px] sm:w-[200px] h-[120px] sm:h-[140px]"></div>
+              <div class="pointer-events-none absolute top-2 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 max-w-[calc(100%-1rem)]">
+                <div data-flowchart-canvas-target="alignmentToolbar" class="pointer-events-auto hidden">align</div>
+              </div>
+            </div>
+          </div>
+
+          <div data-flowchart-canvas-target="bottomPanel"
+               class="bg-white border-t border-slate-200 shadow-sm z-20 flex-shrink-0 max-h-[42%] flex flex-col hidden">
+            <div class="flex flex-col flex-1 min-h-0">
+              <div class="flex items-center border-b border-slate-100 bg-slate-50 flex-shrink-0">
+                <button type="button" data-action="click->flowchart-canvas#switchBottomTab" data-tab="problems" data-flowchart-canvas-target="bottomTab" class="px-3 py-2 text-xs">Problems</button>
+                <button type="button" data-action="click->flowchart-canvas#switchBottomTab" data-tab="elements" data-flowchart-canvas-target="bottomTab" class="px-3 py-2 text-xs">Elements</button>
+              </div>
+              <div class="flex-1 overflow-y-auto min-h-0">
+                <div data-tab-content="problems">
+                  <div data-flowchart-canvas-target="validationList" class="divide-y divide-slate-100" style="min-height: 240px"></div>
+                </div>
+                <div data-tab-content="elements" class="hidden">
+                  <table class="w-full text-sm"><tbody data-flowchart-canvas-target="elementsList"></tbody></table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside data-controller="property-editor"
+               data-flowchart-canvas-target="propertySidebar"
+               data-property-editor-target="sidebar"
+               class="hidden absolute right-0 top-0 bottom-0 z-30 flex-col bg-white border-l border-slate-200 shadow-lg w-full sm:w-[420px] max-w-[90vw] overflow-x-hidden overflow-y-auto">
+          <h1 data-property-editor-target="title" class="px-3 py-2 text-xs font-semibold text-slate-800"></h1>
+          <nav data-property-editor-target="tabBar" class="px-3"></nav>
+          <form data-property-editor-target="form" data-action="submit->property-editor#save" class="flex min-w-0 flex-1 flex-col">
+            <div data-property-editor-target="tabPaneGeneral" class="min-w-0 px-3 py-2">
+              <div data-property-editor-target="formFieldsGeneral" class="min-w-0 space-y-2"></div>
+            </div>
+            <div data-property-editor-target="tabPaneSteps" class="min-w-0 px-3 py-2">
+              <div data-property-editor-target="formFieldsSteps" class="min-w-0 space-y-2"></div>
+            </div>
+            <div data-property-editor-target="tabPaneIo" class="min-w-0 px-3 py-2">
+              <div data-property-editor-target="formFieldsIo" class="min-w-0 space-y-2"></div>
+            </div>
+            <div data-property-editor-target="tabPaneAdvanced" class="min-w-0 px-3 py-2">
+              <div data-property-editor-target="formFieldsAdvanced" class="min-w-0 space-y-2"></div>
+            </div>
+            <div class="mt-auto flex gap-2 border-t border-slate-200 px-3 py-2">
+              <button type="submit" data-property-editor-target="saveButton" class="rounded-md bg-indigo-600 px-3 py-1.5 text-xs text-white">Save</button>
+              <button type="button" data-property-editor-target="cancelButton" data-action="property-editor#close" class="rounded-md border border-slate-200 px-3 py-1.5 text-xs">Close</button>
+            </div>
+          </form>
+        </aside>
+      </div>
+    </main>
+  </body>
+</html>

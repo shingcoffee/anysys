@@ -1,0 +1,10 @@
+<section class="mx-auto w-full max-w-md p-6 text-center"
+         data-controller="payments--jsapi-invoker"
+         data-payments--jsapi-invoker-provider-value="<%= payment.provider %>"
+         data-payments--jsapi-invoker-params-value='<%= params_json %>'
+         data-payments--jsapi-invoker-result-url-value="<%= helpers.payment_result_path(customer_id: helpers.params[:customer_id], payment_id: payment.out_trade_no) %>">
+  <div class="inline-flex items-center gap-2 text-sm text-gray-600">
+    <span class="h-2.5 w-2.5 animate-pulse rounded-full bg-indigo-500"></span>
+    <%= t("comp_payments.jsapi.completing") %>
+  </div>
+</section>

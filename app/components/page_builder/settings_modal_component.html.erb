@@ -1,0 +1,188 @@
+<%# Page Settings modal — sidebar-navigated sections over the live builder state. %>
+<%= render PageBuilder::ConfigModalComponent.new(
+      key: "settings", title: t("comp_page_builder.settings_modal.title"),
+      subtitle: t("comp_page_builder.settings_modal.subtitle"),
+      icon: :settings, accent: :slate, size: :lg, fixed_height: true) do |modal| %>
+
+  <%# Pinned footer — edits apply to the live builder immediately; Save persists
+      the whole page (same action as the toolbar Save, so the two stay in sync). %>
+  <% modal.with_footer do %>
+    <p class="mr-auto hidden sm:block text-xs text-gray-400"><%= t("comp_page_builder.settings_modal.footer_hint") %></p>
+    <button type="button" data-action="click->page-builder#closeAllTabPanels"
+            class="btn btn-secondary text-sm"><%= t("common.actions.close") %></button>
+    <button type="button"
+            data-action="click->page-builder#save"
+            data-page-builder-target="saveBtn"
+            class="btn btn-primary text-sm">
+      <span data-page-builder-target="saveText"><%= t("common.actions.save") %></span>
+    </button>
+  <% end %>
+
+  <div data-controller="page-settings" class="flex flex-col sm:flex-row min-h-0 flex-1 w-full">
+
+    <%# ── Left rail — section navigation ──────────────────────────────── %>
+    <nav class="flex sm:flex-col gap-1 p-3 sm:w-56 sm:flex-shrink-0
+                border-b sm:border-b-0 sm:border-r border-gray-100 bg-gray-50/60
+                overflow-x-auto sm:overflow-y-auto"
+         aria-label="<%= t("comp_page_builder.settings_modal.sections_nav_aria") %>">
+      <% sections.each do |sec| %>
+        <button type="button"
+                data-page-settings-target="tab"
+                data-section="<%= sec[:key] %>"
+                data-action="click->page-settings#select"
+                class="group flex items-center gap-2.5 flex-shrink-0 sm:w-full px-3 py-2 rounded-lg
+                       text-left text-sm font-medium transition-colors whitespace-nowrap
+                       text-gray-600 hover:bg-gray-100">
+          <svg class="w-4 h-4 flex-shrink-0 opacity-80" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="1.75">
+            <path stroke-linecap="round" stroke-linejoin="round" d="<%= icon_path(sec[:icon]) %>" />
+          </svg>
+          <span class="flex flex-col leading-tight">
+            <span><%= sec[:label] %></span>
+            <span class="text-[11px] font-normal text-gray-400 hidden sm:block"><%= sec[:hint] %></span>
+          </span>
+        </button>
+      <% end %>
+    </nav>
+
+    <%# ── Right pane — one panel per section (scrolls within the fixed frame) ── %>
+    <div class="flex-1 min-w-0 overflow-y-auto p-5 sm:p-6">
+
+      <%# Save-error banner — shown at the top of the modal when a save fails
+          while it's open; SaveManager fills the message and scrolls the pane
+          here. Styled like the app's AlertComponent error alert. %>
+      <div data-page-builder-target="settingsSaveError" role="alert"
+           class="hidden mb-5 p-4 bg-danger-subtle border border-danger/20 rounded-lg flex items-start gap-3">
+        <svg class="w-5 h-5 text-danger flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+        </svg>
+        <p data-page-builder-target="settingsSaveErrorMessage" class="text-sm font-medium text-danger flex-1"></p>
+        <button type="button" data-action="click->page-builder#dismissSettingsError"
+                class="flex-shrink-0 -mt-0.5 -mr-0.5 p-1 text-danger/70 hover:text-danger hover:bg-danger/10 rounded-md transition-colors"
+                aria-label="<%= t("common.actions.dismiss") %>">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <%# General — submit button %>
+      <section data-page-settings-target="panel" data-section="general" class="space-y-5 hidden">
+        <header>
+          <h3 class="text-sm font-semibold text-gray-900"><%= t("comp_page_builder.settings_modal.general_title") %></h3>
+          <p class="text-xs text-gray-500 mt-0.5"><%= t("comp_page_builder.settings_modal.general_desc_html") %></p>
+        </header>
+        <div>
+          <label class="<%= LABEL_CLASS %>"><%= t("comp_page_builder.settings_modal.submit_button_text") %></label>
+          <input type="text" name="submit_button_text"
+                 data-action="input->page-builder#updateFormSettings"
+                 data-property="submit_button_text"
+                 class="<%= INPUT_CLASS %>"
+                 placeholder="<%= t("common.actions.submit") %>"
+                 value="<%= submit_button_text %>">
+          <p class="mt-1 text-xs text-gray-400"><%= t("comp_page_builder.settings_modal.submit_hint") %></p>
+        </div>
+        <fieldset>
+          <legend class="<%= LABEL_CLASS %>"><%= t("comp_page_builder.settings_modal.submission_modes_title") %></legend>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <% PageConfigurationHelpers::SUBMISSION_MODES.each do |mode| %>
+              <label class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-gray-300 cursor-pointer">
+                <input type="checkbox" data-submission-mode value="<%= mode %>"
+                       data-action="change->page-builder#updateSubmissionModes"
+                       class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                       <%= "checked" if submission_modes.include?(mode) %>>
+                <span class="text-sm font-medium text-gray-700"><%= t("comp_page_builder.settings_modal.mode_#{mode}") %></span>
+              </label>
+            <% end %>
+          </div>
+        </fieldset>
+      </section>
+
+      <%# Inputs — reference fields locked to the record an earlier step created %>
+      <section data-page-settings-target="panel" data-section="inputs" class="space-y-5 hidden">
+        <header>
+          <h3 class="text-sm font-semibold text-gray-900"><%= t("comp_page_builder.settings_modal.inputs_title") %></h3>
+          <p class="text-xs text-gray-500 mt-0.5"><%= t("comp_page_builder.settings_modal.inputs_desc") %></p>
+        </header>
+        <% fields = reference_fields %>
+        <% if fields.any? %>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <% fields.each do |field| %>
+              <label class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-gray-300 cursor-pointer">
+                <input type="checkbox" data-page-input value="<%= field[:slug] %>" data-entity-id="<%= field[:entity_id] %>"
+                       data-action="change->page-builder#updatePageInputs"
+                       class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                       <%= "checked" if field[:locked] %>>
+                <span class="text-sm font-medium text-gray-700"><%= field[:label].presence || field[:slug] %></span>
+              </label>
+            <% end %>
+          </div>
+          <label class="flex items-start gap-3 p-3 rounded-lg border border-gray-200 hover:border-gray-300 cursor-pointer">
+            <input type="checkbox" name="manage_rows"
+                   data-action="change->page-builder#updateFormSettings"
+                   data-property="manage_rows"
+                   class="mt-0.5 w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                   <%= "checked" if manages_rows? %>>
+            <span>
+              <span class="block text-sm font-medium text-gray-700"><%= t("comp_page_builder.settings_modal.manage_rows") %></span>
+              <span class="block text-xs text-gray-500 mt-0.5"><%= t("comp_page_builder.settings_modal.manage_rows_desc") %></span>
+            </span>
+          </label>
+        <% else %>
+          <p class="text-sm text-gray-500"><%= t("comp_page_builder.settings_modal.inputs_empty") %></p>
+        <% end %>
+      </section>
+
+      <%# Multi-step / wizard %>
+      <section data-page-settings-target="panel" data-section="steps" class="space-y-5 hidden">
+        <header>
+          <h3 class="text-sm font-semibold text-gray-900"><%= t("comp_page_builder.settings_modal.steps_title") %></h3>
+          <p class="text-xs text-gray-500 mt-0.5"><%= t("comp_page_builder.settings_modal.steps_desc") %></p>
+        </header>
+        <div class="space-y-3">
+          <label class="flex items-start gap-3 p-3 rounded-lg border border-gray-200 hover:border-gray-300 cursor-pointer">
+            <input type="checkbox" name="wizard_mode"
+                   data-action="change->page-builder#updateWizardSettings"
+                   data-property="wizard_mode"
+                   class="mt-0.5 w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                   <%= "checked" if wizard_mode? %>>
+            <span>
+              <span class="block text-sm font-medium text-gray-700"><%= t("comp_page_builder.settings_modal.enable_wizard") %></span>
+              <span class="block text-xs text-gray-500 mt-0.5"><%= t("comp_page_builder.settings_modal.enable_wizard_desc") %></span>
+            </span>
+          </label>
+          <label class="flex items-start gap-3 p-3 rounded-lg border border-gray-200 hover:border-gray-300 cursor-pointer">
+            <input type="checkbox" name="show_progress"
+                   data-action="change->page-builder#updateWizardSettings"
+                   data-property="show_progress"
+                   class="mt-0.5 w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                   <%= "checked" if show_progress? %>>
+            <span>
+              <span class="block text-sm font-medium text-gray-700"><%= t("comp_page_builder.settings_modal.show_progress") %></span>
+              <span class="block text-xs text-gray-500 mt-0.5"><%= t("comp_page_builder.settings_modal.show_progress_desc") %></span>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <%# After submit — the page's own success message. Shown by default so
+          the modal opens on this section. %>
+      <section data-page-settings-target="panel" data-section="after_submit" class="space-y-5">
+        <header>
+          <h3 class="text-sm font-semibold text-gray-900"><%= t("comp_page_builder.settings_modal.after_submit_title") %></h3>
+          <p class="text-xs text-gray-500 mt-0.5"><%= t("comp_page_builder.settings_modal.after_submit_desc") %></p>
+        </header>
+        <div>
+          <label class="<%= LABEL_CLASS %>"><%= t("comp_page_builder.settings_modal.success_message") %></label>
+          <input type="text" name="success_message"
+                 data-action="input->page-builder#updateFormSettings"
+                 data-property="success_message"
+                 class="<%= INPUT_CLASS %>"
+                 placeholder="<%= t("comp_page_builder.settings_modal.success_placeholder") %>"
+                 value="<%= success_message %>">
+          <p class="mt-1 text-xs text-gray-400"><%= t("comp_page_builder.settings_modal.success_message_hint") %></p>
+        </div>
+      </section>
+    </div>
+  </div>
+<% end %>

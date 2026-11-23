@@ -1,0 +1,49 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("maint_platform.customers.breadcrumb.maintenance"), path: admin_maintenance_path(current_customer_id) },
+    { label: t("maint_platform.customers.breadcrumb.customers") }
+  ],
+  title: t("maint_platform.customers.index.title"),
+  description: t("maint_platform.customers.index.description"),
+  actions: [
+    { label: t("maint_platform.customers.trash.title"), path: trash_admin_maintenance_platform_customers_path(current_customer_id), variant: :ghost, icon: :trash },
+    { label: t("maint_platform.customers.index.new_action"), path: new_admin_maintenance_platform_customer_path(current_customer_id), variant: :primary, icon: :plus }
+  ]
+) do %>
+  <%= render AdminTableComponent.new(
+      rows:        @rows,
+      columns:     @columns,
+      pagination:  @pagination,
+      params:      @table_context || {},
+      base_path:   admin_maintenance_platform_customers_path(current_customer_id),
+      search:      { param: :q, placeholder: t("maint_platform.customers.index.search_placeholder") },
+      row_path:    ->(c) { admin_maintenance_platform_customer_path(current_customer_id, c) },
+      row_actions: ->(c) {
+        actions = []
+        if c.id != Authentication::User::PLATFORM_CUSTOMER_ID && Current.acting_as_customer&.id != c.id
+          actions << {
+            label:  t("maint_platform.customers.index.act_as"),
+            path:   admin_maintenance_platform_customer_context_path(current_customer_id, target_customer_id: c.id),
+            method: :patch,
+            data:   { turbo_frame: "_top" }
+          }
+        end
+        actions << { label: t("common.actions.edit"), path: edit_admin_maintenance_platform_customer_path(current_customer_id, c) }
+        if c.id != Authentication::User::PLATFORM_CUSTOMER_ID
+          actions << {
+            label:  t("common.actions.delete"),
+            path:   admin_maintenance_platform_customer_path(current_customer_id, c),
+            method: :delete,
+            data:   { turbo_confirm: t("maint_platform.customers.index.delete_confirm", name: c.name), turbo_frame: "_top" }
+          }
+        end
+        actions
+      },
+      empty_state: {
+        title: t("maint_platform.customers.index.empty_title"),
+        description: t("maint_platform.customers.index.empty_description"),
+        action_path: new_admin_maintenance_platform_customer_path(current_customer_id),
+        action_text: t("maint_platform.customers.index.empty_action")
+      }
+    ) %>
+<% end %>

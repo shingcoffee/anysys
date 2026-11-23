@@ -1,0 +1,10 @@
+<div class="flex min-w-0 flex-col gap-6">
+  <% if records.empty? && !filtered? %>
+    <%= section(ui("#{kind}.empty_title")) do %>
+      <p class="text-text-secondary"><%= empty_help %></p>
+      <% if kind != :contacts %><%= link_to ui("campaigns.manage_contacts"), sms_path(:contacts), class: "link" %><% end %>
+    <% end %>
+  <% end %>
+  <%= render AdminTableComponent.new(rows: records, columns: display_columns, pagination: pagination, params: filters, base_path: sms_path(kind), search: { param: :q, placeholder: ui("#{kind}.search") }, filters: table_filters, row_path: ->(record) { sms_path(singular, record) }, row_actions: ->(record) { row_actions(record) }, empty_state: { title: ui("#{kind}.empty_title"), description: empty_help }) %>
+  <% if filtered? %><%= link_to t("chrome.admin_table.clear_filters"), sms_path(kind), class: "link" %><% end %>
+</div>

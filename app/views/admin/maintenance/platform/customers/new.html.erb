@@ -1,0 +1,15 @@
+<%# app/views/customers/new.html.erb %>
+<% content_for :title, t("maint_platform.customers.new.title") %>
+<% content_for :container_width, :narrow %>
+<%= render BreadcrumbsComponent.new(crumbs: [
+  { label: t("maint_platform.customers.breadcrumb.maintenance"), path: admin_maintenance_path(current_customer_id) },
+  { label: t("maint_platform.customers.breadcrumb.customers"), path: admin_maintenance_platform_customers_path(current_customer_id) },
+  { label: t("common.actions.new"), path: nil }
+]) %>
+
+<div class="mb-6">
+  <h1 class="text-heading"><%= t("maint_platform.customers.new.title") %></h1>
+  <p class="mt-1 text-body-sm"><%= t("maint_platform.customers.new.description") %></p>
+</div>
+
+<%= render CustomerFormComponent.new(customer: @customer) %>

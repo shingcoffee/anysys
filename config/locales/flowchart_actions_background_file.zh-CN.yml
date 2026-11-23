@@ -1,0 +1,348 @@
+---
+zh-CN:
+  flowchart_actions:
+    enqueue_job:
+      label: 运行后台任务
+      description: 立即、定时、延迟或按周期将任务加入队列。
+      fields:
+        jobClass:
+          label: 任务类
+          help: 要运行的 Active Job 类。
+          placeholder: 例如 ProcessOrderJob
+        when:
+          label: 执行时机
+          help: 任务何时运行。
+          options:
+            now: 立即
+            at: 指定时间
+            after: 延迟
+            recurring: 周期
+        jobArgs:
+          label: 任务参数
+          help: 任务参数的 Ruby 表达式。
+          placeholder: 例如 ctx[:order].id, ctx[:user].id
+        queueName:
+          label: 队列
+          help: 入队使用的 Active Job 队列。
+          options:
+            default: 默认
+            low: 低
+            high: 高
+            mailers: 邮件
+        priority:
+          label: 优先级
+          help: 任务优先级，范围 0 到 1000。
+          placeholder: 任务优先级
+        runAt:
+          label: 运行时间
+          help: when 为 at 时的时间或时长表达式。
+          placeholder: 例如 1.hour.from_now
+        waitSeconds:
+          label: 延迟秒数
+          help: when 为 after 时的延迟秒数。
+          placeholder: 例如 3600
+        cronExpression:
+          label: Cron 表达式
+          help: 按 cron 周期入队时使用。
+          placeholder: 例如 0 9 * * *
+        timezone:
+          label: 时区
+          help: Cron 表达式使用的时区。
+          placeholder: 例如 UTC、America/New_York
+        intervalSeconds:
+          label: 间隔秒数
+          help: 周期入队的间隔秒数。
+          placeholder: 例如 3600
+        recurrenceLimit:
+          label: 周期次数
+          help: 入队次数，范围 1 到 100。
+          placeholder: 例如 1
+        resultVar:
+          label: 保存为
+          help: 后续步骤读取的变量名。
+      errors:
+        invalid_cron: cronExpression 不是有效的 cron 表达式
+        invalid_timezone: timezone 不是已知时区
+        horizon_too_far: "recurrenceLimit × intervalSeconds 不得超过 %{max_days} 天"
+    generate_file:
+      label: 生成文件
+      description: 生成 PDF/CSV/Excel/JSON/XML/TXT
+      fields:
+        sourceVariable:
+          label: 来源
+          help: 本步骤读取的上下文路径。
+          placeholder: 例如 records
+        resultVar:
+          label: 保存为
+          help: 后续步骤读取的变量名。
+        fileType:
+          label: 文件类型
+          help: 生成文件的格式。
+          options:
+            csv: csv
+            xlsx: xlsx
+            pdf: pdf
+            json: json
+            xml: xml
+            txt: txt
+        outputDestination:
+          label: 输出位置
+          help: 写入上下文变量或 Active Storage。
+          options:
+            ctx_var: 上下文变量
+            active_storage: ActiveStorage
+        columns:
+          label: 列
+          help: 列标题映射到行字段。
+        sheetName:
+          label: 工作表名
+          help: XLSX 工作表名称。
+          placeholder: 例如 Sheet1
+        autoFilter:
+          label: 自动筛选
+          help: 启用 XLSX 自动筛选。
+        pageSize:
+          label: 页面大小
+          help: PDF 页面大小。
+          options:
+            letter: letter
+            a4: a4
+            legal: legal
+        pretty:
+          label: 美化
+          help: 格式化输出 JSON。
+        rootElement:
+          label: 根元素
+          help: XML 根标签。
+          placeholder: 例如 root
+        lineEnding:
+          label: 换行
+          help: TXT 换行符。
+          options:
+            lf: lf
+            crlf: crlf
+        filenameTemplate:
+          label: 文件名
+          help: 附加文件时使用的文件名。
+          placeholder: 例如 export.csv
+        encoding:
+          label: 编码
+          help: CSV 编码。
+          options:
+            utf_8: utf-8
+            utf_16: utf-16
+            ascii: ascii
+            iso_8859_1: iso-8859-1
+        delimiter:
+          label: 分隔符
+          help: CSV 列分隔符。
+          placeholder: 例如 ，
+        headerRow:
+          label: 表头行
+          help: 写入 CSV 表头。
+        quoteStrings:
+          label: 强制引号
+          help: 为每个 CSV 字段加引号。
+        includeBom:
+          label: 包含 UTF-8 BOM
+          help: 在 CSV 前加入 UTF-8 BOM。
+        nestedSeparator:
+          label: 嵌套分隔符
+          help: 嵌套 CSV 字段路径的分隔符。
+          placeholder: 例如 .
+    upload_file:
+      label: 上传文件
+      description: 将文件上传到 Active Storage
+      fields:
+        service:
+          label: 服务
+          help: 接收文件的存储服务。
+          options:
+            active_storage: Active Storage
+        attachmentName:
+          label: 附件名
+          help: 记录上的 Active Storage 附件名。
+          placeholder: 例如 avatar
+        sourceVariable:
+          label: 来源
+          help: 本步骤读取的上下文路径。
+          placeholder: 例如 file
+        modelVariable:
+          label: 记录
+          help: 接收附件的记录。
+        filenameVariable:
+          label: 文件名变量
+          help: 上传文件名的上下文路径。
+          placeholder: 例如 uploaded_filename
+        contentTypeVariable:
+          label: 内容类型变量
+          help: MIME 类型的上下文路径。
+          placeholder: 例如 uploaded_content_type
+        maxSizeBytes:
+          label: 最大字节数
+          help: 超过该字节数则拒绝。
+          placeholder: 例如 10485760
+        allowedTypes:
+          label: 允许的 MIME 类型
+          help: 上传允许的 MIME 类型。
+        fileField:
+          label: 文件字段
+          help: 接收文件的记录文件或图片字段。
+          placeholder: 例如 contract
+        filename:
+          label: 文件名
+          help: 可选，替换来源文件名；留空则保留。
+          placeholder: 例如 invoice-{{ order.number }}.pdf
+        saveRecord:
+          label: 保存记录
+          help: 立即保存记录，使文件存储并通过校验；关闭则留待后续保存步骤。
+        resultVar:
+          label: 保存为
+          help: 后续步骤读取的变量名。
+      errors:
+        not_file_attribute: "%{attribute} 不是 %{entity} 的文件或图片字段"
+    download_file:
+      label: 下载文件
+      description: 从远程地址下载文件
+      fields:
+        url:
+          label: URL
+          help: 要下载的静态地址。
+          placeholder: https://example.com/file.csv
+        urlVariable:
+          label: URL 变量
+          help: 存放下载地址的上下文路径。
+          placeholder: 例如 download_url
+        resultVar:
+          label: 保存为
+          help: 后续步骤读取的变量名。
+        destination:
+          label: 目标
+          help: 下载内容的存放位置。
+          options:
+            ctx_var: 上下文变量
+            temp_file: 临时文件
+            active_storage: ActiveStorage
+        maxSizeBytes:
+          label: 最大字节数
+          help: 超过该字节数则拒绝响应。
+          placeholder: 例如 10485760
+        followRedirects:
+          label: 跟随重定向
+          help: 是否跟随 HTTP 重定向。
+        maxRedirects:
+          label: 最大重定向次数
+          help: 最多跟随的重定向次数。
+        headers:
+          label: 请求头
+          help: 额外的请求头。
+        allowedContentTypes:
+          label: 允许的内容类型
+          help: 响应 Content-Type 不在此列表时拒绝下载。留空表示允许任意类型。
+        validateChecksum:
+          label: 校验和
+          help: "可选的 sha256: 或 md5: 摘要。"
+          placeholder: "例如 sha256:abc…"
+        retryOnTransportError:
+          label: 传输失败重试
+          help: 仅在请求幂等时重试。
+        retryAttempts:
+          label: 重试次数
+          help: 额外传输尝试次数（1–2）。
+        connectTimeout:
+          label: 连接超时
+          help: 等待连接的秒数（1–5）。
+        readTimeout:
+          label: 读取超时
+          help: 等待响应的秒数（1–9）。
+        circuitBreaker:
+          label: 熔断器
+          help: 远端不健康时快速失败。
+        breakerName:
+          label: 熔断器名称
+          help: 该熔断器的缓存键后缀。
+        failureThreshold:
+          label: 失败阈值
+          help: 打开熔断器前的失败次数（1–20）。
+        resetTimeoutSeconds:
+          label: 重置超时
+          help: 半开重试前的秒数（10–3600）。
+      errors:
+        invalid_checksum: "validateChecksum 必须是 sha256: 或 md5: 加十六进制摘要"
+    compress_files:
+      label: 压缩文件
+      description: 将文件压缩为归档
+      fields:
+        entries:
+          label: 条目
+          help: 归档名映射到上下文变量。
+          placeholder: 例如 data.txt -> file_data
+        literalEntries:
+          label: 字面条目
+          help: 归档名映射到字面内容。
+        format:
+          label: 格式
+          help: 归档格式。
+          options:
+            zip: zip
+            tar: tar
+            gz: gz
+            tar_gz: tar.gz
+        compressionLevel:
+          label: 压缩级别
+          help: 压缩级别，范围 0 到 9。
+          placeholder: 0（无）- 9（最高）
+        includeHidden:
+          label: 包含隐藏项
+          help: 是否包含以点号开头的名称。
+        filenameTemplate:
+          label: 文件名
+          help: 写入文件载荷的 ZIP 文件名。
+          placeholder: 例如 orders.zip
+        resultVar:
+          label: 保存为
+          help: 后续步骤读取的变量名。
+    decompress_files:
+      label: 解压文件
+      description: 从归档中提取文件
+      fields:
+        sourceVariable:
+          label: 来源
+          help: 本步骤读取的上下文路径。
+          placeholder: 例如 archive
+        resultVar:
+          label: 保存为
+          help: 后续步骤读取的变量名。
+        format:
+          label: 格式
+          help: 归档格式，或自动检测。
+          options:
+            auto: 自动检测
+            zip: zip
+            tar: tar
+            gz: gz
+            tar_gz: tar_gz
+        filter:
+          label: 筛选（fnmatch）
+          help: 可选，按 fnmatch 模式保留的文件名。
+          placeholder: 例如 *.txt
+        maxEntries:
+          label: 最大条目数
+          help: 最多提取的归档条目数（不超过平台归档上限）。
+        maxTotalBytes:
+          label: 最大总字节数
+          help: 提取内容展开后的最大总字节数。
+  flowchart_runtime:
+    errors:
+      enqueue_job:
+        failed: "无法入队任务（%{reason}）。"
+      generate_file:
+        failed: "无法生成文件（%{reason}）。"
+      upload_file:
+        failed: "无法上传文件（%{reason}）。"
+      download_file:
+        failed: "无法下载文件（%{reason}）。"
+      compress_files:
+        failed: "无法压缩文件（%{reason}）。"
+      decompress_files:
+        failed: "无法解压文件（%{reason}）。"

@@ -1,0 +1,447 @@
+en:
+  website:
+    home_site:
+      brand: Anysys
+      tagline: Build anything. Launch everything. One brilliant workspace.
+      seo:
+        title: Anysys — The AI assistant that builds your business system and website
+        description: Describe your business and the Anysys AI assistant drafts custom records, smart forms and a stunning website in one connected workspace. A Windows desktop app for hosting it on your own computer is coming soon.
+      errors:
+        module_unavailable: Activate the Website module in platform settings before restoring the home site.
+      pages:
+        home: Home
+        platform: Platform
+        pricing: Pricing
+        about: About
+        contact: Contact
+      actions:
+        start: Start building free
+        explore: Explore the platform
+        create: Create your free workspace
+        pricing: See pricing
+      hero_badge: New
+      trust:
+        - Free plan available
+        - AI assistant built in
+        - No code required
+        - English & 简体中文
+      hero_chips:
+        about:
+          - Built by makers
+          - Shipped with care
+        contact:
+          - Real humans, real answers
+          - Replies right in your workspace
+      story_chips:
+        home:
+          - Page published
+          - New sign-up received
+        platform:
+          - Draft approved
+          - Theme applied everywhere
+        about:
+          - Every detail editable
+          - Crafted around you
+      mockup:
+        label: Preview of an Anysys membership workspace with records, an AI assistant and a live website
+        url: app.anysys.com/workspace/members
+        brand: Anysys
+        nav:
+          - Dashboard
+          - Records
+          - Forms
+          - Website
+          - Payments
+          - Messages
+        subtitle: Membership workspace
+        title: Members
+        ai_badge: AI draft ready
+        stats:
+          - label: Active members
+            value: "1,284"
+            delta: +12% this month
+          - label: Renewals due
+            value: "86"
+            delta: Next 30 days
+          - label: Revenue
+            value: $24.6k
+            delta: +18% vs last month
+        columns:
+          - Name
+          - Level
+          - Renewal
+          - Status
+        rows:
+          - name: Emma Chen
+            level: Gold
+            date: Nov 12
+            status: Active
+          - name: Lucas Wright
+            level: Silver
+            date: Nov 18
+            status: Renewing
+          - name: Sofia Patel
+            level: Platinum
+            date: Dec 02
+            status: New
+          - name: Noah Kim
+            level: Gold
+            date: Dec 09
+            status: Active
+        assistant:
+          title: Anysys AI
+          message: I drafted 3 website pages, a registration form and your member records. Ready when you are.
+          action: Review drafts
+        site:
+          title: Your website
+          status: Live
+        toasts:
+          signup:
+            title: New member signed up
+            body: via Registration form
+          payment:
+            title: Payment received
+            body: +$49.00 · Gold membership
+      hero:
+        eyebrow: AI assistant built in · Windows desktop app coming soon
+        headline: "Describe your business.\nAI builds the rest."
+        subhead: Tell the Anysys AI assistant what you do — by typing, speaking or sharing photos — and it drafts custom records, smart forms and a stunning website, all connected and ready for your review. Coming soon, host the whole workspace on your own computer with the Anysys desktop app.
+      illustration:
+        local_data: Local data
+        idea: Idea
+        goals: Goals
+      preview:
+        example: Example workspace
+        draft: Draft
+        prompt_label: Your brief
+        output_label: Generated for you
+        review_note: AI does the heavy lifting. You stay in charge of every detail — nothing goes live until you say so.
+        home:
+          kicker: AI assistant in action
+          heading: One sentence in. A whole system out.
+          subhead: Describe your business once. Anysys drafts the records, the forms and the website — wired together and waiting for your review.
+          prompt: Build a membership workspace with signup and a public website.
+          items:
+            - title: Member records
+              body: "Name · Email\nMembership level · Renewal date"
+            - title: Registration form
+              body: "Contact details\nMembership options"
+            - title: Public website
+              body: "Home · Membership · Contact\nEditable page drafts"
+        platform:
+          kicker: From brief to launch
+          heading: Follow one idea all the way to launch.
+          subhead: Watch a single request become a working membership system — and a website to match.
+          prompt: Build a community membership system. Track renewal dates, collect applications and draft a website explaining membership options.
+          items:
+            - title: Membership records
+              body: "Contact details · Membership level\nRenewal date"
+            - title: Application form
+              body: "Applicant details\nMembership options"
+            - title: Membership website
+              body: "Introduction · Membership options\nApplication link to review"
+      assistant:
+        kicker: Anysys AI assistant
+        heading: An AI teammate that builds while you talk.
+        subhead: Describe what you need and the assistant drafts the records, forms and website pages to match — then refines them with you, step by step.
+        items:
+          - title: Brief it your way
+            body: Type a sentence, dictate with your voice or attach photos of your work. Mention existing records with @ and the assistant picks up the context instantly.
+          - title: Builds your records
+            body: Creates record types with fields, links and calculated values — and asks before changing anything that already exists.
+          - title: Turns records into forms
+            body: Generates ready-to-use form pages straight from your record types, so every answer lands where it belongs.
+          - title: Drafts your website
+            body: Writes up to five pages around your business and places your uploaded photos where they fit best.
+          - title: Undo in one click
+            body: Changed your mind? Roll back a fresh website draft instantly, as long as it hasn't been published or edited.
+          - title: You stay in charge
+            body: Nothing goes live until you publish it. Work in English or Simplified Chinese, and pick up any conversation right where you left off.
+      desktop:
+        status: Windows desktop app · Coming soon
+        headline: Your workspace. Your hardware. Your rules.
+        panel:
+          subhead: The upcoming Anysys desktop app runs your entire workspace on a computer you control — the same records, forms and website builder, hosted on hardware you own. Built for teams that demand total data sovereignty.
+          cards:
+            - title: Host it on your own PC
+              body: Run your full workspace on a Windows machine you manage, right from the desktop app.
+              image_url: /site-images/anysys/anysys-photo-desktop-night.webp
+            - title: Your records, your control
+              body: Locally hosted records live on hardware you own. Nothing leaves without your say.
+              image_url: /site-images/anysys/anysys-photo-desktop-night.webp
+            - title: Private — even from Anysys
+              body: The desktop app is designed to keep locally hosted records completely outside Anysys's reach.
+              image_url: /site-images/anysys/anysys-photo-desktop-night.webp
+      home:
+        stats:
+          items:
+            - value: "3"
+              label: ways to brief the AI assistant — type, speak or share photos
+            - value: "< 5 min"
+              label: from first brief to connected drafts
+            - value: "0"
+              label: lines of code required
+            - value: "2"
+              label: languages, built in from day one
+        industries:
+          heading: Built for ambitious teams in every industry
+          items:
+            - name: Membership clubs
+            - name: Clinics & wellness
+            - name: Creative studios
+            - name: Schools & training
+            - name: Nonprofits
+            - name: Consultancies
+            - name: Boutique retail
+            - name: Event organisers
+            - name: Fitness studios
+            - name: Professional services
+        capabilities:
+          kicker: Everything in one place
+          heading: The system behind your business. The website in front of it.
+          subhead: Stop stitching together spreadsheets, form tools and site builders. Anysys gives you every building block in one beautifully connected workspace.
+          items:
+            - title: Custom records
+              body: Model anything your business tracks — members, bookings, orders, cases — with fields that fit like a glove.
+            - title: Smart forms
+              body: Capture applications, registrations and requests that flow straight into your records.
+            - title: Stunning websites
+              body: Launch polished, responsive pages with themes, imagery and copy that feel unmistakably yours.
+            - title: AI assistant
+              body: Brief it by typing or by voice. It drafts structures, pages and copy while you steer.
+            - title: Members & payments
+              body: Sign-ups, sign-ins, permissions and online payments — switched on when you are ready.
+            - title: Email & SMS
+              body: Reach every customer with configured messaging and delivery tracking built right in.
+        website:
+          heading: A first impression that wins customers.
+          body: |-
+            Your website isn't an afterthought — it's the storefront of your entire operation. Pick a theme, drop in your imagery and polish every word with AI at your side. Preview each page pixel-perfect, then publish in a click.
+
+            Every form on your site feeds straight into your records, so the moment a visitor signs up, your business already knows.
+          image_url: /site-images/anysys/anysys-photo-studio-owner.webp
+          image_side: right
+        steps:
+          kicker: From idea to launch
+          heading: Three steps. Zero code.
+          items:
+            - title: Describe
+              body: Tell Anysys what your business does and what visitors should find. Plain words are all it takes.
+            - title: Refine
+              body: Review the generated records, forms and pages. Tweak anything with intuitive visual editors.
+            - title: Launch
+              body: Publish your website, switch on payments and messaging, and open your doors.
+        faq:
+          kicker: FAQ
+          heading: Questions? We've got answers.
+          items:
+            - question: Do I need to know how to code?
+              answer: Not a single line. Describe your business in plain language and Anysys drafts your system and website. Intuitive visual editors handle the rest.
+            - question: What can the AI assistant do?
+              answer: From one plain-language brief it drafts record types, form pages and up to five website pages, and places the photos you attach. It asks before changing anything that already exists, and nothing is published until you say so.
+            - question: Can I review pages before publishing?
+              answer: Always. Every AI proposal is an editable draft — preview and perfect each page before it goes live.
+            - question: Does Anysys work in Chinese?
+              answer: Yes. The entire workspace speaks both English and Simplified Chinese, and you can brief the assistant in either language.
+            - question: Can I download the Windows app?
+              answer: The Windows desktop app is coming soon and is not yet available to download. It is designed to host your whole workspace on a computer you control; details on AI connections, external services and backups will be shared before release.
+        cta:
+          headline: Your next big idea deserves a launchpad.
+          body: Brief the AI assistant this afternoon and launch a working system and a beautiful website.
+      platform:
+        hero:
+          eyebrow: The Anysys platform
+          headline: "Everything your business runs on.\nOne brilliant workspace."
+          subhead: Records, forms, websites, members, payments and messaging — designed to work together from day one, drafted for you by a built-in AI assistant, and soon ready to host on your own computer.
+        capabilities:
+          kicker: Building blocks
+          heading: Powerful building blocks. Effortlessly connected.
+          subhead: Work in English or Simplified Chinese. Brief the assistant by typing, or simply speak when voice input is configured.
+          items:
+            - title: Custom records & forms
+              body: Define your record types and the forms that capture exactly the information your business needs.
+            - title: Website builder
+              body: Shape page copy, themes and imagery. Preview editable drafts and publish pages you're proud of.
+            - title: AI assistant
+              body: Turn a brief into connected records, forms and pages — then refine them together, step by step.
+            - title: Members & access
+              body: Give members their own accounts, with sign-in, permissions and captcha protection built in.
+            - title: Payments
+              body: Accept online payments through configured gateways, with checkout tied to your records.
+            - title: Email & SMS
+              body: Send messages through configured services and follow every delivery with built-in tracking.
+        website:
+          heading: A website that grows as fast as you do.
+          body: |-
+            Ask AI to propose pages around your offer, then make every headline, theme and image your own in the visual builder.
+
+            Preview each page before publishing and come back anytime — your site evolves as quickly as your business does.
+          image_url: /site-images/anysys/anysys-photo-team-collab.webp
+          image_side: left
+        comparison:
+          kicker: Why Anysys
+          heading: One workspace beats a stack of subscriptions.
+          subhead: See what changes when your system and your website finally live under one roof.
+          column_1: Anysys
+          column_2: The usual patchwork
+          rows:
+            - title: Custom records & forms
+              value_1: Built in
+              value_2: Separate tools
+            - title: Professional website
+              value_1: Built in
+              value_2: Another subscription
+            - title: AI assistant drafts the whole setup
+              value_1: Built in
+              value_2: Rarely available
+            - title: Host it on your own computer
+              value_1: Coming soon
+              value_2: Rarely offered
+            - title: Members & payments
+              value_1: Built in
+              value_2: Plugins and add-ons
+            - title: Email & SMS
+              value_1: Built in
+              value_2: Yet another service
+            - title: English & Simplified Chinese
+              value_1: Built in
+              value_2: Seldom both
+        steps:
+          kicker: How it works
+          heading: Describe. Refine. Launch.
+        cta:
+          headline: Put your way of working at the center.
+          body: Spin up your workspace in minutes and watch your ideas take shape.
+      pricing:
+        hero:
+          eyebrow: Pricing
+          headline: "Simple pricing.\nLimitless ambition."
+          subhead: Start free and upgrade only when you're ready to grow. Reference monthly prices in USD — plans, trials, currency and charges are confirmed in workspace billing.
+        section:
+          kicker: ""
+          heading: ""
+          subhead: ""
+        recommended: Most popular
+        price: "$%{amount}"
+        cadence: USD / month
+        trial: "%{count}-day free trial"
+        limits:
+          page:
+            limited: "Up to %{count} pages"
+            unlimited: Unlimited pages
+          entity:
+            limited: "Up to %{count} custom record types"
+            unlimited: Unlimited custom record types
+          member:
+            limited:
+              one: "%{count} member seat"
+              other: "%{count} member seats"
+            unlimited: Unlimited member seats
+        plans:
+          free:
+            name: Free
+            body: Everything you need to launch your first big idea.
+          starter:
+            name: Starter
+            body: The sweet spot for small teams ready to grow.
+          pro:
+            name: Pro
+            body: Serious power for fast-growing businesses.
+          enterprise:
+            name: Enterprise
+            body: Limitless scale for ambitious organisations.
+        foundation:
+          kicker: Included in every plan
+          heading: More than a plan. A complete, connected workspace.
+          subhead: Every tier unlocks the same beautifully integrated platform — you only choose how much room you need.
+          items:
+            - title: AI assistant
+              body: Brief it by typing or voice, then review the connected records, forms and page drafts it prepares.
+            - title: Records, forms & websites
+              body: Define your record types, collect information with forms and preview your website before publishing.
+            - title: Members, payments & messaging
+              body: Use member accounts, payments, email and SMS with the required services configured.
+        faq:
+          kicker: FAQ
+          heading: Pricing, answered.
+          items:
+            - question: What are the Free plan limits?
+              answer: In the standard plan guide, Free is $0 per month, with up to 10 pages, 5 custom record types and 1 member seat.
+            - question: Do paid plans have a trial?
+              answer: In the standard plan guide, Starter, Pro and Enterprise each include a 14-day trial. Your workspace shows available trial offers.
+            - question: What do these limits count?
+              answer: Pages are pages created in the page builder, including form pages—not the marketing pages in the website builder. Custom record types are the kinds of data you define, not individual records. Member seats count registered workspace accounts, including administrators.
+            - question: How do billing and usage charges work?
+              answer: This guide shows reference monthly prices in USD. Your workspace billing settings show available plans and offers, your billing currency and any applicable usage charges.
+        cta:
+          headline: Start free. Scale without limits.
+          body: Create your workspace today and upgrade anytime from billing.
+      about:
+        hero:
+          eyebrow: About Anysys
+          headline: "We build tools for\npeople who build."
+          subhead: Anysys exists for founders, operators and makers who refuse to bend their business around rigid software. We give your expertise a workspace powerful enough to match it.
+          image_url: /site-images/anysys/anysys-photo-about-team.webp
+        stats:
+          items:
+            - value: "6"
+              label: connected building blocks in one workspace
+            - value: "2"
+              label: languages, from the very first screen
+            - value: "100%"
+              label: of AI drafts reviewed by you before going live
+            - value: "∞"
+              label: ways to shape it around your business
+        mission:
+          heading: Your expertise is the blueprint.
+          body: |-
+            Every business has its own information, its own processes and its own story to tell. Anysys connects custom records, forms and website pages so your system and your public presence grow from the very same idea.
+
+            AI delivers a brilliant first draft in moments. You refine it with visual editors, switch on the services you need and decide exactly when pages go live. Your expertise sets the direction — your judgement stays in charge.
+        principles:
+          kicker: What we believe
+          heading: Powerful tools. Human direction.
+          subhead: Three principles shape every screen we ship.
+          items:
+            - title: Start with the work
+              body: Describe what your business manages before deciding how the software should look.
+            - title: Keep drafts reviewable
+              body: AI proposals are a launchpad, not a verdict. Review the details, change anything and choose when pages go live.
+            - title: Connect the inside and outside
+              body: Build your business system and public website in one workspace, with services configured for your needs.
+        craft:
+          heading: A living workspace, not a frozen template.
+          body: |-
+            Templates lock you in. Anysys hands you records, forms, website pages and configurable services that stay editable forever — because your business never stops evolving.
+
+            Your expertise sets the direction; our tools make it shine.
+          image_url: /site-images/anysys/anysys-photo-craft.webp
+          image_side: left
+        cta:
+          headline: Make your way of working the blueprint.
+          body: Create a workspace around your expertise and your next big idea.
+      contact:
+        hero:
+          eyebrow: Contact
+          headline: "Let's build something\nremarkable together."
+          subhead: Questions, ideas or big plans? Here's the fastest way to get moving with Anysys.
+          image_url: /site-images/anysys/anysys-photo-contact.webp
+        availability:
+          heading: Talk to us from inside your workspace.
+          body: |-
+            Already building? Open the Help menu in your workspace to start a support conversation — our team replies right in the thread, with the full context of your setup.
+
+            New to Anysys? Create a free workspace in moments and reach us from there.
+        cta:
+          headline: Find your starting point.
+          body: Explore the platform and pricing, or create a workspace and start building today.
+        routes:
+          platform: See how records, forms and websites work together.
+          pricing: Compare plans and find the perfect fit.
+          workspace: Create a workspace and start shaping your idea.
+      footer:
+        blurb: Big ambitions deserve brilliant tools. Build custom systems and standout websites with a built-in AI assistant — in the cloud today, and soon on your own computer.
+        product: Product
+        company: Company
+        desktop: Desktop
+        desktop_link: Windows app — Coming soon

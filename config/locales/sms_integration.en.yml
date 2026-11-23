@@ -1,0 +1,15 @@
+en:
+  sms_integration:
+    errors:
+      idempotency_conflict: "This idempotency key has already been used for a different SMS request."
+      invalid_field: "%{field} %{message}"
+      idempotency_key_invalid: "Idempotency key must be a string of at most %{limit} bytes without control characters."
+      expiry_not_supported: "expires_at is not supported by the SMS HTTP endpoint."
+      webhook_recipient_invalid: "The SMS webhook recipient is invalid."
+      notification_not_accepted: "SMS notification was not accepted (status: %{status})."
+    generator:
+      template_key_required: "smsTemplateKey is required when using the sms channel."
+      template_key_invalid: "smsTemplateKey must contain only lowercase letters, numbers, or underscores and be at most %{limit} bytes."
+      vars_invalid: "smsVars must be a template-variable object or a context expression. Objects must satisfy the SMS variable type and size limits."
+      idempotency_key_invalid: "smsIdempotencyKey must be a string of at most %{limit} bytes without control characters."
+      credentials_unsupported: "SMS credentials and sender numbers must be configured in the SMS module, not in notify steps."

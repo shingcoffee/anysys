@@ -1,0 +1,14 @@
+<%= render Admin::Settings::PageComponent.new(customer_id: current_customer.id,
+  title: t("settings_navigation.items.member_portal"), description: t("settings_people.member_description")) do %>
+  <%= render Admin::Settings::SectionComponent.new(
+        title: t("settings_people.pages_heading"),
+        description: t("settings_people.pages_heading_hint"),
+        flush: true
+      ) do %>
+    <div class="divide-y divide-border-subtle">
+      <% @hub_cards.each do |card| %>
+        <%= render Admin::Settings::MemberHubCardComponent.new(presenter: card) %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

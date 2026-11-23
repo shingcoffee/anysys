@@ -1,0 +1,26 @@
+<% body = content %>
+<%= tag.section id: id, **(title.present? ? { aria: { label: title } } : {}), class: "card min-w-0 overflow-hidden" do %>
+  <% if header? %>
+    <header class="flex flex-col gap-3 border-b border-border-subtle px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <div class="min-w-0">
+        <% if title.present? %><h2 class="section-header"><%= title %></h2><% end %>
+        <% if description.present? %><p class="mt-0.5 text-caption"><%= description %></p><% end %>
+      </div>
+      <% if actions? %><div class="flex min-w-0 shrink-0 flex-wrap items-center gap-2"><%= actions %></div><% end %>
+    </header>
+  <% end %>
+  <% if body.present? %>
+    <% if flush? %>
+      <%= body %>
+    <% else %>
+      <div class="px-4 py-4 sm:px-6">
+        <%= body %>
+      </div>
+    <% end %>
+  <% end %>
+  <% if footer? %>
+    <footer class="flex flex-col-reverse gap-2 border-t border-border-subtle bg-canvas-elevated px-4 py-3 sm:flex-row sm:items-center sm:justify-end sm:px-6">
+      <%= footer %>
+    </footer>
+  <% end %>
+<% end %>

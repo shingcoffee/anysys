@@ -1,0 +1,5 @@
+<%= render Authentication::MailerShellComponent.new(
+      scope:      :confirmation,
+      email:      @resource.email,
+      action_url: user_confirmation_url(confirmation_token: @token)
+    ) %>

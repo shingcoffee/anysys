@@ -1,0 +1,5 @@
+<%= render Billing::Admin::CustomerPaymentMethodsComponent.new(
+  payment_methods: payment_methods, available_providers: available_providers, customer_id: customer_id,
+  currency: currency, provider_options: provider_options, payment_method_readiness: payment_method_readiness,
+  authorization: authorization, request_key: request_key, form: form, pagination: pagination, page_path: page_path
+) %>

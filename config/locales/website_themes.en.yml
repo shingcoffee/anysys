@@ -1,0 +1,100 @@
+en:
+  website:
+    themes:
+      linen:
+        name: "Linen"
+        description: "Warm ivory, gold accents, and a classic serif for timeless brands."
+      porcelain:
+        name: "Porcelain"
+        description: "Quiet gallery serif on warm white; lets the work speak."
+      meridian:
+        name: "Meridian"
+        description: "Crisp indigo on cool grays for confident software and services."
+      glacier:
+        name: "Glacier"
+        description: "Clean teal on cool neutrals; calm, precise, product-first."
+      midnight:
+        name: "Midnight"
+        description: "Deep navy dark mode with azure highlights."
+      aurora:
+        name: "Aurora"
+        description: "Dark, rounded, and violet-lit for launches and events."
+      monochrome:
+        name: "Monochrome"
+        description: "Black ink, bold grotesk, and sharp edges. Pure contrast."
+      obsidian:
+        name: "Obsidian"
+        description: "Monochrome in dark mode: stark, technical, editorial."
+      noir:
+        name: "Noir"
+        description: "Cinematic dark with high-contrast display serifs."
+      broadsheet:
+        name: "Broadsheet"
+        description: "Newspaper serif on paper tones for news and long reads."
+      almanac:
+        name: "Almanac"
+        description: "Bookish serif with copper notes for journals and essays."
+      gilded:
+        name: "Gilded"
+        description: "Dark, elegant, and gold-trimmed for hospitality and luxury."
+      terracotta:
+        name: "Terracotta"
+        description: "Sun-baked copper with a classic serif for food and craft."
+      ember:
+        name: "Ember"
+        description: "Bold grotesk with roasted copper warmth."
+      riviera:
+        name: "Riviera"
+        description: "Elegant serif with sea-teal accents for travel and leisure."
+      coral:
+        name: "Coral"
+        description: "Friendly geometric sans with rosy accents and round corners."
+      blossom:
+        name: "Blossom"
+        description: "Soft rose with elegant serifs for beauty, floral, and weddings."
+      sage:
+        name: "Sage"
+        description: "Calm forest green, warm neutrals, and rounded shapes."
+      sandstone:
+        name: "Sandstone"
+        description: "Earthy gold on warm neutrals with a modern geometric sans."
+      orchard:
+        name: "Orchard"
+        description: "Olive greens and display serifs for natural, organic brands."
+      academy:
+        name: "Academy"
+        description: "Crimson and classic serif for schools and institutions."
+      prism:
+        name: "Prism"
+        description: "Vivid plum with a modern sans for creative campaigns."
+      exhibit:
+        name: "Exhibit"
+        description: "Expressive grotesk and sharp ink for portfolios and venues."
+      pulse:
+        name: "Pulse"
+        description: "Dark, loud, and crimson for sports, music, and media."
+      stage:
+        name: "Stage"
+        description: "Dark plum spotlight for conferences and performances."
+      nightshift:
+        name: "Nightshift"
+        description: "Dark mode with forest-green energy for fitness and tech."
+      canopy:
+        name: "Canopy"
+        description: "Deep forest dark mode with display serifs for the outdoors."
+    fonts:
+      inter: "Inter"
+      newsreader: "Newsreader"
+      fraunces: "Fraunces"
+      playfair: "Playfair Display"
+      source_sans: "Source Sans 3"
+      space_grotesk: "Space Grotesk"
+      dm_sans: "DM Sans"
+      outfit: "Outfit"
+      cormorant: "Cormorant Garamond"
+      jost: "Jost"
+      instrument_serif: "Instrument Serif"
+      instrument_sans: "Instrument Sans"
+      plex_sans: "IBM Plex Sans"
+      plex_mono: "IBM Plex Mono"
+      bricolage: "Bricolage Grotesque"

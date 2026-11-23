@@ -1,0 +1,284 @@
+<%= form_with model: template, scope: :email_template, url: url, method: method, local: true,
+      id: FORM_ID,
+      class: "relative" do |f| %>
+  <% if template.errors.any? %>
+    <div class="mb-6">
+      <%= render "shared/form_errors", resource: template %>
+    </div>
+  <% end %>
+
+  <%# The preview controller wraps the whole workspace: compose-side inputs
+      wire debounced reloads through ancestor action dispatch, and the rail
+      holds the render targets. %>
+  <div class="grid grid-cols-1 gap-6 items-start xl:grid-cols-3"
+       data-controller="remote-template-preview"
+       data-remote-template-preview-url-value="<%= preview_url %>"
+       data-remote-template-preview-test-send-url-value="<%= test_send_url %>"
+       data-remote-template-preview-loading-label-value="<%= t("admin_modules.emails.templates.form.preview.loading") %>"
+       data-remote-template-preview-sending-label-value="<%= t("admin_modules.emails.templates.form.preview.sending") %>"
+       data-remote-template-preview-empty-subject-label-value="<%= t("admin_modules.emails.templates.form.preview.empty_subject") %>"
+       data-remote-template-preview-empty-text-label-value="<%= t("admin_modules.emails.templates.form.preview.empty_text") %>"
+       data-remote-template-preview-error-loading-label-value="<%= t("admin_modules.emails.templates.form.preview.error_loading") %>"
+       data-remote-template-preview-email-required-label-value="<%= t("admin_modules.emails.templates.form.preview.email_required") %>"
+       data-remote-template-preview-send-failed-label-value="<%= t("admin_modules.emails.templates.form.preview.send_failed") %>"
+       data-remote-template-preview-network-error-label-value="<%= t("admin_modules.emails.templates.form.preview.network_error") %>"
+       data-remote-template-preview-popup-blocked-label-value="<%= t("admin_modules.emails.templates.form.preview.popup_blocked") %>">
+
+    <%# ——— Compose column ——— %>
+    <div class="min-w-0 space-y-6 xl:col-span-2">
+
+      <%# Template details %>
+      <section class="card" aria-labelledby="template-details-heading">
+        <header class="card-header">
+          <h2 id="template-details-heading" class="section-header mb-0"><%= t("admin_modules.emails.templates.form.details_title") %></h2>
+        </header>
+        <div class="p-6 space-y-5">
+          <div>
+            <%= f.label :name, t("common.labels.name"), class: "form-label form-label-required" %>
+            <%= f.text_field :name, placeholder: t("admin_modules.emails.templates.form.name_placeholder"),
+                  required: true,
+                  class: "input-field mt-1.5",
+                  data: { action: "input->remote-template-preview#debouncedLoadPreview" } %>
+          </div>
+          <div>
+            <%= f.label :subject, t("common.labels.subject"), class: "form-label form-label-required" %>
+            <div class="relative"
+                 data-controller="token-autocomplete"
+                 data-token-autocomplete-tokens-value="<%= token_autocomplete_items.to_json %>"
+                 data-token-autocomplete-no-matches-value="<%= t("admin_modules.emails.templates.form.token_autocomplete_no_matches") %>">
+              <%= f.text_field :subject,
+                    value: labeled(template.subject),
+                    placeholder: t("admin_modules.emails.templates.form.subject_placeholder"),
+                    required: true,
+                    class: "input-field mt-1.5",
+                    data: {
+                      action: "input->remote-template-preview#debouncedLoadPreview",
+                      token_autocomplete_target: "input"
+                    } %>
+            </div>
+            <p class="mt-1.5 text-caption"><%= t("admin_modules.emails.templates.form.subject_token_hint") %></p>
+          </div>
+
+          <% unless template.persisted? %>
+            <div class="flex items-start gap-3 rounded-lg border border-border-subtle bg-canvas-elevated px-4 py-3">
+              <div class="flex items-center h-5">
+                <%= f.check_box :status, { class: "h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer" }, "active", "draft" %>
+              </div>
+              <div class="text-sm">
+                <%= f.label :status, t("admin_modules.emails.templates.form.activate_immediately"), class: "font-medium text-text-primary cursor-pointer" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </section>
+
+      <%# Email body %>
+      <section class="card" aria-labelledby="template-body-heading">
+        <header class="card-header">
+          <h2 id="template-body-heading" class="section-header mb-0"><%= t("admin_modules.emails.templates.form.body_title") %></h2>
+        </header>
+        <div class="p-6 space-y-4"
+             data-controller="template-editor-mode"
+             data-template-editor-mode-initial-value="<%= template.editor_type %>">
+          <div data-controller="template-token-picker"
+               data-action="change->template-token-picker#insert"
+               class="space-y-4">
+
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <div class="inline-flex items-center gap-0.5 rounded-lg bg-surface-active p-0.5"
+                     role="group"
+                     aria-label="<%= t("admin_modules.emails.templates.form.editor_label") %>">
+                  <% Emails::Template::EDITOR_TYPES.each do |type| %>
+                    <button type="button"
+                            data-template-editor-mode-target="modeButton"
+                            data-mode="<%= type %>"
+                            data-action="template-editor-mode#choose"
+                            aria-pressed="<%= template.editor_type == type %>"
+                            class="<%= mode_button_classes(type) %>">
+                      <%= t("admin_modules.emails.templates.form.editor_types.#{type}") %>
+                    </button>
+                  <% end %>
+                </div>
+                <%= f.select :editor_type, Emails::Template::EDITOR_TYPES.map { |type| [t("admin_modules.emails.templates.form.editor_types.#{type}"), type] }, {},
+                      required: true,
+                      class: "sr-only",
+                      tabindex: "-1",
+                      aria: { hidden: "true" },
+                      data: { action: "change->template-editor-mode#switch change->remote-template-preview#loadPreview", template_editor_mode_target: "select" } %>
+              </div>
+              <div class="w-full sm:w-72">
+                <label class="sr-only" for="email_template_token_insert"><%= t("admin_modules.emails.templates.form.insert_token") %></label>
+                <%= render SearchableSelectComponent.new(
+                      name: "token_insert",
+                      selected_value: nil,
+                      grouped_options: token_groups,
+                      placeholder: t("admin_modules.emails.templates.form.token_search_placeholder"),
+                      field_id: "email_template_token_insert",
+                      expand_all: true
+                    ) %>
+              </div>
+            </div>
+
+            <div data-template-editor-mode-target="richContainer"
+                 class="<%= rich_mode? ? "" : "hidden" %> space-y-2">
+              <label class="sr-only" for="email_template_body"><%= t("admin_modules.emails.templates.form.rich_text_body") %></label>
+              <div class="prose-editor-wrapper" data-action="lexxy:change->remote-template-preview#debouncedLoadPreview">
+                <%# Rendered via `helpers`: Lexxy's tag helper is prepended to
+                    ActionText::TagHelper on the ActionView::Base view context,
+                    which component instances do not include (f.rich_text_area
+                    would hit a missing-method on the component). The editor is
+                    a form-associated custom element, so submitting through the
+                    surrounding form still carries email_template[body].
+                    The `lexxy-content` class on the host is REQUIRED: Lexxy
+                    scopes all content styling (tables, headings, lists,
+                    quotes, code, highlights) under `:where(.lexxy-content)` —
+                    without it block content renders unstyled (0-width tables). %>
+                <%= helpers.rich_text_area "email_template", "body",
+                      value: rich_body_value,
+                      aria: { label: t("admin_modules.emails.templates.form.rich_text_body") },
+                      class: "lexxy-content block w-full min-h-[340px] rounded-lg border border-border p-4 bg-white" %>
+              </div>
+            </div>
+
+            <div data-template-editor-mode-target="codeContainer"
+                 class="<%= rich_mode? ? "hidden" : "" %> space-y-2">
+              <label class="sr-only" for="email_template_body_html"><%= t("admin_modules.emails.templates.form.html_code") %></label>
+              <%= f.text_area :body_html,
+                    rows: 16,
+                    value: labeled(template.body_html),
+                    required: !rich_mode?,
+                    aria: { label: t("admin_modules.emails.templates.form.html_code") },
+                    class: "input-field text-mono text-sm w-full p-4 rounded-lg bg-gray-50 focus:bg-white border-border",
+                    data: {
+                      template_editor_mode_target: "codeInput",
+                      action: "input->remote-template-preview#debouncedLoadPreview"
+                    } %>
+            </div>
+          </div>
+
+          <details class="pt-2 border-t border-border-subtle group">
+            <summary class="cursor-pointer list-none flex items-center gap-2 text-sm font-semibold text-text-muted hover:text-text py-2">
+              <span class="text-text-muted group-open:rotate-90 transition-transform inline-block">▸</span>
+              <%= t("admin_modules.emails.templates.form.plain_text_fallback") %>
+            </summary>
+            <div class="pt-2 pb-1 space-y-2">
+              <label class="sr-only" for="email_template_body_text"><%= t("admin_modules.emails.templates.form.plain_text_fallback") %></label>
+              <%= f.text_area :body_text, rows: 4,
+                    value: labeled(template.body_text),
+                    placeholder: t("admin_modules.emails.templates.form.plain_text_placeholder"),
+                    class: "input-field text-mono text-sm w-full p-4 rounded-lg",
+                    data: { action: "input->remote-template-preview#debouncedLoadPreview" } %>
+              <p class="text-caption"><%= t("admin_modules.emails.templates.form.plain_text_hint_html") %></p>
+            </div>
+          </details>
+        </div>
+      </section>
+    </div>
+
+    <%# ——— Preview rail ——— %>
+    <div id="<%= PREVIEW_ANCHOR %>"
+         class="min-w-0 space-y-6 scroll-mt-6 xl:sticky xl:top-6">
+
+      <section class="card" aria-labelledby="template-preview-heading">
+        <header class="card-header flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 id="template-preview-heading" class="section-header mb-0"><%= t("email.preview.title") %></h2>
+          </div>
+          <label class="inline-flex cursor-pointer select-none items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1.5 text-xs text-text-secondary hover:bg-surface-hover">
+            <input type="checkbox"
+                   checked
+                   data-remote-template-preview-target="autoRefresh"
+                   class="h-3.5 w-3.5 cursor-pointer rounded border-gray-300 text-primary focus:ring-primary" />
+            <span><%= t("admin_modules.emails.templates.form.workspace.auto_refresh") %></span>
+          </label>
+        </header>
+
+        <div class="space-y-3 bg-canvas-elevated p-4">
+          <div class="flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-sm">
+            <span class="shrink-0 font-medium text-text-muted"><%= t("common.labels.subject") %></span>
+            <div data-remote-template-preview-target="subjectPane" class="truncate font-medium text-text-primary">
+              <em class="font-normal text-text-muted"><%= t("admin_modules.emails.templates.form.preview_empty_placeholder") %></em>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1" role="group" aria-label="<%= t("email.preview.title") %>">
+            <button type="button"
+                    data-action="click->remote-template-preview#showTab"
+                    data-tab="html"
+                    data-remote-template-preview-target="tabHtml"
+                    class="border-b-2 border-primary px-3 py-1.5 text-xs font-semibold text-primary">
+              <%= t("email.preview.tab_html") %>
+            </button>
+            <button type="button"
+                    data-action="click->remote-template-preview#showTab"
+                    data-tab="text"
+                    data-remote-template-preview-target="tabText"
+                    class="border-b-2 border-transparent px-3 py-1.5 text-xs font-medium text-text-muted hover:border-border hover:text-text">
+              <%= t("email.preview.tab_text") %>
+            </button>
+          </div>
+
+          <div class="overflow-hidden rounded-lg border border-border bg-surface">
+            <div data-remote-template-preview-target="htmlPane">
+              <iframe data-remote-template-preview-target="iframe"
+                      sandbox=""
+                      title="<%= t("email.preview.title") %>"
+                      class="min-h-[340px] w-full bg-white"></iframe>
+            </div>
+            <div data-remote-template-preview-target="textPane"
+                 class="text-mono hidden max-h-[480px] min-h-[340px] overflow-y-auto whitespace-pre-wrap p-3 text-xs"></div>
+          </div>
+        </div>
+
+        <footer class="flex items-center justify-end gap-2 border-t border-border-subtle px-4 py-3">
+          <button type="button"
+                  data-action="click->remote-template-preview#openFullPagePreview"
+                  class="btn btn-ghost px-3 py-1.5 text-xs inline-flex items-center gap-1.5">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+            <%= t("email.preview.new_tab") %>
+          </button>
+          <button type="button"
+                  class="btn btn-secondary px-3 py-1.5 text-xs"
+                  data-remote-template-preview-target="button"
+                  data-action="click->remote-template-preview#loadPreview">
+            <%= t("email.preview.load_button") %>
+          </button>
+        </footer>
+      </section>
+
+      <section class="card" aria-labelledby="template-test-heading">
+        <header class="card-header">
+          <h2 id="template-test-heading" class="section-header mb-0"><%= t("admin_modules.emails.templates.edit.send_test_label") %></h2>
+        </header>
+        <div class="space-y-3 p-4">
+          <div class="flex flex-col gap-2 sm:flex-row">
+            <label class="sr-only" for="dry_run_to"><%= t("admin_modules.emails.templates.edit.send_test_label") %></label>
+            <%= email_field_tag :to, test_recipient,
+                  id: "dry_run_to",
+                  placeholder: t("admin_modules.emails.templates.edit.send_test_placeholder"),
+                  data: { remote_template_preview_target: "testEmailInput" },
+                  class: "input-field flex-grow" %>
+            <button type="button"
+                    data-remote-template-preview-target="testSendButton"
+                    data-action="click->remote-template-preview#sendTestEmail"
+                    class="btn btn-primary shrink-0 whitespace-nowrap">
+              <%= t("admin_modules.emails.templates.edit.send_test_submit") %>
+            </button>
+          </div>
+          <div data-remote-template-preview-target="testStatus" class="hidden"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="form-actions mt-6">
+    <%= link_to t("common.actions.cancel"), admin_modules_emails_templates_path(customer_id), class: "btn btn-secondary" %>
+    <%= f.submit(
+          template.persisted? ? t("admin_modules.emails.templates.form.update_submit") : t("admin_modules.emails.templates.form.create_submit"),
+          class: "btn btn-primary font-semibold"
+        ) %>
+  </div>
+<% end %>

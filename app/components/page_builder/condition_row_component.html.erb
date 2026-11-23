@@ -1,0 +1,108 @@
+<%# app/components/page_builder/condition_row_component.html.erb %>
+<div class="relative flex items-center gap-1.5 py-1.5"
+     data-condition-item="<%= "#{group_index}-#{item_index}" %>">
+
+  <%# Field chip %>
+  <select class="min-w-0 flex-1 max-w-[160px] appearance-none px-2 py-1 text-xs font-medium bg-white border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-400 text-gray-700 truncate cursor-pointer"
+          data-condition-field="<%= "#{group_index}-#{item_index}" %>"
+          data-action="change->rule-builder#onConditionFieldChange">
+    <option value=""><%= t("comp_page_builder.condition_row.select_field") %></option>
+    <% fields.each do |f| %>
+      <option value="<%= f["id"] %>"
+              data-field-type="<%= f["property_type"] %>"
+              <%= "selected" if f["id"] == item["field_id"] %>>
+        <%= f["label"] || f["id"] %>
+      </option>
+    <% end %>
+  </select>
+
+  <%# Operator chip %>
+  <select class="appearance-none px-2 py-1 text-xs bg-indigo-50 border border-indigo-200 rounded-md text-indigo-700 cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          data-condition-operator="<%= "#{group_index}-#{item_index}" %>"
+          data-action="change->rule-builder#onConditionOperatorChange">
+    <% operators_for_type.each do |op| %>
+      <option value="<%= op[:value] %>" <%= "selected" if op[:value] == current_operator %>><%= op[:label] %></option>
+    <% end %>
+  </select>
+
+  <%# Contextual value editor %>
+  <% case value_editor_kind %>
+  <% when :none %>
+    <%# No free-value input for is_empty / is_not_empty / is_selected / is_not_selected %>
+
+  <% when :select %>
+    <select class="flex-1 min-w-[100px] appearance-none px-2 py-1 text-xs bg-white border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-700 cursor-pointer"
+            data-condition-value="<%= "#{group_index}-#{item_index}" %>">
+      <option value=""><%= t("comp_page_builder.condition_row.select_placeholder") %></option>
+      <% field_options.each do |opt| %>
+        <option value="<%= opt["value"] %>" <%= "selected" if opt["value"].to_s == current_value %>>
+          <%= opt["label"] || opt["value"] %>
+        </option>
+      <% end %>
+    </select>
+
+  <% when :boolean %>
+    <select class="appearance-none px-2 py-1 text-xs bg-white border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 text-gray-700 cursor-pointer w-20"
+            data-condition-value="<%= "#{group_index}-#{item_index}" %>">
+      <option value="true"  <%= "selected" if current_value == "true"  %>><%= t("comp_page_builder.condition_row.true") %></option>
+      <option value="false" <%= "selected" if current_value == "false" %>><%= t("comp_page_builder.condition_row.false") %></option>
+    </select>
+
+  <% when :number %>
+    <input type="number"
+           class="flex-1 min-w-[72px] px-2 py-1 text-xs border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white"
+           placeholder="<%= t("comp_page_builder.condition_row.value") %>"
+           value="<%= current_value %>"
+           data-condition-value="<%= "#{group_index}-#{item_index}" %>">
+
+  <% when :number_range %>
+    <input type="number"
+           class="w-16 px-2 py-1 text-xs border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white"
+           placeholder="<%= t("comp_page_builder.condition_row.min") %>"
+           value="<%= item["value"].is_a?(Array) ? item["value"][0] : current_value %>"
+           data-condition-value="<%= "#{group_index}-#{item_index}" %>">
+    <span class="text-xs text-gray-400">–</span>
+    <input type="number"
+           class="w-16 px-2 py-1 text-xs border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white"
+           placeholder="<%= t("comp_page_builder.condition_row.max") %>"
+           value="<%= item["value"].is_a?(Array) ? item["value"][1] : "" %>"
+           data-condition-value-max="<%= "#{group_index}-#{item_index}" %>">
+
+  <% when :date %>
+    <input type="date"
+           class="flex-1 px-2 py-1 text-xs border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white"
+           value="<%= current_value %>"
+           data-condition-value="<%= "#{group_index}-#{item_index}" %>">
+
+  <% when :date_range %>
+    <input type="date"
+           class="px-2 py-1 text-xs border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white"
+           value="<%= item["value"].is_a?(Array) ? item["value"][0] : current_value %>"
+           data-condition-value="<%= "#{group_index}-#{item_index}" %>">
+    <span class="text-xs text-gray-400">–</span>
+    <input type="date"
+           class="px-2 py-1 text-xs border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white"
+           value="<%= item["value"].is_a?(Array) ? item["value"][1] : "" %>"
+           data-condition-value-max="<%= "#{group_index}-#{item_index}" %>">
+
+  <% else %>
+    <%# :text (default) %>
+    <input type="text"
+           class="flex-1 min-w-[80px] px-2 py-1 text-xs border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white"
+           placeholder="<%= current_operator == 'matches_regex' ? t("comp_page_builder.condition_row.regex_placeholder") : t("comp_page_builder.condition_row.value") %>"
+           value="<%= current_value %>"
+           data-condition-value="<%= "#{group_index}-#{item_index}" %>">
+  <% end %>
+
+  <%# Remove button %>
+  <button type="button"
+          class="flex-shrink-0 p-1 text-gray-300 hover:text-red-500 rounded transition-colors"
+          data-action="click->rule-builder#removeConditionItem"
+          data-group-index="<%= group_index %>"
+          data-item-index="<%= item_index %>"
+          aria-label="<%= t("comp_page_builder.condition_row.remove_aria") %>">
+    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+</div>

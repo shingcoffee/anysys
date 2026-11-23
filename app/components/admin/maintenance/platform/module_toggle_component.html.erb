@@ -1,0 +1,26 @@
+<%# app/components/admin/maintenance/platform/module_toggle_component.html.erb %>
+<div class="<%= wrapper_classes %>">
+  <% if disabled? %>
+    <button type="button" disabled class="<%= track_classes %>" role="switch" aria-checked="<%= on? %>" <%== tag.attributes(control_html_attributes) %>>
+      <span class="<%= knob_classes %>"></span>
+    </button>
+  <% else %>
+    <%= form_with url: url, method: http_method, local: true, class: "inline" do %>
+      <% if field.present? %>
+        <input type="hidden" name="<%= field %>" value="<%= next_value %>">
+      <% end %>
+      <% extra_params.each do |key, value| %>
+        <input type="hidden" name="<%= key %>" value="<%= value %>">
+      <% end %>
+      <button type="submit"
+              <% if confirm.present? %>data-turbo-confirm="<%= confirm %>"<% end %>
+              <%== tag.attributes(control_html_attributes) %>
+              class="<%= track_classes %>" role="switch" aria-checked="<%= on? %>">
+        <span class="<%= knob_classes %>"></span>
+      </button>
+    <% end %>
+  <% end %>
+  <% if show_label? %>
+    <span class="text-body-sm text-text-primary"><%= label %></span>
+  <% end %>
+</div>

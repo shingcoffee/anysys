@@ -1,0 +1,43 @@
+<% writable = @entity.active? && !@entity.category_bridge? %>
+<% header_starts = writable ? Array(@journey_starts&.unsectioned(@associations.map(&:association))) : [] %>
+<% actions = [{ label: t("common.actions.delete"),
+                path: admin_entity_entry_path(current_customer.id, @entity, @entry),
+                variant: :secondary,
+                icon: :trash,
+                class: "min-h-11 flex-1 text-danger hover:text-danger sm:min-h-9 sm:flex-none",
+                data: { turbo_method: :delete, turbo_confirm: t("comp_admin.entries_table.delete_entry_confirm") } }] %>
+<% if writable %>
+  <% header_starts.each do |start| %>
+    <% actions << { label: start.journey.name,
+                    path: admin_entity_entry_journey_path(current_customer.id, @entity, @entry, start.journey.key),
+                    method: :post,
+                    variant: :secondary,
+                    icon: :plus,
+                    class: "min-h-11 w-full sm:min-h-9 sm:w-auto",
+                    data: { journey_start: start.journey.key } } %>
+  <% end %>
+  <% actions << { label: t("common.actions.edit"),
+                  path: edit_admin_entity_entry_path(current_customer.id, @entity, @entry),
+                  variant: :primary,
+                  icon: :edit,
+                  class: "min-h-11 flex-1 sm:min-h-9 sm:flex-none" } %>
+<% end %>
+
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("admin_misc.domains.breadcrumb"), path: admin_domains_path(current_customer.id) },
+    { label: @entity.display_label, path: admin_entity_path(current_customer.id, @entity) },
+    { label: t("admin_misc.entities.entry_detail.title", id: @entry.id) }
+  ],
+  title: t("admin_misc.entities.entry_detail.title", id: @entry.id),
+  description: @entity.display_label,
+  icon_path: attribute_group_icon_path(@entity.icon),
+  icon_class: "ring-1 ring-inset #{attribute_group_color_classes(EntityGlyph.color(@entity), variant: :soft)}",
+  actions: actions,
+  wrap_title: true,
+  wrap_actions: header_starts.any?
+) do %>
+  <%= render Admin::Entities::EntryDetailComponent.new(entity: @entity, entry: @entry, display: @display,
+                                                       associations: @associations, writable: writable,
+                                                       reveal_section: @reveal_section, journey_starts: @journey_starts) %>
+<% end %>

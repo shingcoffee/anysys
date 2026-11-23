@@ -1,0 +1,122 @@
+<%# Sibling chrome of the plan panel. Open markup already carries the closed
+    note and hideable footer/inputs so the client can settle the card in place. %>
+<%= tag.section(
+      class: "w-full max-w-[min(92%,42rem)] overflow-hidden rounded-xl bg-canvas ring-1 ring-border-subtle",
+      aria: { label: t("ai_assistant.assistant.questions.section") },
+      data: card_data
+    ) do %>
+  <header class="flex flex-col gap-0.5 border-b border-border-subtle px-3 py-2">
+    <p class="text-xs font-medium text-text-secondary"><%= t("ai_assistant.assistant.questions.title") %></p>
+    <% if open? %>
+      <p class="text-caption text-text-muted" data-questions-subtitle><%= t("ai_assistant.assistant.questions.subtitle") %></p>
+      <p class="hidden text-caption text-text-muted" data-questions-answered><%= t("ai_assistant.assistant.questions.answered") %></p>
+    <% else %>
+      <p class="text-caption text-text-muted" data-questions-answered><%= t("ai_assistant.assistant.questions.answered") %></p>
+    <% end %>
+  </header>
+
+  <div class="flex flex-col gap-3 px-3 py-2.5">
+    <% usable_questions.each_with_index do |question, index| %>
+      <% if open? %>
+        <%= tag.fieldset(
+              class: "flex flex-col gap-3",
+              data: {
+                question_type: question["type"],
+                question_prompt: question["prompt"],
+                questions_fieldset: ""
+              }
+            ) do %>
+          <legend class="mb-0">
+            <span class="flex items-start gap-2">
+              <% if show_numbers? %>
+                <span class="<%= NUMBER_BADGE %>" aria-hidden="true"><%= number_for(question, index) %></span>
+              <% end %>
+              <span id="<%= legend_id(question) %>" class="text-xs font-semibold text-text-primary break-words"><%= question["prompt"] %></span>
+            </span>
+          </legend>
+
+          <% if choice?(question) %>
+            <div class="flex flex-wrap gap-2">
+              <% question["options"].each do |option| %>
+                <label class="max-w-full">
+                  <% if question["type"] == "single" %>
+                    <input type="radio"
+                           name="<%= field_name(question) %>"
+                           value="<%= option %>"
+                           class="peer sr-only"
+                           <%= "checked" if option_selected?(question, option) %>
+                           data-action="change->ai-assistant-questions#pickOption">
+                  <% else %>
+                    <input type="checkbox"
+                           name="<%= field_name(question) %>[]"
+                           value="<%= option %>"
+                           class="peer sr-only"
+                           <%= "checked" if option_selected?(question, option) %>
+                           data-action="change->ai-assistant-questions#pickOption">
+                  <% end %>
+                  <span class="<%= CHIP_OPEN %>"><%= option %></span>
+                </label>
+              <% end %>
+            </div>
+            <div class="flex flex-col gap-1.5" data-questions-input>
+              <label class="text-caption text-text-muted" for="<%= other_id(question) %>"><%= t("ai_assistant.assistant.questions.other") %></label>
+              <input id="<%= other_id(question) %>"
+                     type="text"
+                     class="input-field w-full min-h-11 text-sm"
+                     data-question-other
+                     data-action="input->ai-assistant-questions#typeOther keydown->ai-assistant-questions#preventSubmit">
+            </div>
+          <% else %>
+            <input type="text"
+                   class="input-field w-full min-h-11 text-sm"
+                   value="<%= text_default(question) %>"
+                   placeholder="<%= t("ai_assistant.assistant.questions.text_placeholder") %>"
+                   aria-labelledby="<%= legend_id(question) %>"
+                   data-question-text
+                   data-questions-input
+                   data-action="keydown->ai-assistant-questions#preventSubmit">
+          <% end %>
+        <% end %>
+      <% else %>
+        <div class="flex flex-col gap-1.5">
+          <p class="flex items-start gap-2">
+            <% if show_numbers? %>
+              <span class="<%= NUMBER_BADGE %>" aria-hidden="true"><%= number_for(question, index) %></span>
+            <% end %>
+            <span class="text-xs font-semibold text-text-primary break-words"><%= question["prompt"] %></span>
+          </p>
+          <% if choice?(question) && question["options"].any? %>
+            <div class="flex flex-wrap gap-2">
+              <% question["options"].each do |option| %>
+                <span class="<%= CHIP_CLOSED %>"><%= option %></span>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if open? %>
+    <footer class="flex flex-col gap-2 border-t border-border-subtle px-3 py-2.5 sm:flex-row sm:items-center" data-questions-footer>
+      <%= render ButtonComponent.new(
+            variant: :primary,
+            size: :sm,
+            type: :button,
+            class: "w-full sm:w-auto pointer-coarse:min-h-11",
+            data: { action: "click->ai-assistant-questions#send", "questions-send": "" }
+          ) do %>
+        <span data-questions-send-label><%= t("ai_assistant.assistant.questions.send") %></span>
+      <% end %>
+      <%= render ButtonComponent.new(
+            variant: :secondary,
+            size: :sm,
+            type: :button,
+            class: "w-full sm:w-auto pointer-coarse:min-h-11",
+            data: { action: "click->ai-assistant-questions#skip", "questions-skip": "" }
+          ) do %>
+        <%= t("ai_assistant.assistant.questions.skip") %>
+      <% end %>
+    </footer>
+  <% end %>
+<% end %>

@@ -1,0 +1,72 @@
+<%= tag.div id: panel_id, hidden: true, role: "group",
+      aria: { label: t("website.admin.pages.style.trigger", target: label) },
+      data: { style_panel: true },
+      class: "mt-1 flex min-w-0 flex-col gap-3 rounded-lg border border-border-subtle bg-canvas-elevated p-3" do %>
+  <div class="-mt-1 flex min-w-0 items-center gap-1">
+    <p class="min-w-0 flex-1 truncate text-xs font-medium text-text-secondary">
+      <%= t("website.admin.pages.style.heading") %><span class="text-text-muted"> · <%= label %></span>
+    </p>
+    <button type="button"
+            class="inline-flex min-h-7 shrink-0 items-center rounded-md px-2 text-xs font-medium text-text-tertiary transition-colors hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent pointer-coarse:min-h-10"
+            data-action="click->website-builder#resetStyles:prevent">
+      <%= t("website.admin.pages.style.reset") %>
+    </button>
+    <button type="button"
+            class="-mr-1 inline-flex size-7 shrink-0 items-center justify-center rounded-md text-text-tertiary transition-colors hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent pointer-coarse:size-10"
+            data-action="click->website-builder#toggleStyle"
+            aria-controls="<%= panel_id %>"
+            aria-label="<%= t("common.actions.close") %>">
+      <svg class="size-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"/></svg>
+    </button>
+  </div>
+  <% if content? %>
+    <div class="flex min-w-0 flex-col gap-4 [&_.form-label]:text-xs [&_.form-label]:font-medium [&_.form-label]:text-text-secondary"><%= content %></div>
+  <% end %>
+  <%= content_tag :div, class: grouped? ? "flex min-w-0 flex-col divide-y divide-border-subtle overflow-hidden rounded-md border border-border-subtle bg-surface" : "contents" do %>
+    <% targets.each do |target| %>
+      <%= content_tag grouped? ? :details : :div, class: grouped? ? "group/style min-w-0" : "contents",
+            data: { style_target: target[:key], style_kind: target[:kind] } do %>
+        <% if grouped? %>
+          <summary class="flex min-h-9 cursor-pointer list-none items-center gap-2 px-3 text-sm text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent pointer-coarse:min-h-11 [&::-webkit-details-marker]:hidden">
+            <svg class="size-3.5 shrink-0 text-text-muted transition-transform group-open/style:rotate-90" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 0 1 .02-1.06L11.168 10 7.23 6.29a.75.75 0 1 1 1.04-1.08l4.5 4.25a.75.75 0 0 1 0 1.08l-4.5 4.25a.75.75 0 0 1-1.06-.02Z" clip-rule="evenodd"/></svg>
+            <span class="min-w-0 flex-1 truncate"><%= target_label(target) %></span>
+            <span class="size-1.5 shrink-0 rounded-full bg-accent<%= " hidden" unless edited_target?(target) %>" data-style-dot>
+              <span class="<%= visually_hidden_class %>"><%= t("website.admin.pages.style.edited") %></span>
+            </span>
+          </summary>
+        <% end %>
+        <div class="flex min-w-0 flex-col gap-4<%= " border-t border-border-subtle bg-canvas-elevated px-3 py-3.5" if grouped? %>">
+          <% attributes_for(target).each do |attribute| %>
+            <% case control_kind(attribute) %>
+            <% when :color %>
+              <%= render color_field(target, attribute) %>
+            <% when :segmented %>
+              <fieldset class="min-w-0" data-style-field="<%= attribute %>">
+                <legend class="mb-2 text-xs font-medium text-text-secondary"><%= attribute_label(attribute) %></legend>
+                <div class="inline-flex max-w-full flex-wrap gap-0.5 rounded-md bg-canvas p-0.5 ring-1 ring-border-subtle">
+                  <% ["", *segments(attribute)].each do |option| %>
+                    <span class="relative">
+                      <%= segment_radio(target, attribute, option) %>
+                      <label for="<%= segment_id(target, attribute, option) %>" class="<%= Websites::Admin::StylePanelComponent::SEGMENT_CLASS %>">
+                        <%= option.present? ? segment_label(attribute, option) : t("website.admin.pages.style.default") %>
+                      </label>
+                    </span>
+                  <% end %>
+                </div>
+              </fieldset>
+            <% else %>
+              <div class="flex min-w-0 flex-col gap-1.5" data-style-field="<%= attribute %>">
+                <label for="<%= control_name(target, attribute) %>" class="text-xs font-medium text-text-secondary"><%= attribute_label(attribute) %></label>
+                <%= select_tag control_name(target, attribute),
+                      options_for_select([[t("website.admin.pages.style.default"), ""], *select_options(attribute)], value(target, attribute)),
+                      id: control_name(target, attribute),
+                      class: "input-field h-9",
+                      data: { style_prop: attribute, action: "change->website-builder#markDirty" } %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

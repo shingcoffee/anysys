@@ -1,0 +1,55 @@
+<% profile = Platform::Customers::ProfileComponent.new(customer: @customer) %>
+<% actions = if profile.in_trash?
+  [
+    {
+      label: t("maint_platform.customers.trash.restore"),
+      path: restoration_admin_maintenance_platform_customer_path(current_customer_id, @customer),
+      method: :patch,
+      variant: :primary,
+      icon: :refresh,
+      data: {
+        turbo_frame: "_top",
+        turbo_confirm: t("maint_platform.customers.trash.restore_confirm", name: @customer.name)
+      },
+      class: "min-h-11 w-full whitespace-normal sm:w-auto"
+    }
+  ]
+else
+  active_actions = [
+    {
+      label: t("maint_platform.customers.show.edit_profile"),
+      path: edit_admin_maintenance_platform_customer_path(current_customer_id, @customer),
+      variant: :primary,
+      icon: :edit,
+      class: "min-h-11 w-full whitespace-normal sm:w-auto"
+    }
+  ]
+  if @customer.id != Authentication::User::PLATFORM_CUSTOMER_ID
+    active_actions << {
+      label: t("maint_platform.customers.show.move_to_trash"),
+      path: admin_maintenance_platform_customer_path(current_customer_id, @customer),
+      method: :delete,
+      variant: :danger,
+      icon: :trash,
+      data: { turbo_confirm: t("maint_platform.customers.show.delete_confirm", name: @customer.name) },
+      class: "min-h-11 w-full whitespace-normal sm:w-auto"
+    }
+  end
+  active_actions
+end %>
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("maint_platform.customers.breadcrumb.maintenance"), path: admin_maintenance_path(current_customer_id) },
+    { label: t("maint_platform.customers.breadcrumb.customers"), path: admin_maintenance_platform_customers_path(current_customer_id) },
+    { label: @customer.name }
+  ],
+  title: @customer.name,
+  description: t("maint_platform.customers.show.description"),
+  wrap_title: true,
+  icon_path: Platform::Customers::ProfileComponent::HEADER_ICON,
+  icon_class: "bg-accent-subtle text-accent",
+  badges: profile.header_badges,
+  actions: actions
+) do %>
+  <%= render profile %>
+<% end %>

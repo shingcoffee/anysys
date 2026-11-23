@@ -1,0 +1,8 @@
+<%= turbo_frame_tag Admin::Pages::PublishingPanelComponent::FRAME_ID do %>
+  <%= render Admin::Pages::PublishingPanelComponent.new(
+    page: @page,
+    customer_id: current_customer.id,
+    return_to: @return_to,
+    close_path: @close_path
+  ) %>
+<% end %>

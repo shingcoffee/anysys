@@ -1,0 +1,74 @@
+<% if composer_layout? %>
+  <%= tag.div(**(show_widget? ? wrapper_attributes : { class: "w-full" })) do %>
+    <div class="flex min-w-0 flex-col">
+      <div class="min-w-0">
+        <%= content %>
+      </div>
+      <div class="flex items-center gap-2 px-2 pb-2">
+        <% if show_widget? %>
+          <div class="flex min-w-0 flex-1 items-center gap-1.5">
+            <span class="hidden size-1.5 shrink-0 animate-pulse rounded-full bg-danger" data-speech-to-text-target="liveDot" aria-hidden="true"></span>
+            <p class="min-w-0 flex-1 truncate text-caption text-text-muted" data-speech-to-text-target="status" aria-live="polite"></p>
+          </div>
+          <%= render ButtonComponent.new(
+                variant: :ghost,
+                size: :sm,
+                type: :button,
+                class: "size-9 shrink-0 !rounded-full !p-0 text-text-muted pointer-coarse:size-11",
+                "aria-label": copy(:mic_label),
+                "aria-pressed": "false",
+                data: {
+                  speech_to_text_target: "button",
+                  action: "click->speech-to-text#toggle"
+                }
+              ) do %>
+            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true" data-speech-to-text-target="micIcon">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
+            </svg>
+            <svg class="hidden size-4" viewBox="0 0 24 24" aria-hidden="true" data-speech-to-text-target="stopIcon">
+              <rect x="7" y="7" width="10" height="10" rx="1.5" fill="currentColor" />
+            </svg>
+          <% end %>
+          <div class="hidden" data-speech-to-text-target="inbox"></div>
+        <% else %>
+          <span class="min-w-0 flex-1"></span>
+        <% end %>
+        <%= trailing_actions %>
+      </div>
+    </div>
+  <% end %>
+<% elsif show_widget? %>
+  <%= tag.div(**wrapper_attributes) do %>
+    <div class="relative flex min-w-0 items-center gap-2">
+      <div class="min-w-0 flex-1 [&_input]:pr-10 [&_textarea]:pr-10">
+        <%= content %>
+      </div>
+      <%= render ButtonComponent.new(
+            variant: :ghost,
+            size: :sm,
+            type: :button,
+            class: "absolute right-1 top-1.5 size-8 !p-0 text-text-muted",
+            "aria-label": copy(:mic_label),
+            "aria-pressed": "false",
+            data: {
+              speech_to_text_target: "button",
+              action: "click->speech-to-text#toggle"
+            }
+          ) do %>
+        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true" data-speech-to-text-target="micIcon">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
+        </svg>
+        <svg class="hidden size-4" viewBox="0 0 24 24" aria-hidden="true" data-speech-to-text-target="stopIcon">
+          <rect x="7" y="7" width="10" height="10" rx="1.5" fill="currentColor" />
+        </svg>
+      <% end %>
+    </div>
+    <div class="mt-1 flex items-center gap-1.5">
+      <span class="hidden size-1.5 shrink-0 animate-pulse rounded-full bg-danger" data-speech-to-text-target="liveDot" aria-hidden="true"></span>
+      <p class="min-w-0 flex-1 truncate text-caption text-text-muted" data-speech-to-text-target="status" aria-live="polite"></p>
+    </div>
+    <div class="hidden" data-speech-to-text-target="inbox"></div>
+  <% end %>
+<% else %>
+  <%= content %>
+<% end %>

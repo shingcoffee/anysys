@@ -1,0 +1,13 @@
+en:
+  code_generator_communication:
+    notification_subject: Notification
+    incompatible_mailer_arguments: Custom mailer action must accept the configured email keyword arguments
+    invalid_recipients: At least one valid recipient email address is required
+    invalid_headers: Email headers must be valid field names and values without line breaks
+    invalid_attachments: Attachments must map filenames to file content or valid Mail attachment options
+    mailer_class_allowlist: "mailerClass must be one of: %{allowed}"
+    mailer_action_invalid: mailerAction must be a valid method name
+    attachments_shape: "attachments must be an Array of { filename, value } or Hash of filename => expr"
+    headers_shape: "headers must be an Array of { key, value } or Hash of header => value"
+    mailer_class_not_allowlisted: mailerClass not allowlisted
+    mailer_action_not_valid: mailerAction invalid

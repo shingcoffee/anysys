@@ -1,0 +1,61 @@
+<%# Dedicated author preview — tokens as {{Label}}, no sample fill. %>
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "email",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.email.entries.content"), path: admin_modules_emails_templates_path(current_customer_id) },
+        { label: t("feature_modules.email.tabs.templates"), path: admin_modules_emails_templates_path(current_customer_id) },
+        { label: @template.name, path: admin_modules_emails_template_path(current_customer_id, @template) },
+        { label: t("admin_modules.emails.templates.preview_page.title") }
+      ],
+      title: t("admin_modules.emails.templates.preview_page.title"),
+      description: @preview[:subject].presence || @template.name,
+      actions: [
+        { label: t("common.actions.edit"),
+          path: edit_admin_modules_emails_template_path(current_customer_id, @template),
+          variant: :primary, icon: :edit },
+        { label: t("admin_modules.emails.templates.preview_page.back_to_template"),
+          path: admin_modules_emails_template_path(current_customer_id, @template),
+          variant: :secondary }
+      ]
+    ) do %>
+  <div class="flex flex-col gap-6">
+    <p class="text-caption text-sm"><%= t("admin_modules.emails.templates.preview_page.hint") %></p>
+
+    <section class="card overflow-hidden">
+      <header class="px-4 py-3 border-b border-border-subtle">
+        <h2 class="section-header text-base mb-0"><%= t("common.labels.subject") %></h2>
+      </header>
+      <div class="px-4 py-3 text-body text-text-primary">
+        <%= @preview[:subject].presence || "—" %>
+      </div>
+    </section>
+
+    <section class="card overflow-hidden">
+      <header class="px-4 py-3 border-b border-border-subtle">
+        <h2 class="section-header text-base mb-0"><%= t("admin_modules.emails.templates.show.body_label") %></h2>
+      </header>
+      <div class="p-4 bg-canvas-elevated">
+        <%= render Emails::PreviewFrameComponent.new(
+              srcdoc: @preview[:body_srcdoc],
+              title: t("admin_modules.emails.templates.show.body_label"),
+              empty_message: t("admin_modules.emails.templates.show.body_empty"),
+              min_height_class: "min-h-[560px]"
+            ) %>
+      </div>
+    </section>
+
+    <section class="card overflow-hidden">
+      <header class="px-4 py-3 border-b border-border-subtle">
+        <h2 class="section-header text-base mb-0"><%= t("admin_modules.emails.templates.show.plain_text_label") %></h2>
+      </header>
+      <div class="p-4">
+        <% if @preview[:body_text].present? %>
+          <pre class="text-mono text-xs whitespace-pre-wrap text-text-secondary"><%= @preview[:body_text] %></pre>
+        <% else %>
+          <p class="text-caption text-sm"><%= t("admin_modules.emails.templates.show.plain_text_empty") %></p>
+        <% end %>
+      </div>
+    </section>
+  </div>
+<% end %>

@@ -1,0 +1,73 @@
+zh-CN:
+  website_settings:
+    description: "管理网站信息、外观和发布状态。"
+    page_defaults: "页面默认设置"
+    appearance:
+      appearance: "明暗模式"
+      accent: "强调色"
+      type: "字体风格"
+      density: "页面间距"
+      corners: "圆角风格"
+      neutral: "中性色调"
+    search:
+      heading: "搜索展示"
+      title: "搜索结果标题"
+      title_hint: "搜索结果中可点击的标题，建议不超过 30 个汉字。"
+      description: "搜索结果描述"
+      description_hint: "显示在标题下方的简短摘要，建议不超过 80 个汉字。"
+    footer:
+      introduction: "简短介绍"
+      editing_hint: "拖动或使用箭头调整栏目顺序。清空链接名称和网址即可移除链接；清空栏目标题及其所有链接即可移除栏目。修改后请点击「保存」。"
+    publishing:
+      heading: "发布设置"
+      label: "公开网站"
+      hint: "点击「保存」后生效。关闭后，访客将无法访问网站。各页面也需单独发布才能展示。"
+    starter:
+      heading: "起步模板"
+      description: "替换网站将删除全部现有页面及其内容。此操作独立于「保存」，且无法撤销。"
+      browse: "选择替换模板"
+      consequences: "替换网站后："
+      deletes_pages: "全部现有页面及其区块将被永久删除，并替换为模板中的页面。"
+      resets_appearance: "配色、字体、间距及新页面的默认布局将改为模板设置。"
+      unpublished_pages: "新页面均为未发布状态。请检查并发布后再供访客访问。"
+      unsaved_changes: "此页尚未保存的设置将丢失。"
+      replace: "替换网站"
+      replace_named: "使用「%{name}」替换网站"
+      confirm: "确定使用「%{name}」替换网站？全部现有页面及其区块将被永久删除，外观及默认页面布局将重置为此模板。新页面均为未发布状态，尚未保存的设置将丢失。此操作无法撤销。"
+      pages: "包含页面：%{pages}"
+      page: "页面"
+      not_selected: "尚未选择起步模板。"
+      unavailable: "之前选择的模板"
+      unnamed: "网站模板"
+  website:
+    admin:
+      settings:
+        identity:
+          description: "访客在页头与浏览器标签中看到的站点名称和副标题。"
+        theme:
+          description: "公开站点的配色、字体与疏密。"
+          specimen: "Aa"
+          footer: "点击「保存」后，公开页面才会套用此外观。"
+          preview:
+            kicker: "主题预览"
+            headline: "这就是你的站点外观"
+            body: "标题、正文和按钮会随你的选择即时更新。"
+            action: "开始使用"
+            brand: "Studio"
+            nav_home: "首页"
+            nav_work: "作品"
+        seo:
+          helper: "搜索引擎与社交分享预览中展示的首页信息。"
+        footer:
+          description: "每页底部的简介与链接栏目。"
+          columns_helper: "可拖动排序。空白链接不会保存。"
+        publish:
+          status_on: "已发布"
+          status_off: "未发布"
+          card_description: "未发布时，所有公开站点地址均返回 404。"
+        skeleton:
+          nav: "起步模板"
+          card_title: "起步模板"
+          current_badge: "当前"
+          replace_this: "用此模板替换站点"
+          pages_label: "页面"

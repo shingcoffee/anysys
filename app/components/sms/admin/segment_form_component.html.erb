@@ -1,0 +1,24 @@
+<%= error_summary(root: "sms_segment") %>
+<% if @errors.any? && segment.persisted? %><%= link_to ui("shared.reload_saved"), sms_path(:edit_segment, segment), class: "link" %><% end %>
+<%= form_with(**multi_action_form_options(save_path, :sms_segment)) do |f| %>
+  <%= f.hidden_field :lock_version, value: form_value(:lock_version, segment.lock_version) %>
+  <%= section(ui("segments.details")) do %>
+    <%= field(f, :name, required: true, maxlength: 200) %>
+    <%= field(f, :description, type: :textarea, maxlength: 2048) %>
+  <% end %>
+  <%= section(ui("segments.rules")) do %>
+    <p id="sms-segment-rules-help" class="text-sm text-text-secondary"><%= ui("segments.rules_help") %></p>
+    <% if rules_invalid? %>
+      <%= field(f, :segment_rules_json, type: :textarea, help: ui("segments.invalid_rules_help"), maxlength: 32768, spellcheck: false) %>
+    <% else %>
+      <%= render Emails::Audience::SegmentBuilderComponent.new(list: segment, catalog: catalog, param_name: "sms_segment[segment_rules_json]", preview: false) %>
+    <% end %>
+  <% end %>
+  <%= render Sms::Admin::AudienceSummaryComponent.new(preview: @preview) %>
+  <% if @preview %><%= render Sms::Admin::AudienceSamplesComponent.new(preview: @preview) %><% end %>
+  <div class="flex flex-col sm:flex-row gap-3">
+    <%= f.button ui("segments.save"), type: :submit, name: segment.persisted? ? "_method" : nil, value: segment.persisted? ? "patch" : nil, formaction: save_path, formmethod: "post", class: "btn btn-primary" %>
+    <%= f.button t("maint_platform.announcements.form.preview_action"), type: :submit, name: nil, value: "preview", formaction: preview_path, formmethod: "post", formnovalidate: true, class: "btn btn-secondary" %>
+    <%= link_to ui("segments.back"), sms_path(:segments), class: "btn btn-secondary" %>
+  </div>
+<% end %>

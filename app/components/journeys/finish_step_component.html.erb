@@ -1,0 +1,50 @@
+<div data-journey-builder-target="row" data-finish class="group/finish flex gap-3 sm:gap-4">
+  <div class="flex flex-col items-center" aria-hidden="true">
+    <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-text-primary text-surface">
+      <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21V4m0 0h13l-2.5 4.5L16 13H3" /></svg>
+    </span>
+  </div>
+
+  <fieldset class="min-w-0 flex-1 rounded-lg border border-border-subtle bg-canvas p-4">
+    <legend class="sr-only"><%= t("journeys.admin.step_kind.finish") %></legend>
+    <%= hidden_field_tag field(:key), key_value, id: nil, data: { step_key: true } %>
+
+    <div class="flex min-h-8 flex-col gap-0.5">
+      <p class="text-xs font-medium uppercase tracking-wide text-text-muted" aria-hidden="true"><%= t("journeys.admin.step_kind.finish") %></p>
+      <p class="text-sm text-text-secondary"><%= t("journeys.admin.finish_description") %></p>
+    </div>
+
+    <div class="mt-3 inline-flex w-full rounded-lg border border-border-subtle bg-surface-active p-0.5 sm:w-auto">
+      <% KINDS.each do |value| %>
+        <label class="inline-flex min-h-9 flex-1 cursor-pointer items-center justify-center rounded-md px-3 text-sm font-medium text-text-secondary transition-base hover:text-text-primary has-[:checked]:bg-surface has-[:checked]:text-text-primary has-[:checked]:shadow-sm has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-accent sm:flex-none">
+          <%= radio_button_tag field(:finish_kind), value, kind == value, id: nil, class: "sr-only",
+                               data: (value == "page" ? { finish_page: true } : {}) %>
+          <%= kind_label(value) %>
+        </label>
+      <% end %>
+    </div>
+
+    <div class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <label class="block min-w-0 group-has-[[data-finish-page]:checked]/finish:hidden">
+        <span class="form-label"><%= t("journeys.admin.finish_kind.record") %></span>
+        <%= select_tag field(:finish_step), options_for_select(record_choices, finish_step), id: nil, class: "input-field min-h-10 w-full",
+                       data: { step_options: true } %>
+      </label>
+      <label class="hidden min-w-0 group-has-[[data-finish-page]:checked]/finish:block">
+        <span class="form-label"><%= t("journeys.admin.step_page") %></span>
+        <%= select_tag field(:finish_page_id), grouped_options_for_select(grouped_page_options, page_id), include_blank: t("journeys.admin.step_page_none"),
+                       id: nil, class: "input-field min-h-10 w-full" %>
+      </label>
+    </div>
+
+    <div class="mt-3">
+      <label class="block min-w-0">
+        <span class="form-label"><%= t("journeys.admin.finish_message") %></span>
+        <%= text_field_tag field(:finish_message), finish_message, id: "journey-finish-message", maxlength: 300,
+                           placeholder: t("journeys.admin.finish_message_placeholder"), class: "input-field min-h-10 w-full",
+                           aria: { describedby: message_hint_id } %>
+      </label>
+      <p id="<%= message_hint_id %>" class="mt-1.5 text-xs text-text-muted"><%= t("journeys.admin.finish_message_hint") %></p>
+    </div>
+  </fieldset>
+</div>

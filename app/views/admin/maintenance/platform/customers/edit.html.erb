@@ -1,0 +1,18 @@
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("maint_platform.customers.breadcrumb.maintenance"), path: admin_maintenance_path(current_customer_id) },
+    { label: t("maint_platform.customers.breadcrumb.customers"), path: admin_maintenance_platform_customers_path(current_customer_id) },
+    { label: @customer.name, path: admin_maintenance_platform_customer_path(current_customer_id, @customer) },
+    { label: t("common.actions.edit") }
+  ],
+  title: t("maint_platform.customers.edit.title", name: @customer.name.presence || t("maint_platform.customers.edit.untitled")),
+  description: t("maint_platform.customers.edit.description"),
+  wrap_title: true,
+  icon_path: Platform::Customers::ProfileComponent::HEADER_ICON,
+  icon_class: "bg-accent-subtle text-accent",
+  width: :full
+) do %>
+  <div class="w-full max-w-3xl">
+    <%= render CustomerFormComponent.new(customer: @customer) %>
+  </div>
+<% end %>

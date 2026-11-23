@@ -1,0 +1,31 @@
+<%= render Billing::Admin::CustomerBillingPageComponent.new(
+  customer_id: current_customer_id, active: :plan, description: t("settings_billing.subscription.description"),
+  tab_counts: current_billing_tab_counts
+) do %>
+  <%= render Billing::Admin::PlanComparisonComponent.new(
+    plans:                @plans,
+    current_subscription: @subscription,
+    enabled_items:        @enabled_items,
+    currency:             @currency,
+    customer_id:          current_customer_id,
+    customer_settings:    true,
+    latest_subscription:  @latest_subscription,
+    entitlements:         @entitlements,
+    usage:                @usage,
+    pending_plan_change:  @pending_plan_change,
+    plan_review:          @plan_review,
+    coupon_benefit:       @coupon_benefit,
+    recovery:             @recovery,
+    subscription_actions: @subscription_actions,
+    can_cancel:           @can_cancel,
+    can_resume:           @can_resume,
+    default_payment_method: @payment_method,
+    form:                 @contract,
+    request_key:          @request_key,
+    coupon_code:          @coupon_code,
+    errors:               @errors,
+    one_time_payment:     @one_time_payment,
+    one_time_open:        @one_time_open,
+    one_time_error:       @one_time_error
+  ) %>
+<% end %>

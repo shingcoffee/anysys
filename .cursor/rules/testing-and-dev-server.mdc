@@ -1,0 +1,28 @@
+---
+description: RSpec/Vitest scope rules and local server restart protocol
+alwaysApply: true
+---
+
+# Testing & Dev Server
+
+## RSpec scope
+
+- Trivial/bugfix → only affected specs
+- Feature slice → touched layers (model/service/contract/component/request)
+- Cross-cutting/auth/tenant → full suite. Use parallel when applicable: `bin/rails parallel:prepare && bin/rails parallel:spec`. Fall back to `bundle exec rspec` only if parallel is unavailable. Do not parallelize a targeted/narrow spec run.
+- Never claim tests pass without real command output
+
+## JavaScript (100% Vitest)
+
+- `app/javascript/**` must stay at 100% lines + branches via `npx vitest run --coverage`
+- Browser-only geometry may use Playwright + `coverage.exclude` — no fake `v8 ignore` for testable logic
+
+## Dev server
+
+```bash
+rm -f public/assets/.manifest.json && SKIP_AUTH=1 bin/rails server -b 0.0.0.0 -p 3000
+```
+
+If digested `public/assets/` shadows importmap sources: `bin/rails assets:clobber` then `bin/rails tailwindcss:build`.
+---
+

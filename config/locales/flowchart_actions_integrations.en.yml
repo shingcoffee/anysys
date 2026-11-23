@@ -1,0 +1,125 @@
+en:
+  flowchart_actions:
+    verify_signature:
+      label: Verify Signature
+      description: Verify inbound webhook HMAC signatures
+      fields:
+        payloadVariable:
+          label: Payload
+          help: Context path of the raw request body that was signed.
+        signatureVariable:
+          label: Signature
+          help: Context path of the signature header or query value.
+        secretSource:
+          label: Secret Source
+          help: Where the HMAC secret is read from. Never a literal secret.
+          options:
+            credentials: credentials
+            env: env
+            ctx: ctx
+        keyPath:
+          label: Key Path
+          help: Credentials dot-path or environment variable name holding the secret.
+          placeholder: credentials path (a.b) or ENV name
+        secretVariable:
+          label: Secret Variable
+          help: Context path of the HMAC secret.
+        algorithm:
+          label: Algorithm
+          help: HMAC digest used to recompute the signature.
+          options:
+            sha256: sha256
+            sha512: sha512
+            sha1: sha1
+        encoding:
+          label: Encoding
+          help: How the HMAC digest is encoded before comparison.
+          options:
+            hex: hex
+            base64: base64
+        signaturePrefix:
+          label: Signature Prefix
+          help: Prefix stripped from the header before comparison (e.g. sha256=).
+          placeholder: e.g. sha256=
+        signedPayload:
+          label: Signed Payload
+          help: Whether the HMAC covers the body only, or timestamp plus body.
+          options:
+            body: body
+            timestamp_body: timestamp_body
+        timestampVariable:
+          label: Timestamp
+          help: Context path of the timestamp included in the signed payload.
+        payloadSeparator:
+          label: Payload Separator
+          help: String inserted between timestamp and body when both are signed.
+        toleranceSeconds:
+          label: Tolerance Seconds
+          help: Maximum age of the timestamp in seconds (0 disables the check).
+        onInvalid:
+          label: On Invalid
+          help: Fail the step, or store false and continue.
+          options:
+            fail: fail
+            flag: flag
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+      errors:
+        invalid_env_name: "Invalid keyPath: %{value}. Must be a valid environment variable name"
+        invalid_credential_path: "Invalid keyPath segments: %{value}. Must be credential keys such as webhooks.signing_secret"
+    send_chat_message:
+      label: Send Chat Message
+      description: Post a message to a team chat incoming webhook
+      fields:
+        provider:
+          label: Provider
+          help: Chat platform that owns the incoming webhook.
+          options:
+            slack: slack
+            teams: teams
+            dingtalk: dingtalk
+            wecom: wecom
+            feishu: feishu
+        webhookUrl:
+          label: Webhook URL
+          help: Incoming webhook URL as a Ruby expression.
+          placeholder: https://hooks.example.com/services/...
+        messageType:
+          label: Message Type
+          help: Plain text or Markdown payload.
+          options:
+            text: text
+            markdown: markdown
+        title:
+          label: Title
+          help: Optional heading rendered above Markdown messages.
+        text:
+          label: Text
+          help: Message body. Liquid placeholders are filled from context.
+          placeholder: New order {{order_number}}
+        mentionAll:
+          label: Mention all
+          help: Ping every member of the channel or group.
+        mentionMobiles:
+          label: Mention mobiles
+          help: Mobile numbers @-mentioned on DingTalk or WeCom.
+        signingSecret:
+          label: Signing secret
+          help: Expression for the DingTalk or Feishu bot signing secret.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+  flowchart_runtime:
+    chat_message:
+      mention_all: Everyone
+    errors:
+      verify_signature:
+        invalid: The webhook signature is invalid.
+        expired: The webhook signature has expired.
+        missing_secret: The webhook signing secret is missing.
+      send_chat_message:
+        delivery_failed: The chat message could not be delivered (HTTP %{status}).
+        provider_error: The chat provider rejected the message (%{code}).
+        render_failed: The chat message could not be rendered (%{reason}).
+        transport_failed: The chat message could not be sent (%{reason}).

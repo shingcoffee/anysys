@@ -1,0 +1,114 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "authentication",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("admin_modules.nav.users"), path: admin_modules_authentication_users_path(cid) },
+        { label: user.display_name }
+      ],
+      title: user.display_name,
+      description: tag.span(user.email, class: "block min-w-0 break-words [overflow-wrap:anywhere]"),
+      badges: [status_badge],
+      actions: header_actions,
+      icon_path: identity_icon_path,
+      icon_class: identity_icon_class,
+      wrap_title: true
+    ) do %>
+  <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_18rem] xl:grid-cols-[minmax(0,1fr)_20rem]" data-controller="section-reveal">
+    <aside class="flex min-w-0 flex-col gap-6 lg:col-start-2 lg:row-start-1 lg:sticky lg:top-6 lg:max-h-[calc(100dvh-3rem)] lg:overflow-y-auto">
+      <section id="<%= section_id("details") %>" aria-labelledby="<%= section_id("details") %>-heading" class="card overflow-hidden">
+        <h2 id="<%= section_id("details") %>-heading" class="border-b border-border-subtle px-4 py-3.5 text-sm font-semibold text-text-primary sm:px-5"><%= t("admin_modules.users.show.details") %></h2>
+        <dl class="divide-y divide-border-subtle">
+          <% detail_rows.each do |row| %>
+            <div class="flex items-baseline justify-between gap-4 px-4 py-3 sm:px-5">
+              <dt class="shrink-0 text-xs font-medium text-text-muted"><%= row[:label] %></dt>
+              <dd class="min-w-0 text-right text-sm text-text-primary tabular-nums break-words [overflow-wrap:anywhere]">
+                <% if row[:badge] %>
+                  <%= render BadgeComponent.new(variant: row[:badge], size: :sm, class: "whitespace-normal break-words [overflow-wrap:anywhere]") do %><%= row[:value] %><% end %>
+                <% else %>
+                  <%= row[:value] %>
+                <% end %>
+              </dd>
+            </div>
+          <% end %>
+        </dl>
+
+        <div id="<%= section_id("sign-ins") %>" role="group" aria-labelledby="<%= section_id("sign-ins") %>-heading" tabindex="-1" class="scroll-mt-6 border-t border-border-subtle focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent">
+          <%= tag.details class: "group/section" do %>
+            <summary class="<%= SIDEBAR_SUMMARY_CLASSES %>">
+              <h3 id="<%= section_id("sign-ins") %>-heading" class="min-w-0 flex-1 text-sm font-semibold text-text-primary"><%= t("admin_modules.users.show.sign_in_and_devices") %></h3>
+              <span class="shrink-0 text-xs text-text-muted tabular-nums"><%= devices_meta %></span>
+              <%= render_chevron %>
+            </summary>
+            <div role="group" aria-labelledby="<%= section_id("activity") %>-heading" class="border-t border-border-subtle">
+              <h4 id="<%= section_id("activity") %>-heading" class="px-4 pt-3 text-xs font-semibold uppercase tracking-wide text-text-muted sm:px-5"><%= t("admin_modules.users.show.sign_in_activity") %></h4>
+              <dl class="divide-y divide-border-subtle">
+                <% sign_in_rows.each do |row| %>
+                  <div class="flex items-baseline justify-between gap-4 px-4 py-3 sm:px-5">
+                    <dt class="shrink-0 text-xs font-medium text-text-muted"><%= row[:label] %></dt>
+                    <dd class="min-w-0 text-right text-sm break-words [overflow-wrap:anywhere] <%= row[:numeric] ? "tabular-nums" : "font-mono" %> <%= row[:muted] ? "text-text-tertiary" : "text-text-primary" %>"><%= row[:value] %><% if row[:note] %><span class="mt-1 block text-xs text-danger"><%= row[:note] %></span><% end %></dd>
+                  </div>
+                <% end %>
+              </dl>
+            </div>
+            <div id="<%= section_id("devices") %>" role="group" aria-labelledby="<%= section_id("devices") %>-heading" class="border-t border-border-subtle">
+              <h4 id="<%= section_id("devices") %>-heading" class="px-4 pt-3 text-xs font-semibold uppercase tracking-wide text-text-muted sm:px-5"><%= t("admin_modules.users.show.trusted_devices") %></h4>
+              <p class="px-4 pt-1 text-xs text-text-muted break-words [overflow-wrap:anywhere] sm:px-5"><%= t("admin_modules.users.show.trusted_devices_hint") %></p>
+              <% if trusted_devices.empty? %>
+                <p class="px-4 py-6 text-center text-sm text-text-muted sm:px-5"><%= t("admin_modules.users.show.trusted_devices_empty") %></p>
+              <% else %>
+                <ul class="mt-3 divide-y divide-border-subtle border-t border-border-subtle">
+                  <% trusted_devices.each do |device| %>
+                    <li class="flex min-w-0 flex-col gap-3 px-4 py-3 sm:px-5">
+                      <div class="min-w-0 space-y-1">
+                        <p class="text-sm text-text-primary break-words [overflow-wrap:anywhere]"><%= device.user_agent.presence || t("admin_modules.users.show.device_unknown") %></p>
+                        <div class="flex flex-col gap-0.5 text-xs text-text-muted break-words [overflow-wrap:anywhere]">
+                          <span class="min-w-0 font-mono"><%= device.ip.presence || t("common.labels.em_dash") %></span>
+                          <span class="min-w-0 tabular-nums"><%= device_time_label("admin_modules.users.show.device_last_used", device.last_used_at) %></span>
+                          <span class="min-w-0 tabular-nums"><%= device_time_label("admin_modules.users.show.device_expires", device.expires_at, date_only: true) %></span>
+                        </div>
+                      </div>
+                      <%= button_to admin_modules_authentication_user_trusted_device_path(cid, user, device),
+                            ButtonComponent.new(
+                              variant: :secondary,
+                              size: :sm,
+                              type: :submit,
+                              class: "min-h-11 w-full sm:min-h-9",
+                              data: { turbo_confirm: t("admin_modules.users.show.trusted_device_revoke_confirm") }
+                            ).html_attributes.merge(method: :delete, form: { class: "w-full" }) do %>
+                        <%= t("admin_modules.users.show.trusted_device_revoke") %>
+                      <% end %>
+                    </li>
+                  <% end %>
+                </ul>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </section>
+
+      <%= render Admin::SectionIndexComponent.new(items: index_items, id_prefix: id_prefix, link_action: "section-reveal#open") %>
+    </aside>
+
+    <div class="min-w-0 space-y-6 lg:col-start-1 lg:row-start-1">
+      <section id="<%= section_id("profiles") %>" aria-labelledby="<%= section_id("profiles") %>-heading" tabindex="-1" class="space-y-6 scroll-mt-6 rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+        <% if profile_sections.empty? %>
+          <div class="card overflow-hidden">
+            <%= render Admin::Modules::Authentication::UserCardHeaderComponent.new(
+                  heading_id: "#{section_id("profiles")}-heading", title: t("admin_modules.users.show.profiles.heading"),
+                  icon_path: profiles_icon_path, tile_class: "bg-surface-active text-text-muted"
+                ) %>
+            <p class="px-4 py-10 text-center text-sm text-text-muted sm:px-6"><%= t("admin_modules.users.show.profiles.no_types") %></p>
+          </div>
+        <% else %>
+          <h2 id="<%= section_id("profiles") %>-heading" class="sr-only"><%= t("admin_modules.users.show.profiles.heading") %></h2>
+          <% profile_sections.each do |section| %>
+            <%= render Admin::Modules::Authentication::UserDomainSectionComponent.new(section: section, user: user, customer_id: customer_id, id_prefix: id_prefix, open: profile_sections.one?) %>
+          <% end %>
+          <% if association_dialog? %>
+            <%= render Admin::Entities::QuickAddDialogComponent.new(depth: 0) %>
+          <% end %>
+        <% end %>
+      </section>
+    </div>
+  </div>
+<% end %>

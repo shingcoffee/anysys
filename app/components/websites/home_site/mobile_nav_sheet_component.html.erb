@@ -1,0 +1,18 @@
+<dialog id="website-nav-panel" class="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none overflow-hidden border-0 bg-transparent p-0 text-slate-950 backdrop:bg-black/40 lg:hidden"
+        data-website-nav-target="panel" data-action="cancel->website-nav#close:prevent click->website-nav#dismissBackdrop"
+        aria-modal="true" aria-labelledby="<%= sheet_title_id %>">
+  <div class="ml-auto flex h-full w-[min(20rem,88vw)] flex-col border-l border-slate-200 bg-white shadow-xl">
+    <div class="flex min-h-16 shrink-0 items-center justify-between gap-2 border-b border-slate-200 px-3 py-2 min-[240px]:gap-3 min-[240px]:px-5 sm:px-8">
+      <p id="<%= sheet_title_id %>" class="min-w-0 flex-1 break-words text-[20px] leading-7 font-semibold"><%= site_name %></p>
+      <button type="button" class="<%= sheet_close_class %>" data-action="click->website-nav#close" aria-label="<%= close_label %>" autofocus>
+        <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" d="m6 6 12 12M6 18 18 6" /></svg>
+      </button>
+    </div>
+    <div class="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overscroll-contain p-3">
+      <nav class="flex flex-col gap-1" aria-label="<%= site_name %>">
+        <% nav_pages.each do |page| %><a href="<%= page_href(page) %>" class="<%= sheet_link_class(page) %>" <% if current?(page) %>aria-current="page"<% end %>><%= page_title(page) %></a><% end %>
+      </nav>
+      <a href="<%= signup_href %>" class="<%= signup_class %>"><%= signup_label %></a>
+    </div>
+  </div>
+</dialog>

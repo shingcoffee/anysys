@@ -1,0 +1,669 @@
+zh-CN:
+  website:
+    sections:
+      hero_centered:
+        name: 居中主视觉
+        description: 柔光背景上的居中标题，可选配带边框的产品图片。
+      ai_preview:
+        name: AI 成果预览
+        description: 以需求面板和成果卡片展示可编辑的草稿示例。
+      statement:
+        name: 宣言
+        description: 一句超大标语，配一段简短阐述。
+      logo_cloud:
+        name: 标志墙
+        description: 一行低调的客户或合作伙伴标志。
+      feature_grid:
+        name: 功能网格
+        description: 细线分隔的编号功能要点。
+      steps:
+        name: 步骤
+        description: 按序编号的流程说明。
+      gallery:
+        name: 图集
+        description: 错落排布的杂志风图片与图注。
+      testimonials:
+        name: 用户评价
+        description: 附姓名与职位的简短评价墙。
+      pricing:
+        name: 价格方案
+        description: 多档套餐，可突出其中一档。
+      price_list:
+        name: 价目表
+        description: 带价格的菜单或服务清单。
+      showcase_tiles:
+        name: 产品磁贴
+        description: 通栏与半栏图片磁贴，各配标题与两个胶囊链接。
+      timeline:
+        name: 时间线
+        description: 竖轴上的里程碑——品牌历程或更新日志。
+      story_index:
+        name: 头版索引
+        description: 报纸头版式排布——头条、两篇次要报道与标题快讯。
+      comparison_table:
+        name: 对比表
+        description: 套餐或型号并排对比，每行一项功能。
+      listing_grid:
+        name: 列表卡片
+        description: 带标签、评分、详情与价格的图片卡片。
+      agenda:
+        name: 日程
+        description: 议程或课表——时间、场次、讲者与分类。
+      locations:
+        name: 门店地点
+        description: 门店、咖啡馆或场馆卡片，含地址、营业时间、电话与链接。
+      announcement:
+        name: 公告条
+        description: 带标签与链接的纤细胶囊公告，适合发布新品与动态。
+      product_spotlight:
+        name: 产品聚焦
+        description: 居中展示产品大图，并附一行关键参数。
+      image_banner:
+        name: 图片横幅
+        description: 通栏大图叠加标题与一个行动按钮。
+      metrics:
+        name: 关键数据
+        description: 超大数字配简短说明，呈现规模、成效或成果。
+      feature_tabs:
+        name: 功能标签页
+        description: 通过标签切换功能，每个标签配文案与图片。
+      split_checklist:
+        name: 要点清单
+        description: 标题与介绍旁列出逐项勾选的优势。
+      collection_rail:
+        name: 横向卡片栏
+        description: 可横向滑动的图片卡片行——分类、歌单或商品。
+      cta_split:
+        name: 图文行动区
+        description: 圆角面板中图片与收尾号召并排呈现。
+      groups:
+        heroes: 开篇
+        stories: 叙事
+        showcase: 展示
+        proof: 口碑
+        people: 团队
+        offers: 方案
+        closing: 收尾
+        more: 更多
+    skeletons:
+      categories:
+        business: 商业
+        product: 产品
+        hospitality: 酒旅
+        editorial: 编辑
+        portfolio: 作品集
+        wellness: 健康
+        education: 教育
+        commerce: 零售
+        nonprofit: 公益
+        events: 活动
+        culture: 文化
+      inspired_by_format: "灵感源自 %{brand}"
+      lumen:
+        name: "Lumen"
+        description: "开发者平台发布站点——居中主视觉、客户标识、功能、定价与联系。"
+        inspired_by: "Vercel"
+      monograph:
+        name: "Monograph"
+        description: "慢生活季刊——大号衬线宣言、图片随笔与文章。"
+        inspired_by: "Kinfolk"
+      terrain:
+        name: "Terrain"
+        description: "有使命感的户外品牌——风景主视觉、装备、影响力与门店。"
+        inspired_by: "Patagonia"
+      supper:
+        name: "Supper"
+        description: "高级餐厅——烛光主视觉、品鉴菜单与订位。"
+        inspired_by: "Noma"
+      clinic:
+        name: "Clinic"
+        description: "现代基层医疗——沉静主视觉、就诊流程、服务与会员。"
+        inspired_by: "One Medical"
+      folio:
+        name: "Folio"
+        description: "设计工作室作品集——宣言、项目作品、团队与联系。"
+        inspired_by: "Pentagram"
+      voyage:
+        name: "Voyage"
+        description: "奢华度假酒店——静谧衬线字体、客房、体验与预订。"
+        inspired_by: "Aman"
+      kinetic:
+        name: "Kinetic"
+        description: "高端健身俱乐部——深色电影感主视觉、课程与会员。"
+        inspired_by: "Equinox"
+      voltage:
+        name: "Voltage"
+        description: "电动汽车品牌——层叠全幅产品磁贴、车型对比、充电与体验店。"
+        inspired_by: "Tesla"
+      wellspring:
+        name: "Wellspring"
+        description: "净水公益机构——动人的图片主视觉、100% 承诺、一线故事、发展历程与月捐。"
+        inspired_by: "charity: water"
+      summit:
+        name: "Summit"
+        description: "思想大会——深色舞台主视觉、演讲嘉宾、分日日程、票务档位与场馆。"
+        inspired_by: "TED"
+      manor:
+        name: "Manor"
+        description: "高端地产——沉静衬线主视觉、精选房源、顾问团队与办公室。"
+        inspired_by: "Sotheby's International Realty"
+      bloom:
+        name: "Bloom"
+        description: "美妆品牌——以产品为先的柔和商店，含星级评分、主题磁贴、用户评价与门店。"
+        inspired_by: "Glossier"
+      roast:
+        name: "Roast"
+        description: "精品咖啡烘焙商——咖啡货架、订阅、咖啡馆菜单与品牌历程。"
+        inspired_by: "Blue Bottle Coffee"
+      atrium:
+        name: "Atrium"
+        description: "艺术博物馆——醒目的展览主视觉、正在展出、今日活动、门票与会员。"
+        inspired_by: "MoMA"
+      canvas:
+        name: "Canvas"
+        description: "协作设计产品——多人共创文件、实时组件库、功能导览与按席位计价。"
+        inspired_by: "Figma"
+      harbor:
+        name: "Harbor"
+        description: "面向商家的电商平台——首单成交、主题、结账、店铺故事，以及随门店一同成长的方案。"
+        inspired_by: "Shopify"
+      calm:
+        name: "Calm"
+        description: "正念应用——温和的练习、睡眠故事、会员手记，以及从不催促的会员制。"
+        inspired_by: "Headspace"
+      marque:
+        name: "Marque"
+        description: "豪华汽车品牌——电影感产品揭幕、限量委托、品牌历程与展厅试驾。"
+        inspired_by: "保时捷"
+      tempo:
+        name: "Tempo"
+        description: "音频流媒体——深色歌单、城市电台、文化报道，以及仍聘请主持人的编辑台。"
+        inspired_by: "Spotify"
+      quarterly:
+        name: "Quarterly"
+        description: "印刷杂志——衬线简报、驻站记者栏、刊头与仍出售当期杂志的店铺。"
+        inspired_by: "Monocle"
+      presence:
+        inspired_by: Snøhetta
+      saas_landing:
+        inspired_by: Stripe
+      cinematic:
+        inspired_by: Apple
+      editorial:
+        inspired_by: Nike
+      studio:
+        inspired_by: Airbnb
+      product:
+        inspired_by: Notion
+      ledger:
+        inspired_by: Stripe
+      signal:
+        inspired_by: Linear
+      atelier:
+        inspired_by: Aesop
+      campus:
+        inspired_by: 斯坦福大学
+      gazette:
+        inspired_by: 纽约时报
+    layouts:
+      lumen_home:
+        name: "Lumen 首页"
+        description: "居中发布主视觉、客户标识、功能网格、便当格、用户评价与行动号召。"
+      lumen_platform:
+        name: "Lumen 平台"
+        description: "居中主视觉、步骤、交替功能与数据佐证。"
+      lumen_pricing:
+        name: "Lumen 定价"
+        description: "套餐价格、常见问题与收尾行动号召。"
+      lumen_contact:
+        name: "Lumen 联系"
+        description: "销售与支持联系方式。"
+      monograph_home:
+        name: "Monograph 首页"
+        description: "大字宣言、编辑式图集、引语与文章卡片。"
+      monograph_journal:
+        name: "Monograph 专栏"
+        description: "长文正文、专题章节、随笔图集与引语。"
+      monograph_about:
+        name: "Monograph 关于"
+        description: "刊头宣言、撰稿人与联系方式。"
+      terrain_home:
+        name: "Terrain 首页"
+        description: "全幅风景主视觉、使命宣言、装备便当格与影响力数据。"
+      terrain_gear:
+        name: "Terrain 装备"
+        description: "分栏主视觉、产品卡片与技术功能网格。"
+      terrain_mission:
+        name: "Terrain 使命"
+        description: "电影感主视觉、承诺、发展历程与创始人引语。"
+      terrain_contact:
+        name: "Terrain 联系"
+        description: "门店与维修店，以及联系方式。"
+      supper_home:
+        name: "Supper 首页"
+        description: "烛光主视觉、厨房理念、菜品图集与订位行动号召。"
+      supper_menu:
+        name: "Supper 菜单"
+        description: "分栏主视觉、标价品鉴菜单与餐酒搭配。"
+      supper_visit:
+        name: "Supper 到访"
+        description: "餐厅环境、营业时间与地址。"
+      clinic_home:
+        name: "Clinic 首页"
+        description: "分栏主视觉、保险合作方、就诊步骤、服务项目、会员评价与行动号召。"
+      clinic_care:
+        name: "Clinic 诊疗"
+        description: "电影感主视觉、诊疗项目与医生团队。"
+      clinic_membership:
+        name: "Clinic 会员"
+        description: "会员方案与常见问题。"
+      clinic_contact:
+        name: "Clinic 联系"
+        description: "诊所地址、时间与联系方式。"
+      folio_home:
+        name: "Folio 首页"
+        description: "工作室宣言、项目图集、客户标识与行动号召。"
+      folio_work:
+        name: "Folio 作品"
+        description: "案例主视觉、项目叙述、作品图与客户引语。"
+      folio_studio:
+        name: "Folio 工作室"
+        description: "工作室宣言、合伙人与专业能力。"
+      folio_contact:
+        name: "Folio 联系"
+        description: "商务合作与工作室联系方式。"
+      voyage_home:
+        name: "Voyage 首页"
+        description: "度假主视觉、静谧宣言、图集、宾客留言与预订行动号召。"
+      voyage_stay:
+        name: "Voyage 住宿"
+        description: "分栏主视觉、房价与客房便当格。"
+      voyage_experiences:
+        name: "Voyage 体验"
+        description: "交替体验介绍与一日行程。"
+      voyage_contact:
+        name: "Voyage 联系"
+        description: "预订与礼宾联系方式。"
+      kinetic_home:
+        name: "Kinetic 首页"
+        description: "深色全幅主视觉、俱乐部数据、设施便当格、会员评价与体验行动号召。"
+      kinetic_classes:
+        name: "Kinetic 课程"
+        description: "居中主视觉、课程卡片、今日课表与入门步骤。"
+      kinetic_membership:
+        name: "Kinetic 会员"
+        description: "会员等级与常见问题。"
+      kinetic_contact:
+        name: "Kinetic 联系"
+        description: "俱乐部地址与营业时间，以及联系方式。"
+      voltage_home:
+        name: "Voltage 首页"
+        description: "层叠全幅产品磁贴、核心数据与试驾行动号召。"
+      voltage_models:
+        name: "Voltage 车型"
+        description: "居中主视觉、参数对比表、座舱亮点与下单行动号召。"
+      voltage_charging:
+        name: "Voltage 充电"
+        description: "深色电影感主视觉、充电网络数据、使用步骤与常见问题。"
+      voltage_visit:
+        name: "Voltage 到店"
+        description: "体验店地址、营业时间与预约，以及联系方式。"
+      wellspring_home:
+        name: "Wellspring 首页"
+        description: "图片主视觉、100% 承诺、成效数据、一线故事与捐赠行动号召。"
+      wellspring_story:
+        name: "Wellspring 故事"
+        description: "分栏主视觉、发展历程、项目负责人引言与团队。"
+      wellspring_impact:
+        name: "Wellspring 成效"
+        description: "成效声明、善款如何变成水龙头、方案便当格与成果数据。"
+      wellspring_give:
+        name: "Wellspring 捐赠"
+        description: "月捐档位、捐赠常见问题与筹款活动行动号召。"
+      summit_home:
+        name: "Summit 首页"
+        description: "深色舞台主视觉、大会数据、演讲嘉宾、热门演讲与购票行动号召。"
+      summit_program:
+        name: "Summit 议程"
+        description: "议程导语与分日日程。"
+      summit_tickets:
+        name: "Summit 票务"
+        description: "票务档位、权益对比表与常见问题。"
+      summit_venue:
+        name: "Summit 场馆"
+        description: "场馆介绍、合作酒店与参会者联系方式。"
+      manor_home:
+        name: "Manor 首页"
+        description: "衬线图片主视觉、精选房源、服务理念、业绩数据、客户评价与估价行动号召。"
+      manor_listings:
+        name: "Manor 房源"
+        description: "在售房源组合与私享寻房行动号召。"
+      manor_advisors:
+        name: "Manor 顾问"
+        description: "顾问团队、售房流程与引言。"
+      manor_offices:
+        name: "Manor 办公室"
+        description: "办公室展厅与营业时间，以及私人咨询方式。"
+      bloom_home:
+        name: "Bloom 首页"
+        description: "分栏主视觉、带评分的热销品、主题磁贴、用户评价与订阅行动号召。"
+      bloom_shop:
+        name: "Bloom 商店"
+        description: "带评分的全部商品网格，以及配送与退货说明。"
+      bloom_story:
+        name: "Bloom 故事"
+        description: "品牌缘起、理念与创始人引言。"
+      bloom_stores:
+        name: "Bloom 门店"
+        description: "门店地址与联系方式。"
+      roast_home:
+        name: "Roast 首页"
+        description: "分栏主视觉、本月咖啡、订阅介绍与使用步骤。"
+      roast_coffee:
+        name: "Roast 咖啡"
+        description: "附风味描述的咖啡货架与新鲜度常见问题。"
+      roast_cafes:
+        name: "Roast 咖啡馆"
+        description: "咖啡馆地址与吧台菜单。"
+      roast_story:
+        name: "Roast 故事"
+        description: "品牌理念、发展历程与烘焙工坊图集。"
+      atrium_home:
+        name: "Atrium 首页"
+        description: "展览主视觉、正在展出、会员介绍与参观规划行动号召。"
+      atrium_exhibitions:
+        name: "Atrium 展览"
+        description: "即将开幕的展览与今日讲座、导览和放映。"
+      atrium_visit:
+        name: "Atrium 参观"
+        description: "馆址与开放时间、门票价格与参观须知。"
+      atrium_membership:
+        name: "Atrium 会员"
+        description: "会员档位与权益对比。"
+      canvas_home:
+        name: "Canvas 首页"
+        description: "公告条、产品聚焦、客户标识、关键数据、功能标签页、用户评价与分栏行动号召。"
+      canvas_product:
+        name: "Canvas 产品"
+        description: "分栏主视觉、功能导览、反色要点清单、交替章节与模板卡片栏。"
+      canvas_pricing:
+        name: "Canvas 定价"
+        description: "居中套餐、对比表、常见问题与销售行动号召。"
+      canvas_about:
+        name: "Canvas 关于"
+        description: "工作室宣言、团队、发展历程、引言与招聘分栏。"
+      canvas_contact:
+        name: "Canvas 联系"
+        description: "销售对接、工作室地址与迁移常见问题。"
+      harbor_home:
+        name: "Harbor 首页"
+        description: "商家主视觉、成交数据、店铺卡片栏、平台标签页、商家评价与试用分栏。"
+      harbor_features:
+        name: "Harbor 功能"
+        description: "结账聚焦、增长标签页、运营清单与应用便当格。"
+      harbor_pricing:
+        name: "Harbor 定价"
+        description: "店铺方案、费率对比、商家常见问题与顾问行动号召。"
+      harbor_stories:
+        name: "Harbor 故事"
+        description: "商家报道索引、引言、评价与来信行动号召。"
+      harbor_contact:
+        name: "Harbor 联系"
+        description: "商家工作室营业时间与支持联系方式。"
+      calm_home:
+        name: "Calm 首页"
+        description: "温和公告、电影感主视觉、诚实数据、练习卡片栏与试用分栏。"
+      calm_practice:
+        name: "Calm 练习"
+        description: "日常要点清单、内容库标签页、今夜卡片栏、第一周路径与常见问题。"
+      calm_stories:
+        name: "Calm 故事"
+        description: "会员手记、引言、短评与录制现场章节。"
+      calm_about:
+        name: "Calm 关于"
+        description: "品牌宣言、声音与制作人、无打卡历程与会员说明。"
+      calm_contact:
+        name: "Calm 联系"
+        description: "会回信的联系人，以及实用常见问题。"
+      marque_home:
+        name: "Marque 首页"
+        description: "委托公告、通栏大图、8S 产品聚焦、车型磁贴、品牌数据与试驾行动号召。"
+      marque_models:
+        name: "Marque 车型"
+        description: "产品线聚焦、参数对比、路况标签页与十四周委托行动号召。"
+      marque_story:
+        name: "Marque 故事"
+        description: "品牌历程、车间横幅、创始人引言、档案图版与收尾长文。"
+      marque_visit:
+        name: "Marque 到店"
+        description: "展厅试驾、委托对接与传承分栏。"
+      tempo_home:
+        name: "Tempo 首页"
+        description: "直播公告、深色主视觉、歌单栏、曲库数据、播放方式标签页与 Premium。"
+      tempo_listen:
+        name: "Tempo 收听"
+        description: "城市榜单、现场横幅、电台标签页、录音室图集与收听行动号召。"
+      tempo_stories:
+        name: "Tempo 故事"
+        description: "文化报道索引、编辑引言、编辑台卡片与周日通讯。"
+      tempo_about:
+        name: "Tempo 关于"
+        description: "品牌宣言、分成数据、编辑台与投稿分栏。"
+      tempo_contact:
+        name: "Tempo 联系"
+        description: "编辑台、录音室与作品投递说明。"
+      quarterly_home:
+        name: "Quarterly 首页"
+        description: "当期公告、衬线宣言、简报索引、驻站栏、引言与订阅。"
+      quarterly_stories:
+        name: "Quarterly 报道"
+        description: "通讯索引、当期图版、报道准则与编辑部信条。"
+      quarterly_about:
+        name: "Quarterly 关于"
+        description: "独立宣言、刊头、发展历程与编辑部联系。"
+      quarterly_contact:
+        name: "Quarterly 联系"
+        description: "店铺与驻站、订阅与勘误常见问题。"
+      cinematic_compare:
+        name: "电影感对比"
+        description: "机型对比表与到店行动号召。"
+      studio_home:
+        name: "旅居首页"
+        description: "温暖的图片主视觉、带评分的房源网格、精选房屋与房东招募行动号召。"
+      studio_stays:
+        name: "旅居房源"
+        description: "全部房源的图片、评分与每晚价格，以及预订说明。"
+      studio_hosts:
+        name: "旅居主理人"
+        description: "主理人介绍与住客评价。"
+      studio_contact:
+        name: "旅居联系"
+        description: "联系方式与浏览房源行动号召。"
+      launch:
+        name: "产品发布"
+        description: "居中主视觉、客户标识、功能网格、用户评价与行动号召。"
+      pricing:
+        name: "定价"
+        description: "套餐价格、常见问题与收尾行动号召。"
+      portfolio:
+        name: "作品集"
+        description: "宣言、项目图集、客户标识与行动号召。"
+      menu:
+        name: "菜单"
+        description: "全幅主视觉、标价菜单与到访信息。"
+      journal:
+        name: "杂志专栏"
+        description: "宣言、图片随笔与长文正文。"
+      process:
+        name: "服务流程"
+        description: "分栏主视觉、流程步骤、服务要点与常见问题。"
+      showcase:
+        name: "产品陈列"
+        description: "层叠全幅产品磁贴与行动号召。"
+      compare:
+        name: "方案对比"
+        description: "对比表、常见问题与行动号召。"
+      newsroom:
+        name: "新闻中心"
+        description: "头版式故事索引与订阅行动号召。"
+      listings:
+        name: "列表陈列"
+        description: "带价格与评分的图片列表网格，以及行动号召。"
+      stores:
+        name: "门店"
+        description: "门店地址、营业时间与导航，以及联系方式。"
+      heritage:
+        name: "品牌历程"
+        description: "历史导语、里程碑时间线与引言。"
+      conference:
+        name: "会议活动"
+        description: "深色活动主视觉、日程与购票行动号召。"
+      spotlight:
+        name: "产品聚焦页"
+        description: "苹果式产品页——公告条、居中揭幕、参数、功能标签页与预购分栏。"
+      campaign:
+        name: "品牌战役"
+        description: "耐克式战役页——层叠图片横幅、产品卡片栏、赛季数据与选购分栏。"
+      tour:
+        name: "功能导览"
+        description: "Linear 式功能导览——公告、居中主视觉、标签页、反色清单与周期数据。"
+      impact:
+        name: "年度报告"
+        description: "Stripe 式年报——宣言、成交数据、披露准则与报告下载。"
+      why_us:
+        name: "为何选择"
+        description: "Mailchimp 式清单页——分栏主视觉、转换理由、成效数据、用户评价与常见问题。"
+      launch_note:
+        name: "发布手记"
+        description: "Vercel 式发布页——公告、产品揭幕、更新标签页、合作伙伴数据与预览行动号召。"
+    public:
+      pricing:
+        featured: 推荐
+      comparison:
+        feature: 功能
+        included: 包含
+        not_included: 不包含
+      listings:
+        rating: "评分 %{rating}"
+      announcement:
+        learn_more: 了解更多
+      feature_tabs:
+        tablist: 功能
+    platform:
+      skeletons:
+        pages:
+          care: 诊疗
+          classes: 课程
+          experiences: 体验
+          gear: 装备
+          membership: 会员
+          menu: 菜单
+          mission: 使命
+          platform: 平台
+          stay: 住宿
+          stays: 房源
+          studio: 工作室
+          work: 作品
+          models: 车型
+          charging: 充电
+          story: 故事
+          impact: 影响力
+          give: 捐助
+          program: 议程
+          tickets: 票务
+          venue: 场地
+          listings: 房源
+          advisors: 顾问
+          offices: 办公室
+          shop: 选购
+          stores: 门店
+          coffee: 咖啡
+          cafes: 咖啡馆
+          exhibitions: 展览
+          compare: 对比
+          clubs: 俱乐部
+          product: 产品
+          features: 功能
+          practice: 练习
+          listen: 收听
+    admin:
+      pages:
+        form:
+          fields:
+            media_mode: 主视觉媒体
+            example_label: 示例标签
+            prompt_label: 需求标签
+            prompt: 需求描述
+            review_note: 审核说明
+            output_label: 成果标签
+            featured_label: 推荐套餐标签
+            tiers: 套餐
+            price: 价格
+            cadence: 计费周期
+            features: 包含内容（每行一项）
+            caption: 图注
+            highlight: 突出显示
+            tiles: 磁贴
+            size: 尺寸
+            date: 日期
+            stories: 报道
+            byline: 署名
+            rows: 对比项
+            column_1: 第 1 列
+            column_2: 第 2 列
+            column_3: 第 3 列
+            column_4: 第 4 列
+            value_1: 第 1 列取值
+            value_2: 第 2 列取值
+            value_3: 第 3 列取值
+            value_4: 第 4 列取值
+            listings: 列表项
+            aspect: 图片比例
+            meta: 详情
+            rating: 评分
+            badge: 标签
+            sessions: 场次
+            time: 时间
+            speaker: 讲者
+            track: 分类
+            places: 地点
+            link_label: 链接文字
+            specs: 参数
+            tabs: 标签页
+            height: 高度
+            placement: 文字位置
+            surface: 背景
+            spacing: 间距
+            align: 标题对齐
+          highlights:
+            standard: 标准
+            featured: 推荐
+          media_modes:
+            image: 图片
+            none: 无
+          sizes:
+            full: 通栏
+            half: 半栏
+          aspects:
+            square: 方形
+            portrait: 竖版
+            landscape: 横版
+          heights:
+            tall: 高
+            medium: 中
+          placements:
+            bottom: 底部
+            center: 居中
+          surfaces:
+            default: 默认
+            muted: 浅灰
+            contrast: 反色
+            accent: 主题色
+          spacings:
+            default: 默认
+            tight: 紧凑
+            roomy: 宽松
+          aligns:
+            default: 默认
+            start: 左对齐
+            center: 居中

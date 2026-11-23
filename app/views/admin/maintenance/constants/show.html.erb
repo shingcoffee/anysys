@@ -1,0 +1,68 @@
+<%
+  show_actions = []
+  if @constant.customer_owned? || shared_resources_mode? || @constant.shared?
+    show_actions << {
+      label: t("common.actions.edit"),
+      path: edit_admin_maintenance_constant_path(current_customer_id, @constant),
+      variant: :primary,
+      icon: :edit
+    }
+  end
+  if (reset = definition_override_reset_action(@constant))
+    show_actions << reset
+  end
+  if can_destroy_definition?(@constant)
+    show_actions << {
+      label: t("common.actions.delete"),
+      path: admin_maintenance_constant_path(current_customer_id, @constant),
+      variant: :danger,
+      icon: :trash,
+      data: { turbo_method: :delete, turbo_confirm: t("maint_core.constants.show.delete_confirm") }
+    }
+  end
+  show_description = [
+    t("maint_core.constants.show.options_count", count: @constant.options.length),
+    (@constant.customer_owned? && @constant.customer ? @constant.customer.name : nil)
+  ].compact.join(" · ")
+%>
+<%= render AdminPageComponent.new(
+  breadcrumbs: definition_resource_breadcrumbs(:constants, @constant.name),
+  title: @constant.name,
+  description: show_description,
+  actions: show_actions
+) do %>
+  <% if @constant.shared? && !shared_resources_mode? %>
+    <%= render AlertComponent.new(message: t("maint_core.constants.show.shared_override_notice"), type: :info) %>
+  <% end %>
+
+  <div class="card">
+    <div class="px-5 py-3.5 border-b border-border-subtle">
+      <h2 class="text-sm font-medium text-text-primary"><%= t("maint_core.constants.form.options") %></h2>
+    </div>
+    <div class="p-5">
+      <% if @constant.options.any? %>
+        <ol class="flex flex-col max-h-96 overflow-y-auto">
+          <% @constant.options.each_with_index do |option, index| %>
+            <li class="flex items-start gap-3 py-2 <%= "border-t border-border-subtle" unless index.zero? %>">
+              <span class="text-caption font-medium w-6 shrink-0 tabular-nums pt-0.5"><%= index + 1 %>.</span>
+              <span class="text-body-sm text-text-primary break-words min-w-0"><%= option %></span>
+            </li>
+          <% end %>
+        </ol>
+      <% else %>
+        <p class="text-body-sm text-text-muted text-center py-6"><%= t("maint_core.constants.show.no_options") %></p>
+      <% end %>
+
+      <dl class="mt-5 pt-4 border-t border-border-subtle grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <dt class="text-caption text-text-muted"><%= t("common.labels.created_at") %></dt>
+          <dd class="mt-0.5 text-body-sm text-text-primary"><%= format_datetime(@constant.created_at) %></dd>
+        </div>
+        <div>
+          <dt class="text-caption text-text-muted"><%= t("maint_core.constants.show.last_updated") %></dt>
+          <dd class="mt-0.5 text-body-sm text-text-primary"><%= format_datetime(@constant.updated_at) %></dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+<% end %>

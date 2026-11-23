@@ -1,0 +1,14 @@
+<%= render AdminPageComponent.new(
+      breadcrumbs: definition_resource_breadcrumbs(:entities,
+                                                   { label: @domain.name_in_database, path: admin_maintenance_entities_path(current_customer_id, domain_id: @domain.id) },
+                                                   t("maint_core.entity_domains.edit.title")),
+      title: t("maint_core.entity_domains.edit.title"),
+      description: t("maint_core.entity_domains.edit.summary", name: @domain.name_in_database)
+    ) do %>
+  <div class="space-y-4">
+    <%= render Admin::Maintenance::Entities::EntityDomainFormComponent.new(domain: @domain, customer_id: current_customer_id) %>
+    <div class="flex justify-end">
+      <%= render Admin::Maintenance::Entities::DomainDeleteDialogComponent.new(domain: @domain, customer_id: current_customer_id) %>
+    </div>
+  </div>
+<% end %>

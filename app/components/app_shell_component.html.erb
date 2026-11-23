@@ -1,0 +1,44 @@
+<div data-shell="app" class="relative flex min-h-screen flex-col bg-canvas antialiased">
+  <%# atmospheric backdrop — a restrained accent wash for depth, on-system tokens only %>
+  <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-80 bg-gradient-to-b from-accent-subtle to-transparent" aria-hidden="true"></div>
+
+  <%# brand top bar — centered lockup, no navigation %>
+  <header class="sticky top-0 z-20 border-b border-border/70 bg-surface/80 supports-[backdrop-filter]:backdrop-blur-md">
+    <div class="relative mx-auto flex h-16 max-w-3xl items-center justify-center px-4 sm:px-6">
+      <%= link_to brand_href,
+            class: "inline-flex items-center rounded-lg motion-safe:transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
+            aria: { label: t("chrome.topbar.brand_name") } do %>
+        <%= render Branding::SapphireLogoComponent.new(size: "h-9") %>
+      <% end %>
+      <div class="absolute right-4 sm:right-6">
+        <%= render LocaleSwitcherComponent.new %>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <div class="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+      <%# flash %>
+      <% flash_messages.each do |type, message| %>
+        <% next if message.blank? %>
+        <% style = flash_style(type) %>
+        <div class="mb-5 flex items-start gap-3 rounded-xl px-4 py-3.5 ring-1 <%= style[:classes] %>"
+             role="alert" data-controller="flash" data-flash-auto-dismiss-value="true">
+          <svg class="mt-0.5 h-5 w-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="<%= style[:icon] %>"/>
+          </svg>
+          <p class="flex-1 text-sm font-medium leading-relaxed"><%= message %></p>
+          <button type="button"
+                  class="-mr-1 inline-flex flex-shrink-0 rounded-md p-1 opacity-70 motion-safe:transition hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current"
+                  aria-label="<%= t("common.actions.dismiss") %>" data-action="click->flash#dismiss">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      <% end %>
+
+      <%= content %>
+    </div>
+  </main>
+</div>

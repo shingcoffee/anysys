@@ -1,0 +1,23 @@
+<nav <%= tag.attributes(**html_attributes) %>>
+  <div class="overflow-x-auto scrollbar-none border-b border-border-subtle">
+    <div class="-mb-px flex min-w-max gap-1 sm:min-w-0 sm:flex-wrap" role="list">
+      <% tabs.each do |tab| %>
+        <%= link_to tab[:path],
+              role: "listitem",
+              class: tab_classes(tab),
+              data: { section_nav_tab: tab[:id] }.compact,
+              aria: { current: (tab[:active] ? "page" : nil) } do %>
+          <% if tab[:icon_path].present? %>
+            <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="<%= tab[:icon_path] %>" />
+            </svg>
+          <% end %>
+          <span><%= tab[:label] %></span>
+          <% unless tab[:count].nil? %>
+            <span class="<%= count_classes(tab) %>" data-role="tab-count"><%= helpers.number_with_delimiter(tab[:count]) %></span>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</nav>

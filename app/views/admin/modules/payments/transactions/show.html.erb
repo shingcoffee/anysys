@@ -1,0 +1,13 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "payment",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("feature_modules.payment.entries.transactions"), path: admin_modules_payments_transactions_path(current_customer_id) },
+        { label: @payment.payment_order&.external_ref.presence || @payment.id.to_s }
+      ],
+      title: "#{t("comp_payments.refund.title_prefix")}#{@payment.id}",
+      description: @payment.payment_order&.external_ref,
+      width: :narrow
+    ) do %>
+  <%= render ::Payments::Admin::RefundDialogComponent.new(payment: @payment) %>
+<% end %>

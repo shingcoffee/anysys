@@ -1,0 +1,8 @@
+<% content_for :head do %>
+  <%# The refresh target carries the authorization code. The response also sends
+      Referrer-Policy: no-referrer; this repeats it in-document so the code is
+      not handed to the loopback listener (or anything else) via Referer. %>
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="refresh" content="0;url=<%= redirect_uri %>">
+<% end %>
+<%= render Oauth::NativeHandoffComponent.new(redirect_uri: redirect_uri) %>

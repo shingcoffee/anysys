@@ -1,0 +1,101 @@
+<p class="sr-only"><%= stats_summary %></p>
+
+<% if empty? %>
+  <%= render EmptyStateComponent.new(
+        title: t("maint_platform.module_settings.index.empty"),
+        description: t("maint_platform.module_settings.index.empty_description")
+      ) %>
+<% else %>
+  <div data-controller="module-settings-catalog"
+       data-module-settings-catalog-filter-value="all"
+       class="flex flex-col gap-5">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div class="relative w-full sm:max-w-xs">
+        <label class="sr-only" for="module-settings-catalog-search">
+          <%= t("maint_platform.module_settings.index.search_placeholder") %>
+        </label>
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-text-muted">
+          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <input type="search"
+               id="module-settings-catalog-search"
+               class="input-field w-full pl-9"
+               placeholder="<%= t("maint_platform.module_settings.index.search_placeholder") %>"
+               autocomplete="off"
+               data-module-settings-catalog-target="search"
+               data-action="input->module-settings-catalog#search">
+      </div>
+
+      <div class="inline-flex w-fit flex-wrap rounded-lg border border-border-subtle bg-surface-active p-1" role="group"
+           aria-label="<%= t("maint_platform.module_settings.index.filter_group_label") %>">
+        <% filter_pills.each do |pill| %>
+          <button type="button"
+                  data-module-settings-catalog-target="filter"
+                  data-filter="<%= pill[:id] %>"
+                  data-action="click->module-settings-catalog#setFilter"
+                  aria-pressed="<%= pill[:id] == "all" %>"
+                  class="<%= pill_classes(pill) %>">
+            <span><%= pill[:label] %></span>
+            <span class="<%= pill_count_classes(pill) %>"><%= pill[:count] %></span>
+          </button>
+        <% end %>
+      </div>
+    </div>
+
+    <div data-module-settings-catalog-target="directory">
+      <ul class="grid gap-4 sm:grid-cols-2 2xl:grid-cols-3">
+        <% modules.each do |fm| %>
+          <li data-module-settings-catalog-target="row"
+              data-module-card="true"
+              data-name="<%= fm.display_name %>"
+              data-key="<%= fm.key %>"
+              data-description="<%= description_for(fm) %>"
+              data-active="<%= fm.active? %>"
+              data-required="<%= fm.required? %>"
+              class="min-w-0">
+            <%= link_to show_path(fm),
+                  class: "group flex h-full min-w-0 flex-col gap-4 rounded-xl border border-border-subtle bg-surface p-5 shadow-xs transition-all duration-200 hover:border-accent-muted hover:shadow-md focus-visible:border-accent" do %>
+              <div class="flex min-w-0 items-start gap-3.5">
+                <span class="flex size-10 shrink-0 items-center justify-center rounded-xl <%= module_color_classes(fm.key) %>" aria-hidden="true">
+                  <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="<%= module_icon_path(fm.key) %>" />
+                  </svg>
+                </span>
+                <div class="flex min-w-0 flex-1 flex-col gap-1.5">
+                  <div class="flex min-w-0 flex-wrap items-center gap-2">
+                    <h2 class="text-body font-semibold text-text-primary transition-colors group-hover:text-accent"><%= fm.display_name %></h2>
+                    <%= render BadgeComponent.new(variant: status_variant(fm), size: :sm) do %>
+                      <%= status_label(fm) %>
+                    <% end %>
+                  </div>
+                  <% if description_for(fm).present? %>
+                    <p class="line-clamp-2 text-body-sm"><%= description_for(fm) %></p>
+                  <% end %>
+                </div>
+              </div>
+
+              <div class="mt-auto flex min-w-0 items-center justify-between gap-3 border-t border-border-subtle pt-3.5">
+                <span class="min-w-0 truncate text-caption"><%= configuration_label(fm) %></span>
+                <span class="flex shrink-0 items-center gap-2">
+                  <span class="text-code text-mono"><%= fm.key %></span>
+                  <svg class="size-4 text-text-muted transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </div>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
+    <div data-module-settings-catalog-target="emptyFilter" class="hidden py-8">
+      <%= render EmptyStateComponent.new(
+            title: t("maint_platform.module_settings.index.filter_empty_title"),
+            description: t("maint_platform.module_settings.index.filter_empty_description")
+          ) %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,15 @@
+<%= section(ui("contacts.record_consent")) do %>
+  <%= error_summary(root: "sms_consent_event") %>
+  <%= form_with scope: :sms_consent_event, url: sms_path(:contact_consent_events, contact), method: :post, local: true, class: "space-y-4" do |f| %>
+    <%= f.hidden_field :event_key, value: form_value(:event_key) %>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <%= field(f, :action, type: :select, options: [[ui("contacts.grant"), "granted"], [ui("contacts.revoke"), "revoked"]]) %>
+      <%= field(f, :occurred_at, required: true, help: ui("contacts.occurred_help")) %>
+    </div>
+    <%= field(f, :reference, required: true, maxlength: 1024) %>
+    <%= field(f, :statement, type: :textarea, help: ui("contacts.statement_help"), maxlength: 1024) %>
+    <%= field(f, :notes, type: :textarea, maxlength: 1024) %>
+    <p class="text-sm text-text-secondary"><%= ui("contacts.grant_help") %></p>
+    <%= f.submit ui("contacts.record_consent"), name: nil, class: "btn btn-primary" %>
+  <% end %>
+<% end %>

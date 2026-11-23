@@ -1,0 +1,148 @@
+<%= render Admin::Maintenance::Platform::ModuleSettings::ProviderWorkspaceComponent.new do |workspace| %>
+  <% workspace.with_assignment do %>
+  <% if errors.any? %>
+    <%= render AlertComponent.new(message: errors_message, type: :error) %>
+  <% end %>
+  <% if edit_delivery? %>
+    <%= form_with url: delivery_path, method: :patch, local: true, class: "flex w-full flex-col gap-6" do %>
+      <%= hidden_field_tag :provider, provider_key %>
+      <div class="card overflow-hidden">
+        <div class="card-header">
+          <h2 class="section-header"><%= t("maint_platform.emails.platform_settings.delivery_section") %></h2>
+          <p class="mt-0.5 text-caption"><%= t("maint_platform.emails.platform_settings.delivery_section_hint") %></p>
+        </div>
+        <ul class="divide-y divide-border-subtle">
+          <% delivery_jobs.each do |job| %>
+            <li class="px-4 sm:px-6 py-4 flex flex-col gap-3">
+              <div class="min-w-0">
+                <h3 class="text-body text-text-primary font-medium"><%= job[:title] %></h3>
+                <p class="text-caption"><%= job[:hint] %></p>
+              </div>
+              <div class="grid grid-cols-1 gap-2 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-start sm:gap-6">
+                <label class="form-label mb-0" for="email_delivery_<%= job[:key] %>"><%= t("maint_platform.emails.platform_settings.provider") %></label>
+                <div class="w-full max-w-xl">
+                  <select id="email_delivery_<%= job[:key] %>"
+                          name="<%= job[:key] %>_provider"
+                          class="input-field">
+                    <option value="" <%= "selected" if job[:selected].blank? %>><%= t("maint_platform.emails.platform_settings.not_assigned") %></option>
+                    <% job[:choices].each do |pc| %>
+                      <option value="<%= pc.key %>" <%= "selected" if pc.key.to_s == job[:selected] %>>
+                        <%= pc.display_name %>
+                      </option>
+                    <% end %>
+                  </select>
+                </div>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <%= render Admin::Maintenance::Platform::ModuleSettings::FormActionsComponent.new(
+            cancel_path: settings_path, submit_label: t("common.actions.save")
+          ) %>
+    <% end %>
+  <% else %>
+    <div class="card overflow-hidden">
+      <div class="card-header flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div class="min-w-0">
+          <h2 class="section-header"><%= t("maint_platform.emails.platform_settings.delivery_section") %></h2>
+          <p class="mt-0.5 text-caption"><%= t("maint_platform.emails.platform_settings.delivery_section_hint") %></p>
+        </div>
+        <% if show_mode? %>
+          <%= render ButtonComponent.new(variant: :secondary, size: :sm, tag: :a, href: delivery_edit_path) do %>
+            <%= t("maint_platform.emails.platform_settings.edit_delivery") %>
+          <% end %>
+        <% end %>
+      </div>
+      <ul class="divide-y divide-border-subtle">
+        <% delivery_jobs.each do |job| %>
+          <li class="px-4 sm:px-6 py-4 grid grid-cols-1 gap-1 sm:grid-cols-[12rem_minmax(0,1fr)] sm:items-baseline sm:gap-6">
+            <div class="min-w-0">
+              <h3 class="text-body text-text-primary font-medium"><%= job[:title] %></h3>
+              <p class="text-caption"><%= job[:hint] %></p>
+            </div>
+            <span class="text-body-sm text-text-secondary"><%= job[:provider_name].presence || t("maint_platform.emails.platform_settings.not_assigned") %></span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% end %>
+
+  <% unless edit_delivery? %>
+    <% workspace.with_provider do %>
+    <div class="flex flex-col gap-3">
+      <div>
+        <h2 class="section-header"><%= t("maint_platform.emails.platform_settings.vendor_section") %></h2>
+        <p class="mt-0.5 text-caption"><%= t("maint_platform.emails.platform_settings.vendor_section_hint") %></p>
+      </div>
+
+      <%= render Admin::Maintenance::Platform::ProviderSwitcherComponent.new(
+            nav_label: t("maint_platform.emails.platform_settings.nav_label"),
+            items: switcher_items
+          ) %>
+    </div>
+    <% end %>
+
+    <% workspace.with_health do %>
+    <%= render Admin::Maintenance::Platform::ModuleSettings::CredentialPanelComponent.new(
+          title: t("maint_platform.module_settings.workspace.provider_health")
+        ) do %>
+      <div class="divide-y divide-border-subtle">
+        <% health_rows.each do |row| %>
+          <div class="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <div>
+              <span class="text-sm font-medium text-text-primary"><%= row[:label] %></span>
+              <span class="ml-2 text-xs text-text-muted"><%= row[:state] %></span>
+            </div>
+            <%= render BadgeComponent.new(variant: row[:status_variant], size: :sm) do %><%= row[:status] %><% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+    <% end %>
+
+    <% workspace.with_credentials do %>
+    <div class="flex flex-col gap-6">
+      <% Admin::Maintenance::Platform::Emails::SettingsComponent::MODES.each do |mode_key| %>
+        <% record = credential_for(mode_key) %>
+        <% if editing_mode?(mode_key) %>
+          <%= render Admin::Maintenance::Platform::Emails::CredentialFormComponent.new(
+                credential: editing_record,
+                form_url: form_url,
+                form_method: form_method,
+                cancel_path: settings_path,
+                lock_identity: true
+              ) %>
+        <% else %>
+          <% panel_action = capture do %>
+            <div class="flex flex-wrap items-center gap-2">
+                <% if record %>
+                  <%= render BadgeComponent.new(variant: status_badge_variant(record), size: :sm) do %>
+                    <%= t("common.status.#{record.status}") %>
+                  <% end %>
+                  <%= render BadgeComponent.new(variant: configured_badge_variant(record), size: :sm) do %>
+                    <%= configured_label(record) %>
+                  <% end %>
+                  <%= render ButtonComponent.new(variant: :secondary, size: :sm, tag: :a, href: vendor_edit_path(mode_key, record)) do %>
+                    <%= t("maint_platform.emails.platform_settings.edit_credentials") %>
+                  <% end %>
+                <% else %>
+                  <%= render ButtonComponent.new(variant: :secondary, size: :sm, tag: :a, href: vendor_edit_path(mode_key)) do %>
+                    <%= t("maint_platform.emails.platform_settings.add_credentials") %>
+                  <% end %>
+                <% end %>
+            </div>
+          <% end %>
+          <%= render Admin::Maintenance::Platform::ModuleSettings::CredentialPanelComponent.new(
+                title: mode_title(mode_key),
+                description: record ? t("maint_platform.emails.platform_settings.credentials_section_hint_show") : t("maint_platform.emails.platform_settings.mode_empty"),
+                action: panel_action,
+                rows: record ? show_rows(record) : []
+              ) %>
+        <% end %>
+      <% end %>
+    </div>
+    <% end %>
+  <% end %>
+<% end %>

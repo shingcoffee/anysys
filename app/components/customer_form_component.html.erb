@@ -1,0 +1,147 @@
+<%= form_with model: customer, url: form_url, method: form_method, class: "space-y-6" do |form| %>
+  <% if customer.errors.any? %>
+    <%= render "shared/form_errors", resource: customer %>
+  <% end %>
+
+  <section class="card overflow-hidden" aria-labelledby="customer-form-organization">
+    <div class="card-header">
+      <h2 id="customer-form-organization" class="section-header"><%= t("chrome.customer_form.sections.organization") %></h2>
+      <p class="mt-1 text-body-sm"><%= t("chrome.customer_form.sections.organization_hint") %></p>
+    </div>
+
+    <div class="p-4 sm:p-6">
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div class="min-w-0 sm:col-span-2">
+          <label class="form-label form-label-required" for="customer_name"><%= t("chrome.customer_form.organization_name") %></label>
+          <%= form.text_field :name,
+              required: true,
+              class: "input-field",
+              id: "customer_name",
+              autocomplete: "organization",
+              placeholder: t("chrome.customer_form.name_placeholder"),
+              aria: { describedby: "customer_name_hint" } %>
+          <p id="customer_name_hint" class="mt-1 text-body-sm"><%= t("chrome.customer_form.name_hint") %></p>
+        </div>
+
+        <div class="min-w-0 sm:col-span-2">
+          <label class="form-label" for="customer_domain"><%= t("chrome.customer_form.domain") %></label>
+          <%= form.text_field :domain,
+              class: "input-field",
+              id: "customer_domain",
+              inputmode: "url",
+              autocapitalize: "off",
+              spellcheck: false,
+              placeholder: t("chrome.customer_form.domain_placeholder"),
+              aria: { describedby: "customer_domain_hint" } %>
+          <p id="customer_domain_hint" class="mt-1 text-body-sm"><%= t("chrome.customer_form.domain_hint") %></p>
+        </div>
+
+        <div class="min-w-0">
+          <label class="form-label" for="customer_alias"><%= t("chrome.customer_form.alias") %></label>
+          <%= form.text_field :alias,
+              class: "input-field",
+              id: "customer_alias",
+              placeholder: t("chrome.customer_form.alias_placeholder"),
+              aria: { describedby: "customer_alias_hint" } %>
+          <p id="customer_alias_hint" class="mt-1 text-body-sm"><%= t("chrome.customer_form.alias_hint") %></p>
+        </div>
+
+        <div class="min-w-0">
+          <label class="form-label form-label-required"><%= t("chrome.customer_form.industry") %></label>
+          <%= render SearchableSelectComponent.new(
+              name: "customer[industry]",
+              selected_value: customer.industry,
+              grouped_options: industry_options,
+              placeholder: t("chrome.customer_form.industry_placeholder"),
+              field_id: "customer_industry"
+          ) %>
+          <p class="mt-1 text-body-sm"><%= t("chrome.customer_form.industry_hint") %></p>
+        </div>
+
+        <div class="min-w-0 sm:col-span-2">
+          <label class="form-label" for="customer_locale"><%= t("chrome.customer_form.locale") %></label>
+          <%= form.select :locale, locale_options,
+              { include_blank: t("chrome.customer_form.locale_auto") },
+              class: "input-field",
+              id: "customer_locale",
+              aria: { describedby: "customer_locale_hint" } %>
+          <p id="customer_locale_hint" class="mt-1 text-body-sm"><%= t("chrome.customer_form.locale_hint") %></p>
+        </div>
+
+        <% if customer.persisted? %>
+          <div class="min-w-0 rounded-lg border border-border-subtle bg-surface-hover px-4 py-3 sm:col-span-2">
+            <p class="text-label"><%= t("chrome.customer_form.customer_id") %></p>
+            <p class="mt-1.5 font-mono text-sm text-text-primary"><%= customer.id %></p>
+            <p class="mt-1 text-body-sm"><%= t("chrome.customer_form.customer_id_hint") %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <section class="card overflow-hidden" aria-labelledby="customer-form-contact">
+    <div class="card-header">
+      <h2 id="customer-form-contact" class="section-header"><%= t("chrome.customer_form.sections.contact") %></h2>
+      <p class="mt-1 text-body-sm"><%= t("chrome.customer_form.sections.contact_hint") %></p>
+    </div>
+
+    <div class="p-4 sm:p-6">
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div class="min-w-0">
+          <label class="form-label" for="customer_contact"><%= t("chrome.customer_form.contact_person") %></label>
+          <%= form.text_field :contact,
+              class: "input-field",
+              id: "customer_contact",
+              autocomplete: "name",
+              placeholder: t("chrome.customer_form.contact_placeholder") %>
+        </div>
+
+        <div class="min-w-0">
+          <label class="form-label" for="customer_phone"><%= t("chrome.customer_form.phone") %></label>
+          <%= form.text_field :phone,
+              class: "input-field",
+              id: "customer_phone",
+              autocomplete: "tel",
+              inputmode: "tel",
+              placeholder: t("chrome.customer_form.phone_placeholder") %>
+        </div>
+
+        <div class="min-w-0 sm:col-span-2">
+          <label class="form-label" for="customer_address"><%= t("chrome.customer_form.address") %></label>
+          <%= form.text_area :address,
+              rows: 3,
+              class: "input-field resize-none",
+              id: "customer_address",
+              autocomplete: "street-address",
+              placeholder: t("chrome.customer_form.address_placeholder") %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card overflow-hidden" aria-labelledby="customer-form-plan">
+    <div class="card-header">
+      <h2 id="customer-form-plan" class="section-header">
+        <label for="customer_tier"><%= t("chrome.customer_form.sections.plan") %></label>
+      </h2>
+    </div>
+
+    <div class="p-4 sm:p-6">
+      <div class="max-w-md">
+        <%= form.select :tier, tier_options,
+            {},
+            class: "input-field",
+            id: "customer_tier",
+            aria: { describedby: "customer_tier_hint" } %>
+        <p id="customer_tier_hint" class="mt-1 text-body-sm"><%= t("chrome.customer_form.tier_hint") %></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="form-actions flex-col-reverse sm:flex-row">
+    <%= link_to t("common.actions.cancel"), cancel_url, class: "btn btn-secondary min-h-11 w-full sm:w-auto" %>
+    <button type="submit" class="btn btn-primary min-h-11 w-full sm:w-auto">
+      <%= submit_label %>
+    </button>
+  </div>
+<% end %>

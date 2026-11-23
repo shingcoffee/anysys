@@ -1,0 +1,24 @@
+default: &default
+  store_options:
+    # Cap age of oldest cache entry to fulfill retention policies
+    # max_age: 5184000 # 60 days in seconds
+    max_size: 268435456 # 256 megabytes
+
+development:
+  <<: *default
+  store_options:
+    max_size: 268435456
+    namespace: development
+
+test:
+  <<: *default
+  store_options:
+    max_size: 268435456
+    namespace: test
+
+production:
+  database: cache
+  <<: *default
+  store_options:
+    max_size: 268435456
+    namespace: production

@@ -1,0 +1,9 @@
+<%= render AdminPageComponent.new(
+      breadcrumbs: definition_resource_breadcrumbs(:entities,
+                                                   *([{ label: @domain.name, path: admin_maintenance_entities_path(current_customer_id, domain_id: @domain.id) }] if @domain),
+                                                   t("journeys.admin.generation.title")),
+      title: t("journeys.admin.generation.title"),
+      description: t("journeys.admin.generation.intro")
+    ) do %>
+  <%= render Journeys::GenerationCandidatesComponent.new(groups: @groups, customer_id: current_customer_id, journeys: @journeys) %>
+<% end %>

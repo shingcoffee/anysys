@@ -1,0 +1,15 @@
+<div class="min-w-0 [&_h1]:whitespace-normal [&_h1]:break-words <%= 'print:[&>nav]:hidden' if printable %>">
+  <div class="mb-4 flex min-w-0 items-center gap-3 lg:hidden <%= 'print:hidden' if printable %>">
+    <%= render ButtonComponent.new(variant: :secondary, commandfor: "settings-navigation-dialog", command: "show-modal", class: "min-h-11 shrink-0") do %>
+      <%= t("settings_navigation.menu") %>
+    <% end %>
+    <span class="min-w-0 truncate text-body-sm text-text-secondary"><%= title %></span>
+  </div>
+  <%= render AdminPageComponent.new(breadcrumbs: page_breadcrumbs, title: title, description: description, actions: page_actions, badges: badges, width: width, icon_path: header_icon_path, icon_class: header_icon_class) do %>
+    <div class="min-w-0" data-settings-page>
+      <div class="flex min-w-0 flex-col gap-6">
+      <%= content %>
+      </div>
+    </div>
+  <% end %>
+</div>

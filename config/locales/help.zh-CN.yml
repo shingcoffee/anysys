@@ -1,0 +1,31 @@
+zh-CN:
+  help:
+    errors:
+      too_many_files: "文件过多（最多 %{count} 个）"
+      invalid_file_type: "文件类型不允许"
+      file_too_large: "须不超过 %{size}"
+      file_size_label: "5MB"
+      resolved: "该工单已解决。"
+      invalid_role: "作者角色无效"
+      owner_cannot_notify: "平台所有者无法向自己发送通知。"
+    flash:
+      created: "支持工单已发送给平台所有者。"
+      replied: "回复已发送。"
+      email_sent: "邮件已发送至 help@anysys.com。"
+      email_failed: "帮助邮件未能发出，请稍后重试。"
+      resolved: "支持工单已标记为已解决。"
+    status:
+      open: "进行中"
+      resolved: "已解决"
+    unread: "未读"
+  help_mailer:
+    shell:
+      brand: "Anysys"
+      footer: "由 Anysys 帮助发送。回复此邮件即可联系提交人。"
+    support_request:
+      subject: "帮助邮件：%{subject}"
+      preheader: "来自 Anysys 管理员的帮助邮件：%{subject}"
+      heading: "帮助邮件"
+      label_customer: "客户"
+      label_from: "发件人"
+      label_page: "页面"

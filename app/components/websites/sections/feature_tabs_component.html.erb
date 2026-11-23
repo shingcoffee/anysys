@@ -1,0 +1,62 @@
+<section class="<%= padding_class %>">
+  <div class="<%= inner_measure_class %> flex flex-col <%= gap_class %>"
+    <% if tabs.any? %>
+      data-controller="website-feature-tabs"
+      data-website-feature-tabs-index-value="0"
+      data-website-feature-tabs-active-class="<%= tab_active_class %>"
+      data-website-feature-tabs-inactive-class="<%= tab_inactive_class %>"
+    <% end %>>
+    <%= header(kicker: prop("kicker"), heading: prop("heading"), subhead: prop("subhead")) %>
+
+    <% if tabs.any? %>
+      <% if tabs.size > 1 %>
+        <div class="flex gap-1 overflow-x-auto border-b [scrollbar-width:none] <%= hairline_class %>"
+             role="tablist"
+             aria-label="<%= tablist_label %>">
+          <% tabs.each_with_index do |tab, index| %>
+            <% active = index.zero? %>
+            <button <%= el_attrs("tabs.label",
+                      type: "button",
+                      id: tab_dom_id(index),
+                      class: tab_class(active),
+                      role: "tab",
+                      aria: { selected: active, controls: panel_dom_id(index) },
+                      tabindex: (active ? 0 : -1),
+                      data: {
+                        website_feature_tabs_target: "tab",
+                        action: "click->website-feature-tabs#choose keydown->website-feature-tabs#navigate"
+                      }) %>>
+              <%= tab_label(tab) %>
+            </button>
+          <% end %>
+        </div>
+      <% end %>
+
+      <% tabs.each_with_index do |tab, index| %>
+        <% active = index.zero? %>
+        <div <%= item_attrs("tabs",
+                  id: panel_dom_id(index),
+                  role: "tabpanel",
+                  aria: (tabs.size > 1 ? { labelledby: tab_dom_id(index) } : {}),
+                  tabindex: 0,
+                  class: ("hidden" unless active),
+                  hidden: !active,
+                  data: { website_feature_tabs_target: "panel" }) %>>
+          <div class="grid min-w-0 items-center gap-8 md:grid-cols-12 md:gap-12 lg:gap-16">
+            <div class="flex flex-col gap-4 md:col-span-5 md:gap-5">
+              <% if present_text?(tab["title"]) %>
+                <h3 <%= el_attrs("tabs.title", class: "text-balance break-words text-site-2xl leading-tight md:text-site-4xl #{headline_font_class}") %>><%= tab["title"] %></h3>
+              <% end %>
+              <% if present_text?(tab["body"]) %>
+                <p <%= el_attrs("tabs.body", class: "text-pretty text-site-md leading-relaxed md:text-site-lg #{body_text_class}") %>><%= tab["body"] %></p>
+              <% end %>
+            </div>
+            <div class="relative aspect-[4/3] md:col-span-7 md:aspect-[16/10] <%= image_frame_class %>">
+              <%= render_media(tab["image_url"], alt: tab_label(tab), css_class: "absolute inset-0 size-full object-cover", eager: index.zero?) %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</section>

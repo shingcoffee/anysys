@@ -1,0 +1,16 @@
+<% if @feature_module %>
+  <%= render Admin::Maintenance::Platform::ModuleSettings::ShellComponent.new(
+        feature_module: @feature_module,
+        customer_id: current_customer_id,
+        current: :skeletons
+      ) do %>
+    <%= render Websites::Admin::SkeletonsGalleryComponent.new(
+          skeletons: @skeletons,
+          default_key: @default_key,
+          customer_id: current_customer_id,
+          category: @category
+        ) %>
+  <% end %>
+<% else %>
+  <h1 class="text-subtitle"><%= t("website.platform.skeletons.heading") %></h1>
+<% end %>

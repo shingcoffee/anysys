@@ -1,0 +1,33 @@
+<section class="mx-auto w-full max-w-md card p-6">
+  <dl class="grid grid-cols-2 gap-x-4 gap-y-2 text-body-sm">
+    <dt class="text-text-muted"><%= t("comp_payments.refund.order") %></dt>
+    <dd class="text-text-primary tabular-nums"><%= payment.payment_order.external_ref %></dd>
+    <dt class="text-text-muted"><%= t("comp_payments.refund.provider") %></dt>
+    <dd class="text-text-primary"><%= provider_label %></dd>
+    <dt class="text-text-muted"><%= t("comp_payments.refund.original_amount") %></dt>
+    <dd class="text-text-primary tabular-nums"><%= formatted_amount %></dd>
+    <dt class="text-text-muted"><%= t("common.labels.status") %></dt>
+    <dd class="text-text-primary"><%= status_label %></dd>
+  </dl>
+
+  <%= form_with url: helpers.admin_modules_payments_transaction_refunds_path(customer_id: helpers.params[:customer_id], transaction_id: payment.id),
+                method: :post, class: "mt-6 flex flex-col gap-4" do |f| %>
+    <div>
+      <%= f.label :amount, t("comp_payments.refund.amount_label"), class: "form-label" %>
+      <%= f.number_field :amount,
+                         value: number_with_precision(payment.amount, precision: 2),
+                         max: number_with_precision(payment.amount, precision: 2),
+                         min: 0.01,
+                         step: 0.01,
+                         class: "mt-1 input-field" %>
+      <p class="mt-1 text-caption"><%= t("comp_payments.refund.maximum_prefix") %><%= formatted_amount %></p>
+    </div>
+
+    <div>
+      <%= f.label :reason, t("comp_payments.refund.reason"), class: "form-label" %>
+      <%= f.text_field :reason, class: "mt-1 input-field" %>
+    </div>
+
+    <%= f.submit t("comp_payments.refund.submit"), class: "w-full btn btn-danger min-h-10 pointer-coarse:min-h-11" %>
+  <% end %>
+</section>

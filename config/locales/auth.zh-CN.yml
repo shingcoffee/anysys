@@ -1,0 +1,247 @@
+"zh-CN":
+  auth:
+    errors:
+      owner_role_protected: "仅平台所有者可修改平台所有者的角色。"
+      single_reserved_role: "每位用户只能拥有所有者、管理员或会员中的一种角色。"
+      reserved_role_required: "每位用户必须拥有所有者、管理员或会员中的一种角色。"
+      role_key_taken: "已被占用"
+      system_role_undeletable: "系统角色不可删除"
+      system_role_uneditable: "系统角色不可编辑"
+      role_grants_locked: "角色已锁定"
+      role_grants_invalid: "无法更新角色权限。"
+      platform_grant_forbidden: "仅平台所有者可授予平台级权限。"
+    # 认证相关页面共用的词语与标签。
+    common:
+      sign_in: "登录"
+      back_to_sign_in: "返回登录"
+      remembered_it: "想起来了？"
+      new_password: "新密码"
+      confirm_password: "确认密码"
+      verification_code: "验证码"
+      otp_placeholder: "000000"
+      send_reset_link: "发送重置链接"
+      email: "邮箱"
+      min_chars_placeholder: "至少 %{count} 个字符"
+
+    # Authentication::* 控制器发出的面向用户的闪现消息。
+    flash:
+      sign_in_first: "请先登录。"
+      auth_not_enabled: "该账户未启用身份验证。"
+      confirmation_sent: "确认链接已发送至 %{email}，点击链接即可激活账户。"
+      mfa:
+        enabled: "两步验证已开启。"
+        disabled: "两步验证已关闭。"
+        verified: "验证成功。"
+        invalid_code: "验证码无效，请重试。"
+        throttled: "尝试次数过多，请稍后再试。"
+        reauth_required: "请重新输入当前密码或验证码以关闭两步验证。"
+        already_enabled: "两步验证已开启。"
+      password:
+        throttled: "密码重置请求过于频繁，请稍后再试。"
+      confirmation:
+        throttled: "确认邮件请求过于频繁，请稍后再试。"
+        invalid: "该确认链接无效或已过期，请登录后重新发送。"
+      sign_in_link:
+        throttled: "登录链接请求过于频繁，请稍后再试。"
+        invalid: "该登录链接无效或已过期，请重新获取。"
+      mfa_recovery:
+        throttled: "恢复请求过于频繁，请稍后再试。"
+      customer_signup:
+        throttled: "注册请求过于频繁，请稍后再试。"
+        already_confirmed: "该账户已完成确认，请直接登录。"
+
+    sessions:
+      shell_title: "欢迎回来"
+      shell_subtitle: "登录以继续。"
+      remember_me: "记住我"
+      forgot_password: "忘记密码？"
+      submit: "登录"
+      email_sign_in_link: "通过邮件发送登录链接"
+      or: "或"
+      email_placeholder: "you@example.com"
+      create_account_link: "创建账户"
+
+    unconfirmed:
+      title: "请确认您的邮箱"
+      sent_html: "确认链接已发送至 <strong>%{email}</strong>，点击激活后即可登录。"
+      resend: "重新发送确认邮件"
+      resend_disabled: "确认邮件重发功能当前已停用，请联系管理员。"
+
+    registrations:
+      new:
+        shell_title: "创建您的账户"
+        shell_subtitle: "一分钟加入贵组织的门户。"
+        heading: "注册"
+        have_account: "已有账户？"
+        submit: "创建账户"
+      edit:
+        shell_title: "编辑个人资料"
+        shell_subtitle: "更新您的账户信息和密码。"
+        heading: "编辑个人资料"
+        subheading_html: "修改账户上展示的信息。"
+        change_password: "修改密码"
+        change_password_hint: "留空则保留当前密码。"
+        current_password_hint: "请输入当前密码以确认更改。"
+        set_password_hint: "您尚未设置密码。在下方设置后即可使用邮箱和密码登录。"
+        submit: "保存资料"
+      disabled:
+        shell_title: "注册已暂停"
+        shell_subtitle: "该组织暂不接受新账户。"
+        heading: "注册当前已停用"
+        body: "该组织已停用注册。如需账户，请联系管理员。"
+
+    customer_registrations:
+      new:
+        shell_title: "创建账户"
+        shell_subtitle: "填写邮箱即可，确认收件箱后进入工作区。"
+        heading: "创建账户"
+        have_account: "已有账户？"
+        submit: "创建账户"
+      disabled:
+        shell_title: "注册已暂停"
+        shell_subtitle: "当前暂不接受新账户。"
+        heading: "注册当前已停用"
+        body: "注册当前已停用，请联系平台管理员。"
+      check_email:
+        shell_title: "请确认您的邮箱"
+        shell_subtitle: "请在收件箱中激活账户。"
+        heading: "请查看您的邮箱"
+        body_html: "确认链接已发送至 <strong>%{email}</strong>，点击即可激活账户。"
+      expired:
+        shell_title: "此链接已过期"
+        shell_subtitle: "请重新获取确认邮件以继续。"
+        heading: "链接已过期"
+        body: "该确认链接无效或已过期，请重新输入邮箱获取新链接。"
+        cta: "返回创建账户"
+      errors:
+        retry: "请重试。"
+        failed: "无法创建账户，请重试。"
+
+    sign_in_links:
+      check_email:
+        shell_title: "请查看您的邮箱"
+        shell_subtitle: "使用我们刚发送的登录链接登录。"
+        heading: "请查看您的邮箱"
+        body_html: "如果 <strong>%{email}</strong> 已注册账户，我们已发送登录链接，15 分钟内有效。"
+        resend: "重新发送登录链接"
+
+    passwords:
+      new:
+        shell_title: "重置密码"
+        shell_subtitle: "我们将向您发送重置密码的链接。"
+        heading: "忘记密码"
+        subheading: "输入注册时使用的邮箱。"
+      edit:
+        shell_title: "设置新密码"
+        shell_subtitle: "设置一个易记但难以猜到的密码。"
+        subheading: "将替换您当前的密码。"
+        submit: "设置新密码"
+      disabled:
+        shell_title: "密码重置已暂停"
+        shell_subtitle: "该组织已关闭密码重置。"
+        heading: "密码重置当前已停用"
+        body: "该组织已停用密码重置，请联系管理员协助恢复账户。"
+
+    mfa_recoveries:
+      new:
+        shell_title: "恢复访问"
+        shell_subtitle: "丢失了身份验证器？我们将向您发送关闭两步验证的邮件链接。"
+        heading: "重置两步验证"
+        subheading: "输入账户绑定的邮箱。"
+      create:
+        shell_title: "请查收邮箱"
+        shell_subtitle: "如果该邮箱属于已开启两步验证的会员账户，我们已发送重置链接。链接将在 15 分钟后失效。"
+        heading: "重置链接已发送"
+        subheading_html: "请在您要登录的设备上打开。"
+        spam_prompt_html: "没有收到？请检查垃圾邮件文件夹，或"
+        request_new_link: "重新获取链接"
+      consume:
+        shell_title: "确认重置"
+        shell_subtitle: "此操作将关闭账户的两步验证。"
+        heading: "关闭两步验证？"
+        subheading: "请确认这是您本人发起的重置。登录后需要重新设置两步验证。"
+        submit: "关闭两步验证"
+
+    mfa_sessions:
+      show:
+        shell_title: "还差一步"
+        shell_subtitle: "输入身份验证器应用中的验证码以完成登录。"
+        heading: "两步验证"
+        subheading: "打开身份验证器应用，获取此账户的 6 位验证码。"
+        trust_device: "在此设备上信任 30 天"
+        verify: "验证"
+        lost_authenticator: "丢失了身份验证器？"
+        sign_out: "退出登录"
+
+    mfa_setups:
+      show:
+        shell_title: "增加一层保护"
+        shell_subtitle: "即使密码泄露，两步验证也能保护账户安全。"
+        heading: "设置两步验证"
+        subheading: "使用身份验证器应用扫描二维码，然后输入显示的 6 位验证码。"
+        step1_title: "使用身份验证器扫描"
+        step1_hint: "使用 Google Authenticator、Authy、1Password 或任意 TOTP 应用。"
+        manual_key_prompt_html: "无法扫描？请手动输入此密钥："
+        step2_title: "用验证码确认"
+        step2_hint: "输入身份验证器当前显示的 6 位验证码。"
+        submit: "验证并开启两步验证"
+
+    mailer:
+      confirmation:
+        greeting: "您好，%{email}："
+        title: "确认您的邮箱"
+        instructions: "请确认此邮箱以完成账户设置。"
+        action: "确认邮箱地址"
+        preheader: "确认邮箱即可激活您的 Anysys 账户。"
+        heading: "账户"
+        fallback: "如果按钮无法打开，请将以下链接复制到浏览器中访问："
+        ignore: "如果这不是您本人创建的账户，请忽略此邮件。"
+        brand: "Anysys"
+        footer: "此邮件由 Anysys 发送。这是一封事务性通知，请勿直接回复。"
+      customer_signup:
+        subject: "确认您的 Anysys 账户"
+        greeting: "您好，%{email}："
+        title: "确认您的邮箱"
+        instructions: "请确认此邮箱以完成组织创建。此链接将在 3 天后失效。"
+        action: "确认邮箱地址"
+        preheader: "确认邮箱即可激活您的 Anysys 账户。"
+        heading: "账户"
+        fallback: "如果按钮无法打开，请将以下链接复制到浏览器中访问："
+        ignore: "如果这不是您本人创建的账户，请忽略此邮件。"
+        brand: "Anysys"
+        footer: "此邮件由 Anysys 发送。这是一封事务性通知，请勿直接回复。"
+      sign_in_link:
+        subject: "您的 Anysys 登录链接"
+        greeting: "您好，%{email}："
+        title: "登录您的账户"
+        instructions: "请点击下方按钮登录。此一次性链接将在 15 分钟后失效。"
+        action: "登录 Anysys"
+        preheader: "您的一次性登录链接已就绪，15 分钟后失效。"
+        heading: "登录"
+        fallback: "如果按钮无法打开，请将以下链接复制到浏览器中访问："
+        ignore: "如果这不是您本人的请求，请忽略此邮件。"
+        brand: "Anysys"
+        footer: "此邮件由 Anysys 发送。这是一封事务性通知，请勿直接回复。"
+      reset_password:
+        greeting: "您好，%{email}："
+        title: "重置您的密码"
+        instructions: "我们收到了修改此账户密码的请求，请在下方设置新密码。"
+        action: "设置新密码"
+        preheader: "重置您的 Anysys 密码。"
+        heading: "安全"
+        fallback: "如果按钮无法打开，请将以下链接复制到浏览器中访问："
+        ignore: "如果这不是您本人发起的密码修改，请忽略此邮件。"
+        note: "在您完成新密码设置之前，当前密码不会改变。"
+        brand: "Anysys"
+        footer: "此邮件由 Anysys 发送。这是一封事务性通知，请勿直接回复。"
+
+    shared:
+      category_tabs:
+        all_templates: "全部模板"
+      property_editor:
+        title: "编辑元素属性"
+        subtitle: "配置此元素的属性和行为。"
+        save: "保存"
+      template_picker:
+        no_results_title: "未找到模板"
+        no_results_hint: "尝试调整搜索或分类筛选"

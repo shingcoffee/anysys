@@ -1,0 +1,23 @@
+<%# Rendered view of a built page for the member audience.
+    The portal shell uses the public website theme. The inner @content is
+    self-contained: the page-builder PageComponent centers itself at the
+    page's form width and brings its own card. Header and content share
+    that width so the form is not wrapped in a second card. %>
+<% content_for :title, t("member.pages.show.title", name: @page.name) %>
+
+<div class="<%= page_chrome_form_width(@page) %> mx-auto space-y-6">
+  <%= render Member::PageHeaderComponent.new(
+        title:    @page.name,
+        subtitle: @page.description.presence
+      ) %>
+
+  <% if @content.present? %>
+    <%= render inline: @content %>
+  <% else %>
+    <%= render Member::EmptyStateComponent.new(
+          icon:     :document,
+          headline: t("member.pages.show.empty_headline"),
+          body:     t("member.pages.show.empty_body")
+        ) %>
+  <% end %>
+</div>

@@ -1,0 +1,8 @@
+<% content_for :container_width, :edge %>
+
+<%= render Platform::CodeGenerators::FormComponent.new(
+  form_data: @form_data,
+  customer_id: current_customer_id,
+  kind: @kind,
+  errors: @errors || []
+) %>

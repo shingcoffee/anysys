@@ -1,0 +1,57 @@
+<%# scope: forces the param key to :email_send_activity (the model would derive
+    "emails_send_activities_send_activity"), matching params.require(:email_send_activity). %>
+<%= form_with model: send_activity, scope: :email_send_activity, url: url, method: method, local: true, class: "flex flex-col gap-6" do |f| %>
+  <% if send_activity.errors.any? %>
+    <%= render "shared/form_errors", resource: send_activity %>
+  <% end %>
+
+  <div>
+    <%= f.label :name, t("common.labels.name"), class: "form-label form-label-required" %>
+    <%= f.text_field :name, required: true, class: "input-field mt-1" %>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <%= f.label :email_template_id, t("admin_modules.emails.send_activities.form.template_label"), class: "form-label form-label-required" %>
+      <%= f.collection_select :email_template_id, templates, :id, :name,
+            { include_blank: t("admin_modules.emails.send_activities.form.select_template") },
+            { required: true, class: "input-field mt-1" } %>
+    </div>
+    <div>
+      <%= f.label :email_list_ids, t("admin_modules.emails.send_activities.form.lists_label"), class: "form-label form-label-required" %>
+      <%= f.select :email_list_ids,
+            options_from_collection_for_select(lists, :id, :name, send_activity.email_list_ids),
+            {},
+            { multiple: true, required: true, class: "input-field mt-1 min-h-24" } %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <%= f.label :scheduled_at, t("admin_modules.emails.send_activities.form.schedule_label"), class: "form-label form-label-required" %>
+      <%= f.datetime_local_field :scheduled_at,
+            value: f.object.scheduled_at&.in_time_zone(f.object.timezone.presence || "UTC")&.strftime("%Y-%m-%dT%H:%M"),
+            required: true,
+            class: "input-field mt-1" %>
+    </div>
+    <div>
+      <%= f.label :timezone, t("common.labels.timezone"), class: "form-label form-label-required" %>
+      <%= f.select :timezone, ActiveSupport::TimeZone.us_zones.map { |tz| [tz.to_s, tz.tzinfo.name] } + [["UTC", "UTC"]],
+            { include_blank: false },
+            { required: true, class: "input-field mt-1" } %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :recurrence_preset, t("admin_modules.emails.send_activities.form.recurrence_label"), class: "form-label" %>
+    <%= f.select :recurrence_preset,
+          Emails::SendActivities::RecurrencePresets.select_options,
+          { selected: Emails::SendActivities::RecurrencePresets.preset_for(f.object.recurrence_rule) },
+          class: "input-field mt-1" %>
+  </div>
+
+  <div class="flex justify-end gap-3">
+    <%= link_to t("common.actions.cancel"), admin_modules_emails_send_activities_path(current_customer_id), class: "btn btn-secondary" %>
+    <%= f.submit (send_activity.persisted? ? t("common.actions.update") : t("common.actions.create")), class: "btn btn-primary" %>
+  </div>
+<% end %>

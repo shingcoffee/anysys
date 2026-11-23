@@ -1,0 +1,54 @@
+<section aria-labelledby="<%= heading_id %>" class="mb-12 min-w-0 @container/hub">
+  <h2 id="<%= heading_id %>" class="text-xl font-semibold leading-snug text-text-primary">
+    <%= t("#{translation_scope}.home.guides_title") %>
+  </h2>
+  <p class="mb-6 mt-1 text-body-sm [overflow-wrap:anywhere]">
+    <%= t("#{translation_scope}.home.guides_intro") %>
+  </p>
+
+  <% if groups.empty? %>
+    <p class="rounded-xl border border-border-subtle bg-surface p-4 text-body-sm @min-[40rem]/hub:p-5">
+      <%= t("#{translation_scope}.home.guides_empty") %>
+    </p>
+  <% else %>
+    <div class="grid min-w-0 grid-cols-1 gap-4 @min-[36rem]/hub:grid-cols-2 @min-[52rem]/hub:grid-cols-3 @min-[76rem]/hub:grid-cols-4">
+      <% groups.each do |group| %>
+        <%= render CardComponent.new(
+          variant: :bordered,
+          padding: :none,
+          id: group_panel_id(group),
+          class: "flex min-w-0 scroll-mt-28 flex-col rounded-xl border-border-subtle bg-surface p-4 shadow-xs transition-shadow hover:shadow-sm target:ring-2 target:ring-accent @min-[40rem]/hub:p-5"
+        ) do %>
+          <div class="min-w-0 border-b border-border-subtle pb-3.5">
+            <div class="flex min-w-0 items-center gap-2.5">
+              <span class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent-subtle text-accent" aria-hidden="true">
+                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="<%= group_icon_path(group) %>" />
+                </svg>
+              </span>
+              <h3 class="min-w-0 text-md font-semibold leading-snug text-text-primary [overflow-wrap:anywhere]"><%= t("#{translation_scope}.groups.#{group.key}") %></h3>
+            </div>
+            <p class="mt-2 text-sm leading-normal text-text-tertiary [overflow-wrap:anywhere]"><%= group_description(group) %></p>
+          </div>
+          <ul class="-mx-2 mt-2 flex min-w-0 flex-col">
+            <% group.entries.each do |guide| %>
+              <li class="min-w-0">
+                <%= link_to guide.path,
+                            class: "group flex min-w-0 items-start gap-3 rounded-lg px-2 py-2.5 transition-colors hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+                            aria: { labelledby: guide_title_id(guide), describedby: guide_summary_id(guide) } do %>
+                  <div class="min-w-0 flex-1 [overflow-wrap:anywhere]">
+                    <h4 id="<%= guide_title_id(guide) %>" class="text-base font-medium leading-snug text-text-primary group-hover:text-accent-text"><%= guide.title %></h4>
+                    <p id="<%= guide_summary_id(guide) %>" class="mt-1 text-sm leading-normal text-text-tertiary"><%= guide.summary %></p>
+                  </div>
+                  <svg class="mt-0.5 size-4 shrink-0 text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-accent-text" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6-6 6" />
+                  </svg>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</section>

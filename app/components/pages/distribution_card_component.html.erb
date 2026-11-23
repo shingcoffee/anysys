@@ -1,0 +1,190 @@
+<div class="card overflow-hidden">
+  <div class="px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+    <div class="flex flex-wrap items-center gap-2.5 min-w-0">
+      <h2 class="text-base font-semibold text-text-primary"><%= t("comp_misc.distribution.header_title_html") %></h2>
+      <%= render BadgeComponent.new(variant: page.launched? ? :success : :default, size: :sm) do %>
+        <%= page.launched? ? t("maint_core.pages.show.launched") : t("maint_core.pages.show.not_launched") %>
+      <% end %>
+    </div>
+
+    <% if publishing_editable? && page.launched? %>
+      <%= button_to admin_maintenance_page_launch_path(customer_id, page),
+          { method: :delete, class: "btn btn-secondary btn-sm flex-shrink-0" }.merge(launch_form_options) do %>
+        <%= t("maint_core.pages.show.take_offline") %>
+      <% end %>
+    <% elsif publishing_editable? %>
+      <%= button_to admin_maintenance_page_launch_path(customer_id, page),
+          { method: :post, class: "btn btn-success btn-sm flex-shrink-0" }.merge(launch_form_options) do %>
+        <%= t("maint_core.pages.show.launch") %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if public_url %>
+    <div class="px-5 pb-4">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-2 min-w-0 rounded-lg border border-border-subtle px-3 py-2.5">
+        <span class="text-caption text-text-muted flex-shrink-0"><%= t("comp_misc.publishing.public_url") %></span>
+        <a href="<%= public_url %>" target="_blank" rel="noopener noreferrer"
+           class="text-sm text-accent hover:underline break-all min-w-0 flex-1">
+          <%= public_url %>
+        </a>
+        <button type="button"
+                class="btn btn-ghost btn-sm flex-shrink-0 self-start"
+                data-controller="click-to-copy"
+                data-click-to-copy-text-value="<%= public_url %>"
+                data-click-to-copy-copied-feedback-value="<%= t("common.actions.copied") %>"
+                data-action="click->click-to-copy#copy">
+          <%= t("common.actions.copy") %>
+        </button>
+      </div>
+    </div>
+  <% elsif !page.launched? %>
+    <div class="px-5 pb-4">
+      <p class="text-body-sm text-text-muted"><%= t("comp_misc.publishing.launch_to_generate") %></p>
+    </div>
+  <% end %>
+
+  <div class="border-t border-border-subtle">
+    <%= form_with url: admin_maintenance_page_visibility_path(customer_id, page),
+                  method: :patch,
+                  data: visibility_form_data do %>
+      <% if return_to.present? %>
+        <input type="hidden" name="return_to" value="<%= return_to %>">
+      <% end %>
+
+      <% page.visible_audiences.each do |key| %>
+        <input type="hidden" name="page[visible_audiences][]" value="<%= key %>">
+      <% end %>
+
+      <div class="px-5 py-3 flex items-center justify-between gap-3">
+        <p class="text-sm font-medium text-text-primary"><%= t("comp_misc.distribution.audience_section") %></p>
+        <span data-page-visibility-target="status"
+              class="hidden text-caption text-text-muted"
+              aria-live="polite"></span>
+      </div>
+
+      <ul class="divide-y divide-border-subtle">
+        <% audiences_with_rows.each do |item| %>
+          <li class="px-5 py-3.5">
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+              <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                <span class="w-2 h-2 rounded-full flex-shrink-0 <%= item[:dot_class] %>"></span>
+                <div class="min-w-0">
+                  <p class="text-sm font-medium text-text-primary"><%= item[:label] %></p>
+                  <p class="text-caption text-text-muted"><%= item[:hint] %></p>
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3 flex-shrink-0">
+                <label class="relative inline-flex min-h-11 shrink-0 items-center <%= item[:last_locked] ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer' %>"
+                       <% if item[:last_locked] %>data-tooltip="<%= item[:switch_aria] %>"<% end %>>
+                  <input type="checkbox"
+                         class="sr-only peer"
+                         name="page[visible_audiences][]"
+                         value="<%= item[:key] %>"
+                         <%= "checked" if item[:checked] %>
+                         <%= "disabled" if item[:switch_disabled] %>
+                         aria-label="<%= item[:switch_aria] %>"
+                         <% if publishing_editable? %>
+                           data-page-visibility-target="<%= item[:key] %>"
+                           data-action="change->page-visibility#sync"
+                         <% end %>>
+                  <span class="relative h-6 w-11 rounded-full bg-surface-active transition-colors peer-checked:bg-accent peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2 after:absolute after:left-0.5 after:top-0.5 after:size-5 after:rounded-full after:bg-white after:transition-transform after:content-[''] peer-checked:after:translate-x-5"></span>
+                </label>
+
+                <% if item[:enabled] %>
+                  <a href="<%= item[:open_url] %>" target="_blank" rel="noopener noreferrer"
+                     class="text-sm font-medium text-accent hover:underline">
+                    <%= t("comp_misc.distribution.open") %>
+                  </a>
+                <% elsif item[:disabled_reason] %>
+                  <span class="text-caption text-text-muted"><%= item[:disabled_reason] %></span>
+                <% end %>
+              </div>
+            </div>
+
+            <% if item[:show_url_row] %>
+              <div class="mt-2 flex flex-col sm:flex-row sm:items-center gap-2 min-w-0">
+                <span class="text-caption text-text-muted flex-shrink-0"><%= t("comp_misc.distribution.audience_url") %></span>
+                <a href="<%= item[:open_url] %>" target="_blank" rel="noopener noreferrer"
+                   class="text-sm font-medium text-accent hover:underline break-all min-w-0 flex-1">
+                  <%= item[:open_url] %>
+                </a>
+                <button type="button"
+                        class="btn btn-ghost btn-sm flex-shrink-0 self-start"
+                        data-controller="click-to-copy"
+                        data-click-to-copy-text-value="<%= item[:open_url] %>"
+                        data-click-to-copy-copied-feedback-value="<%= t("common.actions.copied") %>"
+                        data-action="click->click-to-copy#copy">
+                  <%= t("common.actions.copy") %>
+                </button>
+              </div>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+
+      <div class="border-t border-border-subtle px-5 py-4">
+        <label class="form-label" for="page-action-key"><%= t("comp_misc.distribution.action_key_label") %></label>
+        <input id="page-action-key"
+               class="input-field font-mono text-sm max-w-md"
+               type="text"
+               name="page[action_key]"
+               value="<%= page.action_key %>"
+               autocomplete="off"
+               spellcheck="false"
+               placeholder="<%= t("comp_misc.distribution.action_key_placeholder") %>"
+               aria-describedby="page-action-key-help"
+               <%= "readonly" unless publishing_editable? %>
+               <% if publishing_editable? %>data-action="change->page-visibility#sync"<% end %>>
+        <p id="page-action-key-help" class="text-caption text-text-muted mt-1"><%= t("comp_misc.distribution.action_key_help") %></p>
+
+        <% if action_url %>
+          <div class="mt-3 flex flex-col sm:flex-row sm:items-center gap-2 min-w-0">
+            <span class="text-caption text-text-muted flex-shrink-0"><%= t("comp_misc.distribution.action_url") %></span>
+            <a href="<%= action_url %>" target="_blank" rel="noopener noreferrer"
+               class="text-sm font-medium text-accent hover:underline break-all min-w-0 flex-1">
+              <%= action_url %>
+            </a>
+            <button type="button"
+                    class="btn btn-ghost btn-sm flex-shrink-0 self-start"
+                    data-controller="click-to-copy"
+                    data-click-to-copy-text-value="<%= action_url %>"
+                    data-click-to-copy-copied-feedback-value="<%= t("common.actions.copied") %>"
+                    data-action="click->click-to-copy#copy">
+              <%= t("common.actions.copy") %>
+            </button>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <% if page.action_key.present? %>
+    <div class="border-t border-border-subtle">
+      <h3 class="text-sm font-medium text-text-primary px-5 pt-4"><%= t("comp_misc.distribution.siblings_heading") %></h3>
+      <% if siblings.any? %>
+        <ul class="divide-y divide-border-subtle">
+          <% siblings.each do |sibling| %>
+            <li class="px-5 py-3 flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between">
+              <%= link_to sibling.name, admin_maintenance_page_path(customer_id, sibling),
+                  class: "text-sm font-medium text-accent hover:underline break-words" %>
+              <span class="flex flex-wrap items-center gap-1.5">
+                <% sibling.visible_audiences.each do |key| %>
+                  <%= render BadgeComponent.new(variant: sibling_badge_variant(key), size: :sm) do %>
+                    <%= t("comp_misc.distribution.labels.#{key}") %>
+                  <% end %>
+                <% end %>
+                <% unless sibling.launched? %>
+                  <span class="text-caption text-text-muted"><%= t("comp_misc.distribution.not_launched") %></span>
+                <% end %>
+              </span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="px-5 pb-4 text-caption text-text-muted"><%= t("comp_misc.distribution.siblings_empty") %></p>
+      <% end %>
+    </div>
+  <% end %>
+</div>

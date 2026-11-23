@@ -1,0 +1,16 @@
+<%= render Admin::Settings::SettingRowComponent.new(
+      label: presenter.name,
+      description: presenter.description,
+      state: presenter.editable? ? nil : t("settings_people.always_available")
+    ) do %>
+  <div class="flex flex-col items-stretch gap-3 sm:items-end">
+    <p class="text-sm text-text-muted">
+      <%= t("settings_people.pages_count", count: presenter.total_count) %>
+      <% if presenter.editable? %>
+        <%= t("common.labels.em_dash") %>
+        <%= t("settings_people.visible_count", count: presenter.enabled_count) %>
+      <% end %>
+    </p>
+    <%= link_to cta_label, presenter.configure_path, class: cta_classes %>
+  </div>
+<% end %>

@@ -1,0 +1,9 @@
+<div class="flex min-h-7 min-w-0 items-center justify-between gap-2 pointer-coarse:min-h-9" data-field-header>
+  <div class="flex min-w-0 items-center gap-1.5"><%= content %></div>
+  <% if aside? || design %>
+    <div class="flex shrink-0 items-center gap-1">
+      <%= aside %>
+      <%= render design.trigger(reveal: true) if design %>
+    </div>
+  <% end %>
+</div>

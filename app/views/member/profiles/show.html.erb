@@ -1,0 +1,68 @@
+<% content_for :title, t("member.profiles.show.title") %>
+<% content_for :member_nav, "profile" %>
+<% chrome = member_chrome %>
+
+<%= render Member::PageLayoutComponent.new do |c| %>
+  <% c.with_primary do %>
+    <%= render Member::PageHeaderComponent.new(
+          title:    t("member.common.profile"),
+          subtitle: t("member.profiles.show.header_subtitle"),
+          actions:  [
+            { label: t("member.common.edit_profile"), path: "/#{current_user.customer_id}/member/profile/edit", variant: :primary }
+          ]
+        ) %>
+
+    <%= render Member::PageSectionComponent.new do %>
+      <div class="mb-8 flex items-center gap-5">
+        <span class="<%= chrome.avatar_class %> size-16 text-site-xl">
+          <%= "#{current_user.first_name[0]}#{current_user.last_name[0]}".upcase %>
+        </span>
+        <div class="min-w-0">
+          <h2 class="truncate <%= chrome.section_title_class %>"><%= current_user.display_name %></h2>
+          <p class="truncate <%= chrome.body_copy_class %>"><%= current_user.email %></p>
+        </div>
+      </div>
+
+      <%= render Member::DetailGridComponent.new(
+            record: current_user,
+            rows: [
+              { label: t("member.profiles.show.fields.first_name"),   value: ->(u) { u.first_name } },
+              { label: t("member.profiles.show.fields.last_name"),    value: ->(u) { u.last_name } },
+              { label: t("member.profiles.show.fields.email"),        value: ->(u) { u.email } },
+              { label: t("member.profiles.show.fields.member_since"), value: ->(u) { u.created_at }, format: :date }
+            ]
+          ) %>
+    <% end %>
+  <% end %>
+
+  <% c.with_aside do %>
+    <%= render Member::PageSectionComponent.new(title: t("member.profiles.show.account_actions")) do %>
+      <div class="flex flex-col gap-3">
+        <%= link_to t("member.common.edit_profile"), "/#{current_user.customer_id}/member/profile/edit", class: chrome.block_button_class %>
+        <%= link_to t("member.common.sign_out"), "/auth/sign_out", data: { turbo_method: :delete }, class: chrome.block_button_class(:secondary) %>
+      </div>
+    <% end %>
+
+    <%= render Member::PageSectionComponent.new(title: t("member.profiles.show.security_glance")) do %>
+      <div class="mb-4 flex items-start gap-3">
+        <span class="<%= chrome.well_shape_class %> <%= current_user.mfa_required? ? chrome.success_well_class : chrome.warning_well_class %>">
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+            <% if current_user.mfa_required? %>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3zM9 12l2 2 4-4"/>
+            <% else %>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/>
+            <% end %>
+          </svg>
+        </span>
+        <p class="pt-2 <%= chrome.body_copy_class %>">
+          <% if current_user.mfa_required? %>
+            <%= t("member.profiles.show.mfa_on") %>
+          <% else %>
+            <%= t("member.profiles.show.mfa_off") %>
+          <% end %>
+        </p>
+      </div>
+      <%= link_to t("member.common.manage_security"), "/#{current_user.customer_id}/member/security", class: chrome.text_link_class %>
+    <% end %>
+  <% end %>
+<% end %>

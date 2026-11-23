@@ -1,0 +1,14 @@
+<section class="card overflow-hidden" aria-labelledby="<%= title_id %>">
+  <header class="flex flex-col gap-3 border-b border-border-subtle px-4 py-4 sm:flex-row sm:items-start sm:justify-between sm:px-6">
+    <div class="min-w-0">
+      <h2 id="<%= title_id %>" class="section-header"><%= title %></h2>
+      <% if description.present? %>
+        <p class="mt-0.5 text-caption"><%= description %></p>
+      <% end %>
+    </div>
+    <% if action.present? %>
+      <div class="shrink-0"><%= action %></div>
+    <% end %>
+  </header>
+  <div><%= content %></div>
+</section>

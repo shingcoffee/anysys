@@ -1,0 +1,40 @@
+<% if fields.empty? %>
+  <p class="rounded-lg border border-dashed border-border-subtle p-6 text-center text-sm text-text-muted"><%= t("comp_platform.code_generators.schema.empty") %></p>
+<% else %>
+  <div class="card overflow-x-auto">
+    <table class="min-w-full divide-y divide-border-subtle text-sm">
+      <thead class="bg-canvas-elevated">
+        <tr class="text-left text-[11px] font-semibold uppercase tracking-wide text-text-muted">
+          <th scope="col" class="px-4 py-2.5"><%= t("comp_platform.code_generators.schema.field") %></th>
+          <th scope="col" class="px-4 py-2.5"><%= t("comp_platform.code_generators.schema.type") %></th>
+          <th scope="col" class="px-4 py-2.5"><%= t("comp_platform.code_generators.schema.default") %></th>
+          <th scope="col" class="px-4 py-2.5"><%= t("comp_platform.code_generators.schema.required") %></th>
+          <th scope="col" class="px-4 py-2.5"><%= t("comp_platform.code_generators.schema.shown_when") %></th>
+          <th scope="col" class="px-4 py-2.5"><%= t("comp_platform.code_generators.schema.allowed") %></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-border-subtle">
+        <% fields.each do |field| %>
+          <tr class="align-top">
+            <td class="whitespace-nowrap px-4 py-2.5">
+              <span class="font-mono text-xs font-medium text-text-primary"><%= field.name %></span>
+              <% if advanced?(field) %>
+                <span class="ml-1.5 rounded bg-surface-active px-1.5 py-0.5 text-[10px] font-medium text-text-muted"><%= t("comp_platform.code_generators.schema.advanced") %></span>
+              <% end %>
+            </td>
+            <td class="whitespace-nowrap px-4 py-2.5"><code class="rounded bg-accent-subtle px-1.5 py-0.5 text-[11px] text-accent-text"><%= field.role %></code></td>
+            <td class="max-w-[14rem] break-words px-4 py-2.5 font-mono text-xs text-text-secondary"><%= default_text(field) || empty_value %></td>
+            <td class="px-4 py-2.5 text-xs text-text-secondary">
+              <%= required_text(field) || empty_value %>
+              <% if (rule = required_when(field)) %>
+                <span class="mt-0.5 block font-mono text-[11px] text-text-muted"><%= rule %></span>
+              <% end %>
+            </td>
+            <td class="max-w-[16rem] break-words px-4 py-2.5 font-mono text-[11px] text-text-secondary"><%= shown_when(field) || empty_value %></td>
+            <td class="max-w-[16rem] break-words px-4 py-2.5 font-mono text-[11px] text-text-secondary"><%= allowed_text(field) || empty_value %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

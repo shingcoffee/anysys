@@ -1,0 +1,12 @@
+en:
+  routes_audit:
+    invalid_selection: "Select valid record IDs."
+    restoration_failed: "The record could not be restored."
+    invalid_definition: "The entity definition has an invalid JSON structure."
+    entry_deletion_failed: "The entries could not be deleted."
+    version_promotion_failed: "The entity version could not be applied."
+    customer_purge_failed: "The customers could not be permanently deleted."
+    customer_deletion_failed: "The customer could not be deleted."
+    pages:
+      invalid_action: "Select a valid page action."
+      update_failed: "The selected pages could not be updated."

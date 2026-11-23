@@ -1,0 +1,33 @@
+<% if @feature_module %>
+  <%= render Admin::Maintenance::Platform::ModuleSettings::ShellComponent.new(
+        feature_module: @feature_module,
+        customer_id: current_customer_id,
+        current: :skeletons
+      ) do %>
+    <div class="flex flex-col gap-5">
+      <%= render Websites::Admin::CatalogEditorHeaderComponent.new(
+            title: @skeleton.display_name,
+            description: t("website.platform.skeletons.edit_description"),
+            back_path: admin_maintenance_platform_module_settings_website_skeletons_path(current_customer_id)
+          ) do |header| %>
+        <% header.with_actions do %>
+          <%= render ButtonComponent.new(
+                variant: :primary,
+                size: :sm,
+                tag: :button,
+                type: :submit,
+                form: Websites::Admin::SkeletonEditorComponent::FORM_ID
+              ) do %>
+            <%= t("common.actions.save") %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= render Websites::Admin::SkeletonEditorComponent.new(
+            skeleton: @skeleton,
+            layouts: @layouts,
+            form_url: admin_maintenance_platform_module_settings_website_skeleton_path(current_customer_id, @skeleton.key),
+            customer_id: current_customer_id
+          ) %>
+    </div>
+  <% end %>
+<% end %>

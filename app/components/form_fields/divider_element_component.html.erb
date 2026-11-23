@@ -1,0 +1,16 @@
+<div class="<%= spacing_class %>">
+  <% if label.present? %>
+    <div class="relative">
+      <div class="absolute inset-0 flex items-center">
+        <div class="w-full border-t <%= neutral(:soft_border) %>"></div>
+      </div>
+      <div class="relative flex justify-center text-sm">
+        <span class="px-3 <%= label_bg_class %> <%= neutral(:faint_text) %> text-xs font-medium tracking-wide uppercase">
+          <%= label %>
+        </span>
+      </div>
+    </div>
+  <% else %>
+    <hr class="<%= neutral(:soft_border) %>">
+  <% end %>
+</div>

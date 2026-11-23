@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <title><%= content_for(:title) || t("public_views.layouts.payment_title") %></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="bg-gray-50 min-h-screen flex flex-col">
+    <main class="flex-1 flex items-start justify-center py-12 px-4">
+      <div class="w-full max-w-2xl">
+        <% if flash.any? %>
+          <% flash.each do |type, message| %>
+            <% next unless message.is_a?(String) # structured flash payloads (e.g. feature_module_result) are data, not banners %>
+            <div class="mb-4 border-l-4 <%= type == 'alert' ? 'bg-red-50 border-red-400 text-red-800' : 'bg-green-50 border-green-400 text-green-800' %> px-3 py-2 text-sm"
+                 role="alert" data-controller="flash" data-flash-auto-dismiss-value="true"><%= message %></div>
+          <% end %>
+        <% end %>
+        <%= yield %>
+      </div>
+    </main>
+  </body>
+</html>

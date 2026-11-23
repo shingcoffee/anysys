@@ -1,0 +1,15 @@
+en:
+  sms_standards:
+    validation:
+      phone: "must be a valid phone number; use + or 00 for international numbers"
+      template_key: "must be a lowercase alphanumeric/underscore string of at most %{limit} bytes"
+      idempotency_key: "must be a string of at most %{limit} bytes"
+      vars: "must be an object with at most %{count_limit} unique string keys and nonblank string or finite numeric values; each value is limited to %{value_limit} bytes and the JSON payload to %{total_limit} bytes"
+    errors:
+      malformed_response: "SMS provider returned an invalid or unconfirmed response"
+      query_failed: "SMS query failed"
+      invalid_signature: "invalid Twilio webhook signature"
+      invalid_receipt: "invalid normalized SMS receipt"
+      invalid_phone: "Invalid phone number"
+      invalid_text: "SMS text must be a valid UTF-8 string"
+      invalid_segment_limits: "SMS segment limits must be positive integers of at least 2"

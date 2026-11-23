@@ -1,0 +1,45 @@
+<% if enabled_providers.empty? %>
+  <%= render Billing::Admin::EmptyStateComponent.new(
+    icon: :credit_card,
+    title: t("settings_billing.one_time_payment.empty_title"),
+    description: t("settings_billing.one_time_payment.empty_hint", currency: currency.presence || t("common.labels.em_dash"))
+  ) %>
+<% else %>
+  <ul class="grid gap-3 <%= grid_class %>" role="list">
+    <% providers.each do |option| %>
+      <% key = fact(option, :key).to_s %>
+      <li class="min-w-0">
+        <% if selected?(key) %>
+          <div class="flex h-full items-center gap-3 rounded-xl border border-accent bg-accent-subtle/30 p-4 shadow-sm ring-1 ring-accent">
+            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl <%= provider_tile_class(key) %>"><%= render Billing::Admin::IconComponent.new(name: :credit_card) %></span>
+            <div class="min-w-0 flex-1">
+              <p class="font-medium text-text-primary"><%= humanized_provider(key) %></p>
+            </div>
+            <%= render BadgeComponent.new(variant: :primary, size: :sm) do %><%= t("settings_billing.one_time_payment.one_time_badge") %><% end %>
+          </div>
+        <% elsif fact(option, :enabled) == false %>
+          <div class="flex h-full items-start gap-3 rounded-lg border border-dashed border-border-subtle bg-canvas-elevated p-4">
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-surface-active text-text-muted"><%= render Billing::Admin::IconComponent.new(name: :credit_card) %></span>
+            <div class="min-w-0">
+              <p class="font-medium text-text-secondary"><%= humanized_provider(key) %></p>
+              <p class="mt-0.5 text-caption"><%= disabled_reason(option) %></p>
+            </div>
+          </div>
+        <% else %>
+          <%= form_with url: post_url, method: :post, scope: scope, data: { turbo: false }, class: "h-full" do |f| %>
+            <%= f.hidden_field :provider, value: key %>
+            <% if invoice_id.present? %><%= f.hidden_field :invoice_id, value: invoice_id %><% end %>
+            <%= f.button type: "submit", name: nil, class: "group flex h-full w-full cursor-pointer items-center gap-3 rounded-xl border border-border-subtle bg-surface p-4 text-left shadow-xs transition hover:border-accent-muted hover:bg-accent-subtle/40 hover:shadow-sm focus-visible:outline-accent" do %>
+              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl <%= provider_tile_class(key) %>"><%= render Billing::Admin::IconComponent.new(name: :credit_card) %></span>
+              <span class="min-w-0 flex-1">
+                <span class="block font-medium text-text-primary"><%= humanized_provider(key) %></span>
+                <span class="mt-0.5 block text-caption"><%= t("settings_billing.one_time_payment.pay_once_caption") %></span>
+              </span>
+              <span class="text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-accent-text"><%= render Billing::Admin::IconComponent.new(name: :chevron_right, class_name: "h-4 w-4") %></span>
+            <% end %>
+          <% end %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

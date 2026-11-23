@@ -1,0 +1,109 @@
+<%# app/views/maintenance/customer_profile/show.html.erb %>
+<%= render AdminPageComponent.new(
+  breadcrumbs: [
+    { label: t("maint_core.nav.maintenance"), path: admin_maintenance_path(current_customer.id) },
+    { label: t("maint_core.nav.customer_profile"), path: nil }
+  ],
+  title: @customer.name,
+  description: t("maint_core.customer_profile.show.subtitle_html"),
+  actions: [
+    { label: t("maint_core.customer_profile.show.edit_profile"),
+      path: edit_admin_maintenance_customer_profile_path(current_customer_id),
+      variant: :primary, icon: :edit }
+  ]
+) do %>
+
+<%= render AlertComponent.new(message: notice, type: :success, auto_dismiss: true) if notice.present? %>
+
+<div class="space-y-6">
+  <%# Identity Card %>
+  <div class="card overflow-hidden">
+    <div class="card-header">
+      <h2 class="section-header"><%= t("maint_core.customer_profile.sections.identity") %></h2>
+    </div>
+    <div class="p-6">
+      <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
+        <div>
+          <dt class="form-label"><%= t("maint_core.customer_profile.fields.customer_id") %></dt>
+          <dd class="mt-1">
+            <span class="text-mono text-sm bg-surface-active px-2.5 py-1 rounded-md inline-flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+              </svg>
+              <%= @customer.id %>
+            </span>
+          </dd>
+        </div>
+        <div>
+          <dt class="form-label"><%= t("common.labels.name") %></dt>
+          <dd class="mt-1 text-body text-text-primary"><%= @customer.name %></dd>
+        </div>
+        <div>
+          <dt class="form-label"><%= t("maint_core.customer_profile.fields.alias") %></dt>
+          <dd class="mt-1 text-body text-text-primary"><%= @customer.alias.presence || "<span class='text-text-muted'>#{t('maint_core.customer_profile.show.not_set')}</span>".html_safe %></dd>
+        </div>
+        <div>
+          <dt class="form-label"><%= t("maint_core.customer_profile.fields.industry") %></dt>
+          <dd class="mt-1">
+            <%= render BadgeComponent.new(variant: :info, size: :sm) do %>
+              <%= @customer.industry_label.presence || t("maint_core.customer_profile.show.not_specified") %>
+            <% end %>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <%# Contact Card %>
+  <div class="card overflow-hidden">
+    <div class="card-header">
+      <h2 class="section-header"><%= t("maint_core.customer_profile.sections.contact") %></h2>
+    </div>
+    <div class="p-6">
+      <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
+        <div>
+          <dt class="form-label"><%= t("maint_core.customer_profile.fields.contact_person") %></dt>
+          <dd class="mt-1 text-body text-text-primary"><%= @customer.contact.presence || "<span class='text-text-muted'>#{t('maint_core.customer_profile.show.not_set')}</span>".html_safe %></dd>
+        </div>
+        <div>
+          <dt class="form-label"><%= t("maint_core.customer_profile.fields.phone") %></dt>
+          <dd class="mt-1 text-body text-text-primary"><%= @customer.phone.presence || "<span class='text-text-muted'>#{t('maint_core.customer_profile.show.not_set')}</span>".html_safe %></dd>
+        </div>
+        <div class="sm:col-span-2">
+          <dt class="form-label"><%= t("maint_core.customer_profile.fields.address") %></dt>
+          <dd class="mt-1 text-body text-text-primary whitespace-pre-wrap"><%= @customer.address.presence || "<span class='text-text-muted'>#{t('maint_core.customer_profile.show.not_set')}</span>".html_safe %></dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <%# Account Status Card %>
+  <div class="card overflow-hidden">
+    <div class="card-header">
+      <h2 class="section-header"><%= t("maint_core.customer_profile.sections.account_status") %></h2>
+    </div>
+    <div class="p-6">
+      <dl class="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-5">
+        <div>
+          <dt class="form-label"><%= t("maint_core.customer_profile.fields.tier") %></dt>
+          <dd class="mt-1"><%= render TierBadgeComponent.new(tier: @customer.tier) %></dd>
+        </div>
+        <div>
+          <dt class="form-label"><%= t("common.labels.status") %></dt>
+          <dd class="mt-1">
+            <% if @customer.active? %>
+              <%= render BadgeComponent.new(variant: :success, size: :sm) do %><%= t("common.status.active") %><% end %>
+            <% else %>
+              <%= render BadgeComponent.new(variant: :default, size: :sm) do %><%= t("common.status.inactive") %><% end %>
+            <% end %>
+          </dd>
+        </div>
+        <div>
+          <dt class="form-label"><%= t("common.labels.created_at") %></dt>
+          <dd class="mt-1 text-body text-text-primary"><%= l(@customer.created_at.to_date, format: :long) %></dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</div>
+<% end %>

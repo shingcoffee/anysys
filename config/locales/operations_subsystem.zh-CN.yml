@@ -1,0 +1,14 @@
+zh-CN:
+  operations:
+    violations:
+      subsystem:
+        conversation_required: "构建需在助手对话中进行，请从助手发起。"
+        build_active: "此对话中已有构建在运行。请等待其完成或先取消，再发起新的构建。"
+        journey_not_chosen: "流程 %{key} 不在 journeys 中。请先将其加入，或从已选流程中选择。"
+        signup_processing: "%{key} 的注册页面使用自身的处理逻辑，请选择其他页面。"
+        step_not_found: "流程 %{key} 没有步骤 %{step}。请使用其 adds 中列出的名称；若为首个页面，请省略 step。"
+        duplicate_processing: "%{name} 重复出现，请为每项处理设置不同的名称。"
+        processing_name_taken: "本工作区已使用名称 %{name}，请另选名称。"
+        preflight_blocked: "%{errors}"
+        actor_unknown: "%{actor} 不在 people 列出的人员中。请按 people 中的名称填写场景的发起人，或将其加入 people。"
+        value_not_given: "%{value} 不是管理员提供的地址。请使用其消息中的地址，或向管理员询问。"

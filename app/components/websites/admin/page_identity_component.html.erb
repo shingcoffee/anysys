@@ -1,0 +1,82 @@
+<%= content_tag wrapper_tag, **wrapper_options do %>
+  <% if drill_in? %>
+    <header class="sticky top-0 z-10 -mx-5 flex min-w-0 items-center gap-2 border-b border-border-subtle bg-surface/95 px-5 py-2.5 backdrop-blur-sm sm:-mx-6 sm:px-6">
+      <button type="button"
+              class="<%= chrome_btn_class %>"
+              data-action="click->website-builder#showOutline:prevent"
+              aria-label="<%= t("website.admin.pages.edit.back_to_sections") %>">
+        <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 0 1-.02 1.06L8.832 10l3.938 3.71a.75.75 0 1 1-1.04 1.08l-4.5-4.25a.75.75 0 0 1 0-1.08l4.5-4.25a.75.75 0 0 1 1.06.02Z" clip-rule="evenodd"/></svg>
+      </button>
+      <h2 id="website-page-identity-heading" class="min-w-0 flex-1 truncate text-sm font-semibold tracking-tight text-text-primary">
+        <%= t("website.admin.pages.edit.page_settings") %>
+      </h2>
+    </header>
+  <% elsif show_header? %>
+    <div class="<%= workspace? ? "flex flex-col gap-1" : "card-header flex flex-col gap-1" %>">
+      <h2 id="website-page-identity-heading" class="section-header">
+        <%= layout_kind? ? t("website.platform.layouts.form.identity") : t("website.admin.pages.edit.identity") %>
+      </h2>
+      <% if layout_name.present? && !layout_kind? %>
+        <p class="text-sm text-text-tertiary"><%= t("website.admin.pages.form.layout_locked", name: layout_name) %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="<%= body_class %>">
+    <% if layout_kind? %>
+      <div class="flex flex-col gap-1.5">
+        <%= form.label :key, t("website.platform.layouts.form.key"), class: "form-label form-label-required mb-0" %>
+        <%= form.text_field :key, value: layout_key_value, required: true, disabled: persisted_record?, class: "input-field h-10 font-mono" %>
+        <% if persisted_record? %>
+          <%= form.hidden_field :key, value: layout_key_value %>
+        <% end %>
+        <p class="text-sm text-text-tertiary"><%= t("website.platform.layouts.form.key_hint") %></p>
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <%= form.label :name, t("website.platform.layouts.form.name"), class: "form-label form-label-required mb-0" %>
+        <%= form.text_field :name, value: page_title, required: true, class: "input-field h-10",
+              data: { action: "input->website-builder#markDirty" } %>
+      </div>
+      <div class="flex flex-col gap-1.5">
+        <%= form.label :description, t("website.platform.layouts.form.description"), class: "form-label mb-0" %>
+        <%= form.text_area :description, value: layout_description_value, rows: 2, class: "input-field",
+              data: { action: "input->website-builder#markDirty" } %>
+      </div>
+      <%= theme_field(compact: false) %>
+    <% else %>
+      <div class="flex flex-col gap-1.5">
+        <%= form.label :title, t("website.admin.pages.form.title"), class: "form-label form-label-required mb-0" %>
+        <%= form.text_field :title, value: page_title, required: true, class: "input-field #{workspace? ? 'h-9' : 'h-10'}",
+              aria: { describedby: form.field_id(:title, :hint) },
+              data: { action: "input->website-builder#markDirty" } %>
+        <p id="<%= form.field_id(:title, :hint) %>" class="text-sm text-text-tertiary"><%= t("website.admin.pages.form.title_hint") %></p>
+      </div>
+
+      <fieldset class="min-w-0">
+        <legend class="<%= visually_hidden_class %>"><%= t("website.admin.pages.form.visibility") %></legend>
+        <div class="flex flex-col divide-y divide-border-subtle">
+          <% preference_fields.each do |field| %>
+            <% locked = field == :home && home? %>
+            <% hint = preference_hint(field) %>
+            <%= form.hidden_field :home, value: "1", id: nil if locked %>
+            <%= form.label field, class: "flex min-h-11 w-full items-center justify-between gap-4 py-3 #{locked ? 'cursor-default' : 'cursor-pointer'}" do %>
+              <span class="flex min-w-0 flex-1 flex-col gap-1">
+                <span id="<%= form.field_id(field, :label) %>" class="form-label mb-0"><%= t("website.admin.pages.form.#{field}") %></span>
+                <% if hint %>
+                  <span id="<%= form.field_id(field, :hint) %>" class="text-body-sm text-text-tertiary"><%= t(hint) %></span>
+                <% end %>
+              </span>
+              <span class="relative flex shrink-0 items-center">
+                <%= form.check_box field, { checked: public_send("#{field}?"), disabled: locked, include_hidden: !locked,
+                      class: "peer #{visually_hidden_class}", role: "switch", aria: { labelledby: form.field_id(field, :label), describedby: hint ? form.field_id(field, :hint) : nil },
+                      data: { action: field == :home ? "change->website-builder#confirmSetHome" : "change->website-builder#markDirty" } } %>
+                <span aria-hidden="true" class="relative inline-flex h-6 w-11 shrink-0 rounded-full border-2 border-transparent bg-border transition-colors duration-200 ease-in-out after:absolute after:left-0 after:top-0 after:size-5 after:rounded-full after:bg-surface after:shadow after:transition-transform after:duration-200 after:ease-in-out peer-checked:bg-accent peer-checked:after:translate-x-5 peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-2 peer-disabled:opacity-50"></span>
+              </span>
+            <% end %>
+          <% end %>
+        </div>
+      </fieldset>
+      <%= theme_field(compact: workspace?) %>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,87 @@
+en:
+  flowchart_actions:
+    rate_limiter:
+      label: Rate Limiter
+      description: Apply rate limiting
+      fields:
+        limiterName:
+          label: Limiter name
+          help: Tenant-scoped limiter name.
+          placeholder: e.g., api_calls
+        capacity:
+          label: Capacity
+          help: Runs admitted per window.
+        window:
+          label: Window
+          help: Window length in seconds; the count resets when a new window starts.
+        scope:
+          label: Scope
+          help: Who shares this limiter. Global keeps one tenant-wide bucket (today's behaviour).
+          options:
+            global: Entire customer
+            user: Current user
+            ip: Client IP
+            custom: Custom value
+        scopeVariable:
+          label: Scope value
+          help: Context path whose value further scopes the bucket.
+        cost:
+          label: Cost
+          help: How many slots this run consumes.
+        onExceed:
+          label: On exceed
+          help: What to do once the window's capacity is used up.
+          options:
+            fail: Fail
+            skip: Skip
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+        retryAfterVar:
+          label: Save retry-after as
+          help: Seconds until the window resets when the run was denied; 0 when admitted.
+    idempotency_check:
+      label: Idempotency Check
+      description: Ensure idempotent execution
+      fields:
+        keyStrategy:
+          label: Key strategy
+          help: How the idempotency key is built.
+          options:
+            ctx_field: Ctx field
+            hash_of_inputs: Hash of inputs
+            explicit: Explicit
+        ctxField:
+          label: Context field
+          help: Context path whose value becomes the key.
+          placeholder: e.g., order_id
+        explicitKey:
+          label: Explicit key
+          help: Literal idempotency key.
+          placeholder: e.g., "order:42"
+        scope:
+          label: Scope
+          help: Whether the key is unique per customer or also per signed-in user.
+          options:
+            tenant: Entire customer
+            user: Current user
+        onDuplicate:
+          label: On duplicate
+          help: What to do when this key was already claimed.
+          options:
+            fail: Fail
+            skip: Skip
+            flag: Flag only
+        ttlSeconds:
+          label: TTL (seconds)
+          help: How long a claimed key stays reserved.
+        resultVar:
+          label: Save result as
+          help: Name of the variable later steps read.
+  flowchart_runtime:
+    errors:
+      idempotency_user_required: Sign in is required for this idempotency check.
+      idempotency_check:
+        failed: "Could not complete the idempotency check (%{reason})."
+      rate_limiter:
+        failed: "Could not apply the rate limit (%{reason})."

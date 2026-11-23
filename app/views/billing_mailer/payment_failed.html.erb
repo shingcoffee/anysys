@@ -1,0 +1,17 @@
+<% amount = Billing::CurrencyResolver.format(@invoice.total_cents, @invoice.currency) %>
+<%= render Mailers::ShellComponent.new(
+      preheader: t("billing_mailer.payment_failed.preheader", number: @invoice.number),
+      brand:     t("billing_mailer.shell.brand"),
+      heading:   t("billing_mailer.payment_failed.heading"),
+      title:     t("billing_mailer.payment_failed.title"),
+      body:      t("billing_mailer.payment_failed.intro"),
+      highlight: amount,
+      highlight_caption: t("billing_mailer.payment_failed.label_amount_due"),
+      facts: [
+        { label: t("billing_mailer.payment_failed.label_invoice_number"), value: @invoice.number },
+        { label: t("billing_mailer.payment_failed.label_attempt"), value: @invoice.attempt_count },
+        { label: t("billing_mailer.payment_failed.label_next_attempt"), value: format_mail_datetime(@invoice.next_attempt_at) || t("common.labels.em_dash") }
+      ],
+      note:      t("billing_mailer.payment_failed.outro"),
+      footer:    t("billing_mailer.shell.footer")
+    ) %>

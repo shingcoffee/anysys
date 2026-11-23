@@ -1,0 +1,734 @@
+en:
+  layout_catalog:
+    categories:
+      all: "All Templates"
+      general: "General"
+      registration: "Registration"
+      contact: "Contact"
+      business: "Business"
+      survey: "Survey"
+      scheduling: "Scheduling"
+      application: "Application"
+      healthcare: "Healthcare"
+      education: "Education"
+      payment: "Payments::Payment"
+      marketing: "Marketing"
+      realestate: "Real Estate"
+      legal: "Legal"
+      travel: "Travel"
+      nonprofit: "Nonprofit"
+      hr: "Human Resources"
+      ecommerce: "E-Commerce"
+      feedback: "Feedback"
+      social: "Social & Events"
+      hospitality: "Hospitality"
+      fitness: "Fitness & Wellness"
+      creative: "Creative & Media"
+      it: "IT & Technology"
+      insurance: "Insurance"
+      government: "Government"
+      automotive: "Automotive"
+      pets: "Pets & Veterinary"
+      construction: "Construction"
+      beauty: "Beauty & Spa"
+      childcare: "Childcare"
+      sports: "Sports & Leagues"
+      consulting: "Consulting"
+      logistics: "Logistics & Shipping"
+      research: "Research"
+      banking: "Banking & Finance"
+      religious: "Religious & Faith"
+      entertainment: "Entertainment"
+      dental: "Dental"
+      homeservices: "Home Services"
+      mentalhealth: "Mental Health"
+      agriculture: "Agriculture"
+      manufacturing: "Manufacturing"
+      retail: "Retail"
+      accounting: "Accounting & Tax"
+      recruitment: "Recruitment"
+      facilities: "Facilities"
+      procurement: "Procurement"
+      tutoring: "Tutoring & Coaching"
+      moving: "Moving & Relocation"
+      cleaning: "Cleaning Services"
+      security: "Security"
+      food: "Food & Beverage"
+      coworking: "Coworking & Spaces"
+      saas: "SaaS & Product"
+      hoa: "HOA & Community"
+      optometry: "Optometry & Vision"
+      music: "Music & Performing Arts"
+      roofing: "Roofing & Exterior"
+      pestcontrol: "Pest Control"
+      interiordesign: "Interior Design"
+      telehealth: "Telehealth"
+      creator: "Influencer & Creator"
+      energy: "Energy & Utilities"
+      warranty: "Warranty & Claims"
+      compliance: "Compliance & Audit"
+      seniorcare: "Senior Care"
+      hvac: "HVAC & Trades"
+      landscaping: "Landscaping & Lawn"
+      wedding: "Wedding & Bridal"
+      pharmacy: "Pharmacy"
+      waste: "Recycling & Waste"
+      funeral: "Funeral & Memorial"
+      tattoo: "Tattoo & Body Art"
+      laundry: "Laundry & Dry Cleaning"
+      notary: "Notary & Legal Services"
+      physicaltherapy: "Physical Therapy"
+      printing: "Printing & Signage"
+      marine: "Marine & Boating"
+      aviation: "Aviation"
+      staffing: "Staffing & Temp Agency"
+      catering: "Catering"
+      library: "Library & Archive"
+      bidding: "Bidding & RFP"
+      inventory: "Inventory Management"
+    groups:
+      popular: "Popular"
+      business_finance: "Business & Finance"
+      healthcare_wellness: "Healthcare & Wellness"
+      professional: "Professional Services"
+      home_property: "Home & Property"
+      tech_saas: "Technology & SaaS"
+      marketing_media: "Marketing & Media"
+      education_community: "Education & Community"
+      hospitality_events: "Hospitality & Events"
+      government_public: "Government & Public"
+      specialty: "Specialty Industries"
+    templates:
+      accounting_client_onboarding:
+        name: "Client Onboarding"
+        description: "New accounting client intake with business details, tax info, and documents"
+      tax_document_upload:
+        name: "Tax Document Upload"
+        description: "Secure tax document submission portal with document type classification and notes"
+      crop_report:
+        name: "Crop Report"
+        description: "Field crop status report with yield estimates, conditions, and photos"
+      livestock_record:
+        name: "Livestock Record"
+        description: "Animal health and inventory tracking with breed, weight, and veterinary notes"
+      employee_onboarding:
+        name: "Employee Onboarding"
+        description: "New hire form with emergency contacts and policy agreements"
+      job_application:
+        name: "Job Application"
+        description: "Hiring form with personal details, resume upload, and cover letter"
+      test_drive_request:
+        name: "Test Drive Request"
+        description: "Schedule a test drive with vehicle selection and license verification"
+      vehicle_service:
+        name: "Vehicle Service Appointment"
+        description: "Auto service booking with vehicle info, service type, and scheduling"
+      aircraft_charter_request:
+        name: "Aircraft Charter Request"
+        description: "Private aircraft charter inquiry with trip details, passenger count, luggage, and special requirements"
+      flight_training_enrollment:
+        name: "Flight Training Enrollment"
+        description: "Pilot training program enrollment with experience level, certificate goals, medical status, and schedule"
+      credit_card_application:
+        name: "Credit Card Application"
+        description: "Credit card application with personal, employment, and financial information"
+      loan_application:
+        name: "Loan Application"
+        description: "Personal or business loan application with financial details and employment"
+      salon_appointment:
+        name: "Salon Appointment"
+        description: "Hair or beauty salon booking with service selection and stylist preference"
+      spa_treatment:
+        name: "Spa Treatment Booking"
+        description: "Spa or wellness treatment reservation with preferences and health notes"
+      rfp_submission:
+        name: "RFP / Bid Submission"
+        description: "Request for proposal or bid submission with company qualifications, pricing, timeline, and supporting documents"
+      vendor_bid_response:
+        name: "Vendor Bid Response"
+        description: "Vendor bid response form for procurement with line-item pricing, delivery terms, and warranty details"
+      expense_report:
+        name: "Expense Report"
+        description: "Employee expense claim with receipt upload and approval routing"
+      invoice_form:
+        name: "Invoice / Payment"
+        description: "Billing form with itemized amounts and payment info"
+      order_form:
+        name: "Order Form"
+        description: "Purchase order with quantities, shipping, and payment details"
+      product_listing:
+        name: "Product Listing"
+        description: "E-commerce product form with pricing, variants, and media"
+      vendor_registration:
+        name: "Vendor Registration"
+        description: "Supplier onboarding with business details, tax info, and banking"
+      catering_quote_request:
+        name: "Catering Quote Request"
+        description: "Event catering quote with guest count, menu preferences, dietary needs, and venue details"
+      catering_menu_selection:
+        name: "Catering Menu Selection"
+        description: "Pre-event menu selection form for confirmed catering orders with course choices and dietary notes"
+      afterschool_program:
+        name: "After-School Program"
+        description: "After-school activity enrollment with child info, pickup authorization, and medical details"
+      daycare_enrollment:
+        name: "Daycare Enrollment"
+        description: "Child enrollment form with parent info, medical details, and emergency contacts"
+      cleaning_quote:
+        name: "Cleaning Service Quote"
+        description: "Residential or commercial cleaning estimate with rooms, frequency, and extras"
+      janitorial_inspection:
+        name: "Janitorial Inspection"
+        description: "Cleaning quality inspection checklist with area ratings and corrective actions"
+      audit_checklist:
+        name: "Audit Checklist"
+        description: "Internal or external audit checklist with control areas, evidence collection, and findings"
+      policy_acknowledgment:
+        name: "Policy Acknowledgment"
+        description: "Employee policy review and acknowledgment with digital signature and comprehension confirmation"
+      building_inspection:
+        name: "Building Inspection"
+        description: "Property inspection checklist with photos, defects, and compliance notes"
+      project_estimate:
+        name: "Project Estimate Request"
+        description: "Construction or renovation quote request with scope and timeline"
+      consultation_request:
+        name: "Consultation Request"
+        description: "Professional consultation booking with topic, availability, and goals"
+      project_brief:
+        name: "Project Brief"
+        description: "Client project brief with objectives, scope, timeline, and budget"
+      contact_detailed:
+        name: "Detailed Contact"
+        description: "Full contact form with phone, company, and department selector"
+      contact_simple:
+        name: "Simple Contact"
+        description: "Quick contact form — name, email, and message"
+      support_ticket:
+        name: "Support Ticket"
+        description: "Help desk form with priority, category, and file attachments"
+      community_membership:
+        name: "Community Membership"
+        description: "Coworking space membership application with plan selection and access preferences"
+      desk_booking:
+        name: "Desk Booking"
+        description: "Hot-desk or dedicated workspace reservation with date, time, and amenities"
+      design_brief:
+        name: "Design Brief"
+        description: "Creative project brief with brand guidelines, deliverables, and timeline"
+      photography_booking:
+        name: "Photography Booking"
+        description: "Photography session request with event type, date, and style preferences"
+      portfolio_submission:
+        name: "Portfolio Submission"
+        description: "Creative portfolio upload with project descriptions and links"
+      brand_collaboration:
+        name: "Brand Collaboration"
+        description: "Influencer brand partnership inquiry with audience stats, content style, and campaign preferences"
+      sponsorship_application:
+        name: "Sponsorship Application"
+        description: "Event or content sponsorship application with brand details, sponsorship tiers, and deliverables"
+      cosmetic_consultation:
+        name: "Cosmetic Dental Consultation"
+        description: "Cosmetic dentistry consultation with smile goals, treatment interest, and dental history"
+      dental_patient_intake:
+        name: "Dental Patient Intake"
+        description: "New dental patient form with medical history, insurance, and oral health"
+      customer_review:
+        name: "Customer Review"
+        description: "Product review form with star ratings, photos, and pros/cons"
+      gift_card_purchase:
+        name: "Gift Card Purchase"
+        description: "Digital or physical gift card order with personalized message"
+      product_return:
+        name: "Product Return Request"
+        description: "Return or exchange request with order details and reason"
+      wholesale_order:
+        name: "Wholesale Order"
+        description: "Bulk purchase order with product quantities and shipping details"
+      assignment_submission:
+        name: "Assignment Submission"
+        description: "Student submission form with file upload and comments"
+      course_enrollment:
+        name: "Course Enrollment"
+        description: "Student enrollment with course selection and academic details"
+      parent_permission:
+        name: "Parent Permission Slip"
+        description: "School permission form with emergency contacts and medical info"
+      scholarship_application:
+        name: "Scholarship Application"
+        description: "Academic scholarship with GPA, essay, and recommendation letter upload"
+      outage_report:
+        name: "Outage Report"
+        description: "Utility service outage report with location, type of outage, and safety hazard details"
+      solar_quote:
+        name: "Solar Installation Quote"
+        description: "Residential or commercial solar panel quote with roof details, energy usage, and financing preferences"
+      ticket_booking:
+        name: "Ticket Booking"
+        description: "Event or show ticket purchase with seat selection and attendee info"
+      venue_rental:
+        name: "Venue Rental"
+        description: "Event venue rental inquiry with date, capacity, catering, and AV requirements"
+      maintenance_request:
+        name: "Maintenance Request"
+        description: "Facility maintenance or repair request with location, priority, and photos"
+      parking_permit:
+        name: "Parking Permit Application"
+        description: "Employee or visitor parking permit request with vehicle details and lot preference"
+      room_booking:
+        name: "Room Booking"
+        description: "Meeting room or facility space reservation with equipment and catering needs"
+      bug_report:
+        name: "Bug Report"
+        description: "Software issue report with severity, steps to reproduce, and screenshots"
+      feature_request:
+        name: "Feature Request"
+        description: "Product feature suggestion with priority, use case, and voting"
+      testimonial_collection:
+        name: "Testimonial Collection"
+        description: "Gather customer testimonials with photo and permission to share"
+      website_feedback:
+        name: "Website Feedback"
+        description: "Visitor experience survey with ratings and usability questions"
+      class_booking:
+        name: "Class Booking"
+        description: "Fitness class reservation with schedule, instructor, and level selection"
+      gym_membership:
+        name: "Gym Membership"
+        description: "Fitness club membership application with health screening and plan selection"
+      personal_training_intake:
+        name: "Personal Training Intake"
+        description: "New client assessment with fitness goals, health history, and availability"
+      food_truck_booking:
+        name: "Food Truck Booking"
+        description: "Book a food truck for events with menu preferences, guest count, and location details"
+      recipe_submission:
+        name: "Recipe Submission"
+        description: "Community recipe sharing with ingredients, steps, and photo upload"
+      restaurant_order:
+        name: "Restaurant Order"
+        description: "Online food ordering with menu categories, customizations, and delivery details"
+      memorial_tribute:
+        name: "Memorial Tribute Submission"
+        description: "Online memorial tribute page for sharing memories, photos, and condolences in honor of a loved one"
+      funeral_service_arrangement:
+        name: "Funeral Service Arrangement"
+        description: "Funeral and memorial service planning with deceased information, service preferences, and family contact details"
+      blank:
+        name: "Blank Canvas"
+        description: "Start from scratch — no layout modifications applied"
+      compact_two_column:
+        name: "Two-Column Compact"
+        description: "Side-by-side fields for efficient use of space"
+      data_entry_admin:
+        name: "Data Entry / Admin"
+        description: "Compact admin panel with dense field arrangement"
+      default:
+        name: "Default"
+        description: "Auto-arranged layout — groups by your curated attribute groups (falls back to source-based sections when none are defined), and picks sensible widths for every field type."
+      member_default:
+        name: "Default (Member)"
+        description: "Member-facing layout — mobile-first widths, groups attributes by the entity's curated attribute groups, hides anything not flagged visible to members."
+      public_default:
+        name: "Default (Public)"
+        description: "Public-facing layout — showcase theme, generous spacing, full-width fields that auto-collapse on mobile. Designed to look polished and trustworthy on first impression for anonymous internet users."
+      sectioned_professional:
+        name: "Professional Sectioned"
+        description: "Fields organized by type with clear section headings and dividers"
+      settings_preferences:
+        name: "Settings Panel"
+        description: "Toggle-heavy preferences screen for configuration forms"
+      three_column_grid:
+        name: "Three-Column Grid"
+        description: "Dense grid layout — ideal for data-heavy forms"
+      wizard_multi_step:
+        name: "Multi-Step Wizard"
+        description: "Split fields across pages for a guided step-by-step flow"
+      permit_application:
+        name: "Permit Application"
+        description: "Government permit or license application with documentation upload"
+      public_complaint:
+        name: "Public Complaint"
+        description: "Citizen complaint or service request with location and tracking"
+      health_assessment:
+        name: "Health Assessment"
+        description: "Wellness questionnaire with symptom checklist and scales"
+      patient_intake:
+        name: "Patient Intake"
+        description: "Medical intake with demographics, insurance, and consent"
+      prescription_refill:
+        name: "Prescription Refill"
+        description: "Pharmacy refill request with medication details and pharmacy selection"
+      architectural_review:
+        name: "Architectural Review Request"
+        description: "HOA architectural review for exterior modifications with plans, materials, and timeline"
+      hoa_violation_report:
+        name: "HOA Violation Report"
+        description: "Community covenant violation report with location, type of violation, and photo evidence"
+      home_repair:
+        name: "Home Repair Request"
+        description: "Residential repair or maintenance service request with photos and urgency"
+      plumbing_service:
+        name: "Plumbing Service Request"
+        description: "Plumbing service request with issue description, location, and scheduling preferences"
+      catering_order:
+        name: "Catering Order"
+        description: "Event catering request with menu selection, headcount, and delivery"
+      guest_checkin:
+        name: "Guest Check-in"
+        description: "Hotel or vacation rental guest registration with ID and preferences"
+      restaurant_feedback:
+        name: "Restaurant Feedback"
+        description: "Dining experience survey with food, service, and ambiance ratings"
+      room_service_order:
+        name: "Room Service Order"
+        description: "Hotel room service menu order with delivery time and special requests"
+      expense_reimbursement:
+        name: "Expense Reimbursement"
+        description: "Employee expense claim with receipts and approval workflow"
+      performance_review:
+        name: "Performance Review"
+        description: "Quarterly or annual employee evaluation with goals and ratings"
+      time_off_request:
+        name: "Time Off Request"
+        description: "Employee leave request with date range, type, and manager approval"
+      training_registration:
+        name: "Training Registration"
+        description: "Employee training enrollment with course selection and scheduling"
+      ac_repair_request:
+        name: "AC / Heating Repair Request"
+        description: "HVAC repair service request with system details, symptoms, and preferred scheduling"
+      electrical_estimate:
+        name: "Electrical Service Estimate"
+        description: "Electrical work estimate request for residential or commercial wiring, panels, and installations"
+      insurance_claim:
+        name: "Insurance Claim"
+        description: "File an insurance claim with incident details, photos, and documentation"
+      insurance_quote:
+        name: "Insurance Quote Request"
+        description: "Insurance quote with coverage type, personal details, and property info"
+      room_design_assessment:
+        name: "Room Design Assessment"
+        description: "Detailed room assessment for design consultation with dimensions, existing furniture, and goals"
+      interior_style_quiz:
+        name: "Interior Design Style Quiz"
+        description: "Design style preference quiz with room photos, color palette choices, and lifestyle questions"
+      inventory_audit:
+        name: "Inventory Audit Form"
+        description: "Warehouse or store inventory audit with item counts, discrepancy reporting, and auditor sign-off"
+      stock_reorder_request:
+        name: "Stock Reorder Request"
+        description: "Internal stock replenishment request with item details, quantities, vendor preference, and urgency level"
+      access_permission_request:
+        name: "Access Permission Request"
+        description: "System access or permission change request with approval workflow"
+      equipment_request:
+        name: "Equipment Request"
+        description: "IT equipment or software request with justification and approval"
+      it_support_request:
+        name: "IT Support Request"
+        description: "Help desk ticket with issue type, priority, and device details"
+      lawn_care_quote:
+        name: "Lawn Care Quote"
+        description: "Residential or commercial lawn service estimate with property size, services, and scheduling"
+      tree_service_request:
+        name: "Tree Service Request"
+        description: "Tree removal, trimming, or stump grinding request with location, species, and hazard assessment"
+      dry_cleaning_dropoff:
+        name: "Dry Cleaning Drop-off Form"
+        description: "In-store dry cleaning drop-off with garment inventory, fabric details, and stain treatment notes"
+      laundry_pickup_request:
+        name: "Laundry Pickup Request"
+        description: "Laundry and dry cleaning pickup and delivery scheduling with garment types and special care instructions"
+      consent_waiver:
+        name: "Consent / Waiver"
+        description: "Legal consent with terms acknowledgment and signature capture"
+      incident_report:
+        name: "Incident Report"
+        description: "Workplace incident form with date/time, witnesses, and photo upload"
+      nda_agreement:
+        name: "NDA / Agreement"
+        description: "Non-disclosure agreement with parties, effective date, and signature"
+      archive_research_request:
+        name: "Archive Research Request"
+        description: "Special collections and archive research request with topic, time period, and material type preferences"
+      library_card_application:
+        name: "Library Card Application"
+        description: "Library card registration with patron information, address verification, and account preferences"
+      freight_quote:
+        name: "Freight Quote"
+        description: "Freight shipping quote with origin, destination, cargo details, and special handling"
+      shipping_request:
+        name: "Shipping Request"
+        description: "Freight or package shipping form with origin, destination, and dimensions"
+      quality_inspection:
+        name: "Quality Inspection"
+        description: "Product quality check with pass/fail criteria, measurements, and defect tracking"
+      work_order:
+        name: "Work Order"
+        description: "Production or maintenance work order with tasks, materials, and timeline"
+      boat_service_request:
+        name: "Boat Service Request"
+        description: "Marine vessel service and repair request with boat details, engine info, and service type"
+      marina_slip_rental:
+        name: "Marina Slip Rental Application"
+        description: "Marina boat slip rental application with vessel dimensions, insurance, and lease term preferences"
+      contest_entry:
+        name: "Contest / Giveaway"
+        description: "Sweepstakes entry with social sharing and eligibility confirmation"
+      lead_capture:
+        name: "Lead Capture"
+        description: "High-conversion lead gen — minimal fields for maximum completion"
+      newsletter_signup:
+        name: "Newsletter Signup"
+        description: "Email capture with interest preferences and frequency selection"
+      webinar_registration:
+        name: "Webinar Registration"
+        description: "Online event registration with session selection and time zone"
+      counseling_feedback:
+        name: "Counseling Session Feedback"
+        description: "Post-session feedback with mood tracking, progress rating, and therapist evaluation"
+      therapy_intake:
+        name: "Therapy Intake"
+        description: "New client counseling intake with history, goals, and consent"
+      moving_quote:
+        name: "Moving Quote"
+        description: "Residential or commercial moving estimate with inventory and special items"
+      storage_rental:
+        name: "Storage Unit Rental"
+        description: "Self-storage unit rental application with size, duration, and access requirements"
+      music_lesson_signup:
+        name: "Music Lesson Signup"
+        description: "Music lesson enrollment with instrument selection, experience level, and scheduling preferences"
+      music_recital_registration:
+        name: "Music Recital Registration"
+        description: "Student recital or performance registration with piece selection, instrument, and accompaniment needs"
+      membership_application:
+        name: "Membership Application"
+        description: "Organization membership with tier selection and referral info"
+      petition_form:
+        name: "Petition / Pledge"
+        description: "Collect supporter signatures for a cause or campaign pledge"
+      volunteer_registration:
+        name: "Volunteer Registration"
+        description: "Volunteer signup with availability, skills, and background check consent"
+      notary_appointment_request:
+        name: "Notary Appointment Request"
+        description: "Mobile or in-office notary appointment scheduling with document type, signer count, and ID requirements"
+      notary_document_certification:
+        name: "Document Certification Request"
+        description: "Certified copy and document authentication request with document details, purpose, and submission"
+      contact_lens_reorder:
+        name: "Contact Lens Reorder"
+        description: "Contact lens prescription reorder with lens details, prescription verification, and shipping preferences"
+      eye_exam_booking:
+        name: "Eye Exam Booking"
+        description: "Optometry appointment with vision concerns, insurance, and prescription history"
+      donation_form:
+        name: "Donation Form"
+        description: "Nonprofit donation with suggested amounts, recurring option, and donor info"
+      payment_request:
+        name: "Payment Request"
+        description: "Collect payments with billing address and payment method selection"
+      subscription_form:
+        name: "Subscription / Membership"
+        description: "Recurring subscription with plan selection and billing cycle"
+      pest_inspection_request:
+        name: "Pest Inspection Request"
+        description: "Pest control inspection request with pest type, property details, and infestation severity"
+      pest_treatment_followup:
+        name: "Pest Treatment Follow-up"
+        description: "Post-treatment follow-up report with effectiveness assessment, re-treatment needs, and customer satisfaction"
+      pet_adoption:
+        name: "Pet Adoption Application"
+        description: "Adoption request with home environment, experience, and references"
+      vet_appointment:
+        name: "Veterinary Appointment"
+        description: "Pet health visit booking with symptoms, medical history, and vaccination"
+      medication_review:
+        name: "Medication Review"
+        description: "Annual medication therapy review with current medications, allergies, and health goals"
+      prescription_transfer:
+        name: "Prescription Transfer"
+        description: "Transfer prescriptions from another pharmacy with medication and insurance details"
+      pt_progress_evaluation:
+        name: "PT Progress Evaluation"
+        description: "Physical therapy progress evaluation with functional improvements, pain tracking, and updated treatment goals"
+      pt_intake:
+        name: "Physical Therapy Intake"
+        description: "New patient intake for physical therapy with injury details, pain assessment, mobility goals, and medical history"
+      print_order:
+        name: "Print Order Request"
+        description: "Custom printing order with product type, quantity, paper stock, finishing options, and file upload"
+      sign_quote:
+        name: "Custom Sign Quote"
+        description: "Custom signage quote request with dimensions, materials, installation requirements, and design files"
+      purchase_order:
+        name: "Purchase Order"
+        description: "Procurement purchase order with vendor, items, quantities, and approval"
+      vendor_evaluation:
+        name: "Vendor Evaluation"
+        description: "Supplier performance evaluation with quality, delivery, pricing, and service ratings"
+      property_inquiry:
+        name: "Property Inquiry"
+        description: "Real estate listing inquiry with viewing request and budget range"
+      rental_application:
+        name: "Rental Application"
+        description: "Tenant application with employment, references, and income verification"
+      candidate_screening:
+        name: "Candidate Screening"
+        description: "Pre-interview screening questionnaire with experience, skills, and availability"
+      exit_interview:
+        name: "Exit Interview"
+        description: "Employee exit interview with departure reasons, satisfaction ratings, and improvement suggestions"
+      reference_check:
+        name: "Reference Check"
+        description: "Professional reference questionnaire with performance and character assessment"
+      detailed_registration:
+        name: "Detailed Registration"
+        description: "Full registration with personal info, address, and preferences"
+      simple_signup:
+        name: "Simple Sign-Up"
+        description: "Minimal registration — name, email, and password"
+      user_profile:
+        name: "User Profile"
+        description: "Profile editor with avatar upload, bio, and social links"
+      church_event:
+        name: "Church Event Registration"
+        description: "Faith community event signup with group size and dietary needs"
+      prayer_request:
+        name: "Prayer Request"
+        description: "Confidential prayer request submission with category and follow-up preferences"
+      lab_sample_submission:
+        name: "Lab Sample Submission"
+        description: "Laboratory sample submission with specimen details, testing requirements, and chain of custody"
+      research_consent:
+        name: "Research Consent"
+        description: "Informed consent for research participation with study details and signature"
+      customer_loyalty:
+        name: "Customer Loyalty Signup"
+        description: "Rewards program enrollment with preferences and communication opt-in"
+      inventory_count:
+        name: "Inventory Count"
+        description: "Physical inventory audit with product counts, discrepancies, and location"
+      roof_repair_quote:
+        name: "Roof Repair Quote"
+        description: "Roofing repair or replacement quote with damage details, roof type, and urgency level"
+      roof_inspection:
+        name: "Roof Inspection Request"
+        description: "Roof inspection or repair estimate with roof type, age, damage description, and insurance details"
+      beta_signup:
+        name: "Beta Signup"
+        description: "Early access waitlist with use case, company size, and feature interest"
+      cancellation_survey:
+        name: "Cancellation Survey"
+        description: "Customer churn feedback with reason, satisfaction rating, and win-back offer"
+      onboarding_checklist:
+        name: "Onboarding Checklist"
+        description: "New user onboarding with profile setup, preferences, and guided first steps"
+      appointment_booking:
+        name: "Appointment Booking"
+        description: "Service booking with date/time slots and contact info"
+      conference_registration:
+        name: "Conference Registration"
+        description: "Multi-session conference signup with workshops and meal selection"
+      event_registration:
+        name: "Event Registration"
+        description: "RSVP form with date selection, meal choice, and guest count"
+      access_card_request:
+        name: "Access Card Request"
+        description: "Employee or contractor badge and access card request with clearance level and areas"
+      visitor_signin:
+        name: "Visitor Sign-in"
+        description: "Building visitor registration with host, purpose, and badge issuance"
+      senior_activity_signup:
+        name: "Senior Activity Signup"
+        description: "Community center or assisted living activity registration with accessibility and dietary needs"
+      senior_care_assessment:
+        name: "Senior Care Assessment"
+        description: "Comprehensive elder care needs assessment with medical history, mobility, daily living, and family contact"
+      party_rsvp:
+        name: "Party Invitation RSVP"
+        description: "Event RSVP with guest count, dietary preferences, and song requests"
+      potluck_signup:
+        name: "Potluck Signup"
+        description: "Coordinate potluck dishes, servings, and arrival times"
+      reunion_registration:
+        name: "Reunion Registration"
+        description: "Family or class reunion signup with activities and accommodation"
+      wedding_rsvp:
+        name: "Wedding RSVP"
+        description: "Elegant wedding response card with meal choices and plus-one details"
+      player_registration:
+        name: "Player Registration"
+        description: "Individual athlete registration with personal details, medical clearance, and waiver"
+      team_registration:
+        name: "Team Registration"
+        description: "Sports league or team signup with player info, position, and waiver"
+      temp_staffing_request:
+        name: "Temporary Staffing Request"
+        description: "Temp staffing request with position details, skill requirements, duration, and work schedule"
+      staffing_worker_application:
+        name: "Staffing Worker Application"
+        description: "Worker registration for temp agency with availability, skills, work history, and certification uploads"
+      customer_feedback:
+        name: "Customer Feedback"
+        description: "Star ratings, satisfaction scales, and open comments"
+      employee_satisfaction:
+        name: "Employee Satisfaction"
+        description: "Internal HR survey with engagement scores and department feedback"
+      market_research:
+        name: "Market Research"
+        description: "Consumer research with demographics, preferences, and product feedback"
+      nps_survey:
+        name: "NPS Survey"
+        description: "Net Promoter Score survey — rating scale with follow-up"
+      quiz_assessment:
+        name: "Quiz / Assessment"
+        description: "Multiple-choice questions with structured answer groups"
+      tattoo_aftercare_checkin:
+        name: "Tattoo Aftercare Check-in"
+        description: "Post-tattoo healing check-in form with healing progress, concerns, and follow-up photo upload"
+      tattoo_consultation:
+        name: "Tattoo Consultation Request"
+        description: "Tattoo design consultation with style preferences, placement, size, and reference images"
+      symptom_checker:
+        name: "Symptom Checker"
+        description: "Pre-screening symptom assessment to help triage patients before a telehealth consultation"
+      virtual_visit_intake:
+        name: "Virtual Visit Intake"
+        description: "Telehealth pre-visit questionnaire with symptoms, medical history, and technology readiness"
+      hotel_reservation:
+        name: "Hotel Reservation"
+        description: "Guest booking with room type, check-in/out, and special requests"
+      restaurant_reservation:
+        name: "Restaurant Reservation"
+        description: "Table booking with party size, date/time, and dietary preferences"
+      travel_request:
+        name: "Travel Request"
+        description: "Corporate travel request with itinerary, budget, and approvals"
+      progress_report:
+        name: "Student Progress Report"
+        description: "Tutor-submitted progress report with skill assessments, goals, and parent communication"
+      tutoring_session:
+        name: "Tutoring Session Booking"
+        description: "Book a tutoring or coaching session with subject, level, and scheduling"
+      warranty_claim:
+        name: "Warranty Claim"
+        description: "Product warranty claim with defect description, photos, and preferred resolution method"
+      warranty_registration:
+        name: "Warranty Registration"
+        description: "Product warranty registration with purchase details, serial number, and proof of purchase upload"
+      bulk_pickup_request:
+        name: "Bulk Pickup Request"
+        description: "Large item or bulk waste pickup scheduling with item list, location, and access details"
+      recycling_schedule:
+        name: "Recycling Schedule Request"
+        description: "Residential recycling bin request and collection schedule with material types and address verification"
+      wedding_vendor_inquiry:
+        name: "Wedding Vendor Inquiry"
+        description: "Couple-to-vendor inquiry with wedding date, style preferences, budget, and venue details"
+      wedding_guest_rsvp:
+        name: "Wedding Guest RSVP"
+        description: "Elegant guest RSVP with meal selection, plus-one details, song requests, and dietary needs"

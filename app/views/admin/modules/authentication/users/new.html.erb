@@ -1,0 +1,22 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "authentication",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("admin_modules.nav.users"), path: admin_modules_authentication_users_path(current_customer_id) },
+        { label: t("common.actions.new") }
+      ],
+      title: t("admin_modules.users.new.title"),
+      description: t("admin_modules.users.new.subtitle"),
+      width: :narrow
+    ) do %>
+  <% if @journey_start %>
+    <%= render Journeys::ProgressComponent.new(journey: @journey_start.journey,
+                                               current_key: @journey_start.journey.steps_definition.user_start.key) %>
+  <% end %>
+  <%= render Admin::Modules::Authentication::UserFormComponent.new(
+        user: @user,
+        url: admin_modules_authentication_users_path(current_customer_id),
+        method: :post,
+        journey: @journey_start&.journey
+      ) %>
+<% end %>

@@ -1,0 +1,18 @@
+<%= render Admin::Modules::PageComponent.new(
+      module_key: "authentication",
+      breadcrumbs: [
+        { label: t("admin_modules.nav.modules") },
+        { label: t("admin_modules.nav.users"), path: admin_modules_authentication_users_path(current_customer_id) },
+        { label: @user.full_name, path: admin_modules_authentication_user_path(current_customer_id, @user) },
+        { label: t("common.actions.edit") }
+      ],
+      title: t("admin_modules.users.edit.title"),
+      description: t("admin_modules.users.edit.subtitle", name: @user.display_name),
+      width: :narrow
+    ) do %>
+  <%= render Admin::Modules::Authentication::UserFormComponent.new(
+        user: @user,
+        url: admin_modules_authentication_user_path(current_customer_id, @user),
+        method: :patch
+      ) %>
+<% end %>

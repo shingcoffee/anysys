@@ -1,0 +1,19 @@
+<% preview = @catalog_preview %>
+<%= render Websites::Admin::CatalogPreviewBarComponent.new(
+      name: preview[:name],
+      pages: preview[:pages],
+      current_slug: preview[:current_slug],
+      edit_path: preview[:edit_path],
+      back_path: preview[:back_path],
+      page_path: preview[:page_path]
+    ) %>
+<%= render Websites::Admin::CatalogPreviewNavComponent.new(
+      website: @website,
+      pages: preview[:pages].select { |page| preview[:page_path] || page["home"] },
+      current_slug: preview[:current_slug],
+      embed: true,
+      theme: @theme,
+      page_path: preview[:page_path]
+    ) %>
+<%= render Websites::PageComponent.new(sections: preview[:sections], theme: @theme, customer_id: current_customer_id) %>
+<%= render Websites::FooterComponent.new(website: @website, theme: @theme) %>

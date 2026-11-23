@@ -1,0 +1,12 @@
+<% content_for :container_width, :edge %>
+
+<%= render Platform::CodeGenerators::IndexComponent.new(
+  sidebar_data: @sidebar_data,
+  search_index: @search_index || [],
+  filtered_generators: @filtered_generators,
+  customer_id: current_customer_id,
+  category: @category,
+  element_type: @element_type,
+  kind: @kind,
+  total_count: @step_actions.size + @element_types.size
+) %>
